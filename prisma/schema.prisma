@@ -1,0 +1,293 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("administrator")
+  createdAt DateTime @default(now())
+
+  paymentTransactions PaymentTransaction[]
+  checkedInBookings Booking[] @relation("Booking_checkedInBy")
+  checkedOutBookings Booking[] @relation("Booking_checkedOutBy")
+}
+
+model Customer {
+  id       String    @id @default(cuid())
+  name     String
+  phone    String
+  email    String?
+  bookings Booking[]
+}
+
+model Unit {
+  id           String        @id @default(cuid())
+  name         String
+  type         String
+  category     String?
+  kavlingScope String?
+  isActive     Boolean       @default(true)
+  autoAddOnId  String?
+  autoAddOnMode String?
+  facilitiesJson String?     @db.Text
+  capacity     Int
+  totalUnits   Int
+  priceWeekday Int
+  priceWeekend Int
+  description  String?       @db.Text
+  includesJson String?       @db.Text
+  imagesJson   String?       @db.Text
+  createdAt    DateTime      @default(now())
+  bookingItems BookingItem[]
+  dailyRates   UnitDailyRate[]
+  kavlings     BookingKavling[]
+
+  @@index([type])
+  @@index([category])
+  @@index([isActive])
+}
+
+model UnitDailyRate {
+  id        String   @id @default(cuid())
+  unitId    String
+  date      DateTime @db.Date
+  price     Int
+  allotment Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@unique([unitId, date])
+  @@index([date])
+}
+
+model Booking {
+  id         String          @id @default(cuid())
+  code       String          @unique
+  customerId String
+  checkIn    DateTime
+  checkOut   DateTime
+  totalGuest Int
+  status     String
+  checkedInAt  DateTime?
+  checkedInByAdminId String?
+  checkedOutAt DateTime?
+  checkedOutByAdminId String?
+  specialRequest   String?   @db.Text
+  balanceReminderSentAt DateTime?
+  createdAt        DateTime  @default(now())
+
+  customer Customer        @relation(fields: [customerId], references: [id])
+  checkedInBy AdminUser? @relation("Booking_checkedInBy", fields: [checkedInByAdminId], references: [id])
+  checkedOutBy AdminUser? @relation("Booking_checkedOutBy", fields: [checkedOutByAdminId], references: [id])
+  items    BookingItem[]
+  kavlings BookingKavling[]
+  payment  Payment?
+  addOns   BookingAddOn[]
+
+  @@index([customerId])
+  @@index([status, checkIn, checkOut])
+}
+
+model BookingItem {
+  id        String @id @default(cuid())
+  bookingId String
+  unitId    String
+  quantity  Int
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  unit    Unit    @relation(fields: [unitId], references: [id])
+
+  @@index([bookingId])
+  @@index([unitId])
+}
+
+model AddOn {
+  id           String        @id @default(cuid())
+  name         String
+  price        Int
+  bookingAddOns BookingAddOn[]
+}
+
+model BookingAddOn {
+  id        String @id @default(cuid())
+  bookingId String
+  addOnId   String
+  quantity  Int
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  addOn   AddOn   @relation(fields: [addOnId], references: [id])
+
+  @@index([bookingId])
+  @@index([addOnId])
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  bookingId String   @unique
+  amount    Int
+  paidAmount Int     @default(0)
+  dpPlannedAmount Int @default(0)
+  serviceFeeAmount Int @default(0)
+  invoiceKind String?
+  invoiceBaseAmount Int @default(0)
+  invoiceFeeAmount Int @default(0)
+  invoiceFeeBps Int @default(0)
+  invoiceFeeFlat Int @default(0)
+  status    String
+  method    String?
+  paidAt    DateTime?
+  gateway   String?
+  gatewayRef String?
+  gatewayExternalId String?
+  checkoutUrl String? @db.Text
+  gatewayStatus String?
+  gatewayExpiresAt DateTime?
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  transactions PaymentTransaction[]
+
+  @@unique([gatewayExternalId], map: "Payment_gatewayExternalId_key_v2")
+  @@index([gatewayRef], map: "Payment_gatewayRef_idx_v2")
+}
+
+model PaymentTransaction {
+  id              String   @id @default(cuid())
+  paymentId       String
+  adminUserId     String?
+  action          String
+  amountDelta     Int
+  paidAmountBefore Int
+  paidAmountAfter  Int
+  method          String?
+  createdAt       DateTime @default(now())
+
+  payment   Payment    @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  adminUser AdminUser? @relation(fields: [adminUserId], references: [id])
+
+  @@index([paymentId])
+  @@index([adminUserId])
+  @@index([createdAt])
+}
+
+model GatewayWebhookEvent {
+  id          String   @id @default(cuid())
+  gateway     String
+  eventId     String
+  externalId  String?
+  payloadJson String   @db.Text
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+  processError String? @db.Text
+  attempts    Int      @default(0)
+
+  @@unique([gateway, eventId])
+  @@index([gateway])
+  @@index([receivedAt])
+  @@index([processedAt])
+}
+
+model Kavling {
+  id        String          @id @default(cuid())
+  number    Int             @unique
+  createdAt DateTime        @default(now())
+  bookings  BookingKavling[]
+  holds     KavlingHoldKavling[]
+
+  @@index([number])
+}
+
+model BookingKavling {
+  id        String   @id @default(cuid())
+  bookingId String
+  unitId    String
+  kavlingId String
+  createdAt DateTime @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  unit    Unit    @relation(fields: [unitId], references: [id])
+  kavling Kavling @relation(fields: [kavlingId], references: [id])
+
+  @@unique([bookingId, unitId, kavlingId])
+  @@index([bookingId])
+  @@index([unitId])
+  @@index([kavlingId])
+}
+
+model KavlingHold {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  scope     String
+  checkIn   DateTime
+  checkOut  DateTime
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  kavlings KavlingHoldKavling[]
+
+  @@index([expiresAt])
+  @@index([checkIn, checkOut])
+  @@index([scope])
+}
+
+model KavlingHoldKavling {
+  id        String   @id @default(cuid())
+  holdId    String
+  kavlingId String
+  createdAt DateTime @default(now())
+
+  hold   KavlingHold @relation(fields: [holdId], references: [id], onDelete: Cascade)
+  kavling Kavling    @relation(fields: [kavlingId], references: [id])
+
+  @@unique([holdId, kavlingId])
+  @@index([holdId])
+  @@index([kavlingId])
+}
+
+model UgcHighlight {
+  id        String   @id @default(cuid())
+  title     String
+  caption   String?  @db.Text
+  imageUrl  String?
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+}
+
+model AppConfig {
+  id               Int      @id
+  kavlingSellCount Int      @default(110)
+  privateKavlingStart Int   @default(58)
+  privateKavlingEnd   Int   @default(65)
+  mandiriAutoAddOnId String?
+  holdMinutes      Int      @default(5)
+  xenditSecretKey  String?  @db.Text
+  xenditCallbackToken String? @db.Text
+  xenditPaymentMethodsJson String? @db.Text
+  smtpHost         String?
+  smtpPort         Int?
+  smtpSecure       Boolean  @default(true)
+  smtpUser         String?
+  smtpPassword     String?  @db.Text
+  smtpFromName     String?
+  paymentNotifyEmails String? @db.Text
+  balanceReminderDays Int      @default(7)
+  dpPercent        Int      @default(50)
+  dpMinAmount      Int      @default(500000)
+  reminderDays     String   @default("7,3,0,-1")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+

@@ -1,0 +1,130 @@
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { prisma } from "@/lib/prisma";
+import { parseDateRangeWIB } from "@/lib/time";
+
+const QuerySchema = z.object({
+  checkIn: z.string().min(1),
+  checkOut: z.string().min(1),
+  scope: z.enum(["paket", "mandiri", "private", "mixed"]).optional(),
+  holdId: z.string().optional(),
+  holdToken: z.string().optional(),
+});
+
+function deriveCategoryFromUnit(u: { category: string | null; name: string; kavlingScope: string | null }) {
+  const scope = (u.kavlingScope ?? "").toLowerCase();
+  if (scope === "private") return "private";
+  if (scope === "mandiri") return "mandiri";
+  if (scope === "paket") return "paket";
+  const raw = (u.category ?? "").toLowerCase();
+  if (raw.includes("mandiri") || raw.includes("kavling")) return "mandiri";
+  if (raw.includes("paket")) return "paket";
+  const n = u.name.toLowerCase();
+  if (n.includes("mandiri") || n.includes("kavling")) return "mandiri";
+  return "paket";
+}
+
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const parsed = QuerySchema.safeParse({
+    checkIn: url.searchParams.get("checkIn") ?? undefined,
+    checkOut: url.searchParams.get("checkOut") ?? undefined,
+    scope: url.searchParams.get("scope") ?? undefined,
+    holdId: url.searchParams.get("holdId") ?? undefined,
+    holdToken: url.searchParams.get("holdToken") ?? undefined,
+  });
+  if (!parsed.success) return NextResponse.json({ message: "Query tidak valid" }, { status: 400 });
+  const range = (() => {
+    try {
+      return parseDateRangeWIB(parsed.data.checkIn, parsed.data.checkOut);
+    } catch (e) {
+      return e instanceof Error ? e : new Error("Query tidak valid");
+    }
+  })();
+  if (range instanceof Error) return NextResponse.json({ message: range.message }, { status: 400 });
+
+  const cfg = await prisma.appConfig.upsert({
+    where: { id: 1 },
+    create: { id: 1, kavlingSellCount: 110, privateKavlingStart: 58, privateKavlingEnd: 65, mandiriAutoAddOnId: null, holdMinutes: 5 },
+    update: {},
+  });
+
+  const privateStart = Math.max(1, Math.min(cfg.privateKavlingStart, cfg.kavlingSellCount));
+  const privateEnd = Math.max(privateStart, Math.min(cfg.privateKavlingEnd, cfg.kavlingSellCount));
+  const scope = parsed.data.scope ?? "paket";
+
+  const baseAll = Array.from({ length: cfg.kavlingSellCount }).map((_, i) => i + 1);
+  const allowed =
+    scope === "mixed"
+      ? baseAll
+      : scope === "private"
+        ? baseAll.filter((n) => n >= privateStart && n <= privateEnd)
+        : baseAll.filter((n) => n < privateStart || n > privateEnd);
+  const allowedSet = new Set(allowed);
+
+  const now = new Date();
+  const excludeHoldId =
+    parsed.data.holdId && parsed.data.holdToken
+      ? (
+          await prisma.kavlingHold.findFirst({
+            where: { id: parsed.data.holdId, token: parsed.data.holdToken, expiresAt: { gt: now } },
+            select: { id: true },
+          })
+        )?.id ?? null
+      : null;
+
+  const rows = await prisma.bookingKavling.findMany({
+    where: {
+      booking: {
+        status: { not: "cancelled" },
+        checkIn: { lt: range.checkOut },
+        checkOut: { gt: range.checkIn },
+      },
+    },
+    include: {
+      kavling: true,
+      unit: { select: { category: true, name: true, kavlingScope: true } },
+    },
+  });
+
+  const holdRows = await prisma.kavlingHoldKavling.findMany({
+    where: {
+      hold: {
+        expiresAt: { gt: now },
+        checkIn: { lt: range.checkOut },
+        checkOut: { gt: range.checkIn },
+        ...(excludeHoldId ? { id: { not: excludeHoldId } } : {}),
+      },
+    },
+    include: { kavling: true, hold: { select: { scope: true } } },
+  });
+
+  const takenMandiri = new Set<number>();
+  const takenPaket = new Set<number>();
+  for (const r of rows) {
+    if (!allowedSet.has(r.kavling.number)) continue;
+    const cat = deriveCategoryFromUnit(r.unit);
+    if (cat === "mandiri") takenMandiri.add(r.kavling.number);
+    else takenPaket.add(r.kavling.number);
+  }
+
+  for (const r of holdRows) {
+    if (!allowedSet.has(r.kavling.number)) continue;
+    if (r.hold.scope === "mandiri") takenMandiri.add(r.kavling.number);
+    else takenPaket.add(r.kavling.number);
+  }
+
+  const mandiri = Array.from(takenMandiri).sort((a, b) => a - b);
+  const paket = Array.from(takenPaket).sort((a, b) => a - b);
+  const taken = Array.from(new Set([...mandiri, ...paket])).sort((a, b) => a - b);
+
+  return NextResponse.json({
+    all: allowed,
+    taken,
+    takenMandiri: mandiri,
+    takenPaket: paket,
+    scope,
+    sellCount: cfg.kavlingSellCount,
+    privateRange: { start: privateStart, end: privateEnd },
+  });
+}

@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand-lime: #babf1c;
+  --brand-forest: #224002;
+  --brand-brown: #4d3c23;
+  --brand-sand: #d9cb84;
+  --brand-sky: #3e90da;
+
+  --font-title: var(--font-palmore);
+  --font-body: var(--font-inter);
+
+  --background: #f8f9f6;
+  --foreground: var(--brand-forest);
+  --surface: #ffffff;
+  --border: #e4e6df;
+  --muted: #6a5e43;
+  --primary: var(--brand-forest);
+  --primary-foreground: #ffffff;
+  --accent: var(--brand-lime);
+  --accent-foreground: var(--brand-forest);
+  --info: var(--brand-sky);
+  --info-foreground: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --font-sans: var(--font-body);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0b1107;
+    --foreground: #f2f4ef;
+    --surface: #0f170a;
+    --border: #223013;
+    --muted: #d3c892;
+    --primary: var(--brand-forest);
+    --primary-foreground: #ffffff;
+    --accent: var(--brand-sand);
+    --accent-foreground: #0b1206;
+    --info: var(--brand-sky);
+    --info-foreground: #0b1206;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+@layer base {
+  .font-title {
+    font-family: var(--font-title);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--brand-lime) 45%, transparent);
+    color: var(--brand-forest);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  input,
+  select,
+  textarea {
+    border-color: var(--border);
+    background: var(--surface);
+    color: var(--foreground);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: color-mix(in srgb, var(--muted) 70%, transparent);
+  }
 }

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `unit` ADD COLUMN `autoAddOnId` VARCHAR(191) NULL,
+    ADD COLUMN `autoAddOnMode` VARCHAR(191) NULL;
