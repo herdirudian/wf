@@ -14,15 +14,28 @@ function startOfDay(d: Date) {
 }
 
 export async function POST(req: Request) {
-  const token = (process.env.CRON_TOKEN ?? "").trim();
+  const normalizeToken = (v: string) => {
+    const t = v.trim();
+    if ((t.startsWith("\"") && t.endsWith("\"")) || (t.startsWith("'") && t.endsWith("'"))) return t.slice(1, -1).trim();
+    return t;
+  };
+
+  const token = normalizeToken(process.env.CRON_TOKEN ?? "");
   if (!token) return NextResponse.json({ message: "CRON_TOKEN belum diset" }, { status: 400 });
   const url = new URL(req.url);
   const gotHeader = req.headers.get("x-cron-token") ?? "";
   const auth = req.headers.get("authorization") ?? "";
   const gotAuth = auth.toLowerCase().startsWith("bearer ") ? auth.slice(7) : auth;
   const gotQuery = url.searchParams.get("token") ?? "";
-  const got = (gotHeader || gotAuth || gotQuery).trim();
-  if (got !== token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  const raw = [gotHeader, gotAuth, gotQuery].find((v) => v && v.trim().length > 0) ?? "";
+  const got = normalizeToken(raw);
+  if (got !== token) {
+    const source = raw === gotHeader ? "x-cron-token" : raw === gotAuth ? "authorization" : raw === gotQuery ? "query" : "none";
+    return NextResponse.json(
+      { message: "Unauthorized", meta: { source, gotLen: got.length, expectedLen: token.length } },
+      { status: 401 },
+    );
+  }
 
   const cfg = await prisma.appConfig.findUnique({ where: { id: 1 } });
   const balanceDueDays = Math.max(0, cfg?.balanceReminderDays ?? 7);
