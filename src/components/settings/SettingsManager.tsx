@@ -604,27 +604,29 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                   }}
                 />
                 {siteMapCropNatural && siteMapCropRect ? (() => {
+                  const natural = siteMapCropNatural;
+                  const cropRect = siteMapCropRect;
                   const img = siteMapCropImgRef.current;
                   if (!img) return null;
                   const r = img.getBoundingClientRect();
-                  const scaleX = r.width / Math.max(1, siteMapCropNatural.w);
-                  const scaleY = r.height / Math.max(1, siteMapCropNatural.h);
-                  const left = siteMapCropRect.x * scaleX;
-                  const top = siteMapCropRect.y * scaleY;
-                  const width = siteMapCropRect.w * scaleX;
-                  const height = siteMapCropRect.h * scaleY;
+                  const scaleX = r.width / Math.max(1, natural.w);
+                  const scaleY = r.height / Math.max(1, natural.h);
+                  const left = cropRect.x * scaleX;
+                  const top = cropRect.y * scaleY;
+                  const width = cropRect.w * scaleX;
+                  const height = cropRect.h * scaleY;
 
                   function clampRect(next: { x: number; y: number; w: number; h: number }) {
                     const minSize = 32;
-                    const x = Math.max(0, Math.min(siteMapCropNatural.w - minSize, next.x));
-                    const y = Math.max(0, Math.min(siteMapCropNatural.h - minSize, next.y));
-                    const w = Math.max(minSize, Math.min(siteMapCropNatural.w - x, next.w));
-                    const h = Math.max(minSize, Math.min(siteMapCropNatural.h - y, next.h));
+                    const x = Math.max(0, Math.min(natural.w - minSize, next.x));
+                    const y = Math.max(0, Math.min(natural.h - minSize, next.y));
+                    const w = Math.max(minSize, Math.min(natural.w - x, next.w));
+                    const h = Math.max(minSize, Math.min(natural.h - y, next.h));
                     return { x, y, w, h };
                   }
 
                   function startDrag(kind: "move" | "nw" | "ne" | "sw" | "se", clientX: number, clientY: number) {
-                    siteMapCropDragRef.current = { kind, startX: clientX, startY: clientY, rect: siteMapCropRect };
+                    siteMapCropDragRef.current = { kind, startX: clientX, startY: clientY, rect: cropRect };
                   }
 
                   function onMove(clientX: number, clientY: number) {
