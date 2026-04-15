@@ -319,6 +319,7 @@ export async function maybeSendPaidEmails(paymentId: string) {
   if (payment.status !== "paid") return { ok: true };
 
   const dueAt = new Date(payment.booking.checkIn.getTime() - balanceDueDays * 24 * 60 * 60 * 1000);
+  const feeCfg = feeConfigFromPaymentSnapshot(payment) ?? feeConfigForPayment(cfg?.xenditPaymentMethodsJson, payment.method ?? null);
   const alreadyInvoice = await prisma.paymentTransaction.findFirst({ where: { paymentId, action: "email_invoice_sent" } });
   const alreadyAdmin = await prisma.paymentTransaction.findFirst({ where: { paymentId, action: "email_admin_notified" } });
 
