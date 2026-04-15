@@ -56,7 +56,7 @@ export async function POST(req: Request) {
   try {
     const range = parseDateRangeWIB(parsed.data.checkIn, parsed.data.checkOut);
     const r = await createAdminBooking({
-      customer: parsed.data.customer,
+      customer: { ...parsed.data.customer, email: parsed.data.customer.email ?? null },
       specialRequest: parsed.data.specialRequest ?? null,
       checkIn: range.checkIn,
       checkOut: range.checkOut,
