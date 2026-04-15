@@ -3,9 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { reconcileXenditPaymentById } from "@/services/xendit.service";
 
 export async function POST(req: Request) {
-  const token = process.env.CRON_TOKEN ?? "";
+  const token = (process.env.CRON_TOKEN ?? "").trim();
   if (!token) return NextResponse.json({ message: "CRON_TOKEN belum diset" }, { status: 400 });
-  const got = req.headers.get("x-cron-token") ?? "";
+  const url = new URL(req.url);
+  const gotHeader = req.headers.get("x-cron-token") ?? "";
+  const auth = req.headers.get("authorization") ?? "";
+  const gotAuth = auth.toLowerCase().startsWith("bearer ") ? auth.slice(7) : auth;
+  const gotQuery = url.searchParams.get("token") ?? "";
+  const got = (gotHeader || gotAuth || gotQuery).trim();
   if (got !== token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const targets = await prisma.payment.findMany({

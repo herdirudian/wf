@@ -8,6 +8,8 @@
     - `POST /api/cron/webhooks/process`
     - `POST /api/cron/xendit/reconcile`
   - Kirim melalui header: `x-cron-token: <CRON_TOKEN>`
+  - Alternatif: `Authorization: Bearer <CRON_TOKEN>`
+  - Alternatif (darurat / untuk debug forwarding header): query param `?token=<CRON_TOKEN>`
 
 ### Cron Scheduler (VPS / Panel)
 
@@ -31,6 +33,9 @@ Contoh (Linux cron + curl):
 curl -sS -X POST "https://YOUR_DOMAIN/api/cron/payments/cleanup" -H "x-cron-token: YOUR_CRON_TOKEN"
 curl -sS -X POST "https://YOUR_DOMAIN/api/cron/webhooks/process" -H "x-cron-token: YOUR_CRON_TOKEN"
 curl -sS -X POST "https://YOUR_DOMAIN/api/cron/xendit/reconcile" -H "x-cron-token: YOUR_CRON_TOKEN"
+
+curl -sS -X POST "https://YOUR_DOMAIN/api/cron/payments/cleanup" -H "Authorization: Bearer YOUR_CRON_TOKEN"
+curl -sS -X POST "https://YOUR_DOMAIN/api/cron/payments/cleanup?token=YOUR_CRON_TOKEN"
 ```
 
 ### Webhook Xendit
@@ -79,4 +84,3 @@ mysql -u root -p woodforest_jayagiri_48 < backup_woodforest_jayagiri_48.sql
 
 - Setelah restore, jalankan `prisma db push` untuk memastikan schema sesuai aplikasi.
 - Pastikan backup mencakup file konfigurasi environment (`.env`) secara aman (jangan disebar publik).
-
