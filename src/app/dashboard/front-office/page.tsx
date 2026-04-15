@@ -68,7 +68,7 @@ export default async function FrontOfficePage({
   const allKavlings = Array.from({ length: sellCount }, (_, i) => i + 1);
 
   const kavlingStatusByNumber = (() => {
-    const m = new Map<number, "free" | "booked" | "checked_in" | "checked_out">();
+    const m = new Map<number, "booked" | "checked_in" | "checked_out">();
     for (const b of dayBookings) {
       const st = String((b as any).status ?? "");
       const kind = st === "completed" || (b as any).checkedOutAt ? "checked_out" : st === "checked_in" || (b as any).checkedInAt ? "checked_in" : "booked";
@@ -81,7 +81,11 @@ export default async function FrontOfficePage({
         m.set(n, kind);
       }
     }
-    return Object.fromEntries(Array.from(m.entries()).sort((a, b) => a[0] - b[0]));
+    const out: Record<number, "booked" | "checked_in" | "checked_out"> = {};
+    for (const [n, st] of Array.from(m.entries()).sort((a, b) => a[0] - b[0])) {
+      out[n] = st;
+    }
+    return out;
   })();
 
   const rows = bookings.map((b) => ({
