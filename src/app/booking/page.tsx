@@ -1507,67 +1507,71 @@ export default function PublicBookingPage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-surface">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setKavlingMapAssetVersion(Date.now());
-                          setKavlingMapZoom(1);
-                          setKavlingMapOpen(true);
-                        }}
-                        className="group block w-full"
-                        aria-label="Buka zoom Site Map Kavling"
-                      >
-                        <img
-                          src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
-                          alt="Site Map Kavling"
-                          className="h-56 w-full object-contain sm:h-72 md:h-96 cursor-zoom-in transition-opacity group-hover:opacity-95"
-                          loading="lazy"
-                        />
-                      </button>
-                    </div>
+                    <div className="mt-4 flex max-h-[70dvh] flex-col gap-4 sm:max-h-none">
+                      <div className="shrink-0 overflow-hidden rounded-2xl border border-border bg-surface">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setKavlingMapAssetVersion(Date.now());
+                            setKavlingMapZoom(1);
+                            setKavlingMapOpen(true);
+                          }}
+                          className="group block w-full"
+                          aria-label="Buka zoom Site Map Kavling"
+                        >
+                          <img
+                            src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
+                            alt="Site Map Kavling"
+                            className="h-56 w-full object-contain sm:h-72 md:h-96 cursor-zoom-in transition-opacity group-hover:opacity-95"
+                            loading="lazy"
+                          />
+                        </button>
+                      </div>
 
-                    <div className="mt-4 grid grid-cols-5 gap-2 sm:grid-cols-10">
-                      {kavlingAll.map((n) => {
-                        const isTaken = kavlingTaken.includes(n);
-                        const isSelected = kavlingSelected.includes(n);
-                        const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
-                        const isMandiri = !isPrivateInRange;
-                        
-                        let disabled = isTaken;
-                        if (effectiveKavlingScope === "private" && isMandiri) disabled = true;
-                        if (effectiveKavlingScope === "mandiri" && isPrivateInRange) disabled = true;
-                        if (effectiveKavlingScope === "paket" && isPrivateInRange) disabled = true;
-                        if (!effectiveKavlingScope) disabled = true;
+                      <div className="min-h-0 flex-1 overflow-auto">
+                        <div className="grid grid-cols-5 gap-2 pr-1 sm:grid-cols-10">
+                          {kavlingAll.map((n) => {
+                            const isTaken = kavlingTaken.includes(n);
+                            const isSelected = kavlingSelected.includes(n);
+                            const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
+                            const isMandiri = !isPrivateInRange;
 
-                        return (
-                          <button
-                            key={n}
-                            type="button"
-                            disabled={disabled && !isSelected}
-                            onClick={() => {
-                              if (isSelected) {
-                                setKavlingSelected((s) => s.filter((x) => x !== n));
-                              } else {
-                                if (kavlingSelected.length < requiredKavlings) {
-                                  setKavlingSelected((s) => [...s, n]);
-                                }
-                              }
-                            }}
-                            className={`flex h-10 items-center justify-center rounded-xl border text-xs font-bold transition-all ${
-                              isSelected
-                                ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                                : isTaken
-                                ? "border-red-200 bg-red-50 text-red-400 cursor-not-allowed opacity-60"
-                                : disabled
-                                ? "border-border bg-muted/30 text-muted opacity-40 cursor-not-allowed"
-                                : "border-border bg-surface text-foreground hover:border-primary hover:bg-primary/5"
-                            }`}
-                          >
-                            {n}
-                          </button>
-                        );
-                      })}
+                            let disabled = isTaken;
+                            if (effectiveKavlingScope === "private" && isMandiri) disabled = true;
+                            if (effectiveKavlingScope === "mandiri" && isPrivateInRange) disabled = true;
+                            if (effectiveKavlingScope === "paket" && isPrivateInRange) disabled = true;
+                            if (!effectiveKavlingScope) disabled = true;
+
+                            return (
+                              <button
+                                key={n}
+                                type="button"
+                                disabled={disabled && !isSelected}
+                                onClick={() => {
+                                  if (isSelected) {
+                                    setKavlingSelected((s) => s.filter((x) => x !== n));
+                                  } else {
+                                    if (kavlingSelected.length < requiredKavlings) {
+                                      setKavlingSelected((s) => [...s, n]);
+                                    }
+                                  }
+                                }}
+                                className={`flex h-10 items-center justify-center rounded-xl border text-xs font-bold transition-all ${
+                                  isSelected
+                                    ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                                    : isTaken
+                                    ? "border-red-200 bg-red-50 text-red-400 cursor-not-allowed opacity-60"
+                                    : disabled
+                                    ? "border-border bg-muted/30 text-muted opacity-40 cursor-not-allowed"
+                                    : "border-border bg-surface text-foreground hover:border-primary hover:bg-primary/5"
+                                }`}
+                              >
+                                {n}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                     {holdError && <div className="mt-2 text-[11px] text-red-600 font-medium">{holdError}</div>}
                   </div>
