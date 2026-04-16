@@ -39,22 +39,6 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b1107;
-    --foreground: #f2f4ef;
-    --surface: #0f170a;
-    --border: #223013;
-    --muted: #d3c892;
-    --primary: var(--brand-forest);
-    --primary-foreground: #ffffff;
-    --accent: var(--brand-sand);
-    --accent-foreground: #0b1206;
-    --info: var(--brand-sky);
-    --info-foreground: #0b1206;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
