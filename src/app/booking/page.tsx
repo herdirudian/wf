@@ -1528,9 +1528,10 @@ export default function PublicBookingPage() {
                         </button>
                       </div>
 
-                      <div className="min-h-0 flex-1 overflow-auto">
-                        <div className="grid grid-cols-5 gap-2 pr-1 sm:grid-cols-10">
-                          {kavlingAll.map((n) => {
+                      <div className="relative min-h-0 flex-1">
+                        <div className="h-full overflow-auto">
+                          <div className="grid grid-cols-5 gap-2 pr-1 sm:grid-cols-10">
+                            {kavlingAll.map((n) => {
                             const isTaken = kavlingTaken.includes(n);
                             const isSelected = kavlingSelected.includes(n);
                             const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
@@ -1569,8 +1570,18 @@ export default function PublicBookingPage() {
                                 {n}
                               </button>
                             );
-                          })}
+                            })}
+                          </div>
                         </div>
+                        {kavlingAll.length > 25 ? (
+                          <div className="pointer-events-none absolute inset-x-0 bottom-0 sm:hidden">
+                            <div className="h-10 bg-gradient-to-t from-background to-transparent" />
+                            <div className="absolute inset-x-0 bottom-1 flex items-center justify-center gap-2 text-[11px] font-semibold text-muted">
+                              <span>Scroll untuk lihat nomor lainnya</span>
+                              <span className="text-xs">↓</span>
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                     {holdError && <div className="mt-2 text-[11px] text-red-600 font-medium">{holdError}</div>}
