@@ -6,6 +6,7 @@ const cookieName = process.env.SESSION_COOKIE_NAME ?? "wf_admin_session";
 function isPublicApi(pathname: string) {
   if (pathname === "/api/auth/login") return true;
   if (pathname === "/api/auth/logout") return true;
+  if (pathname.startsWith("/api/cron/")) return true;
   if (pathname.startsWith("/api/public/")) return true;
   if (pathname.startsWith("/api/webhooks/")) return true;
   return false;
