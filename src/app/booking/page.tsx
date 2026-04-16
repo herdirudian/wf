@@ -1507,7 +1507,7 @@ export default function PublicBookingPage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 flex max-h-[70dvh] flex-col gap-4 sm:max-h-none">
+                    <div className="mt-4 flex flex-col gap-4">
                       <div className="shrink-0 overflow-hidden rounded-2xl border border-border bg-surface">
                         <button
                           type="button"
@@ -1528,10 +1528,9 @@ export default function PublicBookingPage() {
                         </button>
                       </div>
 
-                      <div className="relative min-h-0 flex-1">
-                        <div className="h-full overflow-auto">
-                          <div className="grid grid-cols-5 gap-2 pr-1 sm:grid-cols-10">
-                            {kavlingAll.map((n) => {
+                      <div className="relative max-h-[42dvh] overflow-auto overscroll-contain rounded-2xl sm:max-h-none sm:overflow-visible">
+                        <div className="grid grid-cols-5 gap-2 pr-1 pb-12 sm:grid-cols-10 sm:pb-0">
+                          {kavlingAll.map((n) => {
                             const isTaken = kavlingTaken.includes(n);
                             const isSelected = kavlingSelected.includes(n);
                             const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
@@ -1570,15 +1569,17 @@ export default function PublicBookingPage() {
                                 {n}
                               </button>
                             );
-                            })}
-                          </div>
+                          })}
                         </div>
+
                         {kavlingAll.length > 25 ? (
-                          <div className="pointer-events-none absolute inset-x-0 bottom-0 sm:hidden">
-                            <div className="h-10 bg-gradient-to-t from-background to-transparent" />
-                            <div className="absolute inset-x-0 bottom-1 flex items-center justify-center gap-2 text-[11px] font-semibold text-muted">
-                              <span>Scroll untuk lihat nomor lainnya</span>
-                              <span className="text-xs">↓</span>
+                          <div className="pointer-events-none sticky bottom-0 left-0 right-0 sm:hidden">
+                            <div className="relative">
+                              <div className="h-10 bg-gradient-to-t from-background to-transparent" />
+                              <div className="absolute inset-x-0 bottom-1 flex items-center justify-center gap-2 text-[11px] font-semibold text-muted">
+                                <span>Scroll untuk lihat nomor lainnya</span>
+                                <span className="text-xs">↓</span>
+                              </div>
                             </div>
                           </div>
                         ) : null}
