@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { maybeSendDpReceivedEmails, maybeSendPaidEmails } from "@/services/email.service";
+import { maybeSendDpReceivedEmails, maybeSendPaidEmails, maybeSendPaymentLinkEmails } from "@/services/email.service";
 import { formatIDR } from "@/lib/format";
 
 type XenditInvoice = {
@@ -396,6 +396,7 @@ export async function createXenditInvoiceByBookingCode(params: {
     },
   });
 
+  await maybeSendPaymentLinkEmails(booking.payment.id, invoiceKind).catch(() => null);
   return { invoiceUrl: (data as any).invoice_url as string };
 }
 

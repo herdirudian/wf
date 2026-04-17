@@ -513,3 +513,96 @@ export async function maybeSendDpReceivedEmails(paymentId: string) {
 
   return { ok: true };
 }
+
+export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" | "balance") {
+  const smtp = await getSmtpConfigOrNull();
+  if (!smtp) return { ok: true, skipped: true };
+
+  const cfg = await prisma.appConfig.findUnique({ where: { id: 1 } });
+  const balanceDueDays = Math.max(0, cfg?.balanceReminderDays ?? 7);
+
+  const payment = await prisma.payment.findUnique({
+    where: { id: paymentId },
+    include: {
+      booking: {
+        include: {
+          customer: true,
+          items: { include: { unit: true } },
+          addOns: { include: { addOn: true } },
+          kavlings: { include: { kavling: true } },
+        },
+      },
+    },
+  });
+  if (!payment) return { ok: false };
+
+  const to = (payment.booking.customer.email ?? "").trim();
+  if (!to) return { ok: true, skipped: true };
+
+  const dueAt = new Date(payment.booking.checkIn.getTime() - balanceDueDays * 24 * 60 * 60 * 1000);
+  const feeCfg = feeConfigFromPaymentSnapshot(payment) ?? feeConfigForPayment(cfg?.xenditPaymentMethodsJson, payment.method ?? null);
+
+  const outstanding = payment.amount - payment.paidAmount;
+  if (outstanding <= 0) return { ok: true, skipped: true };
+  if (!payment.checkoutUrl) return { ok: true, skipped: true };
+
+  const externalId = (payment.gatewayExternalId ?? "").trim();
+  const idempotencyKey = `email_payment_link_sent:${kind}:${externalId || payment.checkoutUrl}`;
+  const already = await prisma.paymentTransaction.findFirst({ where: { paymentId, action: idempotencyKey }, select: { id: true } });
+  if (already) return { ok: true, skipped: true };
+
+  const title = kind === "dp" ? "Link Pembayaran DP" : "Link Pembayaran Pelunasan";
+  const body =
+    kind === "dp"
+      ? `Silakan lakukan pembayaran DP untuk booking ${payment.booking.code}.\n\n` + `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`
+      : `Silakan selesaikan pelunasan untuk booking ${payment.booking.code} sebelum jatuh tempo.\n\n` +
+        `Sisa tagihan: ${formatIDR(outstanding)}\n` +
+        `Jatuh tempo: ${formatDateWIB(dueAt)}\n\n` +
+        `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`;
+
+  const invoiceModel: InvoiceEmailModel = {
+    booking: {
+      code: payment.booking.code,
+      checkIn: payment.booking.checkIn,
+      checkOut: payment.booking.checkOut,
+      totalGuest: payment.booking.totalGuest,
+      specialRequest: payment.booking.specialRequest ?? null,
+      customer: {
+        name: payment.booking.customer.name,
+        phone: payment.booking.customer.phone,
+        email: payment.booking.customer.email ?? "",
+      },
+      items: payment.booking.items.map((it) => ({ name: it.unit.name, quantity: it.quantity })),
+      addOns: payment.booking.addOns.map((x) => ({ name: x.addOn.name, quantity: x.quantity, price: x.addOn.price })),
+      kavlings: payment.booking.kavlings.map((x) => x.kavling.number),
+    },
+    payment: {
+      amount: payment.amount,
+      paidAmount: payment.paidAmount,
+      dpPlannedAmount: payment.dpPlannedAmount ?? 0,
+      serviceFeeAmount: payment.serviceFeeAmount ?? 0,
+      dueAt,
+      feeBps: feeCfg.feeBps,
+      feeFlat: feeCfg.feeFlat,
+      paidAt: payment.paidAt,
+      method: payment.method ?? null,
+      checkoutUrl: payment.checkoutUrl,
+    },
+    notice: { title, body },
+  };
+
+  const html = renderInvoiceEmailHtml(invoiceModel);
+  await sendEmail(smtp, { to, subject: `${title}: Booking ${payment.booking.code} - Woodforest Jayagiri 48`, html });
+  await prisma.paymentTransaction.create({
+    data: {
+      paymentId,
+      action: idempotencyKey,
+      amountDelta: 0,
+      paidAmountBefore: payment.paidAmount ?? 0,
+      paidAmountAfter: payment.paidAmount ?? 0,
+      method: "smtp",
+    },
+  });
+
+  return { ok: true };
+}
