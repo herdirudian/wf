@@ -2388,7 +2388,6 @@ export default function PublicBookingPage() {
                     </div>
                   </Modal>
                 ) : null}
-              </div>
 
               {/* Add-Ons Section */}
               <div className="space-y-8">
