@@ -1592,13 +1592,20 @@ export default function PublicBookingPage() {
                         Lanjut Pilih Unit
                       </button>
                     </div>
-                  </div>
+                  </form>
                 </div>
-              )}
+              </div>
+            )}
 
-              {currentStep === 3 && (
-                <div className="relative z-10">
-                  <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
+            {currentStep === 3 && (
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onSubmit(e);
+                }}
+                className="relative z-10"
+              >
+                <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
                 <div className="mb-12 text-center">
                   <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6">
                     <span className="relative flex h-2 w-2 mr-3">
@@ -2450,8 +2457,7 @@ export default function PublicBookingPage() {
                         Kembali
                       </button>
                       <button
-                        type="button"
-                        onClick={() => onSubmit()}
+                        type="submit"
                         disabled={submitting || loading || guestOverCapacity || selectedVisibleCount === 0}
                         className="group relative flex h-14 flex-1 items-center justify-center overflow-hidden rounded-2xl bg-primary px-10 text-sm font-black text-primary-foreground shadow-2xl shadow-primary/30 transition-all hover:bg-primary/90 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:shadow-none sm:flex-none"
                       >
@@ -2476,10 +2482,13 @@ export default function PublicBookingPage() {
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          </form>
         )}
       </div>
     </div>
-  );
+  )}
+  </div>
+</div>
+);
 }
