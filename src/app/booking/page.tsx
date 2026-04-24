@@ -2561,6 +2561,8 @@ export default function PublicBookingPage() {
       </div>
     </div>
   </div>
+)}
+</div>
 </div>
 );
 }
