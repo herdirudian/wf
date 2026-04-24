@@ -1592,14 +1592,13 @@ export default function PublicBookingPage() {
                         Lanjut Pilih Unit
                       </button>
                     </div>
-                  </form>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {currentStep === 3 && (
-              <div className="relative z-10">
-                <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
+              {currentStep === 3 && (
+                <div className="relative z-10">
+                  <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
                 <div className="mb-12 text-center">
                   <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6">
                     <span className="relative flex h-2 w-2 mr-3">
@@ -2477,11 +2476,9 @@ export default function PublicBookingPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         )}
-        </div>
-      )}
       </div>
     </div>
   );
