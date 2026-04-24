@@ -2148,9 +2148,6 @@ export default function PublicBookingPage() {
                         </div>
                       </div>
                     </div>}
-                  </div>
-                </div>
-              )}
 
                 {kavlingMapOpen ? (
                   <Modal
@@ -2564,5 +2561,6 @@ export default function PublicBookingPage() {
       </div>
     </div>
   </div>
+</div>
 );
 }
