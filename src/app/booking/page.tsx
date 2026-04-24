@@ -188,31 +188,35 @@ function QuantityStepper({
   const decDisabled = disabled || value <= min;
   const incDisabled = disabled || (typeof max === "number" ? value >= max : false);
 
-  const btnClass = size === "sm" ? "h-9 w-9 text-base" : "h-10 w-10 text-lg";
-  const midClass = size === "sm" ? "min-w-8 px-2 text-sm" : "min-w-10 px-3 text-sm";
+  const btnClass = size === "sm" ? "h-10 w-10 text-base" : "h-12 w-12 text-xl";
+  const midClass = size === "sm" ? "min-w-[40px] px-2 text-sm" : "min-w-[48px] px-3 text-base";
 
   return (
-    <div className="inline-flex w-fit items-center rounded-xl border border-border bg-surface">
+    <div className="inline-flex w-fit items-center overflow-hidden rounded-2xl border-2 border-border bg-surface shadow-sm transition-all hover:border-primary/30">
       <button
         type="button"
         disabled={decDisabled}
         onClick={() => onChange(Math.max(min, value - 1))}
-        className={`${btnClass} rounded-l-xl text-foreground hover:bg-background disabled:opacity-40`}
+        className={`${btnClass} flex items-center justify-center font-black text-foreground transition-all hover:bg-muted active:scale-90 disabled:opacity-20 disabled:hover:bg-transparent`}
         aria-label={`Kurangi ${ariaLabel}`}
       >
-        −
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+        </svg>
       </button>
-      <div className={`${midClass} text-center font-semibold text-foreground`} aria-label={ariaLabel}>
+      <div className={`${midClass} flex items-center justify-center border-x-2 border-border text-center font-black text-primary`} aria-label={ariaLabel}>
         {value}
       </div>
       <button
         type="button"
         disabled={incDisabled}
         onClick={() => onChange(typeof max === "number" ? Math.min(max, value + 1) : value + 1)}
-        className={`${btnClass} rounded-r-xl text-foreground hover:bg-background disabled:opacity-40`}
+        className={`${btnClass} flex items-center justify-center font-black text-foreground transition-all hover:bg-muted active:scale-90 disabled:opacity-20 disabled:hover:bg-transparent`}
         aria-label={`Tambah ${ariaLabel}`}
       >
-        +
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
       </button>
     </div>
   );
@@ -234,11 +238,19 @@ export default function PublicBookingPage() {
   const [filterCategory, setFilterCategory] = useState("");
   const [unitPage, setUnitPage] = useState(1);
 
+  const [currentStep, setCurrentStep] = useState(1);
+  const [adultPax, setAdultPax] = useState(1);
+  const [childPax, setChildPax] = useState(0);
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [totalGuest, setTotalGuest] = useState(1);
   const [specialRequest, setSpecialRequest] = useState("");
+
+  useEffect(() => {
+    setTotalGuest(adultPax + childPax);
+  }, [adultPax, childPax]);
 
   const [units, setUnits] = useState<AvailabilityUnit[]>([]);
   const [addons, setAddons] = useState<AvailabilityAddOn[]>([]);
@@ -875,8 +887,8 @@ export default function PublicBookingPage() {
     [totalGuest, totalCapacity],
   );
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
+    e?.preventDefault();
     setSubmitting(true);
     setError(null);
     setSuccess(null);
@@ -980,24 +992,42 @@ export default function PublicBookingPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-background">
-      <div className="mx-auto max-w-4xl px-4 py-8">
-        <div className={`${success ? "no-print " : ""}rounded-3xl border border-border bg-surface/80 p-6 shadow-sm backdrop-blur`}>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-[160px_1fr] sm:items-center">
+    <div className="relative min-h-screen bg-background selection:bg-primary/10 selection:text-primary">
+      {/* Premium Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute -left-1/4 -top-1/4 h-[100%] w-[100%] rounded-full bg-primary/[0.03] blur-[120px] animate-pulse" />
+        <div className="absolute -right-1/4 -bottom-1/4 h-[100%] w-[100%] rounded-full bg-primary/[0.02] blur-[120px] animate-pulse duration-[10000ms]" />
+      </div>
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className={`${success ? "no-print " : ""}mb-12 overflow-hidden rounded-[2.5rem] border border-border bg-surface/50 p-8 shadow-2xl shadow-primary/5 backdrop-blur-xl transition-all hover:shadow-primary/10`}>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-[200px_1fr] sm:items-center">
             <div className="flex justify-center sm:justify-start">
-              <img src="/brand/logowf.png" alt="Woodforest" className="h-28 w-28 shrink-0 rounded-xl object-contain sm:h-40 sm:w-40" />
+              <div className="relative group">
+                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <img src="/brand/logowf.png" alt="Woodforest" className="relative h-32 w-32 shrink-0 rounded-2xl object-contain sm:h-48 sm:w-48 transition-transform duration-700 group-hover:scale-105" />
+              </div>
             </div>
-            <div className="sm:-mt-1">
-              <div className="text-xs font-medium text-muted">Woodforest Jayagiri 48 · Lembang</div>
-              <h1 className="font-title mt-1 text-[36px] font-semibold leading-tight text-foreground sm:text-[40px]">Booking Camping</h1>
-              <p className="mt-2 text-sm text-muted">
+            <div className="sm:-mt-2">
+              <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4">
+                <span className="relative flex h-2 w-2 mr-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                Luxury Camping Ground
+              </div>
+              <h1 className="text-5xl font-black tracking-tighter text-foreground sm:text-6xl">
+                Woodforest <span className="text-primary italic">Booking</span>
+              </h1>
+              <p className="mt-4 max-w-xl text-lg font-medium leading-relaxed text-muted">
                 Grounded, calm, warm. Pilih tanggal, pilih paket, dan kami siapkan pengalaman yang tenang di alam untuk bonding keluarga.
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <div className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground">Quiet nature</div>
-                <div className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground">Family bonding</div>
-                <div className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground">Wellness</div>
-                <div className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground">Light adventure</div>
+              <div className="mt-8 flex flex-wrap gap-3">
+                {["Quiet nature", "Family bonding", "Wellness", "Light adventure"].map((tag) => (
+                  <div key={tag} className="rounded-2xl border-2 border-border bg-surface px-4 py-2 text-[11px] font-black uppercase tracking-wider text-muted transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-1">
+                    {tag}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -1231,284 +1261,684 @@ export default function PublicBookingPage() {
             </div>
           </>
         ) : (
-          <>
-            <form onSubmit={onSubmit} className="mt-6 space-y-6 pb-28">
-              <div className="rounded-2xl border border-border bg-surface p-5">
-                <div className="text-sm font-semibold text-foreground">Tanggal & Preferensi</div>
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <div className="space-y-1">
-                    <label className="text-sm font-semibold text-foreground">
-                      Check-in <span aria-hidden="true" className="text-amber-600">*</span>
-                    </label>
-                    <input
-                      type="date"
-                      value={checkIn}
-                      onChange={(e) => setCheckIn(e.target.value)}
-                      className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-sm font-semibold text-foreground">
-                      Check-out <span aria-hidden="true" className="text-amber-600">*</span>
-                    </label>
-                    <input
-                      type="date"
-                      value={checkOut}
-                      onChange={(e) => setCheckOut(e.target.value)}
-                      className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-                      required
-                    />
-                  </div>
+          <div className="mt-8 space-y-8 pb-32">
+            {/* Step Indicators - Premium & Interactive */}
+            <div className="mx-auto max-w-4xl px-4">
+              <div className="relative flex items-center justify-between">
+                {/* Background Track */}
+                <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 bg-border/40 rounded-full" aria-hidden="true" />
+                
+                {/* Progress Bar */}
+                <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full" aria-hidden="true">
+                  <div 
+                    className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.34, 1.56, 0.64, 1)" 
+                    style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
+                  />
                 </div>
 
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <div className="space-y-1 sm:col-span-2">
-                    <label className="text-sm font-semibold text-foreground">
-                      Nama Lengkap <span aria-hidden="true" className="text-amber-600">*</span>
-                    </label>
-                    <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-sm font-semibold text-foreground">
-                      Total Guest <span aria-hidden="true" className="text-amber-600">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      min={1}
-                      value={totalGuest}
-                      onChange={(e) => setTotalGuest(Number(e.target.value))}
-                      className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-                      required
-                    />
-                    {totalCapacity ? (
-                      <div className="text-xs text-muted">Kapasitas terpilih: {totalCapacity}</div>
-                    ) : null}
-                  </div>
-                  <div className="space-y-1 sm:col-span-2">
-                    <label className="text-sm font-semibold text-foreground">
-                      Nomor WhatsApp <span aria-hidden="true" className="text-amber-600">*</span>
-                    </label>
-                    <input
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-sm font-semibold text-foreground">
-                      Email <span aria-hidden="true" className="text-amber-600">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-1 sm:col-span-3">
-                    <label className="text-sm font-semibold text-foreground">Special Request (opsional)</label>
-                    <textarea
-                      value={specialRequest}
-                      onChange={(e) => setSpecialRequest(e.target.value)}
-                      className="h-20 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-                      placeholder="Contoh: minta lokasi dekat toilet, bawa anak kecil, request check-in lebih awal (jika memungkinkan)..."
-                    />
-                  </div>
-                </div>
+                {[1, 2, 3].map((step) => {
+                  const isActive = currentStep === step;
+                  const isCompleted = currentStep > step;
+                  return (
+                    <div key={step} className="relative z-10 flex flex-col items-center">
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          if (isCompleted || (step < currentStep)) setCurrentStep(step);
+                        }}
+                        disabled={!isCompleted && step > currentStep}
+                        className={`group relative flex h-14 w-14 items-center justify-center rounded-[1.25rem] border-2 transition-all duration-500 ${
+                          isActive 
+                            ? "border-primary bg-surface text-primary ring-[8px] ring-primary/10 -translate-y-1.5 shadow-2xl shadow-primary/30" 
+                            : isCompleted 
+                              ? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-110" 
+                              : "border-border bg-surface text-muted-foreground hover:border-primary/30"
+                        }`}
+                      >
+                        {isCompleted ? (
+                          <svg className="h-7 w-7 transition-transform duration-500 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <span className={`text-lg font-black transition-all duration-500 ${isActive ? "scale-110" : "opacity-60"}`}>{step}</span>
+                        )}
+                        
+                        {/* Tooltip-like Label */}
+                        <div className={`absolute -bottom-12 flex flex-col items-center transition-all duration-500 ${
+                          isActive ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0 pointer-events-none"
+                        }`}>
+                          <div className="h-1.5 w-1.5 rounded-full bg-primary mb-2" />
+                          <span className="whitespace-nowrap text-[10px] font-black uppercase tracking-[0.25em] text-primary">
+                            {step === 1 ? "Pilih Paket" : step === 2 ? "Detail Tamu" : "Pilihan Unit"}
+                          </span>
+                        </div>
+                        
+                        {/* Inactive Label */}
+                        {!isActive && (
+                          <span className="absolute -bottom-10 whitespace-nowrap text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground opacity-40">
+                            {step === 1 ? "Paket" : step === 2 ? "Tamu" : "Unit"}
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
+            </div>
 
-              <div className="rounded-2xl border border-border bg-surface p-5">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-                    <div className="text-sm font-semibold text-foreground">Filter</div>
-                    <select
-                      value={filterType}
-                      onChange={(e) => setFilterType(e.target.value)}
-                      className="h-9 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary sm:w-auto"
-                    >
-                      <option value="">Semua Type</option>
-                      {typeOptions.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
-                    <select
-                      value={filterCategory}
-                      onChange={(e) => setFilterCategory(e.target.value)}
-                      className="h-9 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary sm:w-auto"
-                    >
-                      <option value="">Semua Kategori</option>
-                      {categoryOptions.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
+            <div className="relative">
+              {currentStep === 1 && (
+                <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
+                  <div className="mb-12 text-center">
+                    <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6 border border-primary/10">
+                      Step 01
+                    </div>
+                    <h2 className="text-4xl font-black tracking-tight text-foreground sm:text-6xl">
+                      Pilih <span className="text-primary italic">Pengalaman</span>
+                    </h2>
+                    <p className="mx-auto mt-4 max-w-2xl text-lg font-medium text-muted">
+                      Setiap paket dirancang untuk memberikan kedamaian dan momen bonding yang tak terlupakan di tengah alam.
+                    </p>
                   </div>
-                  <div className="self-end text-xs text-muted sm:self-auto">
-                    {loading ? "Loading..." : `${pagedVisibleUnits.length}/${visibleUnits.length} item`}
-                  </div>
-                </div>
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  {pagedVisibleUnits.map((u) => {
-                    const inc = parseIncludesJson(u.includesJson);
-                    const images = parseImagesJson(u.imagesJson);
-                    const facilities = parseFacilitiesJson(u.facilitiesJson);
+
+                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                  {categoryOptions.map((cat, idx) => {
+                    const isGlamping = cat.toLowerCase().includes('glamp');
+                    const isPaket = cat.toLowerCase().includes('paket');
+                    const isPrivate = cat.toLowerCase().includes('private');
+                    
                     return (
-                      <div key={u.id} className="rounded-2xl border border-border bg-surface p-4">
-                        <div className="mb-3">
-                          <ImageCarousel images={images} heightClassName="h-36" />
-                        </div>
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <div className="text-sm font-semibold text-foreground">{u.name}</div>
-                            <div className="mt-1 text-xs text-muted">
-                              Kapasitas {u.capacity} · Tersedia {u.available}
-                            </div>
-                            {u.description ? (
-                              <div className="mt-2 text-xs text-muted">{u.description}</div>
-                            ) : null}
-                            {facilities.length ? (
-                              <div className="mt-2 flex flex-wrap gap-1.5">
-                                {facilities.map((k) => (
-                                  <div
-                                    key={k}
-                                    className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-foreground"
-                                  >
-                                    {FACILITY_LABEL_BY_KEY[k] ?? k}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : null}
-                          </div>
-                          <QuantityStepper
-                            value={unitQty[u.id] ?? 0}
-                            min={0}
-                            max={u.available}
-                            disabled={u.available <= 0}
-                            ariaLabel={`qty ${u.name}`}
-                            onChange={(next) =>
-                              setUnitQty((s) => ({
-                                ...s,
-                                [u.id]: Math.max(0, Math.min(u.available, next)),
-                              }))
-                            }
-                          />
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => {
+                          setFilterCategory(cat);
+                          setCurrentStep(2);
+                        }}
+                        style={{ animationDelay: `${idx * 150}ms` }}
+                        className={`group relative flex flex-col items-start overflow-hidden p-8 transition-all duration-700 hover:shadow-2xl hover:-translate-y-2 rounded-[2.5rem] border-2 animate-in fade-in slide-in-from-bottom-8 fill-mode-both ${
+                          filterCategory === cat ? "border-primary bg-primary/[0.03] shadow-xl shadow-primary/10" : "border-border bg-surface hover:border-primary/40"
+                        }`}
+                      >
+                        {/* Decorative Background Element */}
+                        <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-primary/5 transition-transform duration-1000 group-hover:scale-150" />
+                        
+                        <div className={`relative mb-8 flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-700 ${
+                          filterCategory === cat ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" : "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-12"
+                        }`}>
+                          {isGlamping ? (
+                            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                          ) : isPrivate ? (
+                            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                          ) : isPaket ? (
+                            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                          ) : (
+                            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                          )}
                         </div>
 
-                        <div className="mt-3 grid grid-cols-2 gap-2">
-                          <div className="rounded-xl border border-border bg-background px-3 py-2">
-                            <div className="text-[11px] text-muted">Total (tanggal ini)</div>
-                            <div className="text-sm font-semibold text-foreground">{formatIDR(sumDailyPrice(u))}</div>
-                          </div>
-                          <div className="rounded-xl border border-border bg-background px-3 py-2">
-                            <div className="text-[11px] text-muted">Per malam</div>
-                            <div className="text-sm font-semibold text-foreground">{priceRangeLabel(u)}</div>
-                          </div>
+                        <div className="relative text-left">
+                          <h3 className="text-2xl font-black text-foreground transition-colors group-hover:text-primary">{cat}</h3>
+                          <p className="mt-3 text-sm font-medium leading-relaxed text-muted">
+                            {cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap di tengah rimbunnya hutan Jayagiri." : 
+                             cat === "Paket" ? "Pilihan paket lengkap untuk keluarga dengan berbagai fasilitas yang sudah kami siapkan." :
+                             "Pengalaman eksklusif dengan privasi tinggi untuk momen spesial Anda bersama orang terdekat."}
+                          </p>
                         </div>
 
-                        {inc.length ? (
-                          <ul className="mt-3 list-disc pl-5 text-xs text-muted">
-                            {inc.map((t) => (
-                              <li key={t}>{t}</li>
-                            ))}
-                          </ul>
-                        ) : null}
-                      </div>
+                        <div className="relative mt-8 flex items-center text-sm font-black text-primary transition-all duration-300 group-hover:translate-x-2">
+                          Mulai Booking
+                          <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </div>
+                      </button>
                     );
                   })}
-                  {visibleUnits.length === 0 ? (
-                    <div className="rounded-2xl border border-border bg-surface p-6 text-center text-sm text-muted sm:col-span-2">
-                      Tidak ada item untuk filter ini
-                    </div>
-                  ) : null}
                 </div>
-                {visibleUnits.length > shownUnitBaseCount ? (
-                  <div className="mt-4 flex justify-center">
-                    <button
-                      type="button"
-                      onClick={() => setUnitPage((p) => p + 1)}
-                      className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground hover:bg-background"
-                    >
-                      Tampilkan lebih banyak
-                    </button>
-                  </div>
-                ) : null}
-                <div className="mt-3 text-xs text-muted">Paket dipilih: {selectedVisibleCount}</div>
+              </div>
+            )}
 
-                {effectiveKavlingScope || kavlingAmbiguous ? (
-                  <div className="mt-4 rounded-2xl border border-border bg-background p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="text-sm font-semibold text-foreground">Pilih Kavling</div>
-                        <div className="mt-1 text-xs text-muted">
-                          {kavlingAmbiguous ? (
-                            <div className="space-y-2">
-                              {combinedAll ? (
-                                <div>
-                                  Pilih {requiredKavlings} kavling untuk Paket + Camping Mandiri + Paket Private (Private: x{kavlingQtyByGroup.private}
-                                  {kavlingPrivateRange ? ` • range ${kavlingPrivateRange.start}-${kavlingPrivateRange.end}` : ""}).
-                                </div>
-                              ) : combinedNonPrivate ? (
-                                <div>Pilih {requiredKavlings} kavling untuk Paket + Camping Mandiri.</div>
-                              ) : (
-                                <>
-                                  <div>Untuk pilih kavling, pilih qty hanya di salah satu: Paket / Paket Private / Camping Mandiri (atau filter kategori).</div>
-                                  <div className="flex flex-wrap items-end gap-2">
-                                    <div className="space-y-1">
-                                      <label className="text-xs font-medium text-foreground">Pilih untuk</label>
-                                      <select
-                                        value={kavlingScopePick || ""}
-                                        onChange={(e) => setKavlingScopePick(e.target.value as any)}
-                                        className="h-8 rounded-lg border border-border bg-surface px-2 text-xs outline-none focus:border-primary"
-                                      >
-                                        <option value="">Pilih...</option>
-                                        {kavlingQtyByGroup.mandiri > 0 && <option value="mandiri">Camping Mandiri</option>}
-                                        {kavlingQtyByGroup.paket > 0 && <option value="paket">Paket</option>}
-                                        {kavlingQtyByGroup.private > 0 && <option value="private">Paket Private</option>}
-                                      </select>
-                                    </div>
-                                    <div className="text-xs text-muted pb-2">
-                                      {effectiveKavlingScope === "private" && kavlingPrivateRange 
-                                        ? `Range: ${kavlingPrivateRange.start}-${kavlingPrivateRange.end}` 
-                                        : ""}
-                                    </div>
-                                  </div>
-                                </>
-                              )}
+            {currentStep === 2 && (
+              <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
+                <div className="mb-12 text-center">
+                  <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6 border border-primary/10">
+                    Step 02
+                  </div>
+                  <h2 className="text-4xl font-black tracking-tight text-foreground sm:text-6xl">
+                    Detail <span className="text-primary italic">Tamu</span>
+                  </h2>
+                  <p className="mx-auto mt-4 max-w-2xl text-lg font-medium text-muted">
+                    Informasi jumlah tamu membantu kami menyiapkan fasilitas yang tepat untuk kenyamanan keluarga Anda.
+                  </p>
+                </div>
+
+                <div className="mx-auto max-w-4xl">
+                  <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(3); }} className="space-y-8">
+                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                      {/* Left Column: Stay Details */}
+                      <div className="space-y-8">
+                        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-sm transition-all hover:shadow-md">
+                          <div className="border-b border-border bg-muted/30 px-8 py-5">
+                            <h3 className="text-lg font-black text-foreground flex items-center">
+                              <svg className="mr-3 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                              Detail Menginap
+                            </h3>
+                          </div>
+                      <div className="p-8 space-y-6">
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                          <div className="space-y-2 animate-in fade-in slide-in-from-left-4 duration-700 fill-mode-both" style={{ animationDelay: "100ms" }}>
+                            <label className="text-xs font-black uppercase tracking-widest text-muted">Check-in</label>
+                            <div className="relative group">
+                              <input
+                                type="date"
+                                value={checkIn}
+                                onChange={(e) => setCheckIn(e.target.value)}
+                                className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                required
+                              />
+                              <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
                             </div>
-                          ) : (
-                            <div>
-                              Pilih {requiredKavlings} kavling ({effectiveKavlingScope}) 
-                              {effectiveKavlingScope === "private" && kavlingPrivateRange ? ` • range ${kavlingPrivateRange.start}-${kavlingPrivateRange.end}` : ""}.
+                          </div>
+                          <div className="space-y-2 animate-in fade-in slide-in-from-right-4 duration-700 fill-mode-both" style={{ animationDelay: "200ms" }}>
+                            <label className="text-xs font-black uppercase tracking-widest text-muted">Check-out</label>
+                            <div className="relative group">
+                              <input
+                                type="date"
+                                value={checkOut}
+                                onChange={(e) => setCheckOut(e.target.value)}
+                                className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                required
+                              />
+                              <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 pt-2 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both" style={{ animationDelay: "300ms" }}>
+                          <label className="text-xs font-black uppercase tracking-widest text-muted">Jumlah Tamu</label>
+                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="flex items-center justify-between rounded-2xl border border-border bg-muted/20 p-4 transition-all hover:bg-muted/30">
+                              <div className="space-y-0.5">
+                                <p className="text-sm font-black text-foreground">Dewasa</p>
+                                <p className="text-[10px] font-bold text-muted">Usia 12+</p>
+                              </div>
+                              <QuantityStepper 
+                                value={adultPax} 
+                                min={1} 
+                                ariaLabel="Dewasa" 
+                                onChange={setAdultPax} 
+                              />
+                            </div>
+                            <div className="flex items-center justify-between rounded-2xl border border-border bg-muted/20 p-4 transition-all hover:bg-muted/30">
+                              <div className="space-y-0.5">
+                                <p className="text-sm font-black text-foreground">Anak</p>
+                                <p className="text-[10px] font-bold text-muted">Usia &lt; 12</p>
+                              </div>
+                              <QuantityStepper 
+                                value={childPax} 
+                                min={0} 
+                                ariaLabel="Anak" 
+                                onChange={setChildPax} 
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                        </div>
+                      </div>
+
+                      {/* Right Column: Contact Info */}
+                      <div className="space-y-8">
+                        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-sm transition-all hover:shadow-md">
+                          <div className="border-b border-border bg-muted/30 px-8 py-5">
+                            <h3 className="text-lg font-black text-foreground flex items-center">
+                              <svg className="mr-3 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                              Informasi Kontak
+                            </h3>
+                          </div>
+                          <div className="p-8 space-y-5">
+                            <div className="space-y-2">
+                              <label className="text-xs font-black uppercase tracking-widest text-muted">Nama Lengkap</label>
+                              <div className="relative group">
+                                <input
+                                  value={name}
+                                  onChange={(e) => setName(e.target.value)}
+                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                  placeholder="Sesuai KTP"
+                                  required
+                                />
+                                <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                              <div className="space-y-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-muted">WhatsApp</label>
+                                <div className="relative group">
+                                  <input
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className="w-full rounded-2xl border border-border bg-surface pl-14 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                    placeholder="0812..."
+                                    required
+                                  />
+                                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-black text-primary transition-transform group-hover:scale-110">+62</span>
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-muted">Email</label>
+                                <div className="relative group">
+                                  <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                    placeholder="email@anda.com"
+                                    required
+                                  />
+                                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="text-xs font-black uppercase tracking-widest text-muted">Permintaan Khusus</label>
+                              <textarea
+                                value={specialRequest}
+                                onChange={(e) => setSpecialRequest(e.target.value)}
+                                className="h-24 w-full rounded-2xl border border-border bg-surface px-5 py-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 resize-none group-hover:border-primary/40"
+                                placeholder="Opsional: Request lokasi, check-in awal, dll."
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-4 pt-4 sm:flex-row">
+                      <button
+                        type="button"
+                        onClick={() => setCurrentStep(1)}
+                        className="order-2 flex-1 rounded-[1.5rem] border-2 border-border bg-surface px-8 py-4.5 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95 sm:order-1"
+                      >
+                        Kembali
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={!name || !phone || !email || !checkIn || !checkOut}
+                        className="order-1 flex-1 rounded-[1.5rem] bg-primary px-8 py-4.5 text-sm font-black text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:shadow-none sm:order-2"
+                      >
+                        Lanjut Pilih Unit
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {currentStep === 3 && (
+              <div className="relative z-10">
+                <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
+                <div className="mb-12 text-center">
+                  <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6">
+                    <span className="relative flex h-2 w-2 mr-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    </span>
+                    Step 03: Pilih Unit
+                  </div>
+                  <h2 className="text-5xl font-black tracking-tight text-foreground sm:text-6xl">
+                    Pilihan <span className="text-primary italic">Unit & Kavling</span>
+                  </h2>
+                  <p className="mx-auto mt-6 max-w-2xl text-lg font-medium text-muted">
+                    Tentukan unit dan lokasi kavling yang Anda inginkan. Kami pastikan setiap sudut Woodforest memberikan pengalaman yang tenang.
+                  </p>
+                </div>
+
+                <div className="mx-auto max-w-5xl">
+                  <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between rounded-[2.5rem] border-2 border-border bg-surface/50 p-8 backdrop-blur-xl shadow-2xl shadow-primary/5">
+                    <div className="flex items-center gap-5">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-xl shadow-primary/20">
+                        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-[0.25em] text-muted mb-1">Kategori Terpilih</p>
+                        <p className="text-xl font-black text-foreground">{filterCategory || "Semua Paket"}</p>
+                      </div>
+                    </div>
+
+                    <div className="hidden h-12 w-px bg-border lg:block" />
+
+                    <div className="hidden flex-col gap-1 lg:flex">
+                      <p className="text-[10px] font-black uppercase tracking-[0.25em] text-muted">Jadwal & Tamu</p>
+                      <div className="flex items-center gap-2">
+                        <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p className="text-sm font-black text-foreground">
+                          {checkIn} - {checkOut}
+                        </p>
+                        <span className="mx-1 text-muted">/</span>
+                        <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <p className="text-sm font-black text-foreground">
+                          {adultPax}D {childPax > 0 ? `+ ${childPax}A` : ""}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-4">
+                      <div className="relative group flex-1 sm:flex-none">
+                        <select
+                          value={filterType}
+                          onChange={(e) => setFilterType(e.target.value)}
+                          className="h-16 w-full appearance-none rounded-2xl border-2 border-border bg-surface pl-8 pr-14 text-sm font-black text-foreground outline-none transition-all group-hover:border-primary/40 focus:border-primary focus:ring-8 focus:ring-primary/5 sm:w-64"
+                        >
+                          <option value="">Semua Tipe Unit</option>
+                          {typeOptions.map((t) => (
+                            <option key={t} value={t}>{t}</option>
+                          ))}
+                        </select>
+                        <svg className="absolute right-6 top-1/2 -translate-y-1/2 h-5 w-5 text-primary pointer-events-none transition-transform group-hover:translate-y-[-40%]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                      
+                      <button
+                        type="button"
+                        onClick={() => setCurrentStep(2)}
+                        className="group flex h-16 items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95"
+                      >
+                        <svg className="mr-3 h-5 w-5 text-primary transition-transform group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Ubah Data
+                      </button>
+                    </div>
+                  </div>
+                
+                {/* Unit Grid */}
+              <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
+                {pagedVisibleUnits.map((u, idx) => {
+                  const inc = parseIncludesJson(u.includesJson);
+                  const images = parseImagesJson(u.imagesJson);
+                  const facilities = parseFacilitiesJson(u.facilitiesJson);
+                  const isSelected = (unitQty[u.id] ?? 0) > 0;
+                  
+                  return (
+                    <div 
+                      key={u.id} 
+                      style={{ animationDelay: `${idx * 100}ms` }}
+                      className={`group flex flex-col overflow-hidden rounded-[2.5rem] border-2 transition-all duration-700 animate-in fade-in slide-in-from-bottom-8 fill-mode-both ${
+                        isSelected 
+                          ? "border-primary bg-primary/[0.02] shadow-2xl shadow-primary/10 scale-[1.02]" 
+                          : "border-border bg-surface hover:border-primary/30 hover:shadow-xl hover:-translate-y-1"
+                      }`}
+                    >
+                      <div className="relative aspect-[16/10] overflow-hidden">
+                        <ImageCarousel images={images} heightClassName="h-full" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                        
+                        {u.available <= 0 && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md">
+                            <div className="flex flex-col items-center gap-2 scale-110">
+                              <svg className="h-8 w-8 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <span className="text-sm font-black uppercase tracking-[0.2em] text-destructive">Unit Penuh</span>
+                            </div>
+                          </div>
+                        )}
+                        
+                        <div className="absolute right-6 top-6 flex flex-col gap-2">
+                          <div className="rounded-2xl bg-surface/90 px-4 py-2 text-[10px] font-black uppercase tracking-[0.15em] text-foreground backdrop-blur-xl shadow-2xl">
+                            {u.type}
+                          </div>
+                          {isSelected && (
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-2xl animate-in zoom-in-50 duration-300">
+                              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
                             </div>
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="text-xs font-medium text-foreground">
-                          {kavlingSelected.length}/{requiredKavlings} dipilih
-                        </div>
-                        {hold?.expiresAt && holdLeftLabel ? (
-                          <div className="text-[11px] font-semibold text-amber-700">
-                            Hold berakhir dalam {holdLeftLabel}
+                      
+                      <div className="flex flex-1 flex-col p-8">
+                        <div className="flex items-start justify-between gap-6">
+                          <div className="flex-1 space-y-3">
+                            <h3 className="text-2xl font-black leading-tight text-foreground transition-colors group-hover:text-primary">{u.name}</h3>
+                            <div className="flex flex-wrap items-center gap-4">
+                              <span className="flex items-center rounded-xl bg-muted/50 px-3 py-1.5 text-xs font-black text-muted-foreground">
+                                <svg className="mr-2 h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                {u.capacity} Tamu
+                              </span>
+                              <span className={`flex items-center rounded-xl px-3 py-1.5 text-xs font-black ${u.available > 2 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+                                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                </svg>
+                                Sisa {u.available} Unit
+                              </span>
+                            </div>
                           </div>
-                        ) : null}
-                        {kavlingLoading && <div className="text-[10px] text-muted animate-pulse">Menyiapkan kavling...</div>}
+                          <div className="shrink-0 scale-110">
+                            <QuantityStepper
+                              value={unitQty[u.id] ?? 0}
+                              min={0}
+                              max={u.available}
+                              disabled={u.available <= 0}
+                              ariaLabel={`qty ${u.name}`}
+                              onChange={(next) =>
+                                setUnitQty((s) => ({
+                                  ...s,
+                                  [u.id]: Math.max(0, Math.min(u.available, next)),
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+
+                        {u.description && (
+                          <p className="mt-6 text-sm font-medium leading-relaxed text-muted line-clamp-2">{u.description}</p>
+                        )}
+
+                        {facilities.length > 0 && (
+                          <div className="mt-6 flex flex-wrap gap-2">
+                            {facilities.map((k) => (
+                              <span key={k} className="rounded-xl border border-border/50 bg-muted/20 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-muted-foreground transition-colors group-hover:border-primary/20 group-hover:bg-primary/5 group-hover:text-primary">
+                                {FACILITY_LABEL_BY_KEY[k] ?? k}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        <div className="mt-8 grid grid-cols-2 gap-6 border-t border-border/50 pt-8">
+                          <div className="space-y-1">
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Harga Malam</p>
+                            <p className="text-lg font-black text-foreground">{priceRangeLabel(u)}</p>
+                          </div>
+                          <div className="space-y-1 text-right">
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Total Menginap</p>
+                            <p className="text-xl font-black text-primary italic underline decoration-primary/20 underline-offset-8">{formatIDR(sumDailyPrice(u))}</p>
+                          </div>
+                        </div>
+
+                        {inc.length > 0 && (
+                          <div className="mt-8 rounded-[1.5rem] bg-muted/20 p-6 transition-colors group-hover:bg-primary/[0.03] border border-transparent group-hover:border-primary/10">
+                            <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted">Package Includes:</p>
+                            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                              {inc.map((t, idx) => (
+                                <li key={idx} className="flex items-center text-xs font-bold text-foreground">
+                                  <div className="mr-3 flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                    <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  </div>
+                                  {t}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     </div>
+                  );
+                })}
+              </div>
 
-                    <div className="mt-4 flex flex-col gap-4">
-                      <div className="shrink-0 overflow-hidden rounded-2xl border border-border bg-surface">
+              {visibleUnits.length > shownUnitBaseCount && (
+                <div className="flex justify-center pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setUnitPage((p) => p + 1)}
+                    className="rounded-2xl border-2 border-border bg-surface px-8 py-3 text-sm font-bold text-foreground transition-all hover:bg-muted/50"
+                  >
+                    Lihat Lebih Banyak Unit
+                  </button>
+                </div>
+              )}
+                <div className="mt-3 text-xs text-muted">Paket dipilih: {selectedVisibleCount}</div>
+
+              {/* Kavling Selection Section */}
+              {(effectiveKavlingScope || kavlingAmbiguous) && (
+                <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-xl shadow-primary/5 transition-all duration-500 hover:shadow-primary/10">
+                  <div className="border-b border-border bg-muted/30 px-8 py-6">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 20l-5.447-2.724A2 2 0 013 15.483V5.517a2 2 0 011.553-1.943L9 2l6 3 5.447-2.724A2 2 0 0121 4.224v9.966a2 2 0 01-1.553 1.943L15 19l-6 1z" />
+                          </svg>
+                        </div>
+                        <div className="space-y-0.5">
+                          <h3 className="text-xl font-black text-foreground">Pilih Lokasi Kavling</h3>
+                          <p className="text-xs font-medium text-muted">Tentukan titik camping favorit Anda</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex flex-col items-end">
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Progres</span>
+                          <span className="text-sm font-black text-primary">
+                            {kavlingSelected.length} / {requiredKavlings} Kavling
+                          </span>
+                        </div>
+                        <div className="h-10 w-1 rounded-full bg-primary/20">
+                          <div 
+                            className="h-full w-full rounded-full bg-primary transition-all duration-500" 
+                            style={{ height: `${(kavlingSelected.length / requiredKavlings) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-8">
+                    <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="flex-1 space-y-4">
+                        <div className="rounded-2xl bg-primary/[0.03] p-5 border border-primary/10">
+                          {kavlingAmbiguous ? (
+                            <div className="space-y-4">
+                              {combinedAll ? (
+                                <p className="text-sm font-bold text-foreground leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/30 underline-offset-4">{requiredKavlings} kavling</span> untuk paket yang Anda pilih.</p>
+                              ) : combinedNonPrivate ? (
+                                <p className="text-sm font-bold text-foreground leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/30 underline-offset-4">{requiredKavlings} kavling</span> untuk Paket + Camping Mandiri.</p>
+                              ) : (
+                                <div className="flex flex-col gap-4">
+                                  <div className="flex items-center gap-2">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                                    <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Pilih Kategori Kavling</span>
+                                  </div>
+                                  <div className="flex flex-wrap gap-3">
+                                    {kavlingQtyByGroup.mandiri > 0 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setKavlingScopePick("mandiri")}
+                                        className={`group relative overflow-hidden rounded-2xl px-6 py-3 text-xs font-black transition-all ${kavlingScopePick === "mandiri" ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20" : "bg-surface border-2 border-border text-foreground hover:border-primary/40"}`}
+                                      >
+                                        <span className="relative z-10">Camping Mandiri</span>
+                                      </button>
+                                    )}
+                                    {kavlingQtyByGroup.paket > 0 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setKavlingScopePick("paket")}
+                                        className={`group relative overflow-hidden rounded-2xl px-6 py-3 text-xs font-black transition-all ${kavlingScopePick === "paket" ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20" : "bg-surface border-2 border-border text-foreground hover:border-primary/40"}`}
+                                      >
+                                        <span className="relative z-10">Paket</span>
+                                      </button>
+                                    )}
+                                    {kavlingQtyByGroup.private > 0 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setKavlingScopePick("private")}
+                                        className={`group relative overflow-hidden rounded-2xl px-6 py-3 text-xs font-black transition-all ${kavlingScopePick === "private" ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20" : "bg-surface border-2 border-border text-foreground hover:border-primary/40"}`}
+                                      >
+                                        <span className="relative z-10">Paket Private</span>
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <p className="text-sm font-bold text-foreground leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/30 underline-offset-4">{requiredKavlings} kavling</span> untuk {effectiveKavlingScope}.</p>
+                          )}
+                        </div>
+                        {hold?.expiresAt && holdLeftLabel && (
+                          <div className="flex items-center gap-3 rounded-xl bg-amber-50 px-4 py-3 text-[11px] font-black text-amber-600 border border-amber-100">
+                            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-100 animate-pulse">
+                              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                            </div>
+                            Sesi pemilihan berakhir dalam {holdLeftLabel}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setKavlingMapAssetVersion(Date.now());
+                          setKavlingMapZoom(1);
+                          setKavlingMapOpen(true);
+                        }}
+                        className="group flex h-14 shrink-0 items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95 lg:w-auto"
+                      >
+                        <svg className="mr-3 h-5 w-5 text-primary transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        </svg>
+                        Lihat Peta Interaktif
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col gap-10 lg:flex-row">
+                      {/* Map Preview */}
+                      <div className="shrink-0 lg:w-1/3">
                         <button
                           type="button"
                           onClick={() => {
@@ -1516,21 +1946,30 @@ export default function PublicBookingPage() {
                             setKavlingMapZoom(1);
                             setKavlingMapOpen(true);
                           }}
-                          className="group block w-full"
-                          aria-label="Buka zoom Site Map Kavling"
+                          className="group relative block aspect-video w-full overflow-hidden rounded-[2rem] border-2 border-border bg-muted/5 transition-all hover:border-primary/30"
                         >
                           <img
                             src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
                             alt="Site Map Kavling"
-                            className="h-56 w-full object-contain sm:h-72 md:h-96 cursor-zoom-in transition-opacity group-hover:opacity-95"
-                            loading="lazy"
+                            className="h-full w-full object-contain cursor-zoom-in transition-all duration-700 group-hover:scale-110"
                           />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/0 backdrop-blur-0 transition-all duration-500 group-hover:bg-black/10 group-hover:backdrop-blur-[2px]">
+                            <div className="flex translate-y-4 flex-col items-center gap-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-surface shadow-2xl">
+                                <svg className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                </svg>
+                              </div>
+                              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Zoom Peta</span>
+                            </div>
+                          </div>
                         </button>
                       </div>
 
-                      <div className="relative max-h-[42dvh] overflow-auto overscroll-contain rounded-2xl sm:max-h-none sm:overflow-visible">
-                        <div className="grid grid-cols-5 gap-2 pr-1 pb-12 sm:grid-cols-10 sm:pb-0">
-                          {kavlingAll.map((n) => {
+                      {/* Kavling Grid */}
+                      <div className="flex-1">
+                        <div className="grid grid-cols-5 gap-3 sm:grid-cols-8 md:grid-cols-10">
+                          {kavlingAll.map((n, idx) => {
                             const isTaken = kavlingTaken.includes(n);
                             const isSelected = kavlingSelected.includes(n);
                             const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
@@ -1546,6 +1985,7 @@ export default function PublicBookingPage() {
                               <button
                                 key={n}
                                 type="button"
+                                style={{ animationDelay: `${(idx % 20) * 30}ms` }}
                                 disabled={disabled && !isSelected}
                                 onClick={() => {
                                   if (isSelected) {
@@ -1556,14 +1996,14 @@ export default function PublicBookingPage() {
                                     }
                                   }
                                 }}
-                                className={`flex h-10 items-center justify-center rounded-xl border text-xs font-bold transition-all ${
+                                className={`flex h-11 items-center justify-center rounded-xl border-2 text-[11px] font-black transition-all duration-300 animate-in zoom-in-50 fill-mode-both ${
                                   isSelected
-                                    ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                                    ? "border-primary bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110 rotate-2 z-10"
                                     : isTaken
-                                    ? "border-red-200 bg-red-50 text-red-400 cursor-not-allowed opacity-60"
+                                    ? "border-destructive/10 bg-destructive/5 text-destructive/30 cursor-not-allowed"
                                     : disabled
                                     ? "border-border bg-muted/30 text-muted opacity-40 cursor-not-allowed"
-                                    : "border-border bg-surface text-foreground hover:border-primary hover:bg-primary/5"
+                                    : "border-border bg-surface text-foreground hover:border-primary/50 hover:bg-primary/5 hover:-translate-y-1"
                                 }`}
                               >
                                 {n}
@@ -1571,23 +2011,42 @@ export default function PublicBookingPage() {
                             );
                           })}
                         </div>
-
-                        {kavlingAll.length > 25 ? (
-                          <div className="pointer-events-none sticky bottom-0 left-0 right-0 sm:hidden">
-                            <div className="relative">
-                              <div className="h-10 bg-gradient-to-t from-background to-transparent" />
-                              <div className="absolute inset-x-0 bottom-1 flex items-center justify-center gap-2 text-[11px] font-semibold text-muted">
-                                <span>Scroll untuk lihat nomor lainnya</span>
-                                <span className="text-xs">↓</span>
-                              </div>
-                            </div>
+                        <div className="mt-8 flex flex-wrap gap-6 border-t border-border/50 pt-6">
+                          <div className="flex items-center gap-3">
+                            <div className="h-4 w-4 rounded-lg border-2 border-primary bg-primary shadow-lg shadow-primary/20 rotate-3" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Terpilih</span>
                           </div>
-                        ) : null}
+                          <div className="flex items-center gap-3">
+                            <div className="h-4 w-4 rounded-lg border-2 border-border bg-surface" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Tersedia</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="h-4 w-4 rounded-lg border-2 border-destructive/10 bg-destructive/5" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Terisi</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="h-4 w-4 rounded-lg border-2 border-border bg-muted/30" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Tidak Sesuai</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    {holdError && <div className="mt-2 text-[11px] text-red-600 font-medium">{holdError}</div>}
+                    {holdError && <div className="mt-8 animate-in slide-in-from-top-4 duration-500">
+                      <div className="flex items-center gap-4 rounded-[1.5rem] border-2 border-destructive/20 bg-destructive/5 p-6 text-sm font-black text-destructive">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
+                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="uppercase tracking-wider">Kesalahan Pemilihan</p>
+                          <p className="text-xs font-medium opacity-80">{holdError}</p>
+                        </div>
+                      </div>
+                    </div>}
                   </div>
-                ) : null}
+                </div>
+              )}
 
                 {kavlingMapOpen ? (
                   <Modal
@@ -1827,24 +2286,66 @@ export default function PublicBookingPage() {
                 ) : null}
               </div>
 
-              <div className="rounded-2xl border border-border bg-surface p-5">
-                <div className="text-sm font-semibold text-foreground">Add-Ons (Opsional)</div>
-                <div className="mt-4 overflow-hidden rounded-xl border border-border">
-                  <table className="w-full text-left text-sm">
-                    <thead className="bg-background text-muted">
-                      <tr>
-                        <th className="px-4 py-2 font-medium">Nama</th>
-                        <th className="px-4 py-2 font-medium">Harga</th>
-                        <th className="px-4 py-2 font-medium text-center">Qty</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border">
-                      {addons.map((a) => (
-                        <tr key={a.id}>
-                          <td className="px-4 py-3 font-medium text-foreground">{a.name}</td>
-                          <td className="px-4 py-3 text-muted">{formatIDR(a.price)}</td>
-                          <td className="px-4 py-3">
-                            <div className="flex justify-center">
+              {/* Add-Ons Section */}
+              <div className="space-y-8">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <h3 className="flex items-center text-2xl font-black text-foreground">
+                      <svg className="mr-3 h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                      Fasilitas Tambahan
+                    </h3>
+                    <p className="text-sm font-medium text-muted">Lengkapi kenyamanan menginap Anda dengan add-ons pilihan.</p>
+                  </div>
+                  <div className="hidden sm:block">
+                    <span className="rounded-full bg-primary/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-primary">Opsional</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {addons.map((a, idx) => {
+                    const isSelected = (effectiveAddonQty[a.id] ?? 0) > (autoAddonQty[a.id] ?? 0);
+                    const auto = autoAddonQty[a.id] ?? 0;
+                    return (
+                      <div 
+                        key={a.id} 
+                        style={{ animationDelay: `${idx * 100}ms` }}
+                        className={`group relative overflow-hidden rounded-[2rem] border-2 p-6 transition-all duration-700 animate-in fade-in slide-in-from-bottom-6 fill-mode-both ${
+                          isSelected 
+                            ? "border-primary bg-primary/[0.03] shadow-xl shadow-primary/10" 
+                            : "border-border bg-surface hover:border-primary/40 hover:shadow-md"
+                        }`}
+                      >
+                        {/* Decorative background for selected */}
+                        {isSelected && (
+                          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/10" />
+                        )}
+
+                        <div className="flex flex-col gap-6">
+                          <div className="flex-1">
+                            <div className="flex items-start justify-between gap-2">
+                              <h4 className="text-lg font-black text-foreground leading-tight group-hover:text-primary transition-colors">{a.name}</h4>
+                              {auto > 0 && (
+                                <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-wider text-primary">
+                                  Included
+                                </span>
+                              )}
+                            </div>
+                            <div className="mt-2 flex items-baseline gap-1">
+                              <span className="text-lg font-black text-primary">{formatIDR(a.price)}</span>
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-muted">/ item</span>
+                            </div>
+                            {auto > 0 && (
+                              <p className="mt-2 text-[10px] font-bold text-primary/60 italic">
+                                * {auto} unit sudah termasuk dalam paket Anda
+                              </p>
+                            )}
+                          </div>
+                          
+                          <div className="flex items-center justify-between pt-4 border-t border-border/50">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-muted">Jumlah</span>
+                            <div className="scale-110">
                               <QuantityStepper
                                 value={effectiveAddonQty[a.id] ?? 0}
                                 min={autoAddonQty[a.id] ?? 0}
@@ -1856,52 +2357,131 @@ export default function PublicBookingPage() {
                                 }}
                               />
                             </div>
-                          </td>
-                        </tr>
-                      ))}
-                      {addons.length === 0 ? (
-                        <tr>
-                          <td className="px-4 py-6 text-center text-muted" colSpan={3}>
-                            Belum ada add-on
-                          </td>
-                        </tr>
-                      ) : null}
-                    </tbody>
-                  </table>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
+                {addons.length === 0 && (
+                  <div className="rounded-[2rem] border-2 border-dashed border-border bg-muted/10 p-16 text-center">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-muted/20">
+                      <svg className="h-8 w-8 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      </svg>
+                    </div>
+                    <h4 className="mt-6 text-lg font-black text-foreground">Tidak Ada Add-On</h4>
+                    <p className="mt-2 text-sm font-medium text-muted">Belum ada fasilitas tambahan yang tersedia saat ini.</p>
+                  </div>
+                )}
               </div>
 
               {error && (
-                <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>
+                <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+                  <div className="relative overflow-hidden rounded-[2rem] border-2 border-destructive/20 bg-destructive/5 p-6 shadow-2xl shadow-destructive/10 backdrop-blur-xl">
+                    <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-destructive/10 blur-2xl" />
+                    <div className="flex items-center gap-5">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-destructive/10 text-destructive shadow-inner">
+                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-destructive/60">Perhatian Diperlukan</span>
+                        <span className="text-sm font-black text-destructive leading-relaxed">{error}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
 
               {guestOverCapacity && (
-                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-                  Total guest melebihi kapasitas paket yang dipilih.
+                <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+                  <div className="relative overflow-hidden rounded-[2rem] border-2 border-amber-500/20 bg-amber-500/5 p-6 shadow-2xl shadow-amber-500/10 backdrop-blur-xl">
+                    <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-amber-500/10 blur-2xl" />
+                    <div className="flex items-center gap-5">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 shadow-inner">
+                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-amber-600/60">Kapasitas Penuh</span>
+                        <span className="text-sm font-black text-amber-700 leading-relaxed">Total tamu melebihi kapasitas paket yang dipilih. Mohon sesuaikan jumlah tamu atau pilih paket lain.</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-surface/90 backdrop-blur">
-                <div className="mx-auto max-w-4xl px-4 py-4">
-                  <div className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-surface p-4 shadow-sm">
-                    <div>
-                      <div className="text-xs text-muted">Estimasi total</div>
-                      <div className="text-lg font-semibold text-foreground">{formatIDR(estimatedAmount)}</div>
-                      <div className="text-xs text-muted">Final total dihitung server saat submit.</div>
+              {/* Floating Summary Bar - Enhanced & Elegant */}
+              <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/60 pb-safe backdrop-blur-2xl">
+                <div className="mx-auto max-w-5xl px-6 py-6 sm:py-8">
+                  <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-6">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Total Estimasi</span>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-3xl font-black tracking-tight text-foreground">{formatIDR(estimatedAmount)}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="hidden h-10 w-px bg-border sm:block" />
+                      
+                      <div className="hidden flex-col sm:flex">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Status</span>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className={`inline-flex h-2 w-2 rounded-full ${selectedVisibleCount > 0 ? "bg-primary animate-pulse" : "bg-muted"}`} />
+                          <span className="text-sm font-bold text-foreground">
+                            {selectedVisibleCount} Unit Terpilih
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <button
-                      type="submit"
-                      disabled={submitting || loading || guestOverCapacity || selectedVisibleCount === 0}
-                      className="rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
-                    >
-                      {submitting ? "Memproses..." : "Buat Booking"}
-                    </button>
+                    
+                    <div className="flex items-center gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setCurrentStep(2)}
+                        className="group flex h-14 items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95"
+                      >
+                        <svg className="mr-2 h-5 w-5 text-primary transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Kembali
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onSubmit()}
+                        disabled={submitting || loading || guestOverCapacity || selectedVisibleCount === 0}
+                        className="group relative flex h-14 flex-1 items-center justify-center overflow-hidden rounded-2xl bg-primary px-10 text-sm font-black text-primary-foreground shadow-2xl shadow-primary/30 transition-all hover:bg-primary/90 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:shadow-none sm:flex-none"
+                      >
+                        {submitting || loading ? (
+                          <div className="flex items-center gap-3">
+                            <svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            <span>Memproses...</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <span>Konfirmasi Booking</span>
+                            <svg className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                          </div>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </form>
-          </>
+            </div>
+          </div>
         )}
+        </div>
+      )}
       </div>
     </div>
   );
