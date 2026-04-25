@@ -657,7 +657,7 @@ export default function BookingConfirmPage() {
                 type="button"
                 disabled={submitting}
                 onClick={() => router.back()}
-                className="group order-2 flex h-16 flex-1 items-center justify-center rounded-[1.5rem] border border-[#E8E8E1] bg-white px-8 text-[11px] font-black uppercase tracking-[0.3em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 sm:order-1"
+                className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-[1.5rem] border border-[#E8E8E1] bg-white px-8 py-5 text-[13px] font-black uppercase tracking-[0.3em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 sm:order-1"
               >
                 <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -668,7 +668,7 @@ export default function BookingConfirmPage() {
                 type="button"
                 disabled={submitting || !agreed}
                 onClick={() => confirmAndPay()}
-                className="group relative order-1 flex h-16 flex-[2] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#2D3E10] px-8 text-[11px] font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#2D3E10]/20 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-95 disabled:opacity-30 disabled:shadow-none sm:order-2"
+                className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#2D3E10] px-8 py-5 text-[13px] font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#2D3E10]/20 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-95 disabled:opacity-30 disabled:shadow-none sm:order-2"
               >
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                 <span className="relative z-10">{submitting ? "Memproses..." : "Konfirmasi & Bayar Sekarang"}</span>
@@ -731,7 +731,7 @@ export default function BookingConfirmPage() {
                 <a 
                   href="https://wa.me/6281234567890" 
                   target="_blank" 
-                  className="group relative mx-auto flex h-16 w-full max-w-xs items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98]"
+                  className="group relative mx-auto flex min-h-[4rem] w-full max-w-xs items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 py-5 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98]"
                 >
                   <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                   <span className="relative z-10">Hubungi via WhatsApp</span>
@@ -809,7 +809,7 @@ export default function BookingConfirmPage() {
             <div className="pt-4">
               <button 
                 onClick={() => setShowPrivacyModal(false)}
-                className="group relative w-full overflow-hidden rounded-[1.5rem] bg-[#2D3E10] py-5 text-[11px] font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#2D3E10]/20 transition-all hover:bg-[#1A2508] active:scale-95"
+                className="group relative flex min-h-[4rem] w-full items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#2D3E10] py-5 text-[13px] font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#2D3E10]/20 transition-all hover:bg-[#1A2508] active:scale-95"
               >
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                 <span className="relative z-10">Saya Mengerti</span>
@@ -872,7 +872,7 @@ export default function BookingConfirmPage() {
             <div className="pt-4">
               <button 
                 onClick={() => setShowCancellationModal(false)}
-                className="group relative w-full overflow-hidden rounded-[1.5rem] bg-[#2D3E10] py-5 text-[11px] font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#2D3E10]/20 transition-all hover:bg-[#1A2508] active:scale-95"
+                className="group relative flex min-h-[4rem] w-full items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#2D3E10] py-5 text-[13px] font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#2D3E10]/20 transition-all hover:bg-[#1A2508] active:scale-95"
               >
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                 <span className="relative z-10">Saya Mengerti</span>

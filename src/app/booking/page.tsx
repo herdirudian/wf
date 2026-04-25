@@ -197,8 +197,8 @@ function QuantityStepper({
   const decDisabled = disabled || value <= min;
   const incDisabled = disabled || (typeof max === "number" ? value >= max : false);
 
-  const btnClass = size === "sm" ? "h-8 w-8" : "h-10 w-10";
-  const midClass = size === "sm" ? "min-w-[28px] text-xs" : "min-w-[36px] text-sm";
+  const btnClass = size === "sm" ? "h-9 w-9" : "h-11 w-11";
+  const midClass = size === "sm" ? "min-w-[32px] text-sm" : "min-w-[40px] text-base";
 
   return (
     <div className="inline-flex w-fit items-center gap-1.5 p-1.5 rounded-full border border-[#E8E8E1] bg-white shadow-sm group transition-all duration-500 hover:border-primary/30 hover:shadow-md relative overflow-hidden">
@@ -1129,7 +1129,7 @@ export default function PublicBookingPage() {
               else onSubmit(new Event('submit') as any);
             }}
             disabled={(currentStep === 1 && !filterCategory) || (currentStep === 2 && (!name || !phone || !email || !checkIn || !checkOut)) || (currentStep === 3 && selectedVisibleCount === 0)}
-            className="group relative w-full overflow-hidden rounded-[1.2rem] bg-[#2D3E10] py-5 text-[11px] font-bold text-white shadow-xl shadow-[#2D3E10]/20 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-20 disabled:pointer-events-none"
+            className="group relative w-full overflow-hidden rounded-[1.2rem] bg-[#2D3E10] py-6 text-[13px] font-bold text-white shadow-xl shadow-[#2D3E10]/20 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-20 disabled:pointer-events-none"
           >
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
             <div className="relative z-10 flex items-center justify-center gap-4 uppercase tracking-[0.3em]">
@@ -1507,7 +1507,7 @@ export default function PublicBookingPage() {
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="group relative flex h-14 flex-1 items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50"
+                  className="group relative flex min-h-[3.75rem] flex-1 items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50"
                   disabled={!invoice}
                 >
                   <div className="relative z-10 flex items-center gap-3">
@@ -1523,7 +1523,7 @@ export default function PublicBookingPage() {
                     sessionStorage.removeItem("wf_booking_draft");
                     window.location.href = window.location.pathname;
                   }}
-                  className="group flex h-14 flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98]"
+                  className="group flex min-h-[3.75rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98]"
                 >
                   Booking Lagi
                 </button>
@@ -1944,11 +1944,11 @@ export default function PublicBookingPage() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-5 pt-12 sm:flex-row">
+                    <div className="flex flex-col gap-4 pt-10 sm:flex-row">
                       <button
                         type="button"
                         onClick={() => setCurrentStep(1)}
-                        className="group order-2 flex h-16 flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1"
+                        className="group order-2 flex min-h-[3.75rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1"
                       >
                         <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -1958,7 +1958,7 @@ export default function PublicBookingPage() {
                       <button
                         type="submit"
                         disabled={!name || !phone || !email || !checkIn || !checkOut}
-                        className="group relative order-1 flex h-16 flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 disabled:shadow-none sm:order-2"
+                        className="group relative order-1 flex min-h-[3.75rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 disabled:shadow-none sm:order-2"
                       >
                         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                         <span className="relative z-10">Lanjut Pilih Unit & Kavling</span>
@@ -2041,7 +2041,7 @@ export default function PublicBookingPage() {
                         <select
                           value={filterType}
                           onChange={(e) => setFilterType(e.target.value)}
-                          className="h-12 w-full appearance-none rounded-2xl border border-[#E8E8E1] bg-white pl-5 pr-12 text-xs font-bold text-[#2D3E10] outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-44"
+                          className="h-14 w-full appearance-none rounded-2xl border border-[#E8E8E1] bg-white pl-5 pr-12 text-sm font-bold text-[#2D3E10] outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-48"
                         >
                           <option value="">Semua Tipe</option>
                           {typeOptions.map((t) => (
@@ -2182,7 +2182,7 @@ export default function PublicBookingPage() {
                   <button
                     type="button"
                     onClick={() => setUnitPage((p) => p + 1)}
-                    className="group relative flex items-center gap-4 rounded-[2rem] border border-[#E8E8E1] bg-white px-12 py-5 text-[11px] font-bold uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] shadow-sm hover:shadow-xl hover:shadow-[#2D3E10]/5 overflow-hidden"
+                    className="group relative flex min-h-[3.75rem] items-center gap-4 rounded-[2rem] border border-[#E8E8E1] bg-white px-12 py-4 text-[13px] font-bold uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] shadow-sm hover:shadow-xl hover:shadow-[#2D3E10]/5 overflow-hidden"
                   >
                     {/* Subtle leaf icon for the button */}
                     <div className="absolute -left-4 -top-4 h-12 w-12 opacity-0 transition-all duration-700 group-hover:opacity-10 group-hover:scale-110 group-hover:rotate-12">
@@ -2267,7 +2267,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("mandiri")}
-                                        className={`group relative overflow-hidden rounded-xl px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "mandiri" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "mandiri" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Camping Mandiri</span>
                                       </button>
@@ -2276,7 +2276,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("paket")}
-                                        className={`group relative overflow-hidden rounded-xl px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "paket" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "paket" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Paket</span>
                                       </button>
@@ -2285,7 +2285,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("private")}
-                                        className={`group relative overflow-hidden rounded-xl px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "private" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "private" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Paket Private</span>
                                       </button>
@@ -2338,7 +2338,7 @@ export default function PublicBookingPage() {
                           setKavlingMapZoom(1);
                           setKavlingMapOpen(true);
                         }}
-                        className="group relative flex h-16 shrink-0 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 text-[11px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 lg:w-auto overflow-hidden"
+                        className="group relative flex min-h-[3.75rem] shrink-0 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 lg:w-auto overflow-hidden"
                       >
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                         <svg className="relative z-10 mr-3 h-5 w-5 text-primary transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2407,7 +2407,7 @@ export default function PublicBookingPage() {
                                     }
                                   }
                                 }}
-                                className={`group/kavling relative flex h-12 items-center justify-center rounded-[1rem] border-2 text-[11px] font-black transition-all duration-500 overflow-hidden ${
+                                className={`group/kavling relative flex min-h-[3.25rem] items-center justify-center rounded-[1rem] border-2 text-[13px] font-black transition-all duration-500 overflow-hidden ${
                                   isSelected
                                     ? "border-primary bg-[#2D3E10] text-white shadow-xl shadow-primary/20 scale-105 z-10"
                                     : isTaken
@@ -2488,7 +2488,7 @@ export default function PublicBookingPage() {
                               setKavlingMapZoom((z) => Math.max(1, Number((z - 0.25).toFixed(2))));
                             }}
                             disabled={kavlingMapZoom <= 1}
-                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white text-lg font-bold text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 disabled:opacity-30 disabled:hover:bg-white active:scale-95"
+                            className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white text-lg font-bold text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 disabled:opacity-30 disabled:hover:bg-white active:scale-95"
                           >
                             −
                           </button>
@@ -2499,7 +2499,7 @@ export default function PublicBookingPage() {
                               setKavlingMapOrigin({ x: 50, y: 50 });
                               setKavlingMapZoom(1);
                             }}
-                            className="flex h-11 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-5 text-[11px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
+                            className="flex h-12 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-5 text-[12px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
                           >
                             100%
                           </button>
@@ -2509,7 +2509,7 @@ export default function PublicBookingPage() {
                               kavlingMapManualZoomRef.current = true;
                               setKavlingMapZoom((z) => Math.min(4, Number((z + 0.25).toFixed(2))));
                             }}
-                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white text-lg font-bold text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
+                            className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white text-lg font-bold text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
                           >
                             +
                           </button>
@@ -2518,7 +2518,7 @@ export default function PublicBookingPage() {
                             href={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex h-11 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-6 text-[11px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
+                            className="flex h-12 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-6 text-[12px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
                           >
                             Buka Tab Baru
                           </a>
@@ -2859,11 +2859,11 @@ export default function PublicBookingPage() {
                 </div>
               )}
 
-                  <div className="flex flex-col gap-5 pt-12 sm:flex-row">
+                  <div className="flex flex-col gap-4 pt-10 sm:flex-row">
                     <button
                       type="button"
                       onClick={() => setCurrentStep(2)}
-                      className="group order-2 flex h-16 flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1"
+                      className="group order-2 flex min-h-[3.75rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1"
                     >
                       <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -2873,7 +2873,7 @@ export default function PublicBookingPage() {
                     <button
                       type="submit"
                       disabled={submitting || loading || guestOverCapacity || selectedVisibleCount === 0}
-                      className="group relative order-1 flex h-16 flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 text-[11px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:order-2"
+                      className="group relative order-1 flex min-h-[3.75rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:order-2"
                     >
                       <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                       
@@ -2915,9 +2915,9 @@ export default function PublicBookingPage() {
           <div className="w-full max-w-2xl rounded-[2rem] bg-[#F1F3EE] p-8 space-y-6 text-center">
             <h4 className="text-sm font-bold text-[#2D3E10]">Butuh bantuan reservasi?</h4>
             <p className="text-xs text-[#2D3E10]/60 leading-relaxed">Tim reservasi kami siap membantu Anda merencanakan liburan impian yang tak terlupakan.</p>
-            <a href="https://wa.me/6281234567890" target="_blank" className="mx-auto flex h-12 w-full max-w-xs items-center justify-center rounded-xl bg-[#2D3E10] text-[11px] font-bold uppercase tracking-widest text-white shadow-lg shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:shadow-xl active:scale-95">
-              Hubungi via WhatsApp
-            </a>
+            <a href="https://wa.me/6281234567890" target="_blank" className="mx-auto flex min-h-[3.5rem] w-full max-w-xs items-center justify-center rounded-xl bg-[#2D3E10] py-4 text-[13px] font-bold uppercase tracking-widest text-white shadow-lg shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:shadow-xl active:scale-95">
+                  Hubungi via WhatsApp
+                </a>
           </div>
         </div>
 

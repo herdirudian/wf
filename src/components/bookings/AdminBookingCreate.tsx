@@ -1118,7 +1118,7 @@ export function AdminBookingCreate() {
                     type="button"
                     disabled={settlementLinking || baseAmountToPay <= 0}
                     onClick={createSettlementLink}
-                    className="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white hover:bg-emerald-700 disabled:opacity-50 transition-all active:scale-95"
                   >
                     {settlementLinking ? "Membuat..." : "Buat Link Pelunasan (Xendit)"}
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1136,7 +1136,7 @@ export function AdminBookingCreate() {
                   type="button"
                   disabled={paying || baseAmountToPay <= 0}
                   onClick={payWithXendit}
-                  className="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white hover:bg-emerald-700 disabled:opacity-50 transition-all active:scale-95"
                 >
                   {paying
                     ? "Memproses..."
@@ -1161,7 +1161,7 @@ export function AdminBookingCreate() {
           <button
             type="submit"
             disabled={submitting || loading}
-            className="rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            className="rounded-xl bg-primary px-8 py-4 text-[15px] font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-60 transition-all active:scale-95"
           >
             {submitting ? "Memproses..." : "Buat Booking"}
           </button>
