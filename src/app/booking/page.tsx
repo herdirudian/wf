@@ -1278,7 +1278,7 @@ export default function PublicBookingPage() {
                 <img src="/brand/logowf.png" alt="Woodforest" className="relative h-24 w-24 shrink-0 rounded-2xl object-contain sm:h-36 sm:w-36 transition-transform duration-700 group-hover:scale-105" />
               </div>
             </div>
-            <div className="sm:-mt-2">
+            <div className="flex flex-col items-center text-center sm:items-start sm:text-left sm:-mt-2">
               <div className="inline-flex items-center rounded-full bg-primary/10 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-3">
                 <span className="relative flex h-2 w-2 mr-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -1289,10 +1289,10 @@ export default function PublicBookingPage() {
               <h1 className="text-4xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
                 Woodforest <span className="text-primary italic">Booking</span>
               </h1>
-              <p className="mt-3 max-w-xl text-sm font-medium leading-relaxed text-primary/60 italic">
+              <p className="mx-auto mt-3 max-w-xl text-sm font-medium leading-relaxed text-primary/60 italic sm:mx-0">
                 "Grounded, calm, warm. Pilih tanggal, pilih paket, dan nikmati pengalaman yang tenang di alam untuk bonding keluarga."
               </p>
-              <div className="mt-6 flex flex-wrap gap-2.5">
+              <div className="mt-6 flex flex-wrap justify-center gap-2.5 sm:justify-start">
                 {["Quiet nature", "Family bonding", "Wellness", "Light adventure"].map((tag) => (
                   <div key={tag} className="rounded-2xl border border-[#E8E8E1] bg-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40 transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-0.5">
                     {tag}
@@ -1616,7 +1616,7 @@ export default function PublicBookingPage() {
                 <div className="space-y-8">
                   {currentStep === 1 && (
                     <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                      <div className="mb-12 text-center">
+                      <div className="mb-12 flex flex-col items-center text-center">
                         <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10] mb-6 border border-[#E8E8E1]">
                           Langkah 01
                         </div>
@@ -1702,7 +1702,7 @@ export default function PublicBookingPage() {
                                   </div>
                                 </div>
 
-                                <div className="flex flex-col flex-1 p-8 text-left">
+                                <div className="flex flex-col flex-1 p-8 text-center sm:text-left">
                                   <h3 className="text-2xl font-bold text-[#2D3E10] mb-3 group-hover:text-primary transition-colors">{cat}</h3>
                                   <p className="text-sm font-medium leading-relaxed text-primary/60 mb-8 flex-1 italic">
                                     {packageConfigs[cat]?.description || (
@@ -1731,7 +1731,7 @@ export default function PublicBookingPage() {
 
             {currentStep === 2 && (
               <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                <div className="mb-12 text-center">
+                <div className="mb-12 flex flex-col items-center text-center">
                   <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10] mb-6 border border-[#E8E8E1]">
                     Langkah 02
                   </div>
@@ -1755,7 +1755,7 @@ export default function PublicBookingPage() {
                           </svg>
                         </div>
                         
-                        <div className="flex items-center gap-4 relative z-10">
+                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start relative z-10">
                           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -1764,7 +1764,7 @@ export default function PublicBookingPage() {
                           <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
                         </div>
 
-                        <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-10 shadow-xl shadow-[#2D3E10]/5 relative group/card">
+                        <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-6 sm:p-10 shadow-xl shadow-[#2D3E10]/5 relative group/card">
                           {/* Organic Background Decoration for Date Picker Area */}
                           <div className="absolute -right-24 -bottom-24 h-64 w-64 opacity-[0.02] transition-transform duration-1000 group-hover/card:scale-110 group-hover/card:-rotate-12 pointer-events-none">
                             <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -1816,7 +1816,7 @@ export default function PublicBookingPage() {
                           </div>
 
                           <div className="mt-12 space-y-6 pt-10 border-t border-[#E8E8E1]/60">
-                            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40 ml-1">Konfigurasi Tamu</label>
+                            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40 ml-1 block text-center sm:text-left">Konfigurasi Tamu</label>
                             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                               <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
                                 <div className="space-y-1">
@@ -1856,7 +1856,7 @@ export default function PublicBookingPage() {
                           </svg>
                         </div>
                         
-                        <div className="flex items-center gap-4 relative z-10">
+                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start relative z-10">
                           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -1981,7 +1981,7 @@ export default function PublicBookingPage() {
                 className="relative z-10"
               >
                 <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                  <div className="mb-12 text-center relative group">
+                  <div className="mb-12 flex flex-col items-center text-center relative group">
                     {/* Organic Decoration for Step 3 Header */}
                     <div className="absolute -left-16 -top-16 h-64 w-64 opacity-[0.03] transition-transform duration-1000 group-hover:scale-110 group-hover:-rotate-12 pointer-events-none">
                       <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -2009,7 +2009,7 @@ export default function PublicBookingPage() {
                         </svg>
                       </div>
 
-                      <div className="flex items-center gap-4 relative z-10">
+                      <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left relative z-10">
                         <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-primary transition-transform group-hover/filter:rotate-6">
                           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -2023,7 +2023,7 @@ export default function PublicBookingPage() {
 
                       <div className="h-8 w-px bg-[#E8E8E1] hidden sm:block relative z-10" />
 
-                      <div className="flex items-center gap-4 relative z-10">
+                      <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left relative z-10">
                         <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-primary transition-transform group-hover/filter:-rotate-6">
                           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -2096,13 +2096,13 @@ export default function PublicBookingPage() {
                               </svg>
                             </div>
                             
-                            <div className="flex items-start justify-between gap-4 relative z-10">
-                              <div className="space-y-2 group/title">
+                            <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-4 relative z-10">
+                              <div className="flex flex-col items-center text-center sm:items-start sm:text-left space-y-2 group/title">
                                 <h3 className="text-xl font-black leading-tight text-[#2D3E10] transition-all duration-300 group-hover/title:translate-x-1 flex items-center gap-2">
-                                  <span className="h-1.5 w-1.5 rounded-full bg-primary opacity-0 -ml-3 transition-all duration-300 group-hover/title:opacity-100 group-hover/title:ml-0" />
+                                  <span className="h-1.5 w-1.5 rounded-full bg-primary opacity-0 -ml-3 transition-all duration-300 group-hover/title:opacity-100 group-hover/title:ml-0 hidden sm:block" />
                                   {u.name}
                                 </h3>
-                                <div className="flex flex-wrap items-center gap-3">
+                                <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
                                   <span className="flex items-center rounded-lg bg-primary/5 px-2 py-1 text-[10px] font-bold text-primary/70 transition-colors group-hover:bg-primary/10">
                                     <svg className="mr-1.5 h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -2134,15 +2134,15 @@ export default function PublicBookingPage() {
                             </div>
 
                             {u.description && (
-                              <p className="mt-6 text-sm font-medium leading-relaxed text-primary/60 line-clamp-2">{u.description}</p>
+                              <p className="mt-6 text-sm font-medium leading-relaxed text-primary/60 line-clamp-2 text-center sm:text-left">{u.description}</p>
                             )}
 
-                            <div className="mt-8 grid grid-cols-2 gap-6 border-t border-[#E8E8E1]/60 pt-8">
-                              <div className="space-y-1">
+                            <div className="mt-8 grid grid-cols-1 gap-6 border-t border-[#E8E8E1]/60 pt-8 sm:grid-cols-2">
+                              <div className="space-y-1 text-center sm:text-left">
                                 <p className="text-[10px] font-black uppercase tracking-widest text-primary/40">Per Malam</p>
                                 <p className="text-lg font-black text-[#2D3E10]">{priceRangeLabel(u)}</p>
                               </div>
-                              <div className="space-y-1 text-right">
+                              <div className="space-y-1 text-center sm:text-right">
                                 <p className="text-[10px] font-black uppercase tracking-widest text-primary/40">Total Menginap</p>
                                 <p className="text-xl font-black text-primary italic">{formatIDR(sumDailyPrice(u))}</p>
                               </div>
@@ -2155,10 +2155,10 @@ export default function PublicBookingPage() {
                                     <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
                                   </svg>
                                 </div>
-                                <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-primary/40">Fasilitas Termasuk</p>
+                                <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-primary/40 text-center sm:text-left">Fasilitas Termasuk</p>
                                 <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 relative z-10">
                                   {inc.slice(0, 4).map((t, idx) => (
-                                    <li key={idx} className="flex items-center text-[10px] font-bold text-[#2D3E10] group/item">
+                                    <li key={idx} className="flex items-center justify-center text-[10px] font-bold text-[#2D3E10] group/item sm:justify-start">
                                       <div className="mr-3 flex h-5 w-5 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] transition-transform group-hover/item:scale-110">
                                         <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -2211,7 +2211,7 @@ export default function PublicBookingPage() {
                     </div>
                     
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between relative z-10">
-                      <div className="flex items-center gap-5">
+                      <div className="flex flex-col items-center gap-5 sm:flex-row">
                         <div className="relative group/icon">
                           <div className="absolute inset-0 bg-primary/20 rounded-[1.25rem] blur-xl opacity-0 group-hover/icon:opacity-100 transition-opacity duration-700" />
                           <div className="relative flex h-14 w-14 items-center justify-center rounded-[1.25rem] bg-[#2D3E10] text-white shadow-lg shadow-[#2D3E10]/20 transition-transform duration-500 group-hover/icon:scale-110 group-hover/icon:-rotate-3">
@@ -2220,16 +2220,16 @@ export default function PublicBookingPage() {
                             </svg>
                           </div>
                         </div>
-                        <div className="space-y-1">
+                        <div className="space-y-1 text-center sm:text-left">
                           <h3 className="text-2xl font-bold tracking-tight text-[#2D3E10]">Pilih Lokasi <span className="italic text-primary">Kavling</span></h3>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center justify-center gap-2 sm:justify-start">
                             <span className="h-1.5 w-1.5 rounded-full bg-primary/40 animate-pulse" />
                             <p className="text-[10px] font-bold text-primary/40 uppercase tracking-[0.2em]">Tentukan titik camping favorit Anda</p>
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4 bg-white/50 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-sm transition-all hover:shadow-md hover:border-primary/20 group/progress">
-                        <div className="flex flex-col items-end">
+                      <div className="flex items-center justify-center gap-4 bg-white/50 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-sm transition-all hover:shadow-md hover:border-primary/20 group/progress sm:justify-end">
+                        <div className="flex flex-col items-center sm:items-end">
                           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Progres Pemilihan</span>
                           <span className="text-base font-black text-[#2D3E10] tracking-tighter tabular-nums">
                             {kavlingSelected.length} <span className="text-primary/40">/</span> {requiredKavlings} <span className="text-[10px] font-bold text-primary/40 uppercase ml-1">Kavling</span>
@@ -2262,7 +2262,7 @@ export default function PublicBookingPage() {
                                     <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                                     <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.3em]">Tentukan Kategori Kavling</span>
                                   </div>
-                                  <div className="flex flex-wrap gap-3">
+                                  <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
                                     {kavlingQtyByGroup.mandiri > 0 && (
                                       <button
                                         type="button"
@@ -2439,7 +2439,7 @@ export default function PublicBookingPage() {
                             );
                           })}
                         </div>
-                        <div className="mt-12 flex flex-wrap gap-8 border-t border-[#E8E8E1]/60 pt-8">
+                        <div className="mt-12 flex flex-wrap justify-center gap-8 border-t border-[#E8E8E1]/60 pt-8 sm:justify-start">
                           <div className="flex items-center gap-3 group/legend">
                             <div className="relative h-4 w-4">
                               <div className="absolute inset-0 bg-[#2D3E10] rounded-full shadow-lg shadow-primary/20 transition-transform group-hover/legend:scale-125" />
@@ -2486,8 +2486,8 @@ export default function PublicBookingPage() {
                     maxWidthClassName="max-w-6xl"
                   >
                     <div className="space-y-6">
-                      <div className="flex flex-wrap items-center justify-between gap-4">
-                        <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-center">
+                        <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
                           <button
                             type="button"
                             onClick={() => {
@@ -2530,8 +2530,8 @@ export default function PublicBookingPage() {
                             Buka Tab Baru
                           </a>
                         </div>
-                        <div className="flex flex-col items-end gap-1.5">
-                          <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/40">
+                        <div className="flex flex-col items-center gap-1.5 sm:items-end">
+                          <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/40 text-center sm:text-right">
                             Arahkan kursor untuk zoom otomatis
                           </div>
                           <div className="flex items-center gap-2">
@@ -2728,9 +2728,9 @@ export default function PublicBookingPage() {
 
               {/* Add-Ons Section */}
               <div className="space-y-8">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:items-center sm:text-left">
                   <div className="space-y-1">
-                    <h3 className="flex items-center text-2xl font-black text-foreground">
+                    <h3 className="flex items-center justify-center text-2xl font-black text-foreground sm:justify-start">
                       <svg className="mr-3 h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                       </svg>
@@ -2738,7 +2738,7 @@ export default function PublicBookingPage() {
                     </h3>
                     <p className="text-sm font-medium text-primary/60">Lengkapi kenyamanan menginap Anda dengan add-ons pilihan.</p>
                   </div>
-                  <div className="hidden sm:block">
+                  <div className="">
                     <span className="rounded-full bg-primary/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-primary">Opsional</span>
                   </div>
                 </div>
@@ -2765,9 +2765,9 @@ export default function PublicBookingPage() {
                           </div>
                         )}
 
-                        <div className="flex flex-col h-full justify-between gap-8">
-                          <div className="space-y-4">
-                            <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-col h-full items-center text-center justify-between gap-8 sm:items-start sm:text-left">
+                          <div className="space-y-4 w-full">
+                            <div className="flex flex-col items-center justify-between gap-3 sm:flex-row sm:items-start">
                               <h4 className="text-[17px] font-black tracking-tight text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">
                                 {a.name}
                               </h4>
@@ -2777,12 +2777,12 @@ export default function PublicBookingPage() {
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-baseline gap-1.5">
+                            <div className="flex items-baseline justify-center gap-1.5 sm:justify-start">
                               <span className="text-xl font-black text-primary tracking-tight">{formatIDR(a.price)}</span>
                               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/30">/ unit</span>
                             </div>
                             {auto > 0 && (
-                              <div className="flex items-center gap-2 rounded-xl bg-primary/5 p-3">
+                              <div className="flex items-center justify-center gap-2 rounded-xl bg-primary/5 p-3 sm:justify-start">
                                 <svg className="h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                                 </svg>
@@ -2793,11 +2793,11 @@ export default function PublicBookingPage() {
                             )}
                           </div>
                           
-                          <div className="flex items-center justify-between pt-6 border-t border-[#E8E8E1]">
-                            <div className="flex flex-col">
+                          <div className="flex w-full flex-col items-center justify-between pt-6 border-t border-[#E8E8E1] gap-4 sm:flex-row">
+                            <div className="flex flex-col items-center sm:items-start">
                               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Atur Jumlah</span>
                             </div>
-                            <div className="scale-110 origin-right">
+                            <div className="scale-110 sm:origin-right">
                               <QuantityStepper
                                 value={effectiveAddonQty[a.id] ?? 0}
                                 min={autoAddonQty[a.id] ?? 0}
