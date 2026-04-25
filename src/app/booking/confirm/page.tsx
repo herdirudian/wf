@@ -430,48 +430,48 @@ export default function BookingConfirmPage() {
           </div>
 
           <div className="mt-6 px-2">
-            <label className="flex cursor-pointer items-start gap-3 group">
-              <div className="relative flex h-5 w-5 shrink-0 items-center justify-center mt-0.5">
+            <label className="flex cursor-pointer items-start gap-4 group">
+              <div className="relative flex h-6 w-6 shrink-0 items-center justify-center mt-0.5">
                 <input
                   type="checkbox"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="peer h-5 w-5 cursor-pointer appearance-none rounded border-2 border-border bg-background transition-all checked:border-primary checked:bg-primary hover:border-primary/50"
+                  className="peer h-full w-full cursor-pointer appearance-none rounded-[0.7rem] border-2 border-[#E8E8E1] bg-white transition-all duration-500 checked:border-primary checked:bg-primary hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10"
                 />
                 <svg
-                  className="pointer-events-none absolute h-3.5 w-3.5 text-primary-foreground opacity-0 transition-opacity peer-checked:opacity-100"
+                  className="pointer-events-none absolute h-3.5 w-3.5 text-white opacity-0 transition-all duration-500 scale-50 peer-checked:opacity-100 peer-checked:scale-110"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={4}
+                  strokeWidth={3.5}
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <span className="text-xs font-medium leading-relaxed text-primary/60 transition-colors group-hover:text-foreground">
+              <span className="text-xs font-medium leading-relaxed text-[#2D3E10]/60 transition-colors duration-500 group-hover:text-[#2D3E10]">
                 Dengan melanjutkan ke pembayaran, Anda dianggap telah membaca dan menyetujui{" "}
                 <button 
                   type="button"
                   onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}
-                  className="font-bold text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+                  className="font-bold text-[#2D3E10] hover:text-primary transition-colors underline decoration-dotted underline-offset-4 decoration-primary/30 hover:decoration-primary"
                 >
                   Syarat & Ketentuan
                 </button>,{" "}
                 <button 
                   type="button"
                   onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}
-                  className="font-bold text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+                  className="font-bold text-[#2D3E10] hover:text-primary transition-colors underline decoration-dotted underline-offset-4 decoration-primary/30 hover:decoration-primary"
                 >
                   Kebijakan Privasi
                 </button>, serta{" "}
                 <button 
                   type="button"
                   onClick={(e) => { e.preventDefault(); setShowCancellationModal(true); }}
-                  className="font-bold text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+                  className="font-bold text-[#2D3E10] hover:text-primary transition-colors underline decoration-dotted underline-offset-4 decoration-primary/30 hover:decoration-primary"
                 >
                   Kebijakan Pembatalan
                 </button> yang berlaku di{" "}
-                <span className="font-bold text-foreground italic">Woodforest Jayagiri 48</span>.
+                <span className="font-bold text-[#2D3E10] italic">Woodforest Jayagiri 48</span>.
               </span>
             </label>
           </div>

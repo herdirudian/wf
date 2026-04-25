@@ -197,33 +197,33 @@ function QuantityStepper({
   const decDisabled = disabled || value <= min;
   const incDisabled = disabled || (typeof max === "number" ? value >= max : false);
 
-  const btnClass = size === "sm" ? "h-10 w-10 text-base" : "h-12 w-12 text-xl";
-  const midClass = size === "sm" ? "min-w-[40px] px-2 text-sm" : "min-w-[48px] px-3 text-base";
+  const btnClass = size === "sm" ? "h-8 w-8" : "h-10 w-10";
+  const midClass = size === "sm" ? "min-w-[28px] text-xs" : "min-w-[36px] text-sm";
 
   return (
-    <div className="inline-flex w-fit items-center overflow-hidden rounded-2xl border-2 border-border bg-surface shadow-sm transition-all hover:border-primary/30">
+    <div className="inline-flex w-fit items-center gap-1.5 p-1.5 rounded-full border border-[#E8E8E1] bg-white shadow-sm group transition-all duration-500 hover:border-primary/30 hover:shadow-md">
       <button
         type="button"
         disabled={decDisabled}
         onClick={() => onChange(Math.max(min, value - 1))}
-        className={`${btnClass} flex items-center justify-center font-black text-foreground transition-all hover:bg-primary/5 active:scale-90 disabled:opacity-20 disabled:hover:bg-transparent`}
+        className={`${btnClass} flex items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all hover:bg-primary hover:text-white active:scale-90 disabled:opacity-20 disabled:pointer-events-none`}
         aria-label={`Kurangi ${ariaLabel}`}
       >
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
         </svg>
       </button>
-      <div className={`${midClass} flex items-center justify-center border-x-2 border-border text-center font-black text-primary`} aria-label={ariaLabel}>
+      <div className={`${midClass} flex items-center justify-center text-center font-bold text-[#2D3E10] tabular-nums`} aria-label={ariaLabel}>
         {value}
       </div>
       <button
         type="button"
         disabled={incDisabled}
         onClick={() => onChange(typeof max === "number" ? Math.min(max, value + 1) : value + 1)}
-        className={`${btnClass} flex items-center justify-center font-black text-foreground transition-all hover:bg-primary/5 active:scale-90 disabled:opacity-20 disabled:hover:bg-transparent`}
+        className={`${btnClass} flex items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all hover:bg-primary hover:text-white active:scale-90 disabled:opacity-20 disabled:pointer-events-none`}
         aria-label={`Tambah ${ariaLabel}`}
       >
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
         </svg>
       </button>
@@ -960,94 +960,156 @@ export default function PublicBookingPage() {
   }, [visibleUnits, unitQty]);
 
   const sidebarContent = (
-    <div className="sticky top-6 space-y-4">
-      <div className="overflow-hidden rounded-[2.5rem] border border-border bg-white shadow-sm">
-        {/* Header */}
-              <div className="bg-[#F1F3EE] px-8 py-5">
-                <h3 className="text-lg font-bold text-[#2D3E10]">Ringkasan Pesanan</h3>
-              </div>
+    <div className="sticky top-6 space-y-6">
+      <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/5 transition-all duration-700 hover:shadow-primary/10">
+        {/* Header - Premium Nature Gradient */}
+        <div className="relative overflow-hidden bg-[#2D3E10] px-8 py-12">
+          <div className="relative z-10">
+            <h3 className="text-2xl font-bold tracking-tight text-white">Ringkasan <span className="italic font-serif opacity-80">Pesanan</span></h3>
+            <div className="mt-3 flex items-center gap-3">
+              <span className="h-[1px] w-8 bg-primary/40"></span>
+              <p className="text-[10px] font-bold text-white/50 uppercase tracking-[0.4em]">Exclusive Stay</p>
+            </div>
+          </div>
+          
+          {/* Organic Background Pattern - More Subtle */}
+          <div className="absolute -right-10 -top-10 h-48 w-48 opacity-[0.07] rotate-12 pointer-events-none">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#ffffff" d="M40,-67.2C51.7,-60.7,60.9,-49.5,68.1,-37.1C75.3,-24.7,80.5,-11.1,79.1,2C77.7,15.1,69.7,27.7,60.3,38.5C50.9,49.3,40.1,58.3,27.7,64.3C15.3,70.3,1.3,73.3,-13.2,71.7C-27.7,70.1,-42.7,63.9,-54.6,53.8C-66.5,43.7,-75.3,29.7,-78.7,14.6C-82.1,-0.5,-80.1,-16.7,-73.4,-30.5C-66.7,-44.3,-55.3,-55.7,-42.2,-61.5C-29.1,-67.3,-14.5,-67.5,0.4,-68.2C15.3,-68.9,30.6,-70,40,-67.2Z" transform="translate(100 100)" />
+            </svg>
+          </div>
+        </div>
         
-        <div className="p-8 space-y-6">
+        <div className="p-8 space-y-12">
           {/* Jadwal & Tamu */}
-          <div className="space-y-4">
+          <div className="space-y-8">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40">JADWAL & TAMU</span>
-              <button onClick={() => setCurrentStep(1)} className="text-[10px] font-bold text-primary hover:underline underline-offset-4 uppercase tracking-wider">Ubah</button>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Rencana Kunjungan</span>
+              <button 
+                onClick={() => setCurrentStep(1)} 
+                className="group flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest transition-all hover:text-[#2D3E10]"
+              >
+                <span>Ubah</span>
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F1F3EE] transition-colors group-hover:bg-primary group-hover:text-white">
+                  <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </button>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* Date */}
-              <div className="flex flex-col">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40">Tanggal</span>
-                <span className="text-sm font-bold text-foreground">
-                  {checkIn ? formatDateWIB(new Date(checkIn)) : "Pilih Tanggal"} - {checkOut ? formatDateWIB(new Date(checkOut)) : ""}
-                </span>
+              <div className="flex items-start gap-5 group">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:rotate-3 group-hover:scale-110">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col gap-1.5 py-0.5">
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Tanggal Menginap</span>
+                  <span className="text-sm font-bold text-[#2D3E10] leading-none tracking-tight">
+                    {checkIn ? formatDateWIB(new Date(checkIn)) : "Pilih Tanggal"}
+                    {checkOut && <span className="mx-2 text-[#2D3E10]/20">—</span>}
+                    {checkOut ? formatDateWIB(new Date(checkOut)) : ""}
+                  </span>
+                </div>
               </div>
 
               {/* Guests */}
-              <div className="flex flex-col">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40">Tamu</span>
-                <span className="text-sm font-bold text-foreground">{totalGuest} Orang ({adultPax} Dewasa, {childPax} Anak)</span>
+              <div className="flex items-start gap-5 group">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:-rotate-3 group-hover:scale-110">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col gap-1.5 py-0.5">
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jumlah Tamu</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-[#2D3E10] tracking-tight">{totalGuest} Orang</span>
+                    <span className="text-[10px] font-medium text-primary/60 italic">({adultPax}D, {childPax}A)</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="h-px bg-border/40" />
-
           {/* Unit Terpilih */}
-          <div className="space-y-4">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40">UNIT TERPILIH</span>
+          <div className="space-y-8">
+            <div className="border-b border-[#E8E8E1] pb-4">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Akomodasi</span>
+            </div>
             {selectedVisibleUnits.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {selectedVisibleUnits.map(u => {
                   const qty = unitQty[u.id] || 0;
                   return (
-                    <div key={u.id} className="flex justify-between items-center gap-4">
-                      <span className="text-sm font-bold text-foreground leading-tight">{u.name} (x{qty})</span>
-                      <span className="text-sm font-bold text-foreground">{formatIDR(sumDailyPrice(u) * qty)}</span>
+                    <div key={u.id} className="group flex justify-between items-start gap-4">
+                      <div className="flex flex-col gap-2">
+                        <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{u.name}</span>
+                        <div className="flex items-center">
+                          <span className="rounded-full bg-[#F1F3EE] px-2.5 py-0.5 text-[9px] font-bold text-[#2D3E10]/60 uppercase tracking-wider">
+                            {qty} Unit
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(sumDailyPrice(u) * qty)}</span>
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <p className="text-sm text-primary/30 italic">Belum ada unit dipilih</p>
+              <div className="flex flex-col items-center justify-center py-10 text-center rounded-[2rem] border-2 border-dashed border-[#E8E8E1] bg-[#F1F3EE]/20">
+                <p className="text-[10px] font-bold text-[#2D3E10]/30 uppercase tracking-[0.2em]">Belum Ada Pilihan</p>
+              </div>
             )}
           </div>
 
           {/* Add-ons if any */}
           {Object.keys(addonQty).some(id => addonQty[id] > 0) && (
-            <>
-              <div className="h-px bg-border/40" />
-              <div className="space-y-4">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40">TAMBAHAN</span>
-                <div className="space-y-3">
-                  {addons.filter(a => addonQty[a.id] > 0).map(a => (
-                    <div key={a.id} className="flex justify-between items-center gap-4">
-                      <span className="text-sm font-bold text-foreground leading-tight">{a.name} (x{addonQty[a.id]})</span>
-                      <span className="text-sm font-bold text-foreground">{formatIDR(a.price * addonQty[a.id])}</span>
-                    </div>
-                  ))}
-                </div>
+            <div className="space-y-8">
+              <div className="border-b border-[#E8E8E1] pb-4">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Layanan Tambahan</span>
               </div>
-            </>
+              <div className="space-y-6">
+                {addons.filter(a => addonQty[a.id] > 0).map(a => (
+                  <div key={a.id} className="group flex justify-between items-start gap-4">
+                    <div className="flex flex-col gap-2">
+                      <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{a.name}</span>
+                      <span className="text-[9px] font-bold text-[#2D3E10]/40 uppercase tracking-widest">Qty: {addonQty[a.id]}</span>
+                    </div>
+                    <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(a.price * addonQty[a.id])}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
-          <div className="h-px bg-border/40" />
+          {/* Summary Footer */}
+          <div className="pt-4">
+            <div className="relative overflow-hidden rounded-[2.5rem] bg-[#F1F3EE] p-10 space-y-6 group">
+              {/* Organic Accent in Footer - Very Subtle */}
+              <div className="absolute -left-6 -bottom-6 h-32 w-32 opacity-[0.05] -rotate-12 transition-transform duration-1000 group-hover:rotate-0 group-hover:scale-110">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#2D3E10" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
+                </svg>
+              </div>
 
-          {/* Total */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-base font-medium text-foreground/80">Total Estimasi</span>
-              <span className="text-xl font-bold text-[#2D3E10]">{formatIDR(estimatedAmount)}</span>
+              <div className="relative z-10 space-y-3 text-center">
+                <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.4em]">Estimasi Total Biaya</span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-3xl font-black text-[#2D3E10] tracking-tighter tabular-nums">{formatIDR(estimatedAmount)}</span>
+                  <p className="text-[10px] font-medium text-primary/40 italic">
+                    *Termasuk pajak & biaya layanan
+                  </p>
+                </div>
+              </div>
             </div>
-            <p className="text-[10px] leading-relaxed text-primary/40 italic">
-              * Harga sudah termasuk pajak dan belum termasuk biaya layanan.
-            </p>
           </div>
         </div>
 
         {/* Action Button Section */}
-              <div className="bg-[#F1F3EE] p-8">
+        <div className="bg-white px-8 pb-10 pt-4 border-t border-[#E8E8E1]/60">
           <button
             onClick={() => {
               if (currentStep === 1) setCurrentStep(2);
@@ -1055,24 +1117,30 @@ export default function PublicBookingPage() {
               else onSubmit(new Event('submit') as any);
             }}
             disabled={(currentStep === 1 && !filterCategory) || (currentStep === 2 && (!name || !phone || !email || !checkIn || !checkOut)) || (currentStep === 3 && selectedVisibleCount === 0)}
-            className="w-full rounded-2xl bg-[#2D3E10] py-4 text-sm font-bold text-white shadow-lg shadow-black/10 transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:shadow-none"
+            className="group relative w-full overflow-hidden rounded-[1.2rem] bg-[#2D3E10] py-5 text-[11px] font-bold text-white shadow-xl shadow-[#2D3E10]/20 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-20 disabled:pointer-events-none"
           >
-            {currentStep === 1 ? "Lanjut Isi Data" : currentStep === 2 ? "Lanjut Pilih Unit" : "Konfirmasi Booking"}
+            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+            <div className="relative z-10 flex items-center justify-center gap-4 uppercase tracking-[0.3em]">
+              <span>{currentStep === 1 ? "Lanjut Isi Data" : currentStep === 2 ? "Lanjut Pilih Unit" : "Konfirmasi Booking"}</span>
+              <svg className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
           </button>
         </div>
       </div>
 
-      {/* Help Section */}
-      <div className="rounded-[2rem] bg-white p-6 text-center border border-border shadow-sm">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-primary/40 mb-1">BUTUH BANTUAN?</p>
-        <p className="text-xs font-bold text-foreground/80 mb-4">Hubungi Admin Woodforest</p>
-        <a 
-                href="https://wa.me/628112090808" 
-                target="_blank" 
-                className="inline-flex h-10 items-center justify-center rounded-xl bg-[#F1F3EE] px-6 text-[10px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#2D3E10] hover:text-white w-full"
-              >
-          WHATSAPP CHAT
-        </a>
+      {/* Trust Badge - More Elegant */}
+      <div className="flex items-center gap-5 px-10 py-8 rounded-[2.5rem] bg-[#F1F3EE]/30 border border-[#E8E8E1] group transition-all duration-500 hover:bg-white hover:shadow-xl hover:shadow-[#2D3E10]/5">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm transition-transform duration-700 group-hover:rotate-[360deg]">
+          <svg className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <div className="space-y-0.5">
+          <span className="block text-[10px] font-black text-[#2D3E10] uppercase tracking-[0.3em]">Secure Stay</span>
+          <span className="block text-[9px] font-medium text-primary/40 uppercase tracking-widest">Premium Protected Reservation</span>
+        </div>
       </div>
     </div>
   );
@@ -1199,22 +1267,22 @@ export default function PublicBookingPage() {
               </div>
             </div>
             <div className="sm:-mt-2">
-              <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-3">
+              <div className="inline-flex items-center rounded-full bg-primary/10 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-3">
                 <span className="relative flex h-2 w-2 mr-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                 </span>
                 Luxury Camping Ground
               </div>
-              <h1 className="text-4xl font-black tracking-tighter text-foreground sm:text-5xl">
+              <h1 className="text-4xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
                 Woodforest <span className="text-primary italic">Booking</span>
               </h1>
-              <p className="mt-3 max-w-xl text-base font-medium leading-relaxed text-primary/60">
-                Grounded, calm, warm. Pilih tanggal, pilih paket, dan kami siapkan pengalaman yang tenang di alam untuk bonding keluarga.
+              <p className="mt-3 max-w-xl text-sm font-medium leading-relaxed text-primary/60 italic">
+                "Grounded, calm, warm. Pilih tanggal, pilih paket, dan nikmati pengalaman yang tenang di alam untuk bonding keluarga."
               </p>
-              <div className="mt-5 flex flex-wrap gap-2.5">
+              <div className="mt-6 flex flex-wrap gap-2.5">
                 {["Quiet nature", "Family bonding", "Wellness", "Light adventure"].map((tag) => (
-                  <div key={tag} className="rounded-2xl border-2 border-border bg-surface px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-primary/60 transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-1">
+                  <div key={tag} className="rounded-2xl border border-[#E8E8E1] bg-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40 transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-0.5">
                     {tag}
                   </div>
                 ))}
@@ -1277,140 +1345,130 @@ export default function PublicBookingPage() {
               }
             `}</style>
             <div className="mt-6 print-mt-0">
-              <div className="print-page print-invoice overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-                <div className="p-6 print-tight print-compact-text">
+              <div className="print-page print-invoice overflow-hidden rounded-[1.5rem] border border-[#E8E8E1] bg-white shadow-sm transition-all duration-700 hover:shadow-xl hover:shadow-[#2D3E10]/5">
+                <div className="p-8 print-tight print-compact-text">
                   <div className="text-center">
-                    <img src="/brand/logowf.png" alt="Woodforest" className="print-logo mx-auto h-40 w-40 object-contain" />
-                    <div className="mt-0.5 text-base font-bold leading-tight text-foreground">Woodforest Jayagiri 48</div>
-                    <div className="mt-0.5 text-[10px] tracking-[0.2em] text-primary/40">Quiet nature • Family bonding • Wellness • Light adventure</div>
-                    <div className="mt-1 text-[11px] text-primary/40">admin@woodforestjayagiri48.com · +62 811-2090-808</div>
-                    <div className="mt-0.5 text-[10px] text-primary/40">Jam check-in 14:00 WIB • Check-out 12:00 WIB • Tunjukkan Booking ID saat check-in</div>
+                    <img src="/brand/logowf.png" alt="Woodforest" className="print-logo mx-auto h-32 w-32 object-contain" />
+                    <div className="mt-4 text-xl font-bold tracking-tight text-[#2D3E10]">Woodforest <span className="italic font-serif opacity-60">Jayagiri 48</span></div>
+                    <div className="mt-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Quiet nature • Family bonding • Wellness • Light adventure</div>
+                    <div className="mt-4 text-[11px] font-medium text-[#2D3E10]/40">admin@woodforestjayagiri48.com · +62 811-2090-808</div>
+                    <div className="mt-1 text-[10px] font-medium text-[#2D3E10]/40">Jam check-in 14:00 WIB • Check-out 12:00 WIB</div>
                   </div>
 
-                  <div className="my-2 h-px bg-border" />
+                  <div className="my-8 h-px bg-[#E8E8E1]" />
 
                   {invoice ? (
                     <>
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <div className="text-sm font-bold text-foreground">Invoice / Booking Confirmation</div>
-                          <div className="mt-2 text-xs text-primary/60">Dear {invoice.customer.name},</div>
-                          <div className="mt-1 text-xs text-primary/60">Terima kasih telah memilih Woodforest Jayagiri 48. Berikut detail booking Anda.</div>
+                      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                        <div className="space-y-3">
+                          <div className="inline-flex rounded-full bg-[#F1F3EE] px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/60">Invoice / Confirmation</div>
+                          <div className="text-sm font-bold text-[#2D3E10]">Dear {invoice.customer.name},</div>
+                          <p className="max-w-xs text-xs leading-relaxed text-[#2D3E10]/50">Terima kasih telah memilih Woodforest Jayagiri 48. Berikut adalah detail konfirmasi booking Anda.</p>
                         </div>
-                        <div className="text-right">
-                          <div className="text-xs text-primary/40">Booking ID</div>
-                          <div className="mt-0.5 font-mono text-sm font-bold text-foreground">{invoice.code}</div>
-                          <div className="mt-2 text-xs text-primary/40">Status</div>
-                          <div className="mt-0.5 text-sm font-bold text-foreground">
-                            {invoice.payment.paidAmount >= invoice.payment.amount ? "Confirmed" : "Pending"}
+                        <div className="flex flex-col gap-4 md:text-right">
+                          <div>
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">Booking ID</div>
+                            <div className="mt-1 font-mono text-sm font-bold text-[#2D3E10]">{invoice.code}</div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">Status</div>
+                            <div className="mt-1">
+                              <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${
+                                invoice.payment.paidAmount >= invoice.payment.amount 
+                                  ? "bg-green-50 text-green-600" 
+                                  : "bg-amber-50 text-amber-600"
+                              }`}>
+                                {invoice.payment.paidAmount >= invoice.payment.amount ? "Confirmed" : "Pending"}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
 
-                      <div className="my-2 h-px bg-border" />
+                      <div className="my-8 h-px bg-[#E8E8E1]" />
 
-                      <div className="print-grid grid grid-cols-1 gap-4 md:grid-cols-5">
-                        <div className="print-box rounded-xl border border-border p-4 md:col-span-3">
-                          <div className="text-sm font-bold text-foreground">Detail Booking</div>
-                          <div className="mt-3 text-xs text-primary/40">Item</div>
-                          <div className="mt-2 space-y-2">
+                      <div className="print-grid grid grid-cols-1 gap-6 md:grid-cols-5">
+                        <div className="print-box rounded-[1.2rem] border border-[#E8E8E1] bg-[#F1F3EE]/30 p-6 md:col-span-3">
+                          <h4 className="text-xs font-bold uppercase tracking-widest text-[#2D3E10]">Detail Booking</h4>
+                          
+                          <div className="mt-6 space-y-4">
                             {(invoice.items ?? []).map((it, idx) => (
                               <div key={`${it.name}-${idx}`} className="flex items-center justify-between gap-3 text-sm">
-                                <div className="text-foreground">{it.name}</div>
-                                <div className="text-primary/60">x{it.quantity}</div>
+                                <div className="font-bold text-[#2D3E10]">{it.name}</div>
+                                <div className="font-mono text-[#2D3E10]/60">x{it.quantity}</div>
                               </div>
                             ))}
-                            {(invoice.items ?? []).length === 0 ? <div className="text-sm text-primary/40">-</div> : null}
                           </div>
 
                           {invoice.addOns?.length ? (
-                            <>
-                              <div className="my-4 h-px bg-border/60" />
-                              <div className="text-xs text-primary/40">Add-Ons</div>
-                              <div className="mt-2 space-y-2">
+                            <div className="mt-6 pt-6 border-t border-[#E8E8E1]">
+                              <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30 mb-4">Add-Ons</div>
+                              <div className="space-y-3">
                                 {invoice.addOns.map((a, idx) => (
                                   <div key={`${a.name}-${idx}`} className="flex items-center justify-between gap-3 text-sm">
-                                    <div className="text-foreground">
-                                      {a.name} <span className="text-xs text-primary/40">({formatIDR(a.price)})</span>
+                                    <div className="text-[#2D3E10]">
+                                      {a.name} <span className="ml-1 text-[10px] font-bold text-[#2D3E10]/30">({formatIDR(a.price)})</span>
                                     </div>
-                                    <div className="text-primary/60">x{a.quantity}</div>
+                                    <div className="font-mono text-[#2D3E10]/60">x{a.quantity}</div>
                                   </div>
                                 ))}
                               </div>
-                            </>
+                            </div>
                           ) : null}
 
-                          <div className="my-4 h-px bg-border/60" />
-
-                          <div className="grid grid-cols-2 gap-3 text-xs">
-                            <div className="text-primary/40">Nama</div>
-                            <div className="text-right font-semibold text-foreground">{invoice.customer.name}</div>
-                            <div className="text-primary/40">Kontak</div>
-                            <div className="text-right text-foreground">
-                              {invoice.customer.phone} · {invoice.customer.email}
-                            </div>
-                            <div className="text-primary/40">Check-in</div>
-                            <div className="text-right font-semibold text-foreground">{formatDateWIB(new Date(invoice.checkIn))}</div>
-                            <div className="text-primary/40">Check-out</div>
-                            <div className="text-right font-semibold text-foreground">{formatDateWIB(new Date(invoice.checkOut))}</div>
-                            <div className="text-primary/40">Guest</div>
-                            <div className="text-right text-foreground">{invoice.totalGuest}</div>
-                            <div className="text-primary/40">Kavling</div>
-                            <div className="text-right text-foreground">
-                              {invoice.kavlings?.length ? invoice.kavlings.slice().sort((a, b) => a - b).join(", ") : "-"}
+                          <div className="mt-8 pt-6 border-t border-[#E8E8E1]">
+                            <div className="grid grid-cols-2 gap-y-4 text-xs">
+                              <div className="text-[#2D3E10]/40">Check-in</div>
+                              <div className="text-right font-bold text-[#2D3E10]">{formatDateWIB(new Date(invoice.checkIn))}</div>
+                              <div className="text-[#2D3E10]/40">Check-out</div>
+                              <div className="text-right font-bold text-[#2D3E10]">{formatDateWIB(new Date(invoice.checkOut))}</div>
+                              <div className="text-[#2D3E10]/40">Guest</div>
+                              <div className="text-right font-bold text-[#2D3E10]">{invoice.totalGuest} Tamu</div>
+                              <div className="text-[#2D3E10]/40">Kavling</div>
+                              <div className="text-right font-mono font-bold text-[#2D3E10]">
+                                {invoice.kavlings?.length ? invoice.kavlings.slice().sort((a, b) => a - b).join(", ") : "-"}
+                              </div>
                             </div>
                           </div>
 
                           {invoice.specialRequest ? (
-                            <>
-                              <div className="my-4 h-px bg-border/60" />
-                              <div className="text-xs font-bold text-foreground">Special Request</div>
-                              <div className="mt-2 whitespace-pre-wrap text-sm text-foreground">{invoice.specialRequest}</div>
-                            </>
-                          ) : null}
-
-                          <div className="my-4 h-px bg-border/60" />
-                          <div className="print-hide">
-                            <div className="text-xs font-bold text-foreground">Cancellation Policy</div>
-                            <div className="mt-2 text-xs text-primary/40">
-                              Pembatalan dapat dikenakan biaya sesuai kebijakan. Silakan hubungi admin untuk detail kebijakan pembatalan.
+                            <div className="mt-6 pt-6 border-t border-[#E8E8E1]">
+                              <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30 mb-2">Special Request</div>
+                              <p className="text-xs italic text-[#2D3E10]/60 leading-relaxed">"{invoice.specialRequest}"</p>
                             </div>
-                          </div>
+                          ) : null}
                         </div>
 
-                        <div className="print-box rounded-xl border border-border p-4 md:col-span-2">
-                          <div className="text-sm font-bold text-foreground">Ringkasan Pembayaran</div>
+                        <div className="print-box flex flex-col rounded-[1.2rem] border border-[#E8E8E1] p-6 md:col-span-2">
+                          <h4 className="text-xs font-bold uppercase tracking-widest text-[#2D3E10]">Ringkasan Pembayaran</h4>
 
                           {(() => {
                             const addOnAmount = invoice.addOns.reduce((acc, a) => acc + a.quantity * a.price, 0);
                             const baseAmount = Math.max(0, invoice.payment.amount - addOnAmount);
-                            const paidAtText = invoice.payment.paidAt ? `${formatDateWIB(new Date(invoice.payment.paidAt))} WIB` : "-";
                             return (
-                              <div className="mt-3 space-y-2 text-xs">
+                              <div className="mt-6 flex-1 space-y-4 text-xs">
                                 <div className="flex items-center justify-between gap-3">
-                                  <div className="text-primary/40">Room / Paket</div>
-                                  <div className="text-foreground">{formatIDR(baseAmount)}</div>
+                                  <div className="text-[#2D3E10]/40">Room / Paket</div>
+                                  <div className="font-bold text-[#2D3E10]">{formatIDR(baseAmount)}</div>
                                 </div>
                                 <div className="flex items-center justify-between gap-3">
-                                  <div className="text-primary/40">Add-Ons</div>
-                                  <div className="text-foreground">{formatIDR(addOnAmount)}</div>
+                                  <div className="text-[#2D3E10]/40">Add-Ons</div>
+                                  <div className="font-bold text-[#2D3E10]">{formatIDR(addOnAmount)}</div>
                                 </div>
-                                <div className="my-3 h-px bg-border/60" />
-                                <div className="flex items-center justify-between gap-3 text-sm font-bold">
-                                  <div className="text-foreground">Total</div>
-                                  <div className="text-foreground">{formatIDR(invoice.payment.amount)}</div>
+                                <div className="my-4 h-px bg-[#E8E8E1]" />
+                                <div className="flex items-center justify-between gap-3 text-sm">
+                                  <div className="font-bold text-[#2D3E10]">Total</div>
+                                  <div className="text-lg font-bold text-primary">{formatIDR(invoice.payment.amount)}</div>
                                 </div>
-                                <div className="flex items-center justify-between gap-3">
-                                  <div className="text-primary/40">Amount Paid</div>
-                                  <div className="text-foreground">{formatIDR(invoice.payment.paidAmount)}</div>
-                                </div>
-                                <div className="flex items-center justify-between gap-3">
-                                  <div className="text-primary/40">Paid at</div>
-                                  <div className="text-foreground">{paidAtText}</div>
-                                </div>
-                                <div className="flex items-center justify-between gap-3">
-                                  <div className="text-primary/40">Metode</div>
-                                  <div className="text-foreground">{invoice.payment.method ?? "-"}</div>
+                                <div className="mt-8 space-y-3 rounded-xl bg-[#F1F3EE]/50 p-4">
+                                  <div className="flex items-center justify-between text-[10px]">
+                                    <div className="font-bold uppercase tracking-widest text-[#2D3E10]/30">Method</div>
+                                    <div className="font-bold text-[#2D3E10]">{invoice.payment.method ?? "-"}</div>
+                                  </div>
+                                  <div className="flex items-center justify-between text-[10px]">
+                                    <div className="font-bold uppercase tracking-widest text-[#2D3E10]/30">Amount Paid</div>
+                                    <div className="font-bold text-[#2D3E10]">{formatIDR(invoice.payment.paidAmount)}</div>
+                                  </div>
                                 </div>
                               </div>
                             );
@@ -1418,24 +1476,34 @@ export default function PublicBookingPage() {
                         </div>
                       </div>
 
-                      <div className="print-hide print-box mt-6 rounded-xl border border-border bg-surface p-4 text-xs text-primary/40">
-                        Simpan halaman ini sebagai bukti booking. Tunjukkan Booking ID saat check-in.
+                      <div className="print-hide mt-8 rounded-xl bg-[#F1F3EE] p-4 text-center">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/40">
+                          Simpan halaman ini sebagai bukti booking. Tunjukkan Booking ID saat check-in.
+                        </p>
                       </div>
                     </>
                   ) : (
-                    <div className="rounded-xl border border-border bg-surface p-4 text-sm text-primary/40">Menyiapkan invoice...</div>
+                    <div className="flex flex-col items-center justify-center py-20">
+                      <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                      <p className="mt-4 text-xs font-bold uppercase tracking-widest text-[#2D3E10]/30">Menyiapkan invoice...</p>
+                    </div>
                   )}
                 </div>
               </div>
 
-              <div className="no-print mt-4 flex flex-col gap-3 sm:flex-row">
+              <div className="no-print mt-8 flex flex-col gap-4 sm:flex-row">
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                  className="group relative flex h-14 flex-1 items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50"
                   disabled={!invoice}
                 >
-                  Unduh E-Voucher / Cetak
+                  <div className="relative z-10 flex items-center gap-3">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Unduh E-Voucher / Cetak
+                  </div>
                 </button>
                 <button
                   type="button"
@@ -1443,7 +1511,7 @@ export default function PublicBookingPage() {
                     sessionStorage.removeItem("wf_booking_draft");
                     window.location.href = window.location.pathname;
                   }}
-                  className="inline-flex items-center justify-center rounded-xl border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground hover:bg-background"
+                  className="group flex h-14 flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98]"
                 >
                   Booking Lagi
                 </button>
@@ -1521,20 +1589,19 @@ export default function PublicBookingPage() {
                 <div className="space-y-8">
                   {currentStep === 1 && (
                     <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                      <div className="mb-10 text-center">
-                        <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-4 border border-primary/10 backdrop-blur-sm">
-                          Langkah Pertama
+                      <div className="mb-12 text-center">
+                        <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10] mb-6 border border-[#E8E8E1]">
+                          Langkah 01
                         </div>
-                        <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-5xl mb-4">
-                          Pilih <span className="text-primary italic font-serif">Pengalaman</span> Anda
+                        <h2 className="text-3xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
+                          Pilih <span className="text-primary italic">Pengalaman</span> Anda
                         </h2>
-                        <p className="mx-auto max-w-2xl text-base font-medium text-primary/60 leading-relaxed">
-                          Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri. 
-                          Pilih kategori yang paling sesuai dengan rencana liburan Anda.
+                        <p className="mx-auto mt-4 max-w-xl text-sm font-medium text-primary/60 italic">
+                          "Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri. Pilih kategori yang paling sesuai dengan rencana liburan Anda."
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                         {categoryOptions.map((cat, idx) => {
                           const isGlamping = cat.toLowerCase().includes('glamp');
                           const isPaket = cat.toLowerCase().includes('paket');
@@ -1554,13 +1621,13 @@ export default function PublicBookingPage() {
                                   setFilterCategory(cat);
                                   setCurrentStep(2);
                                 }}
-                                className={`flex flex-col h-full overflow-hidden rounded-[2.5rem] border-2 transition-all duration-700 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] hover:-translate-y-2 ${
+                                className={`flex flex-col h-full overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] transition-all duration-700 hover:shadow-[0_32px_64px_-16px_rgba(45,62,16,0.1)] hover:-translate-y-2 ${
                                   filterCategory === cat 
-                                    ? "border-primary bg-primary/[0.02] shadow-2xl shadow-primary/5" 
-                                    : "border-border/60 bg-surface hover:border-primary/40"
+                                    ? "border-primary bg-white shadow-2xl shadow-primary/5" 
+                                    : "bg-white hover:border-primary/40"
                                 }`}
                               >
-                                <div className="relative h-48 w-full overflow-hidden">
+                                <div className="relative h-56 w-full overflow-hidden">
                                   {packageConfigs[cat]?.imageUrl ? (
                                     <img 
                                       src={`${packageConfigs[cat].imageUrl}?t=${Date.now()}`} 
@@ -1569,19 +1636,21 @@ export default function PublicBookingPage() {
                                     />
                                   ) : (
                                     <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-1000 group-hover:scale-110 ${
-                                      isGlamping ? "from-emerald-100 to-teal-50" : 
-                                      isPrivate ? "from-amber-100 to-orange-50" : 
-                                      "from-blue-100 to-indigo-50"
+                                      isGlamping ? "from-[#F1F3EE] to-[#E8E8E1]" : 
+                                      isPrivate ? "from-[#FDFDFB] to-[#F1F3EE]" : 
+                                      "from-[#E8E8E1] to-[#F1F3EE]"
                                     }`} />
                                   )}
-                                  <div className="absolute inset-0 flex items-center justify-center opacity-20 mix-blend-overlay">
-                                    <svg className="w-40 h-40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                      <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
+                                  
+                                  {/* Organic SVG Overlay */}
+                                  <div className="absolute inset-0 flex items-center justify-center opacity-5 mix-blend-multiply transition-opacity group-hover:opacity-10">
+                                    <svg className="w-64 h-64" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                      <path fill="#2D3E10" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
                                     </svg>
                                   </div>
-                                  
-                                  <div className={`absolute top-5 left-5 flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-700 ${
-                                    filterCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-white/80 backdrop-blur-md text-primary group-hover:bg-primary group-hover:text-white group-hover:rotate-12"
+
+                                  <div className={`absolute top-6 left-6 flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-700 ${
+                                    filterCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-white/90 backdrop-blur-md text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
                                   }`}>
                                     {isGlamping ? (
                                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1589,19 +1658,19 @@ export default function PublicBookingPage() {
                                       </svg>
                                     ) : isPrivate ? (
                                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                       </svg>
                                     ) : (
                                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                       </svg>
                                     )}
                                   </div>
                                 </div>
 
-                                <div className="flex flex-col flex-1 p-6 text-left">
-                                  <h3 className="text-xl font-black text-foreground mb-3 group-hover:text-primary transition-colors">{cat}</h3>
-                                  <p className="text-sm font-medium leading-relaxed text-primary/40 mb-6 flex-1">
+                                <div className="flex flex-col flex-1 p-8 text-left">
+                                  <h3 className="text-2xl font-bold text-[#2D3E10] mb-3 group-hover:text-primary transition-colors">{cat}</h3>
+                                  <p className="text-sm font-medium leading-relaxed text-primary/60 mb-8 flex-1 italic">
                                     {packageConfigs[cat]?.description || (
                                       cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap di tengah rimbunnya hutan Jayagiri yang menenangkan." : 
                                       cat === "Paket" ? "Pilihan paket lengkap yang dirancang khusus untuk menciptakan momen berharga bersama keluarga tercinta." :
@@ -1609,9 +1678,9 @@ export default function PublicBookingPage() {
                                     )}
                                   </p>
 
-                                  <div className="flex items-center justify-between pt-5 border-t border-border/40">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-primary">Lihat Detail</span>
-                                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1">
+                                  <div className="flex items-center justify-between pt-6 border-t border-[#E8E8E1]">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]">Eksplorasi Detail</span>
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1">
                                       <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                       </svg>
@@ -1628,37 +1697,42 @@ export default function PublicBookingPage() {
 
             {currentStep === 2 && (
               <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                <div className="mb-8 text-center">
-                  <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4 border border-primary/10">
-                    Step 02
+                <div className="mb-12 text-center">
+                  <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10] mb-6 border border-[#E8E8E1]">
+                    Langkah 02
                   </div>
-                  <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-5xl">
-                    Detail <span className="text-primary italic">Tamu</span>
+                  <h2 className="text-3xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
+                    Detail <span className="text-primary italic">Menginap</span>
                   </h2>
-                  <p className="mx-auto mt-3 max-w-2xl text-base font-medium text-primary/60">
-                    Informasi jumlah tamu membantu kami menyiapkan fasilitas yang tepat untuk kenyamanan keluarga Anda.
+                  <p className="mx-auto mt-4 max-w-xl text-sm font-medium text-primary/60 italic">
+                    "Kenyamanan Anda adalah prioritas kami. Silakan lengkapi detail rencana menginap Anda untuk pengalaman yang tak terlupakan."
                   </p>
                 </div>
 
                 <div className="mx-auto w-full">
                   <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(3); }} className="space-y-8">
-                    <div className="space-y-8">
+                    <div className="space-y-12">
                       {/* Section: Stay Details */}
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-4 mb-2">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-4">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
-                          <h3 className="text-xl font-black text-foreground">Detail Menginap</h3>
+                          <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
                         </div>
 
-                        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-sm transition-all hover:shadow-md p-6">
-                          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                            <div className="space-y-3">
-                              <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Check-in</label>
+                        <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-10 shadow-xl shadow-[#2D3E10]/5">
+                          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2">
+                            <div className="space-y-4">
+                              <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/40 ml-1">Tanggal Check-in</label>
                               <div className="relative group">
+                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-primary transition-transform duration-500 group-hover:scale-110">
+                                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                  </svg>
+                                </div>
                                 <input
                                   type="date"
                                   value={checkIn}
@@ -1668,17 +1742,19 @@ export default function PublicBookingPage() {
                                     }
                                     setCheckIn(e.target.value);
                                   }}
-                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                  className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] py-5 pl-14 pr-6 text-base font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 group-hover:border-[#D1D1C7]"
                                   required
                                 />
-                                <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
                               </div>
                             </div>
-                            <div className="space-y-3">
-                              <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Check-out</label>
+                            <div className="space-y-4">
+                              <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/40 ml-1">Tanggal Check-out</label>
                               <div className="relative group">
+                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-primary transition-transform duration-500 group-hover:scale-110">
+                                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                  </svg>
+                                </div>
                                 <input
                                   type="date"
                                   value={checkOut}
@@ -1688,23 +1764,20 @@ export default function PublicBookingPage() {
                                     }
                                     setCheckOut(e.target.value);
                                   }}
-                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                  className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] py-5 pl-14 pr-6 text-base font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 group-hover:border-[#D1D1C7]"
                                   required
                                 />
-                                <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
                               </div>
                             </div>
                           </div>
 
-                          <div className="mt-6 space-y-3 pt-6 border-t border-border/60">
-                            <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Jumlah Tamu</label>
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                              <div className="flex items-center justify-between rounded-2xl border border-border bg-primary/5 p-4 transition-all hover:bg-primary/10">
-                                <div className="space-y-0.5">
-                                  <p className="text-sm font-black text-foreground">Dewasa</p>
-                                  <p className="text-[10px] font-bold text-primary/40">Usia 12+</p>
+                          <div className="mt-12 space-y-6 pt-10 border-t border-[#E8E8E1]/60">
+                            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40 ml-1">Konfigurasi Tamu</label>
+                            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                              <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-[#FDFDFB] p-6 transition-all hover:bg-[#F1F3EE] hover:border-primary/20">
+                                <div className="space-y-1">
+                                  <p className="text-base font-bold text-[#2D3E10]">Dewasa</p>
+                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia di atas 12 tahun</p>
                                 </div>
                                 <QuantityStepper 
                                   value={adultPax} 
@@ -1713,10 +1786,10 @@ export default function PublicBookingPage() {
                                   onChange={setAdultPax} 
                                 />
                               </div>
-                              <div className="flex items-center justify-between rounded-2xl border border-border bg-primary/5 p-4 transition-all hover:bg-primary/10">
-                                <div className="space-y-0.5">
-                                  <p className="text-sm font-black text-foreground">Anak</p>
-                                  <p className="text-[10px] font-bold text-primary/40">Usia &lt; 12</p>
+                              <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-[#FDFDFB] p-6 transition-all hover:bg-[#F1F3EE] hover:border-primary/20">
+                                <div className="space-y-1">
+                                  <p className="text-base font-bold text-[#2D3E10]">Anak-anak</p>
+                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia di bawah 12 tahun</p>
                                 </div>
                                 <QuantityStepper 
                                   value={childPax} 
@@ -1731,92 +1804,93 @@ export default function PublicBookingPage() {
                       </div>
 
                       {/* Section: Contact Info */}
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-4 mb-2">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-4">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                           </div>
-                          <h3 className="text-xl font-black text-foreground">Informasi Kontak</h3>
+                          <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Informasi Kontak</h3>
                         </div>
 
-                        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-sm transition-all hover:shadow-md p-6 space-y-5">
+                        <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-10 shadow-xl shadow-[#2D3E10]/5 space-y-10">
                           <div className="space-y-3">
-                            <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Nama Lengkap</label>
+                            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40 ml-1">Nama Lengkap Sesuai Identitas</label>
                             <div className="relative group">
                               <input
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
-                                placeholder="Sesuai KTP"
+                                className="w-full border-b-2 border-[#E8E8E1] bg-transparent px-1 py-4 text-lg font-bold text-[#2D3E10] outline-none transition-all focus:border-primary group-hover:border-[#D1D1C7]"
+                                placeholder="Contoh: Budi Santoso"
                                 required
                               />
-                              <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                              </svg>
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2">
                             <div className="space-y-3">
-                              <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">WhatsApp</label>
-                              <div className="relative group">
+                              <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40 ml-1">Nomor WhatsApp</label>
+                              <div className="relative group flex items-center">
+                                <span className="text-lg font-bold text-primary mr-4 transition-colors group-hover:text-primary/80">+62</span>
                                 <input
                                   value={phone}
                                   onChange={(e) => setPhone(e.target.value)}
-                                  className="w-full rounded-2xl border border-border bg-surface pl-14 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
-                                  placeholder="0812..."
+                                  className="w-full border-b-2 border-[#E8E8E1] bg-transparent px-1 py-4 text-lg font-bold text-[#2D3E10] outline-none transition-all focus:border-primary group-hover:border-[#D1D1C7]"
+                                  placeholder="8123456789"
                                   required
                                 />
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-black text-primary">+62</span>
                               </div>
                             </div>
                             <div className="space-y-3">
-                              <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Email</label>
+                              <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40 ml-1">Alamat Email Aktif</label>
                               <div className="relative group">
                                 <input
                                   type="email"
                                   value={email}
                                   onChange={(e) => setEmail(e.target.value)}
-                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
-                                  placeholder="email@anda.com"
+                                  className="w-full border-b-2 border-[#E8E8E1] bg-transparent px-1 py-4 text-lg font-bold text-[#2D3E10] outline-none transition-all focus:border-primary group-hover:border-[#D1D1C7]"
+                                  placeholder="nama@email.com"
                                   required
                                 />
-                                <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
                               </div>
                             </div>
                           </div>
 
-                          <div className="space-y-3 pt-3">
-                            <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Permintaan Khusus</label>
+                          <div className="space-y-3 pt-4">
+                            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40 ml-1">Permintaan Khusus atau Catatan Tambahan</label>
                             <textarea
                               value={specialRequest}
                               onChange={(e) => setSpecialRequest(e.target.value)}
-                              className="h-28 w-full rounded-2xl border border-border bg-surface px-5 py-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 resize-none group-hover:border-primary/40"
-                              placeholder="Opsional: Request lokasi, check-in awal, dll."
+                              className="h-32 w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 text-base font-medium text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:bg-white group-hover:border-[#D1D1C7] resize-none"
+                              placeholder="Contoh: Request lokasi dekat parkir, check-in lebih awal, atau perayaan ulang tahun."
                             />
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-3 pt-6 sm:flex-row">
+                    <div className="flex flex-col gap-5 pt-12 sm:flex-row">
                       <button
                         type="button"
                         onClick={() => setCurrentStep(1)}
-                        className="order-2 flex-1 rounded-2xl border-2 border-border bg-surface px-6 py-4 text-sm font-black text-foreground transition-all hover:bg-primary/5 active:scale-95 sm:order-1"
+                        className="group order-2 flex h-16 flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1"
                       >
+                        <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
                         Kembali
                       </button>
                       <button
                         type="submit"
                         disabled={!name || !phone || !email || !checkIn || !checkOut}
-                        className="order-1 flex-1 rounded-2xl bg-primary px-6 py-4 text-sm font-black text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:shadow-none sm:order-2"
+                        className="group relative order-1 flex h-16 flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 disabled:shadow-none sm:order-2"
                       >
-                        Lanjut Pilih Unit
+                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+                        <span className="relative z-10">Lanjut Pilih Unit & Kavling</span>
+                        <svg className="relative z-10 ml-3 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
                       </button>
                     </div>
                   </form>
@@ -1833,53 +1907,53 @@ export default function PublicBookingPage() {
                 className="relative z-10"
               >
                 <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                  <div className="mb-8 text-center">
-                    <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4 border border-primary/10">
-                      Step 03
+                  <div className="mb-12 text-center">
+                    <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10] mb-6 border border-[#E8E8E1]">
+                      Langkah 03
                     </div>
-                    <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-5xl">
+                    <h2 className="text-3xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
                       Pilihan <span className="text-primary italic">Unit & Kavling</span>
                     </h2>
-                    <p className="mx-auto mt-3 max-w-2xl text-base font-medium text-primary/60">
-                      Tentukan unit dan lokasi kavling favorit Anda untuk pengalaman menginap yang tak terlupakan.
+                    <p className="mx-auto mt-4 max-w-xl text-sm font-medium text-primary/60 italic">
+                      "Tentukan unit dan lokasi kavling favorit Anda untuk pengalaman menginap yang tak terlupakan."
                     </p>
                   </div>
 
                   <div className="mx-auto w-full space-y-8">
-                    <div className="mb-8 flex flex-col items-center justify-between gap-5 rounded-[2.5rem] border border-border bg-surface/50 p-5 backdrop-blur-xl shadow-sm sm:flex-row sm:p-6">
+                    <div className="mb-8 flex flex-col items-center justify-between gap-5 rounded-[2.5rem] border border-[#E8E8E1] bg-[#FDFDFB]/50 p-5 backdrop-blur-xl shadow-sm sm:flex-row sm:p-6">
                       <div className="flex items-center gap-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-primary">
+                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-primary/40">Kategori</p>
-                          <p className="text-sm font-black text-foreground">{filterCategory || "Semua Paket"}</p>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-primary/40">Kategori</p>
+                          <p className="text-sm font-bold text-[#2D3E10]">{filterCategory || "Semua Paket"}</p>
                         </div>
                       </div>
 
-                      <div className="h-8 w-px bg-border hidden sm:block" />
+                      <div className="h-8 w-px bg-[#E8E8E1] hidden sm:block" />
 
                       <div className="flex items-center gap-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-primary">
+                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-primary/40">Jadwal</p>
-                          <p className="text-sm font-black text-foreground">{checkIn} - {checkOut}</p>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-primary/40">Jadwal</p>
+                          <p className="text-sm font-bold text-[#2D3E10]">{checkIn} - {checkOut}</p>
                         </div>
                       </div>
 
-                      <div className="h-8 w-px bg-border hidden sm:block" />
+                      <div className="h-8 w-px bg-[#E8E8E1] hidden sm:block" />
 
                       <div className="relative group w-full sm:w-auto">
                         <select
                           value={filterType}
                           onChange={(e) => setFilterType(e.target.value)}
-                          className="h-12 w-full appearance-none rounded-2xl border border-border bg-surface pl-5 pr-12 text-xs font-black text-foreground outline-none transition-all group-hover:border-primary/40 focus:border-primary focus:ring-4 focus:ring-primary/10 sm:w-44"
+                          className="h-12 w-full appearance-none rounded-2xl border border-[#E8E8E1] bg-white pl-5 pr-12 text-xs font-bold text-[#2D3E10] outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-44"
                         >
                           <option value="">Semua Tipe</option>
                           {typeOptions.map((t) => (
@@ -1887,7 +1961,7 @@ export default function PublicBookingPage() {
                           ))}
                         </select>
                         <svg className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-primary pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                         </svg>
                       </div>
                     </div>
@@ -1997,71 +2071,74 @@ export default function PublicBookingPage() {
                 </div>
 
               {visibleUnits.length > shownUnitBaseCount && (
-                <div className="flex justify-center pt-4">
+                <div className="flex justify-center pt-8">
                   <button
-                    type="button"
-                    onClick={() => setUnitPage((p) => p + 1)}
-                    className="rounded-2xl border-2 border-border bg-surface px-8 py-3 text-sm font-bold text-foreground transition-all hover:bg-primary/5"
-                  >
-                    Lihat Lebih Banyak Unit
-                  </button>
+              type="button"
+              onClick={() => setUnitPage((p) => p + 1)}
+              className="group relative flex items-center gap-4 rounded-[2rem] border border-[#E8E8E1] bg-white px-12 py-5 text-[11px] font-bold uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] shadow-sm hover:shadow-xl hover:shadow-[#2D3E10]/5"
+            >
+              <span className="relative z-10">Lihat Lebih Banyak Unit</span>
+              <svg className="relative z-10 h-4 w-4 text-primary transition-transform duration-700 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
                 </div>
               )}
 
               {/* Kavling Selection Section */}
               {(effectiveKavlingScope || kavlingAmbiguous) && requiredKavlings > 0 && (
-                <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-xl shadow-primary/5 transition-all duration-500 hover:shadow-primary/10">
-                  <div className="border-b border-border bg-primary/5 px-8 py-6">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 20l-5.447-2.724A2 2 0 013 15.483V5.517a2 2 0 011.553-1.943L9 2l6 3 5.447-2.724A2 2 0 0121 4.224v9.966a2 2 0 01-1.553 1.943L15 19l-6 1z" />
+                <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-[#FDFDFB] shadow-2xl shadow-[#2D3E10]/5 transition-all duration-700 hover:shadow-primary/10">
+                  <div className="border-b border-[#E8E8E1] bg-[#F1F3EE]/50 px-8 py-8">
+                    <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex items-center gap-5">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-[1.25rem] bg-[#2D3E10] text-white shadow-lg shadow-[#2D3E10]/20">
+                          <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A2 2 0 013 15.483V5.517a2 2 0 011.553-1.943L9 2l6 3 5.447-2.724A2 2 0 0121 4.224v9.966a2 2 0 01-1.553 1.943L15 19l-6 1z" />
                           </svg>
                         </div>
-                        <div className="space-y-0.5">
-                          <h3 className="text-xl font-black text-foreground">Pilih Lokasi Kavling</h3>
-                          <p className="text-xs font-medium text-primary/60">Tentukan titik camping favorit Anda</p>
+                        <div className="space-y-1">
+                          <h3 className="text-2xl font-bold tracking-tight text-[#2D3E10]">Pilih Lokasi <span className="italic text-primary">Kavling</span></h3>
+                          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-[0.2em]">Tentukan titik camping favorit Anda</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4 bg-white/50 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-sm">
                         <div className="flex flex-col items-end">
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/40">Progres</span>
-                          <span className="text-sm font-black text-primary">
-                            {kavlingSelected.length} / {requiredKavlings} Kavling
+                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Progres Pemilihan</span>
+                          <span className="text-base font-black text-[#2D3E10] tracking-tighter tabular-nums">
+                            {kavlingSelected.length} <span className="text-primary/40">/</span> {requiredKavlings} <span className="text-[10px] font-bold text-primary/40 uppercase ml-1">Kavling</span>
                           </span>
                         </div>
-                        <div className="h-10 w-1 rounded-full bg-primary/20">
+                        <div className="h-12 w-1.5 rounded-full bg-[#F1F3EE]">
                           <div 
-                            className="h-full w-full rounded-full bg-primary transition-all duration-500" 
+                            className="h-full w-full rounded-full bg-primary transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(186,191,28,0.3)]" 
                             style={{ height: `${requiredKavlings > 0 ? (kavlingSelected.length / requiredKavlings) * 100 : 0}%` }}
                           />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                      <div className="flex-1 space-y-4">
-                        <div className="rounded-2xl bg-primary/[0.03] p-5 border border-primary/10">
+                  <div className="p-8">
+                    <div className="mb-12 flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="flex-1 space-y-6">
+                        <div className="rounded-[2rem] bg-[#F1F3EE]/40 p-6 border border-[#E8E8E1]">
                           {kavlingAmbiguous ? (
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                               {combinedAll ? (
-                                <p className="text-sm font-bold text-foreground leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/30 underline-offset-4">{requiredKavlings} kavling</span> untuk paket yang Anda pilih.</p>
+                                <p className="text-sm font-bold text-[#2D3E10] leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/20 underline-offset-4 decoration-2">{requiredKavlings} kavling</span> untuk paket yang Anda pilih.</p>
                               ) : combinedNonPrivate ? (
-                                <p className="text-sm font-bold text-foreground leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/30 underline-offset-4">{requiredKavlings} kavling</span> untuk Paket + Camping Mandiri.</p>
+                                <p className="text-sm font-bold text-[#2D3E10] leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/20 underline-offset-4 decoration-2">{requiredKavlings} kavling</span> untuk Paket + Camping Mandiri.</p>
                               ) : (
-                                <div className="flex flex-col gap-4">
-                                  <div className="flex items-center gap-2">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                                    <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">Pilih Kategori Kavling</span>
+                                <div className="flex flex-col gap-5">
+                                  <div className="flex items-center gap-3">
+                                    <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                                    <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.3em]">Tentukan Kategori Kavling</span>
                                   </div>
                                   <div className="flex flex-wrap gap-3">
                                     {kavlingQtyByGroup.mandiri > 0 && (
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("mandiri")}
-                                        className={`group relative overflow-hidden rounded-2xl px-6 py-3 text-xs font-black transition-all ${kavlingScopePick === "mandiri" ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20" : "bg-surface border-2 border-border text-foreground hover:border-primary/40"}`}
+                                        className={`group relative overflow-hidden rounded-xl px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "mandiri" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Camping Mandiri</span>
                                       </button>
@@ -2070,7 +2147,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("paket")}
-                                        className={`group relative overflow-hidden rounded-2xl px-6 py-3 text-xs font-black transition-all ${kavlingScopePick === "paket" ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20" : "bg-surface border-2 border-border text-foreground hover:border-primary/40"}`}
+                                        className={`group relative overflow-hidden rounded-xl px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "paket" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Paket</span>
                                       </button>
@@ -2079,7 +2156,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("private")}
-                                        className={`group relative overflow-hidden rounded-2xl px-6 py-3 text-xs font-black transition-all ${kavlingScopePick === "private" ? "bg-primary text-primary-foreground shadow-xl shadow-primary/20" : "bg-surface border-2 border-border text-foreground hover:border-primary/40"}`}
+                                        className={`group relative overflow-hidden rounded-xl px-6 py-3.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "private" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Paket Private</span>
                                       </button>
@@ -2089,17 +2166,17 @@ export default function PublicBookingPage() {
                               )}
                             </div>
                           ) : (
-                            <p className="text-sm font-bold text-foreground leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/30 underline-offset-4">{requiredKavlings} kavling</span> untuk {effectiveKavlingScope}.</p>
+                            <p className="text-sm font-bold text-[#2D3E10] leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/20 underline-offset-4 decoration-2">{requiredKavlings} kavling</span> untuk {effectiveKavlingScope}.</p>
                           )}
                         </div>
                         {hold?.expiresAt && holdLeftLabel && (
-                          <div className="flex items-center gap-3 rounded-xl bg-amber-50 px-4 py-3 text-[11px] font-black text-amber-600 border border-amber-100">
-                            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-100 animate-pulse">
+                          <div className="flex items-center gap-4 rounded-2xl bg-amber-50/50 px-5 py-4 text-[11px] font-bold text-amber-700 border border-amber-100/50 backdrop-blur-sm">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-600 animate-pulse">
                               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
                             </div>
-                            Sesi pemilihan berakhir dalam {holdLeftLabel}
+                            <span className="tracking-tight">Sesi pemilihan kavling Anda berakhir dalam <span className="font-black underline decoration-amber-200 underline-offset-4">{holdLeftLabel}</span></span>
                           </div>
                         )}
                       </div>
@@ -2110,16 +2187,16 @@ export default function PublicBookingPage() {
                           setKavlingMapZoom(1);
                           setKavlingMapOpen(true);
                         }}
-                        className="group flex h-14 shrink-0 items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-primary/5 active:scale-95 lg:w-auto"
+                        className="group flex h-16 shrink-0 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 text-[11px] font-bold uppercase tracking-[0.15em] text-[#2D3E10] shadow-sm transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 lg:w-auto"
                       >
-                        <svg className="mr-3 h-5 w-5 text-primary transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        <svg className="mr-3 h-5 w-5 text-primary transition-transform duration-500 group-hover:scale-125" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                         </svg>
-                        Lihat Peta Interaktif
+                        Buka Peta Interaktif
                       </button>
                     </div>
 
-                    <div className="flex flex-col gap-10 lg:flex-row">
+                    <div className="flex flex-col gap-12 lg:flex-row">
                       {/* Map Preview */}
                       <div className="shrink-0 lg:w-1/3">
                         <button
@@ -2129,21 +2206,21 @@ export default function PublicBookingPage() {
                             setKavlingMapZoom(1);
                             setKavlingMapOpen(true);
                           }}
-                          className="group relative block aspect-video w-full overflow-hidden rounded-[2rem] border-2 border-border bg-primary/5 transition-all hover:border-primary/30"
+                          className="group relative block aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5"
                         >
                           <img
                             src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
                             alt="Site Map Kavling"
-                            className="h-full w-full object-contain cursor-zoom-in transition-all duration-700 group-hover:scale-110"
+                            className="h-full w-full object-contain cursor-zoom-in transition-all duration-1000 group-hover:scale-110"
                           />
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/0 backdrop-blur-0 transition-all duration-500 group-hover:bg-black/10 group-hover:backdrop-blur-[2px]">
-                            <div className="flex translate-y-4 flex-col items-center gap-2 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-surface shadow-2xl">
-                                <svg className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/0 backdrop-blur-0 transition-all duration-700 group-hover:bg-[#2D3E10]/10 group-hover:backdrop-blur-[2px]">
+                            <div className="flex translate-y-6 flex-col items-center gap-3 opacity-0 transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100">
+                              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-[#2D3E10] shadow-2xl">
+                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                                 </svg>
                               </div>
-                              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Zoom Peta</span>
+                              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white drop-shadow-lg">Zoom Peta</span>
                             </div>
                           </div>
                         </button>
@@ -2178,14 +2255,14 @@ export default function PublicBookingPage() {
                                     }
                                   }
                                 }}
-                                className={`flex h-11 items-center justify-center rounded-xl border-2 text-[11px] font-black transition-all duration-300 ${
+                                className={`flex h-12 items-center justify-center rounded-[0.9rem] border-2 text-[11px] font-bold transition-all duration-500 ${
                                   isSelected
-                                    ? "border-primary bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110 rotate-2 z-10"
+                                    ? "border-primary bg-[#2D3E10] text-white shadow-xl shadow-primary/20 scale-105 z-10"
                                     : isTaken
-                                    ? "border-destructive/10 bg-destructive/5 text-destructive/30 cursor-not-allowed"
+                                    ? "border-[#F1F3EE] bg-[#F1F3EE]/30 text-[#2D3E10]/10 cursor-not-allowed"
                                     : disabled
-                                    ? "border-border bg-primary/5 text-primary/30 opacity-40 cursor-not-allowed"
-                                    : "border-border bg-surface text-foreground hover:border-primary/50 hover:bg-primary/5 hover:-translate-y-1"
+                                    ? "border-[#F1F3EE] bg-[#F1F3EE]/20 text-[#2D3E10]/10 cursor-not-allowed opacity-40"
+                                    : "border-[#E8E8E1] bg-white text-[#2D3E10] hover:border-primary/50 hover:bg-[#F1F3EE] hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
                                 }`}
                               >
                                 {n}
@@ -2193,36 +2270,36 @@ export default function PublicBookingPage() {
                             );
                           })}
                         </div>
-                        <div className="mt-8 flex flex-wrap gap-6 border-t border-border/50 pt-6">
-                          <div className="flex items-center gap-3">
-                            <div className="h-4 w-4 rounded-lg border-2 border-primary bg-primary shadow-lg shadow-primary/20 rotate-3" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Terpilih</span>
+                        <div className="mt-12 flex flex-wrap gap-8 border-t border-[#E8E8E1] pt-8">
+                          <div className="flex items-center gap-3 group">
+                            <div className="h-4 w-4 rounded-full bg-[#2D3E10] shadow-lg shadow-primary/20 transition-transform group-hover:scale-125" />
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/60">Terpilih</span>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <div className="h-4 w-4 rounded-lg border-2 border-border bg-surface" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Tersedia</span>
+                          <div className="flex items-center gap-3 group">
+                            <div className="h-4 w-4 rounded-full border-2 border-[#E8E8E1] bg-white transition-colors group-hover:border-primary/40" />
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/60">Tersedia</span>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <div className="h-4 w-4 rounded-lg border-2 border-destructive/10 bg-destructive/5" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-destructive/60">Terisi</span>
+                          <div className="flex items-center gap-3 group">
+                            <div className="h-4 w-4 rounded-full bg-[#F1F3EE]" />
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/30">Sudah Terisi</span>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <div className="h-4 w-4 rounded-lg border-2 border-border bg-primary/5" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Tidak Sesuai</span>
+                          <div className="flex items-center gap-3 group">
+                            <div className="h-4 w-4 rounded-full border border-[#E8E8E1] bg-[#F1F3EE]/50" />
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/30">Tidak Sesuai</span>
                           </div>
                         </div>
                       </div>
                     </div>
                     {holdError ? (
-                      <div className="mt-8 animate-in slide-in-from-top-4 duration-500">
-                        <div className="flex items-center gap-4 rounded-[1.5rem] border-2 border-destructive/20 bg-destructive/5 p-6 text-sm font-black text-destructive">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      <div className="mt-10 animate-in slide-in-from-top-4 duration-700">
+                        <div className="flex items-center gap-5 rounded-[1.5rem] border border-red-200 bg-red-50/50 p-6 text-sm font-bold text-red-700 backdrop-blur-sm">
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-red-100 text-red-600 shadow-sm">
+                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                           </div>
                           <div className="space-y-1">
-                            <p className="uppercase tracking-wider">Kesalahan Pemilihan</p>
+                            <p className="uppercase tracking-[0.15em] text-[10px] font-black">Kesalahan Pemilihan</p>
                             <p className="text-xs font-medium opacity-80">{holdError}</p>
                           </div>
                         </div>
@@ -2236,9 +2313,9 @@ export default function PublicBookingPage() {
                     onClose={() => setKavlingMapOpen(false)}
                     maxWidthClassName="max-w-6xl"
                   >
-                    <div className="space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="flex flex-wrap items-center gap-2">
+                    <div className="space-y-6">
+                      <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex flex-wrap items-center gap-3">
                           <button
                             type="button"
                             onClick={() => {
@@ -2246,7 +2323,7 @@ export default function PublicBookingPage() {
                               setKavlingMapZoom((z) => Math.max(1, Number((z - 0.25).toFixed(2))));
                             }}
                             disabled={kavlingMapZoom <= 1}
-                            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white text-lg font-bold text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 disabled:opacity-30 disabled:hover:bg-white active:scale-95"
                           >
                             −
                           </button>
@@ -2257,7 +2334,7 @@ export default function PublicBookingPage() {
                               setKavlingMapOrigin({ x: 50, y: 50 });
                               setKavlingMapZoom(1);
                             }}
-                            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-background"
+                            className="flex h-11 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-5 text-[11px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
                           >
                             100%
                           </button>
@@ -2267,27 +2344,35 @@ export default function PublicBookingPage() {
                               kavlingMapManualZoomRef.current = true;
                               setKavlingMapZoom((z) => Math.min(4, Number((z + 0.25).toFixed(2))));
                             }}
-                            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-background"
+                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white text-lg font-bold text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
                           >
                             +
                           </button>
+                          <div className="h-6 w-px bg-[#E8E8E1] mx-1 hidden sm:block" />
                           <a
                             href={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-background"
+                            className="flex h-11 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-6 text-[11px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
                           >
                             Buka Tab Baru
                           </a>
                         </div>
-                        <div className="flex flex-col items-end gap-1">
-                          <div className="text-xs text-primary/40">Arahkan kursor ke gambar untuk zoom (otomatis).</div>
-                          <div className="text-xs text-primary/40">Zoom: {Math.round(kavlingMapZoom * 100)}%</div>
+                        <div className="flex flex-col items-end gap-1.5">
+                          <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/40">
+                            Arahkan kursor untuk zoom otomatis
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="h-1.5 w-1.5 rounded-full bg-primary/40 animate-pulse" />
+                            <div className="text-[11px] font-bold text-[#2D3E10]">
+                              Zoom: <span className="font-serif italic opacity-60">{Math.round(kavlingMapZoom * 100)}%</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
                       <div
-                        className={`max-h-[70dvh] overflow-auto rounded-xl border border-border bg-background ${kavlingMapDragging ? "cursor-grabbing" : "cursor-grab"}`}
+                        className={`max-h-[70dvh] overflow-auto rounded-[2rem] border-4 border-[#F1F3EE] bg-[#F1F3EE]/30 shadow-inner ${kavlingMapDragging ? "cursor-grabbing" : "cursor-grab"}`}
                         ref={kavlingMapViewportRef}
                         onMouseEnter={() => {
                           setKavlingMapHover(true);
@@ -2493,41 +2578,54 @@ export default function PublicBookingPage() {
                     return (
                       <div 
                         key={a.id} 
-                        className={`group relative overflow-hidden rounded-[2rem] border-2 p-6 transition-all duration-700 ${
+                        className={`group relative overflow-hidden rounded-[2.5rem] border p-7 transition-all duration-700 ${
                           isSelected 
-                            ? "border-primary bg-primary/[0.03] shadow-xl shadow-primary/10" 
-                            : "border-border bg-surface hover:border-primary/40 hover:shadow-md"
+                            ? "border-primary/20 bg-[#F1F3EE] shadow-xl shadow-primary/5 scale-[1.02]" 
+                            : "border-[#E8E8E1] bg-white hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                         }`}
                       >
-                        {/* Decorative background for selected */}
+                        {/* Organic decorative element for selected */}
                         {isSelected && (
-                          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/10" />
+                          <div className="absolute -right-6 -top-6 h-24 w-24 opacity-10">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                              <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
+                            </svg>
+                          </div>
                         )}
 
-                        <div className="flex flex-col gap-6">
-                          <div className="flex-1">
-                            <div className="flex items-start justify-between gap-2">
-                              <h4 className="text-lg font-black text-foreground leading-tight group-hover:text-primary transition-colors">{a.name}</h4>
+                        <div className="flex flex-col h-full justify-between gap-8">
+                          <div className="space-y-4">
+                            <div className="flex items-start justify-between gap-3">
+                              <h4 className="text-[17px] font-black tracking-tight text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">
+                                {a.name}
+                              </h4>
                               {auto > 0 && (
-                                <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-wider text-primary">
+                                <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-primary">
                                   Included
                                 </span>
                               )}
                             </div>
-                            <div className="mt-2 flex items-baseline gap-1">
-                              <span className="text-lg font-black text-primary">{formatIDR(a.price)}</span>
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-primary/40">/ item</span>
+                            <div className="flex items-baseline gap-1.5">
+                              <span className="text-xl font-black text-primary tracking-tight">{formatIDR(a.price)}</span>
+                              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/30">/ unit</span>
                             </div>
                             {auto > 0 && (
-                              <p className="mt-2 text-[10px] font-bold text-primary/60 italic">
-                                * {auto} unit sudah termasuk dalam paket Anda
-                              </p>
+                              <div className="flex items-center gap-2 rounded-xl bg-primary/5 p-3">
+                                <svg className="h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                </svg>
+                                <p className="text-[10px] font-bold text-primary/70 leading-relaxed uppercase tracking-widest">
+                                  {auto} unit termasuk dalam paket
+                                </p>
+                              </div>
                             )}
                           </div>
                           
-                          <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-primary/40">Jumlah</span>
-                            <div className="scale-110">
+                          <div className="flex items-center justify-between pt-6 border-t border-[#E8E8E1]">
+                            <div className="flex flex-col">
+                              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Atur Jumlah</span>
+                            </div>
+                            <div className="scale-110 origin-right">
                               <QuantityStepper
                                 value={effectiveAddonQty[a.id] ?? 0}
                                 min={autoAddonQty[a.id] ?? 0}
@@ -2560,17 +2658,17 @@ export default function PublicBookingPage() {
 
               {error && (
                 <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-                  <div className="relative overflow-hidden rounded-[2rem] border-2 border-destructive/20 bg-destructive/5 p-6 shadow-2xl shadow-destructive/10 backdrop-blur-xl">
-                    <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-destructive/10 blur-2xl" />
-                    <div className="flex items-center gap-5">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-destructive/10 text-destructive shadow-inner">
-                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <div className="relative overflow-hidden rounded-[2.5rem] border border-red-200 bg-red-50/50 p-7 shadow-xl shadow-red-900/5 backdrop-blur-sm">
+                    <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-red-200/20 blur-3xl" />
+                    <div className="flex items-center gap-6">
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-red-600 shadow-sm border border-red-100">
+                        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
-                      <div className="flex flex-col gap-1">
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-destructive/60">Perhatian Diperlukan</span>
-                        <span className="text-sm font-black text-destructive leading-relaxed">{error}</span>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-900/40">Perhatian Diperlukan</span>
+                        <span className="text-sm font-bold text-red-900 leading-relaxed">{error}</span>
                       </div>
                     </div>
                   </div>
@@ -2579,55 +2677,57 @@ export default function PublicBookingPage() {
 
               {guestOverCapacity && (
                 <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-                  <div className="relative overflow-hidden rounded-[2rem] border-2 border-amber-500/20 bg-amber-500/5 p-6 shadow-2xl shadow-amber-500/10 backdrop-blur-xl">
-                    <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-amber-500/10 blur-2xl" />
-                    <div className="flex items-center gap-5">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 shadow-inner">
-                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  <div className="relative overflow-hidden rounded-[2.5rem] border border-amber-200 bg-amber-50/50 p-7 shadow-xl shadow-amber-900/5 backdrop-blur-sm">
+                    <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-amber-200/20 blur-3xl" />
+                    <div className="flex items-center gap-6">
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-amber-600 shadow-sm border border-amber-100">
+                        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                       </div>
-                      <div className="flex flex-col gap-1">
-                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-amber-600/60">Kapasitas Penuh</span>
-                        <span className="text-sm font-black text-amber-700 leading-relaxed">Total tamu melebihi kapasitas paket yang dipilih. Mohon sesuaikan jumlah tamu atau pilih paket lain.</span>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-900/40">Kapasitas Terlampaui</span>
+                        <span className="text-sm font-bold text-amber-900 leading-relaxed">Total tamu melebihi kapasitas paket yang dipilih. Mohon sesuaikan jumlah tamu atau pilih unit tambahan.</span>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
 
-                  <div className="flex flex-col gap-4 pt-4">
+                  <div className="flex flex-col gap-5 pt-12 sm:flex-row">
+                    <button
+                      type="button"
+                      onClick={() => setCurrentStep(2)}
+                      className="group order-2 flex h-16 flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1"
+                    >
+                      <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                      </svg>
+                      Kembali
+                    </button>
                     <button
                       type="submit"
                       disabled={submitting || loading || guestOverCapacity || selectedVisibleCount === 0}
-                      className="group relative flex h-14 w-full items-center justify-center overflow-hidden rounded-2xl bg-primary px-10 text-sm font-black text-primary-foreground shadow-2xl shadow-primary/30 transition-all hover:bg-primary/90 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:shadow-none"
+                      className="group relative order-1 flex h-16 flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 text-[11px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:order-2"
                     >
+                      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+                      
                       {submitting || loading ? (
                         <div className="flex items-center gap-3">
-                          <svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                           </svg>
-                          <span>Memproses...</span>
+                          <span className="tracking-widest">Memproses...</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-2">
+                        <div className="relative z-10 flex items-center gap-3">
                           <span>Konfirmasi Booking</span>
-                          <svg className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                           </svg>
                         </div>
                       )}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setCurrentStep(2)}
-                      className="group flex h-14 w-full items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-primary/5 active:scale-95"
-                    >
-                      <svg className="mr-2 h-5 w-5 text-primary transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                      </svg>
-                      Kembali ke Data Tamu
                     </button>
                   </div>
                   </div>
@@ -2642,6 +2742,81 @@ export default function PublicBookingPage() {
         </div>
       </div>
     </div>
+    
+    {/* Nature-Inspired Footer */}
+    <footer className="mt-20 border-t border-[#E8E8E1] bg-white py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
+          {/* Logo & Description */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2D3E10] text-white">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <span className="text-lg font-bold tracking-tight text-[#2D3E10]">Woodforest <span className="italic font-serif opacity-60">Jayagiri 48</span></span>
+            </div>
+            <p className="text-sm leading-relaxed text-[#2D3E10]/60 max-w-sm">
+              Destinasi glamping eksklusif yang memadukan kenyamanan modern dengan keasrian alam Lembang. Temukan kedamaian di tengah hutan pinus yang asri.
+            </p>
+            <div className="flex gap-4">
+              {['Instagram', 'WhatsApp', 'Facebook'].map((social) => (
+                <a key={social} href="#" className="text-xs font-bold uppercase tracking-widest text-[#2D3E10]/40 hover:text-primary transition-colors">
+                  {social}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]">Eksplorasi</h4>
+              <ul className="space-y-4">
+                {['Tentang Kami', 'Fasilitas', 'Galeri', 'Kontak'].map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-sm text-[#2D3E10]/60 hover:text-primary transition-colors">{link}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-6">
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]">Bantuan</h4>
+              <ul className="space-y-4">
+                {['Syarat & Ketentuan', 'Kebijakan Privasi', 'Pembatalan', 'FAQ'].map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-sm text-[#2D3E10]/60 hover:text-primary transition-colors">{link}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Newsletter / Contact */}
+          <div className="rounded-[2rem] bg-[#F1F3EE] p-8 space-y-6">
+            <h4 className="text-sm font-bold text-[#2D3E10]">Butuh bantuan reservasi?</h4>
+            <p className="text-xs text-[#2D3E10]/60 leading-relaxed">Tim reservasi kami siap membantu Anda merencanakan liburan impian yang tak terlupakan.</p>
+            <a href="https://wa.me/6281234567890" target="_blank" className="flex h-12 w-full items-center justify-center rounded-xl bg-white text-[11px] font-bold uppercase tracking-widest text-[#2D3E10] shadow-sm transition-all hover:shadow-md active:scale-95">
+              Hubungi via WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-16 border-t border-[#E8E8E1] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">
+            &copy; {new Date().getFullYear()} Woodforest Jayagiri 48. All rights reserved.
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">Crafted with</span>
+            <svg className="h-3 w-3 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+            </svg>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30 text-primary">at Jayagiri</span>
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
 )}
 </div>

@@ -37,6 +37,12 @@
   --color-info-foreground: var(--info-foreground);
   --font-sans: var(--font-body);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  --animate-shine: shine 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 body {
