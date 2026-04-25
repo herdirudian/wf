@@ -314,52 +314,6 @@ export default function BookingConfirmPage() {
       </div>
 
       <div className="mx-auto max-w-3xl px-4 py-12 relative z-10">
-        {/* Progress Steps - Standardized with Booking Page */}
-        <div className="mb-12">
-          <div className="flex items-center justify-center gap-3">
-            {[
-              { id: 1, label: "Pilih", active: false, completed: true },
-              { id: 2, label: "Konfirmasi", active: true, completed: false },
-              { id: 3, label: "Bayar", active: false, completed: false }
-            ].map((step, idx) => (
-              <div key={step.id} className="flex items-center">
-                <div className="flex flex-col items-center gap-2">
-                  <div className={`relative flex h-10 w-10 items-center justify-center rounded-2xl border-2 transition-all duration-500 ${
-                    step.active 
-                      ? "border-primary bg-primary text-white shadow-xl shadow-primary/20 scale-105" 
-                      : step.completed 
-                        ? "border-primary bg-primary/10 text-primary" 
-                        : "border-[#E8E8E1] bg-white text-[#2D3E10]/20"
-                  }`}>
-                    {step.active && (
-                      <div className="absolute inset-0 animate-spin-slow opacity-20 pointer-events-none">
-                        <svg viewBox="0 0 100 100" className="h-full w-full">
-                          <path fill="currentColor" d="M50 5 L55 45 L95 50 L55 55 L50 95 L45 55 L5 50 L45 45 Z" />
-                        </svg>
-                      </div>
-                    )}
-                    {step.completed ? (
-                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                      <span className="text-sm font-black tracking-tight relative z-10">{step.id}</span>
-                    )}
-                  </div>
-                  <span className={`text-[9px] font-black uppercase tracking-[0.2em] transition-colors duration-300 ${
-                    step.active ? "text-primary" : step.completed ? "text-[#2D3E10]" : "text-[#2D3E10]/20"
-                  }`}>
-                    {step.label}
-                  </span>
-                </div>
-                {idx < 2 && (
-                  <div className="mx-4 mb-6 h-px w-8 bg-[#E8E8E1]" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
         <div className="relative rounded-[2.5rem] border border-[#E8E8E1] bg-white p-10 shadow-2xl shadow-[#2D3E10]/5 overflow-hidden group/main">
           {/* Main Card Organic Decor */}
           <div className="absolute -right-20 -bottom-20 h-64 w-64 opacity-[0.03] pointer-events-none transition-transform duration-1000 group-hover/main:scale-110 group-hover/main:-rotate-12">

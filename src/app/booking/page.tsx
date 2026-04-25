@@ -1532,45 +1532,6 @@ export default function PublicBookingPage() {
           </>
         ) : (
           <div className="mt-12 space-y-12 pb-20">
-            {/* Global Progress Steps - Standardized with Confirmation Page */}
-            <div className="mb-16">
-              <div className="flex items-center justify-center gap-3">
-                {[
-                  { id: 1, label: "Pilih", active: true, completed: false },
-                  { id: 2, label: "Konfirmasi", active: false, completed: false },
-                  { id: 3, label: "Bayar", active: false, completed: false }
-                ].map((step, idx) => (
-                  <div key={step.id} className="flex items-center">
-                    <div className="flex flex-col items-center gap-2">
-                      <div className={`relative flex h-10 w-10 items-center justify-center rounded-2xl border-2 transition-all duration-500 ${
-                        step.active 
-                          ? "border-primary bg-primary text-white shadow-xl shadow-primary/20 scale-105" 
-                          : step.completed 
-                            ? "border-primary bg-primary/10 text-primary" 
-                            : "border-[#E8E8E1] bg-white text-[#2D3E10]/20"
-                      }`}>
-                        {step.completed ? (
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        ) : (
-                          <span className="text-sm font-black tracking-tight">{step.id}</span>
-                        )}
-                      </div>
-                      <span className={`text-[9px] font-black uppercase tracking-[0.2em] transition-colors duration-300 ${
-                        step.active ? "text-primary" : step.completed ? "text-[#2D3E10]" : "text-[#2D3E10]/20"
-                      }`}>
-                        {step.label}
-                      </span>
-                    </div>
-                    {idx < 2 && (
-                      <div className="mx-4 mb-6 h-px w-8 bg-[#E8E8E1]" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Step Indicators - Modern & Professional */}
             <div className="mx-auto max-w-4xl px-4">
               <div className="relative flex items-center justify-between gap-4">
