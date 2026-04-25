@@ -311,7 +311,7 @@ export default function BookingConfirmPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/booking")}
-                  className="rounded-xl border border-amber-200 bg-white px-3 py-2 text-xs font-semibold text-amber-900 hover:bg-amber-100"
+                  className="rounded-xl border border-primary/20 bg-white px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/5"
                 >
                   Kembali pilih kavling
                 </button>
@@ -487,7 +487,7 @@ export default function BookingConfirmPage() {
                 type="button"
                 disabled={submitting}
                 onClick={() => router.back()}
-                className="h-10 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                className="h-10 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground hover:bg-primary/5 disabled:opacity-60"
               >
                 Kembali
               </button>
@@ -509,7 +509,7 @@ export default function BookingConfirmPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/booking")}
-                  className="rounded-xl border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-100"
+                  className="rounded-xl border border-primary/20 bg-white px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/5"
                 >
                   Kembali ke Booking
                 </button>
@@ -532,7 +532,7 @@ export default function BookingConfirmPage() {
                 </div>
                 <button 
                   onClick={() => setShowPrivacyModal(false)}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-all hover:bg-primary/5 hover:text-primary"
                 >
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
@@ -608,7 +608,7 @@ export default function BookingConfirmPage() {
                 </div>
                 <button 
                   onClick={() => setShowCancellationModal(false)}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-all hover:bg-primary/5 hover:text-primary"
                 >
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />

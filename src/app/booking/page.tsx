@@ -206,7 +206,7 @@ function QuantityStepper({
         type="button"
         disabled={decDisabled}
         onClick={() => onChange(Math.max(min, value - 1))}
-        className={`${btnClass} flex items-center justify-center font-black text-foreground transition-all hover:bg-muted active:scale-90 disabled:opacity-20 disabled:hover:bg-transparent`}
+        className={`${btnClass} flex items-center justify-center font-black text-foreground transition-all hover:bg-primary/5 active:scale-90 disabled:opacity-20 disabled:hover:bg-transparent`}
         aria-label={`Kurangi ${ariaLabel}`}
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -220,7 +220,7 @@ function QuantityStepper({
         type="button"
         disabled={incDisabled}
         onClick={() => onChange(typeof max === "number" ? Math.min(max, value + 1) : value + 1)}
-        className={`${btnClass} flex items-center justify-center font-black text-foreground transition-all hover:bg-muted active:scale-90 disabled:opacity-20 disabled:hover:bg-transparent`}
+        className={`${btnClass} flex items-center justify-center font-black text-foreground transition-all hover:bg-primary/5 active:scale-90 disabled:opacity-20 disabled:hover:bg-transparent`}
         aria-label={`Tambah ${ariaLabel}`}
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -1695,7 +1695,7 @@ export default function PublicBookingPage() {
                           <div className="mt-6 space-y-3 pt-6 border-t border-border/60">
                             <label className="text-xs font-black uppercase tracking-widest text-muted ml-1">Jumlah Tamu</label>
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                              <div className="flex items-center justify-between rounded-2xl border border-border bg-muted/20 p-4 transition-all hover:bg-muted/30">
+                              <div className="flex items-center justify-between rounded-2xl border border-border bg-primary/5 p-4 transition-all hover:bg-primary/10">
                                 <div className="space-y-0.5">
                                   <p className="text-sm font-black text-foreground">Dewasa</p>
                                   <p className="text-[10px] font-bold text-muted">Usia 12+</p>
@@ -1707,7 +1707,7 @@ export default function PublicBookingPage() {
                                   onChange={setAdultPax} 
                                 />
                               </div>
-                              <div className="flex items-center justify-between rounded-2xl border border-border bg-muted/20 p-4 transition-all hover:bg-muted/30">
+                              <div className="flex items-center justify-between rounded-2xl border border-border bg-primary/5 p-4 transition-all hover:bg-primary/10">
                                 <div className="space-y-0.5">
                                   <p className="text-sm font-black text-foreground">Anak</p>
                                   <p className="text-[10px] font-bold text-muted">Usia &lt; 12</p>
@@ -1801,7 +1801,7 @@ export default function PublicBookingPage() {
                       <button
                         type="button"
                         onClick={() => setCurrentStep(1)}
-                        className="order-2 flex-1 rounded-2xl border-2 border-border bg-surface px-6 py-4 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95 sm:order-1"
+                        className="order-2 flex-1 rounded-2xl border-2 border-border bg-surface px-6 py-4 text-sm font-black text-foreground transition-all hover:bg-primary/5 active:scale-95 sm:order-1"
                       >
                         Kembali
                       </button>
@@ -1995,7 +1995,7 @@ export default function PublicBookingPage() {
                   <button
                     type="button"
                     onClick={() => setUnitPage((p) => p + 1)}
-                    className="rounded-2xl border-2 border-border bg-surface px-8 py-3 text-sm font-bold text-foreground transition-all hover:bg-muted/50"
+                    className="rounded-2xl border-2 border-border bg-surface px-8 py-3 text-sm font-bold text-foreground transition-all hover:bg-primary/5"
                   >
                     Lihat Lebih Banyak Unit
                   </button>
@@ -2104,7 +2104,7 @@ export default function PublicBookingPage() {
                           setKavlingMapZoom(1);
                           setKavlingMapOpen(true);
                         }}
-                        className="group flex h-14 shrink-0 items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95 lg:w-auto"
+                        className="group flex h-14 shrink-0 items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-primary/5 active:scale-95 lg:w-auto"
                       >
                         <svg className="mr-3 h-5 w-5 text-primary transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
@@ -2616,7 +2616,7 @@ export default function PublicBookingPage() {
                     <button
                       type="button"
                       onClick={() => setCurrentStep(2)}
-                      className="group flex h-14 w-full items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95"
+                      className="group flex h-14 w-full items-center justify-center rounded-2xl border-2 border-border bg-surface px-8 text-sm font-black text-foreground transition-all hover:bg-primary/5 active:scale-95"
                     >
                       <svg className="mr-2 h-5 w-5 text-primary transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
