@@ -1269,8 +1269,8 @@ export default function PublicBookingPage() {
         <div className="absolute -right-1/4 -bottom-1/4 h-[100%] w-[100%] rounded-full bg-primary/[0.02] blur-[120px] animate-pulse duration-[10000ms]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className={`${success ? "no-print " : ""}mb-8 overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-8 shadow-2xl shadow-[#2D3E10]/5 backdrop-blur-xl transition-all hover:shadow-primary/10`}>
+      <div className="relative mx-auto w-full max-w-7xl px-2 py-8 sm:px-6 lg:px-8">
+        <div className={`${success ? "no-print " : ""}mb-8 overflow-hidden rounded-[1.5rem] border border-[#E8E8E1] bg-white px-4 py-8 shadow-2xl shadow-[#2D3E10]/5 backdrop-blur-xl transition-all hover:shadow-primary/10 sm:rounded-[2.5rem] sm:p-8`}>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-[180px_1fr] sm:items-center">
             <div className="flex justify-center sm:justify-start">
               <div className="relative group">
@@ -1534,7 +1534,7 @@ export default function PublicBookingPage() {
           <div className="mt-12 space-y-12 pb-20">
             {/* Step Indicators - Modern & Professional */}
             <div className="mx-auto max-w-4xl px-4">
-              <div className="relative flex items-center justify-between gap-4">
+              <div className="relative flex flex-col items-center justify-center gap-6 sm:flex-row sm:justify-between sm:gap-4">
                 {[1, 2, 3].map((step) => {
                   const isActive = currentStep === step;
                   const isCompleted = currentStep > step;
@@ -1552,18 +1552,27 @@ export default function PublicBookingPage() {
                       >
                         {/* Line connector */}
                         {step < 3 && (
-                          <div className="absolute left-[calc(50%+20px)] right-[-calc(50%-20px)] top-5 h-[2px] bg-[#E8E8E1]">
-                            <div 
-                              className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)" 
-                              style={{ width: isCompleted ? "100%" : "0%" }}
-                            />
-                            {/* Organic leaf-like dot on the line */}
-                            <div 
-                              className={`absolute -top-1 h-2 w-2 rounded-full border border-white bg-primary transition-all duration-1000 ${
-                                isCompleted ? "left-full opacity-100" : "left-0 opacity-0"
-                              }`}
-                            />
-                          </div>
+                          <>
+                            {/* Horizontal line for desktop */}
+                            <div className="absolute left-[calc(50%+20px)] right-[-calc(50%-20px)] top-5 hidden h-[2px] bg-[#E8E8E1] sm:block">
+                              <div 
+                                className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)" 
+                                style={{ width: isCompleted ? "100%" : "0%" }}
+                              />
+                              <div 
+                                className={`absolute -top-1 h-2 w-2 rounded-full border border-white bg-primary transition-all duration-1000 ${
+                                  isCompleted ? "left-full opacity-100" : "left-0 opacity-0"
+                                }`}
+                              />
+                            </div>
+                            {/* Vertical line for mobile */}
+                            <div className="absolute left-1/2 top-10 h-6 w-[2px] -translate-x-1/2 bg-[#E8E8E1] sm:hidden">
+                              <div 
+                                className="w-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)" 
+                                style={{ height: isCompleted ? "100%" : "0%" }}
+                              />
+                            </div>
+                          </>
                         )}
 
                         <div className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-2xl border-2 transition-all duration-700 ${
@@ -1648,7 +1657,7 @@ export default function PublicBookingPage() {
                                   setFilterCategory(cat);
                                   setCurrentStep(2);
                                 }}
-                                className={`flex flex-col h-full overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] transition-all duration-700 hover:shadow-[0_32px_64px_-16px_rgba(45,62,16,0.1)] hover:-translate-y-2 ${
+                                className={`flex flex-col h-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] transition-all duration-700 hover:shadow-[0_32px_64px_-16px_rgba(45,62,16,0.1)] hover:-translate-y-2 sm:rounded-[2.5rem] ${
                                   filterCategory === cat 
                                     ? "border-primary bg-white shadow-2xl shadow-primary/5" 
                                     : "bg-white hover:border-primary/40"
