@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatIDR, formatTimeWIB } from "@/lib/format";
 import { formatDateWIB } from "@/lib/time";
@@ -295,6 +295,19 @@ export default function PublicBookingPage() {
   const restoringDraftRef = useRef(false);
   const pendingKavlingRestoreRef = useRef<null | { scope: "" | "paket" | "mandiri" | "private" | "mixed"; kavlings: number[]; hold?: { id: string; token: string; expiresAt?: string } }>(null);
 
+  const resetSelection = useCallback((keepDraftRef = false) => {
+    setUnitQty({});
+    setAddonQty({});
+    setKavlingSelected([]);
+    if (hold?.id && hold?.token) void releaseHold(hold);
+    setHold(null);
+    setHoldError(null);
+    if (!keepDraftRef) {
+      restoringDraftRef.current = false;
+      pendingKavlingRestoreRef.current = null;
+    }
+  }, [hold]);
+
   useEffect(() => {
     const draft = readDraft();
     if (!draft) return;
@@ -522,6 +535,17 @@ export default function PublicBookingPage() {
       setHoldError(null);
       return;
     }
+
+    // Auto-clear selection if scope changed and we're not restoring
+    if (!restoringDraftRef.current || !pendingKavlingRestoreRef.current) {
+      const isMismatch = pendingKavlingRestoreRef.current && pendingKavlingRestoreRef.current.scope !== effectiveKavlingScope;
+      if (isMismatch) {
+        setKavlingSelected([]);
+        if (hold?.id && hold?.token) void releaseHold(hold);
+        setHold(null);
+      }
+    }
+
     const scope = effectiveKavlingScope;
     let cancelled = false;
     async function load() {
@@ -666,6 +690,14 @@ export default function PublicBookingPage() {
     const s = totalSec % 60;
     return `${m}:${String(s).padStart(2, "0")}`;
   }, [holdLeftMs]);
+
+  useEffect(() => {
+    if (holdLeftMs !== null && holdLeftMs <= 0 && hold) {
+      setHold(null);
+      setHoldError("Sesi pemilihan kavling telah berakhir. Silakan pilih ulang.");
+      setKavlingSelected([]);
+    }
+  }, [holdLeftMs, hold]);
 
   useEffect(() => {
     if (!hold?.expiresAt) return;
@@ -1499,6 +1531,9 @@ export default function PublicBookingPage() {
                               <button
                                 type="button"
                                 onClick={() => {
+                                  if (filterCategory !== cat || currentStep > 1) {
+                                    resetSelection();
+                                  }
                                   setFilterCategory(cat);
                                   setCurrentStep(2);
                                 }}
@@ -1610,7 +1645,12 @@ export default function PublicBookingPage() {
                                 <input
                                   type="date"
                                   value={checkIn}
-                                  onChange={(e) => setCheckIn(e.target.value)}
+                                  onChange={(e) => {
+                                    if (checkIn !== e.target.value) {
+                                      resetSelection();
+                                    }
+                                    setCheckIn(e.target.value);
+                                  }}
                                   className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
                                   required
                                 />
@@ -1625,7 +1665,12 @@ export default function PublicBookingPage() {
                                 <input
                                   type="date"
                                   value={checkOut}
-                                  onChange={(e) => setCheckOut(e.target.value)}
+                                  onChange={(e) => {
+                                    if (checkOut !== e.target.value) {
+                                      resetSelection();
+                                    }
+                                    setCheckOut(e.target.value);
+                                  }}
                                   className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
                                   required
                                 />
