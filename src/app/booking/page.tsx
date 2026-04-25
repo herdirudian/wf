@@ -2746,74 +2746,20 @@ export default function PublicBookingPage() {
     {/* Nature-Inspired Footer */}
     <footer className="mt-20 border-t border-[#E8E8E1] bg-white py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-          {/* Logo & Description */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2D3E10] text-white">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
-              <span className="text-lg font-bold tracking-tight text-[#2D3E10]">Woodforest <span className="italic font-serif opacity-60">Jayagiri 48</span></span>
-            </div>
-            <p className="text-sm leading-relaxed text-[#2D3E10]/60 max-w-sm">
-              Destinasi glamping eksklusif yang memadukan kenyamanan modern dengan keasrian alam Lembang. Temukan kedamaian di tengah hutan pinus yang asri.
-            </p>
-            <div className="flex gap-4">
-              {['Instagram', 'WhatsApp', 'Facebook'].map((social) => (
-                <a key={social} href="#" className="text-xs font-bold uppercase tracking-widest text-[#2D3E10]/40 hover:text-primary transition-colors">
-                  {social}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]">Eksplorasi</h4>
-              <ul className="space-y-4">
-                {['Tentang Kami', 'Fasilitas', 'Galeri', 'Kontak'].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-sm text-[#2D3E10]/60 hover:text-primary transition-colors">{link}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="space-y-6">
-              <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]">Bantuan</h4>
-              <ul className="space-y-4">
-                {['Syarat & Ketentuan', 'Kebijakan Privasi', 'Pembatalan', 'FAQ'].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-sm text-[#2D3E10]/60 hover:text-primary transition-colors">{link}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Newsletter / Contact */}
-          <div className="rounded-[2rem] bg-[#F1F3EE] p-8 space-y-6">
+        <div className="flex justify-center">
+          <div className="w-full max-w-2xl rounded-[2rem] bg-[#F1F3EE] p-8 space-y-6 text-center">
             <h4 className="text-sm font-bold text-[#2D3E10]">Butuh bantuan reservasi?</h4>
             <p className="text-xs text-[#2D3E10]/60 leading-relaxed">Tim reservasi kami siap membantu Anda merencanakan liburan impian yang tak terlupakan.</p>
-            <a href="https://wa.me/6281234567890" target="_blank" className="flex h-12 w-full items-center justify-center rounded-xl bg-white text-[11px] font-bold uppercase tracking-widest text-[#2D3E10] shadow-sm transition-all hover:shadow-md active:scale-95">
+            <a href="https://wa.me/6281234567890" target="_blank" className="mx-auto flex h-12 w-full max-w-xs items-center justify-center rounded-xl bg-white text-[11px] font-bold uppercase tracking-widest text-[#2D3E10] shadow-sm transition-all hover:shadow-md active:scale-95">
               Hubungi via WhatsApp
             </a>
           </div>
         </div>
 
-        <div className="mt-16 border-t border-[#E8E8E1] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-16 border-t border-[#E8E8E1] pt-8 flex flex-col md:flex-row justify-center items-center gap-4">
           <p className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">
-            &copy; {new Date().getFullYear()} Woodforest Jayagiri 48. All rights reserved.
+            &copy; 2026 Woodforest Jayagiri 48. All rights reserved.
           </p>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">Crafted with</span>
-            <svg className="h-3 w-3 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-            </svg>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30 text-primary">at Jayagiri</span>
-          </div>
         </div>
       </div>
     </footer>

@@ -519,6 +519,27 @@ export default function BookingConfirmPage() {
         </div>
       </div>
 
+      {/* Nature-Inspired Footer */}
+      <footer className="mt-20 border-t border-[#E8E8E1] bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center">
+            <div className="w-full max-w-2xl rounded-[2rem] bg-[#F1F3EE] p-8 space-y-6 text-center">
+              <h4 className="text-sm font-bold text-[#2D3E10]">Butuh bantuan reservasi?</h4>
+              <p className="text-xs text-[#2D3E10]/60 leading-relaxed">Tim reservasi kami siap membantu Anda merencanakan liburan impian yang tak terlupakan.</p>
+              <a href="https://wa.me/6281234567890" target="_blank" className="mx-auto flex h-12 w-full max-w-xs items-center justify-center rounded-xl bg-white text-[11px] font-bold uppercase tracking-widest text-[#2D3E10] shadow-sm transition-all hover:shadow-md active:scale-95">
+                Hubungi via WhatsApp
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-16 border-t border-[#E8E8E1] pt-8 flex flex-col md:flex-row justify-center items-center gap-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">
+              &copy; 2026 Woodforest Jayagiri 48. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+
       {/* Modal Kebijakan Privasi & S&K */}
       {showPrivacyModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
