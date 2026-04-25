@@ -597,10 +597,12 @@ export default function PublicBookingPage() {
     if (!units.length) return;
     if (submitting) return;
     if (!hold?.id || !hold?.token) {
-      const dHold = draftHoldCredsFor({ checkIn, checkOut });
-      if (dHold?.id && dHold?.token) {
-        setHold(dHold);
-        return;
+      if (requiredKavlings > 0) {
+        const dHold = draftHoldCredsFor({ checkIn, checkOut });
+        if (dHold?.id && dHold?.token) {
+          setHold(dHold);
+          return;
+        }
       }
     }
     if (!requiredKavlings) {
@@ -1992,7 +1994,7 @@ export default function PublicBookingPage() {
               )}
 
               {/* Kavling Selection Section */}
-              {(effectiveKavlingScope || kavlingAmbiguous) && (
+              {(effectiveKavlingScope || kavlingAmbiguous) && requiredKavlings > 0 && (
                 <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-xl shadow-primary/5 transition-all duration-500 hover:shadow-primary/10">
                   <div className="border-b border-border bg-muted/30 px-8 py-6">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
