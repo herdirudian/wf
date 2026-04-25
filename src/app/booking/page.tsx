@@ -2227,7 +2227,8 @@ export default function PublicBookingPage() {
                     <div className="absolute -left-4 -top-4 h-12 w-12 opacity-0 transition-all duration-700 group-hover:opacity-10 group-hover:scale-110 group-hover:rotate-12">
                       <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-                      </div>
+                      </svg>
+                    </div>
 
                     <span className="relative z-10">Lihat Lebih Banyak Unit</span>
                     <svg className="relative z-10 h-4 w-4 text-primary transition-transform duration-700 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
