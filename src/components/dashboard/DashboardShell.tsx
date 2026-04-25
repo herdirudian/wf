@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/front-office", label: "Resepsionis" },
+  { href: "/dashboard/packages", label: "Paket" },
   { href: "/dashboard/units", label: "Unit" },
   { href: "/dashboard/bookings", label: "Booking" },
   { href: "/dashboard/bookings/monitoring", label: "Monitoring" },
@@ -74,6 +75,7 @@ export function DashboardShell({
                 item.href === "/dashboard/users" ||
                 item.href === "/dashboard/ugc" ||
                 item.href === "/dashboard/units" ||
+                item.href === "/dashboard/packages" ||
                 item.href === "/dashboard/reports")
             )
               return false;

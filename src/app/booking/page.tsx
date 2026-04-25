@@ -290,6 +290,7 @@ export default function PublicBookingPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<{ code: string; amount: number } | null>(null);
   const [invoice, setInvoice] = useState<PublicBookingInvoice | null>(null);
+  const [packageConfigs, setPackageConfigs] = useState<Record<string, { description?: string; imageUrl?: string }>>({});
   const preserveHoldOnUnmountRef = useRef(false);
   const restoringDraftRef = useRef(false);
   const pendingKavlingRestoreRef = useRef<null | { scope: "" | "paket" | "mandiri" | "private" | "mixed"; kavlings: number[]; hold?: { id: string; token: string; expiresAt?: string } }>(null);
@@ -335,6 +336,13 @@ export default function PublicBookingPage() {
           .catch(() => null);
       }
     }
+  }, []);
+  
+  useEffect(() => {
+    fetch("/api/packages")
+      .then((res) => res.json())
+      .then((data) => setPackageConfigs(data))
+      .catch(() => null);
   }, []);
 
   async function releaseHold(h: { id: string; token: string }) {
@@ -1501,12 +1509,19 @@ export default function PublicBookingPage() {
                                 }`}
                               >
                                 <div className="relative h-48 w-full overflow-hidden">
-                                  {/* Placeholder Image or Pattern since we don't have real images for categories yet */}
-                                  <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-1000 group-hover:scale-110 ${
-                                    isGlamping ? "from-emerald-100 to-teal-50" : 
-                                    isPrivate ? "from-amber-100 to-orange-50" : 
-                                    "from-blue-100 to-indigo-50"
-                                  }`} />
+                                  {packageConfigs[cat]?.imageUrl ? (
+                                    <img 
+                                      src={packageConfigs[cat].imageUrl} 
+                                      alt={cat} 
+                                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                                    />
+                                  ) : (
+                                    <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-1000 group-hover:scale-110 ${
+                                      isGlamping ? "from-emerald-100 to-teal-50" : 
+                                      isPrivate ? "from-amber-100 to-orange-50" : 
+                                      "from-blue-100 to-indigo-50"
+                                    }`} />
+                                  )}
                                   <div className="absolute inset-0 flex items-center justify-center opacity-20 mix-blend-overlay">
                                     <svg className="w-40 h-40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                                       <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
@@ -1535,9 +1550,11 @@ export default function PublicBookingPage() {
                                 <div className="flex flex-col flex-1 p-6 text-left">
                                   <h3 className="text-xl font-black text-foreground mb-3 group-hover:text-primary transition-colors">{cat}</h3>
                                   <p className="text-sm font-medium leading-relaxed text-muted/70 mb-6 flex-1">
-                                    {cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap di tengah rimbunnya hutan Jayagiri yang menenangkan." : 
-                                     cat === "Paket" ? "Pilihan paket lengkap yang dirancang khusus untuk menciptakan momen berharga bersama keluarga tercinta." :
-                                     "Pengalaman eksklusif dengan privasi tinggi untuk momen spesial Anda bersama orang terdekat di alam terbuka."}
+                                    {packageConfigs[cat]?.description || (
+                                      cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap di tengah rimbunnya hutan Jayagiri yang menenangkan." : 
+                                      cat === "Paket" ? "Pilihan paket lengkap yang dirancang khusus untuk menciptakan momen berharga bersama keluarga tercinta." :
+                                      "Pengalaman eksklusif dengan privasi tinggi untuk momen spesial Anda bersama orang terdekat di alam terbuka."
+                                    )}
                                   </p>
 
                                   <div className="flex items-center justify-between pt-5 border-t border-border/40">
