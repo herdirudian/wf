@@ -141,7 +141,7 @@ export function UserManager({ currentUserRole }: { currentUserRole: string }) {
               <button
                 type="submit"
                 disabled={saving}
-                className="h-9 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
               >
                 {saving ? "Menyimpan..." : "Simpan"}
               </button>
@@ -154,7 +154,7 @@ export function UserManager({ currentUserRole }: { currentUserRole: string }) {
                     setError(null);
                   }}
                   disabled={saving}
-                  className="h-9 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                  className="flex min-h-[2.25rem] items-center justify-center rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-60"
                 >
                   Batal
                 </button>
@@ -186,24 +186,26 @@ export function UserManager({ currentUserRole }: { currentUserRole: string }) {
                     <td className="py-3 text-muted">{new Date(u.createdAt).toLocaleDateString("id-ID")}</td>
                     {!isOwner && (
                       <td className="py-3 text-right">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setForm({ id: u.id, email: u.email, password: "", role: u.role });
-                            setIsEditing(true);
-                            setError(null);
-                          }}
-                          className="text-xs font-medium text-blue-600 hover:underline mr-3"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => deleteUser(u.id)}
-                          className="text-xs font-medium text-red-600 hover:underline"
-                        >
-                          Hapus
-                        </button>
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setForm({ id: u.id, email: u.email, password: "", role: u.role });
+                              setIsEditing(true);
+                              setError(null);
+                            }}
+                            className="flex min-h-[1.75rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs font-medium text-blue-600 shadow-sm transition-all active:scale-95 hover:bg-background"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => deleteUser(u.id)}
+                            className="flex min-h-[1.75rem] items-center justify-center rounded-lg border border-red-200 bg-white px-3 py-1 text-xs font-medium text-red-600 shadow-sm transition-all active:scale-95 hover:bg-red-50"
+                          >
+                            Hapus
+                          </button>
+                        </div>
                       </td>
                     )}
                   </tr>

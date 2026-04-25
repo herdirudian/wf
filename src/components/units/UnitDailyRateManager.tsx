@@ -331,7 +331,7 @@ export function UnitDailyRateManager({
                   setError(e instanceof Error ? e.message : "Gagal load data");
                 }
               }}
-              className="h-9 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+              className="flex min-h-[2.25rem] items-center justify-center rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-60"
             >
               Load
             </button>
@@ -366,7 +366,7 @@ export function UnitDailyRateManager({
               type="button"
               disabled={submitting}
               onClick={applyBulk}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+              className="flex min-h-[2.25rem] items-center justify-center rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-60"
             >
               Apply ke tanggal terpilih
             </button>
@@ -374,7 +374,7 @@ export function UnitDailyRateManager({
               type="button"
               disabled={submitting || !Object.values(dirtyDates).some(Boolean)}
               onClick={saveDraft}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
             >
               {submitting ? "Menyimpan..." : "Simpan"}
             </button>
@@ -507,7 +507,7 @@ export function UnitDailyRateManager({
             type="button"
             disabled={submitting}
             onClick={setSpecial}
-            className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
           >
             {submitting ? "Memproses..." : "Simpan Tanggal"}
           </button>
@@ -581,7 +581,7 @@ export function UnitDailyRateManager({
                 type="button"
                 disabled={submitting}
                 onClick={generateNext3Months}
-                className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-60"
               >
                 Generate 3 Bulan ke Depan
               </button>
@@ -589,7 +589,7 @@ export function UnitDailyRateManager({
                 type="button"
                 disabled={submitting}
                 onClick={() => generate()}
-                className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
               >
                 {submitting ? "Memproses..." : "Generate"}
               </button>
@@ -633,7 +633,7 @@ export function UnitDailyRateManager({
                   type="button"
                   disabled={submitting}
                   onClick={bulkAdjust}
-                  className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60 sm:w-auto"
+                  className="flex min-h-[2.25rem] w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60 sm:w-auto"
                 >
                   {submitting ? "Memproses..." : "Apply"}
                 </button>

@@ -273,7 +273,7 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
           <button
             type="button"
             onClick={openCreate}
-            className="rounded-xl bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="flex min-h-[2.5rem] items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90"
           >
             Tambah
           </button>
@@ -317,10 +317,10 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
                 <td className="px-4 py-3">{u.priceWeekday}</td>
                 <td className="px-4 py-3">{u.priceWeekend}</td>
                 <td className="px-4 py-3">
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <Link
                       href={`/dashboard/units/${u.id}/rates`}
-                      className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background"
+                      className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background"
                     >
                       Harga
                     </Link>
@@ -329,21 +329,21 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
                         <button
                           type="button"
                           onClick={() => toggleActive(u)}
-                          className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background"
+                          className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background"
                         >
                           {u.isActive ? "Nonaktifkan" : "Aktifkan"}
                         </button>
                         <button
                           type="button"
                           onClick={() => openEdit(u)}
-                          className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background"
+                          className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background"
                         >
                           Edit
                         </button>
                         <button
                           type="button"
                           onClick={() => onDelete(u)}
-                          className="rounded-lg border border-red-200 bg-white px-2 py-1 text-xs text-red-700 hover:bg-red-50"
+                          className="flex min-h-[2rem] items-center justify-center rounded-lg border border-red-200 bg-white px-3 py-1 text-xs text-red-700 shadow-sm transition-all active:scale-95 hover:bg-red-50"
                         >
                           Hapus
                         </button>
@@ -575,7 +575,7 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
                     <button
                       type="button"
                       onClick={() => setNewFiles((s) => s.filter((_, i) => i !== idx))}
-                      className="mt-2 w-full rounded-lg border border-border bg-surface px-2 py-1 text-xs text-foreground hover:bg-background"
+                      className="mt-2 flex min-h-[2rem] w-full items-center justify-center rounded-lg border border-border bg-surface px-2 py-1 text-xs text-foreground shadow-sm transition-all active:scale-95 hover:bg-background"
                     >
                       Hapus dari pilihan
                     </button>
@@ -597,7 +597,7 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
                       <button
                         type="button"
                         onClick={() => removeImage(url)}
-                        className="mt-2 w-full rounded-lg border border-red-200 bg-white px-2 py-1 text-xs text-red-700 hover:bg-red-50"
+                        className="mt-2 flex min-h-[2rem] w-full items-center justify-center rounded-lg border border-red-200 bg-white px-2 py-1 text-xs text-red-700 shadow-sm transition-all active:scale-95 hover:bg-red-50"
                       >
                         Hapus
                       </button>
@@ -618,14 +618,14 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
             <button
               type="button"
               onClick={() => closeModal()}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              className="flex min-h-[2.75rem] min-w-[100px] items-center justify-center rounded-xl bg-primary px-6 py-2 text-sm font-medium text-primary-foreground shadow-md transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
             >
               {submitting ? "Menyimpan..." : "Simpan"}
             </button>

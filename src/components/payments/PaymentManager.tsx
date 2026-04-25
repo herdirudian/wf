@@ -199,12 +199,12 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
               <td className="px-4 py-3">{p.method}</td>
               <td className="px-4 py-3 text-xs text-muted">{p.paidAt ? p.paidAt.slice(0, 10) : "-"}</td>
               <td className="px-4 py-3">
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
                     disabled={paying === p.id || isOwner}
                     onClick={() => payWithXendit(p)}
-                    className="rounded-lg border border-border bg-emerald-50 px-2 py-1 text-xs text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                    className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-emerald-50 px-3 py-1 text-xs text-emerald-700 shadow-sm transition-all active:scale-95 hover:bg-emerald-100 disabled:opacity-50"
                   >
                     {paying === p.id ? "..." : "Xendit"}
                   </button>
@@ -212,7 +212,7 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
                     type="button"
                     disabled={isOwner}
                     onClick={() => reconcileFromXendit(p)}
-                    className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background disabled:opacity-50"
+                    className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-50"
                   >
                     Sync
                   </button>
@@ -220,7 +220,7 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
                     type="button"
                     disabled={isOwner}
                     onClick={() => openPaid(p)}
-                    className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background disabled:opacity-50"
+                    className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-50"
                   >
                     Mark Paid
                   </button>
@@ -228,14 +228,14 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
                     type="button"
                     disabled={isOwner}
                     onClick={() => openAdd(p)}
-                    className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background disabled:opacity-50"
+                    className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-50"
                   >
                     Tambah
                   </button>
                   <button
                     type="button"
                     onClick={() => openHistory(p)}
-                    className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background"
+                    className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background"
                   >
                     History
                   </button>
@@ -243,7 +243,7 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
                     type="button"
                     disabled={isOwner}
                     onClick={() => markPending(p)}
-                    className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background disabled:opacity-50"
+                    className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-50"
                   >
                     Set Pending
                   </button>
@@ -283,14 +283,14 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              className="flex min-h-[2.75rem] min-w-[100px] items-center justify-center rounded-xl bg-primary px-6 py-2 text-sm font-medium text-primary-foreground shadow-md transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
             >
               {submitting ? "Menyimpan..." : "Simpan"}
             </button>
@@ -329,14 +329,14 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
             <button
               type="button"
               onClick={() => setAddOpen(false)}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              className="flex min-h-[2.75rem] min-w-[100px] items-center justify-center rounded-xl bg-primary px-6 py-2 text-sm font-medium text-primary-foreground shadow-md transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
             >
               {submitting ? "Menyimpan..." : "Simpan"}
             </button>

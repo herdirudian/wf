@@ -90,27 +90,27 @@ export default async function BookingsPage({
         <div className="grid w-full grid-cols-2 gap-2 sm:w-auto sm:flex sm:flex-wrap sm:items-center sm:justify-end">
           <a
             href={`/api/dashboard/export?resource=bookings&status=${encodeURIComponent(status ?? "")}&start=${encodeURIComponent(startStr ?? "")}&end=${encodeURIComponent(endStr ?? "")}`}
-            className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-center text-sm font-medium text-foreground hover:bg-background sm:w-auto"
+            className="flex min-h-[2.75rem] w-full items-center justify-center rounded-xl border border-border bg-surface px-4 py-2 text-center text-sm font-medium text-foreground hover:bg-background transition-all active:scale-95 shadow-sm sm:w-auto"
           >
             Export CSV
           </a>
           {role !== "owner" && (
             <Link
               href="/dashboard/bookings/new"
-              className="w-full rounded-xl bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground hover:bg-primary/90 sm:w-auto"
+              className="flex min-h-[2.75rem] w-full items-center justify-center rounded-xl bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-all active:scale-95 shadow-sm sm:w-auto"
             >
               Tambah Manual
             </Link>
           )}
           <Link
             href="/dashboard/bookings/calendar"
-            className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-center text-sm font-medium text-foreground hover:bg-background sm:w-auto"
+            className="flex min-h-[2.75rem] w-full items-center justify-center rounded-xl border border-border bg-surface px-4 py-2 text-center text-sm font-medium text-foreground hover:bg-background transition-all active:scale-95 shadow-sm sm:w-auto"
           >
             Calendar View
           </Link>
           <Link
             href="/dashboard/bookings/chart"
-            className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-center text-sm font-medium text-foreground hover:bg-background sm:w-auto"
+            className="flex min-h-[2.75rem] w-full items-center justify-center rounded-xl border border-border bg-surface px-4 py-2 text-center text-sm font-medium text-foreground hover:bg-background transition-all active:scale-95 shadow-sm sm:w-auto"
           >
             Blocking Chart
           </Link>
@@ -153,7 +153,7 @@ export default async function BookingsPage({
         </div>
         <button
           type="submit"
-          className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          className="flex min-h-[2.75rem] items-center justify-center rounded-xl bg-primary px-6 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-all active:scale-95 shadow-sm"
         >
           Filter
         </button>

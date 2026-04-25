@@ -72,24 +72,24 @@ function QuantityStepper({
   const incDisabled = disabled || (typeof max === "number" ? value >= max : false);
 
   return (
-    <div className="inline-flex w-fit items-center rounded-xl border border-border bg-surface">
+    <div className="inline-flex w-fit items-center gap-1 p-1 rounded-xl border border-border bg-surface shadow-sm transition-all hover:border-primary/20">
       <button
         type="button"
         disabled={decDisabled}
         onClick={() => onChange(Math.max(min, value - 1))}
-        className="h-9 w-9 rounded-l-xl text-base text-foreground hover:bg-background disabled:opacity-40"
+        className="flex h-10 w-10 items-center justify-center rounded-lg text-lg font-bold text-foreground hover:bg-background active:scale-90 transition-all disabled:opacity-30 disabled:pointer-events-none"
         aria-label={`Kurangi ${ariaLabel}`}
       >
         −
       </button>
-      <div className="min-w-8 px-2 text-center text-sm font-semibold text-foreground" aria-label={ariaLabel}>
+      <div className="min-w-[2.5rem] px-1 text-center text-sm font-black text-foreground tabular-nums" aria-label={ariaLabel}>
         {value}
       </div>
       <button
         type="button"
         disabled={incDisabled}
         onClick={() => onChange(typeof max === "number" ? Math.min(max, value + 1) : value + 1)}
-        className="h-9 w-9 rounded-r-xl text-base text-foreground hover:bg-background disabled:opacity-40"
+        className="flex h-10 w-10 items-center justify-center rounded-lg text-lg font-bold text-foreground hover:bg-background active:scale-90 transition-all disabled:opacity-30 disabled:pointer-events-none"
         aria-label={`Tambah ${ariaLabel}`}
       >
         +
@@ -589,7 +589,7 @@ export function AdminBookingCreate() {
         </div>
         <Link
           href="/dashboard/bookings"
-          className="rounded-xl border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-background"
+          className="flex min-h-[3.25rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-sm font-bold text-foreground hover:bg-background transition-all active:scale-95"
         >
           Kembali
         </Link>
@@ -754,7 +754,7 @@ export function AdminBookingCreate() {
                 type="button"
                 disabled={loading}
                 onClick={loadAvailability}
-                className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                className="flex min-h-[3.25rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-sm font-bold text-foreground hover:bg-background disabled:opacity-60 transition-all active:scale-95"
               >
                 {loading ? "Loading..." : "Load Availability"}
               </button>
@@ -832,11 +832,11 @@ export function AdminBookingCreate() {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setKavlingMapOpen(true)}
-                  className="rounded-xl border border-border bg-surface px-3 py-2 text-xs font-medium text-foreground hover:bg-background"
+                  className="flex min-h-[3rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-xs font-bold text-foreground hover:bg-background transition-all active:scale-95 shadow-sm"
                 >
                   Lihat map
                 </button>
@@ -864,7 +864,7 @@ export function AdminBookingCreate() {
                     }
                     setKavlingSelected(picked.slice(0, requiredKavlings));
                   }}
-                  className="rounded-xl border border-border bg-surface px-3 py-2 text-xs font-medium text-foreground hover:bg-background disabled:opacity-60"
+                  className="flex min-h-[3rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-xs font-bold text-foreground hover:bg-background disabled:opacity-60 transition-all active:scale-95 shadow-sm"
                 >
                   Pilih otomatis
                 </button>
@@ -878,7 +878,7 @@ export function AdminBookingCreate() {
                     setKavlingSelected([]);
                     setHoldHeartbeat((x) => x + 1);
                   }}
-                  className="rounded-xl border border-border bg-surface px-3 py-2 text-xs font-medium text-foreground hover:bg-background disabled:opacity-60"
+                  className="flex min-h-[3rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-xs font-bold text-foreground hover:bg-background disabled:opacity-60 transition-all active:scale-95 shadow-sm"
                 >
                   Reset
                 </button>
@@ -984,7 +984,7 @@ export function AdminBookingCreate() {
                           return Array.from(set).sort((a, b) => a - b);
                         });
                       }}
-                      className={`h-9 rounded-xl border border-border text-xs font-semibold ${cls} disabled:opacity-60`}
+                      className={`flex min-h-[2.5rem] items-center justify-center rounded-xl border border-border text-xs font-semibold ${cls} disabled:opacity-60 transition-all active:scale-95`}
                       aria-label={`Kavling ${n}${isTaken ? " terbooking" : ""}`}
                     >
                       {n}
@@ -1118,7 +1118,7 @@ export function AdminBookingCreate() {
                     type="button"
                     disabled={settlementLinking || baseAmountToPay <= 0}
                     onClick={createSettlementLink}
-                    className="flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white hover:bg-emerald-700 disabled:opacity-50 transition-all active:scale-95"
+                    className="flex min-h-[3.25rem] items-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white hover:bg-emerald-700 disabled:opacity-50 transition-all active:scale-95 shadow-lg shadow-emerald-600/10"
                   >
                     {settlementLinking ? "Membuat..." : "Buat Link Pelunasan (Xendit)"}
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1136,7 +1136,7 @@ export function AdminBookingCreate() {
                   type="button"
                   disabled={paying || baseAmountToPay <= 0}
                   onClick={payWithXendit}
-                  className="flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white hover:bg-emerald-700 disabled:opacity-50 transition-all active:scale-95"
+                  className="flex min-h-[3.25rem] items-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white hover:bg-emerald-700 disabled:opacity-50 transition-all active:scale-95 shadow-lg shadow-emerald-600/10"
                 >
                   {paying
                     ? "Memproses..."
@@ -1161,7 +1161,7 @@ export function AdminBookingCreate() {
           <button
             type="submit"
             disabled={submitting || loading}
-            className="rounded-xl bg-primary px-8 py-4 text-[15px] font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-60 transition-all active:scale-95"
+            className="flex min-h-[4rem] items-center justify-center rounded-xl bg-primary px-8 py-4 text-[15px] font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-60 transition-all active:scale-95 shadow-xl shadow-primary/10"
           >
             {submitting ? "Memproses..." : "Buat Booking"}
           </button>

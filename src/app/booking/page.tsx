@@ -2201,8 +2201,8 @@ export default function PublicBookingPage() {
 
               {/* Kavling Selection Section */}
               {(effectiveKavlingScope || kavlingAmbiguous) && requiredKavlings > 0 && (
-                <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/5 transition-all duration-700 hover:shadow-primary/10">
-                  <div className="border-b border-[#E8E8E1] bg-[#F1F3EE]/30 px-8 py-8 relative group overflow-hidden">
+                <div className="rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/5 transition-all duration-700 hover:shadow-primary/10">
+                  <div className="rounded-t-[2.5rem] border-b border-[#E8E8E1] bg-[#F1F3EE]/30 px-8 py-8 relative group overflow-hidden">
                     {/* Organic Decoration for Kavling Selection Header */}
                     <div className="absolute -left-16 -top-16 h-64 w-64 opacity-[0.03] transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-12 pointer-events-none">
                       <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -2267,7 +2267,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("mandiri")}
-                                        className={`group relative overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "mandiri" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative flex min-h-[3.25rem] items-center justify-center overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "mandiri" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Camping Mandiri</span>
                                       </button>
@@ -2276,7 +2276,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("paket")}
-                                        className={`group relative overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "paket" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative flex min-h-[3.25rem] items-center justify-center overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "paket" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Paket</span>
                                       </button>
@@ -2285,7 +2285,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("private")}
-                                        className={`group relative overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "private" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative flex min-h-[3.25rem] items-center justify-center overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "private" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
                                       >
                                         <span className="relative z-10">Paket Private</span>
                                       </button>

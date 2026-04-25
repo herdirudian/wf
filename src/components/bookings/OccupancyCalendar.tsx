@@ -184,7 +184,7 @@ export function OccupancyCalendar() {
             type="button"
             disabled={loading}
             onClick={load}
-            className="h-9 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
           >
             {loading ? "Loading..." : "Load"}
           </button>

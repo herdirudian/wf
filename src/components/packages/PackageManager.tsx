@@ -89,7 +89,7 @@ export function PackageManager({ categories }: { categories: string[] }) {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+          className="flex min-h-[2.5rem] items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-50"
         >
           {saving ? "Menyimpan..." : "Simpan Perubahan"}
         </button>

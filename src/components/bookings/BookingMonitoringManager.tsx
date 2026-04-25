@@ -199,7 +199,7 @@ export function BookingMonitoringManager({ rows, balanceDueDays, currentUserRole
         <button
           type="button"
           onClick={() => setQuickFilter("all")}
-          className={`rounded-xl border px-3 py-2 text-sm font-semibold ${
+          className={`flex min-h-[2.25rem] items-center justify-center rounded-xl border px-3 py-2 text-sm font-semibold shadow-sm transition-all active:scale-95 ${
             quickFilter === "all" ? "border-primary bg-primary/10 text-primary" : "border-border bg-surface text-foreground hover:bg-background"
           }`}
         >
@@ -208,7 +208,7 @@ export function BookingMonitoringManager({ rows, balanceDueDays, currentUserRole
         <button
           type="button"
           onClick={() => setQuickFilter("dp")}
-          className={`rounded-xl border px-3 py-2 text-sm font-semibold ${
+          className={`flex min-h-[2.25rem] items-center justify-center rounded-xl border px-3 py-2 text-sm font-semibold shadow-sm transition-all active:scale-95 ${
             quickFilter === "dp" ? "border-primary bg-primary/10 text-primary" : "border-border bg-surface text-foreground hover:bg-background"
           }`}
         >
@@ -217,7 +217,7 @@ export function BookingMonitoringManager({ rows, balanceDueDays, currentUserRole
         <button
           type="button"
           onClick={() => setQuickFilter("partial")}
-          className={`rounded-xl border px-3 py-2 text-sm font-semibold ${
+          className={`flex min-h-[2.25rem] items-center justify-center rounded-xl border px-3 py-2 text-sm font-semibold shadow-sm transition-all active:scale-95 ${
             quickFilter === "partial"
               ? "border-primary bg-primary/10 text-primary"
               : "border-border bg-surface text-foreground hover:bg-background"
@@ -228,7 +228,7 @@ export function BookingMonitoringManager({ rows, balanceDueDays, currentUserRole
         <button
           type="button"
           onClick={() => setQuickFilter("expired")}
-          className={`rounded-xl border px-3 py-2 text-sm font-semibold ${
+          className={`flex min-h-[2.25rem] items-center justify-center rounded-xl border px-3 py-2 text-sm font-semibold shadow-sm transition-all active:scale-95 ${
             quickFilter === "expired"
               ? "border-primary bg-primary/10 text-primary"
               : "border-border bg-surface text-foreground hover:bg-background"
@@ -239,7 +239,7 @@ export function BookingMonitoringManager({ rows, balanceDueDays, currentUserRole
         <button
           type="button"
           onClick={() => setQuickFilter("cancel_no_pay")}
-          className={`rounded-xl border px-3 py-2 text-sm font-semibold ${
+          className={`flex min-h-[2.25rem] items-center justify-center rounded-xl border px-3 py-2 text-sm font-semibold shadow-sm transition-all active:scale-95 ${
             quickFilter === "cancel_no_pay"
               ? "border-primary bg-primary/10 text-primary"
               : "border-border bg-surface text-foreground hover:bg-background"
@@ -325,7 +325,7 @@ export function BookingMonitoringManager({ rows, balanceDueDays, currentUserRole
                       <button
                         onClick={() => sendEmailReminder(row.id)}
                         disabled={mailing === row.id || row.paymentStatus === "paid" || isOwner}
-                        className="rounded-lg border border-border bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+                        className="flex min-h-[1.75rem] items-center justify-center rounded-lg border border-border bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700 shadow-sm transition-all active:scale-95 hover:bg-slate-100 disabled:opacity-50"
                         title="Kirim ulang email tagihan"
                       >
                         {mailing === row.id ? "..." : "Kirim Email"}
@@ -333,14 +333,14 @@ export function BookingMonitoringManager({ rows, balanceDueDays, currentUserRole
                       <button
                         onClick={() => payWithXendit(row.code, row.id, "dp")}
                         disabled={paying === row.id || row.paymentStatus === "paid" || row.paymentPaidAmount > 0 || isOwner}
-                        className="rounded-lg border border-border bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                        className="flex min-h-[1.75rem] items-center justify-center rounded-lg border border-border bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700 shadow-sm transition-all active:scale-95 hover:bg-emerald-100 disabled:opacity-50"
                       >
                         {paying === row.id ? "..." : "Xendit DP"}
                       </button>
                       <button
                         onClick={() => payWithXendit(row.code, row.id, "balance")}
                         disabled={paying === row.id || row.paymentStatus === "paid" || isOwner}
-                        className="rounded-lg border border-border bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                        className="flex min-h-[1.75rem] items-center justify-center rounded-lg border border-border bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700 shadow-sm transition-all active:scale-95 hover:bg-emerald-100 disabled:opacity-50"
                       >
                         {paying === row.id ? "..." : "Xendit Pelunasan"}
                       </button>
@@ -396,7 +396,7 @@ export function BookingMonitoringManager({ rows, balanceDueDays, currentUserRole
                           }
                           setCopyingId(null);
                         }}
-                        className="rounded-lg border border-border bg-white px-2 py-1 text-xs font-semibold text-foreground hover:bg-background"
+                        className="flex min-h-[1.75rem] items-center justify-center rounded-lg border border-border bg-white px-2 py-1 text-xs font-semibold text-foreground shadow-sm transition-all active:scale-95 hover:bg-background"
                       >
                         {copiedId === row.id ? "Copied" : copyingId === row.id ? "..." : "Copy WA"}
                       </button>

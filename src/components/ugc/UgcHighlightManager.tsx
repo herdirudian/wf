@@ -148,7 +148,7 @@ export function UgcHighlightManager({ items }: { items: UgcHighlight[] }) {
         <button
           type="button"
           onClick={openCreate}
-          className="rounded-xl bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90"
         >
           Tambah
         </button>
@@ -179,31 +179,31 @@ export function UgcHighlightManager({ items }: { items: UgcHighlight[] }) {
                   <div className="font-medium">{x.title}</div>
                   {x.caption ? <div className="mt-1 text-xs text-muted">{x.caption}</div> : null}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 text-center">
                   <button
                     type="button"
                     onClick={() => toggleActive(x)}
-                    className={`rounded-full px-2 py-1 text-[11px] font-semibold ${
+                    className={`flex min-h-[1.5rem] w-full items-center justify-center rounded-full px-2 text-[11px] font-semibold transition-all active:scale-95 ${
                       x.isActive ? "bg-accent/20 text-foreground" : "border border-border bg-surface text-muted"
                     }`}
                   >
                     {x.isActive ? "aktif" : "nonaktif"}
                   </button>
                 </td>
-                <td className="px-4 py-3">{x.sortOrder}</td>
+                <td className="px-4 py-3 text-center">{x.sortOrder}</td>
                 <td className="px-4 py-3">
                   <div className="flex gap-2">
                     <button
                       type="button"
                       onClick={() => openEdit(x)}
-                      className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background"
+                      className="flex min-h-[1.75rem] items-center justify-center rounded-lg border border-border bg-surface px-2 text-xs shadow-sm transition-all active:scale-95 hover:bg-background"
                     >
                       Edit
                     </button>
                     <button
                       type="button"
                       onClick={() => onDelete(x)}
-                      className="rounded-lg border border-red-200 bg-white px-2 py-1 text-xs text-red-700 hover:bg-red-50"
+                      className="flex min-h-[1.75rem] items-center justify-center rounded-lg border border-red-200 bg-white px-2 text-xs text-red-700 shadow-sm transition-all active:scale-95 hover:bg-red-50"
                     >
                       Hapus
                     </button>
@@ -280,14 +280,14 @@ export function UgcHighlightManager({ items }: { items: UgcHighlight[] }) {
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background"
+              className="flex min-h-[2.25rem] items-center justify-center rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
             >
               {submitting ? "Menyimpan..." : "Simpan"}
             </button>

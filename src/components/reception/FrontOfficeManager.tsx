@@ -214,7 +214,7 @@ export function FrontOfficeManager({
                         type="button"
                         disabled={!canIn || actingId === r.id}
                         onClick={() => markCheckIn(r.id)}
-                        className="rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+                        className="flex min-h-[2.5rem] items-center justify-center rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all active:scale-95 shadow-sm"
                       >
                         {actingId === r.id ? "..." : "Check-in"}
                       </button>
@@ -228,7 +228,7 @@ export function FrontOfficeManager({
                         type="button"
                         disabled={!canOut || actingId === r.id}
                         onClick={() => markCheckOut(r.id)}
-                        className="rounded-xl border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground hover:bg-background disabled:opacity-50"
+                        className="flex min-h-[2.5rem] items-center justify-center rounded-xl border border-border bg-surface px-4 py-2 text-xs font-bold text-foreground hover:bg-background disabled:opacity-50 transition-all active:scale-95 shadow-sm"
                       >
                         {actingId === r.id ? "..." : "Check-out"}
                       </button>

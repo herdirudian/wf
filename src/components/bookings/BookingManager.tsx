@@ -347,7 +347,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                         type="button"
                         disabled={paying === b.id || b.paymentPaidAmount > 0 || isOwner}
                         onClick={() => payWithXendit(b, "dp")}
-                        className="rounded-xl border border-border bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                        className="flex min-h-[3.25rem] items-center justify-center rounded-xl border border-border bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50 transition-all active:scale-95"
                       >
                         {paying === b.id ? "..." : "Bayar DP (Xendit)"}
                       </button>
@@ -355,7 +355,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                         type="button"
                         disabled={paying === b.id || isOwner}
                         onClick={() => payWithXendit(b, "balance")}
-                        className="rounded-xl border border-border bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                        className="flex min-h-[3.25rem] items-center justify-center rounded-xl border border-border bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50 transition-all active:scale-95"
                       >
                         {paying === b.id ? "..." : "Bayar Pelunasan (Xendit)"}
                       </button>
@@ -383,7 +383,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                                   type="button"
                                   onClick={() => openKavling(b, k)}
                                   disabled={isOwner}
-                                  className="shrink-0 rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background"
+                                  className="flex min-h-[2.75rem] shrink-0 items-center justify-center rounded-lg border border-border bg-surface px-6 py-1 text-xs font-bold hover:bg-background transition-all active:scale-95 shadow-sm"
                                 >
                                   {k.assigned.length < k.required ? "Pilih" : "Ubah"}
                                 </button>
@@ -406,7 +406,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                   type="button"
                   onClick={() => openReschedule(b)}
                   disabled={b.status === "cancelled" || isOwner}
-                  className="rounded-xl border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground hover:bg-background disabled:opacity-50"
+                  className="flex min-h-[3rem] items-center justify-center rounded-xl border border-border bg-surface px-4 py-2 text-xs font-bold text-foreground hover:bg-background disabled:opacity-50 transition-all active:scale-95"
                 >
                   Reschedule
                 </button>
@@ -417,7 +417,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                       const v = e.target.value as BookingStatus;
                       if (v) updateStatus(b.id, v);
                     }}
-                    className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-xs font-semibold outline-none focus:border-primary"
+                    className="h-12 w-full rounded-xl border border-border bg-surface px-3 text-xs font-bold outline-none focus:border-primary"
                   >
                     <option value="">Update...</option>
                     {options.map((o) => (
@@ -433,7 +433,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                   <button
                     type="button"
                     onClick={() => openDelete(b)}
-                    className="col-span-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-100 disabled:opacity-50"
+                    className="col-span-2 flex min-h-[3rem] items-center justify-center rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-xs font-bold text-red-700 hover:bg-red-100 disabled:opacity-50 transition-all active:scale-95"
                   >
                     Hapus
                   </button>
@@ -512,7 +512,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                                     type="button"
                                     onClick={() => openKavling(b, k)}
                                     disabled={isOwner}
-                                    className="shrink-0 rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background"
+                                    className="flex min-h-[2.5rem] shrink-0 items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs hover:bg-background transition-all active:scale-95 shadow-sm"
                                   >
                                     {k.assigned.length < k.required ? "Pilih" : "Ubah"}
                                   </button>
@@ -559,7 +559,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                           type="button"
                           disabled={paying === b.id || b.paymentPaidAmount > 0 || isOwner}
                           onClick={() => payWithXendit(b, "dp")}
-                          className="flex w-full items-center justify-center gap-1 rounded-lg border border-border bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                          className="flex min-h-[2.25rem] w-full items-center justify-center gap-1 rounded-lg border border-border bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50 transition-all active:scale-95"
                         >
                           {paying === b.id ? "..." : "Bayar DP (Xendit)"}
                         </button>
@@ -567,7 +567,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                           type="button"
                           disabled={paying === b.id || isOwner}
                           onClick={() => payWithXendit(b, "balance")}
-                          className="flex w-full items-center justify-center gap-1 rounded-lg border border-border bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                          className="flex min-h-[2.25rem] w-full items-center justify-center gap-1 rounded-lg border border-border bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700 hover:bg-emerald-100 disabled:opacity-50 transition-all active:scale-95"
                         >
                           {paying === b.id ? "..." : "Bayar Pelunasan (Xendit)"}
                         </button>
@@ -580,19 +580,19 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                         type="button"
                         onClick={() => openReschedule(b)}
                         disabled={b.status === "cancelled" || isOwner}
-                        className="rounded-lg border border-border bg-surface px-2 py-1 text-xs hover:bg-background disabled:opacity-50"
+                        className="flex min-h-[2.25rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs hover:bg-background disabled:opacity-50 transition-all active:scale-95 shadow-sm"
                       >
                         Reschedule
                       </button>
-                      {isAdministrator ? (
+                      {isAdministrator && (
                         <button
                           type="button"
                           onClick={() => openDelete(b)}
-                          className="rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-semibold text-red-700 hover:bg-red-100 disabled:opacity-50"
+                          className="flex min-h-[2.25rem] items-center justify-center rounded-lg border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-100 disabled:opacity-50 transition-all active:scale-95 shadow-sm"
                         >
                           Hapus
                         </button>
-                      ) : null}
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -653,7 +653,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                         <button
                           type="button"
                           onClick={() => openKavlingReschedule(k)}
-                          className="shrink-0 rounded-lg border border-border bg-surface px-2 py-1 text-xs font-semibold text-foreground hover:bg-background"
+                          className="flex min-h-[2.5rem] shrink-0 items-center justify-center rounded-lg border border-border bg-surface px-4 py-1 text-xs font-semibold text-foreground hover:bg-background transition-all active:scale-95 shadow-sm"
                         >
                           {selected.length < k.required ? "Pilih" : "Ubah"}
                         </button>
@@ -676,14 +676,14 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-sm font-bold text-foreground hover:bg-background transition-all active:scale-95 shadow-sm"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl bg-primary px-8 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-60 transition-all active:scale-95 shadow-md shadow-primary/10"
             >
               {submitting ? "Menyimpan..." : "Simpan"}
             </button>
@@ -720,12 +720,12 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                     type="button"
                     title={blocked ? (takenLabel ? `Terpakai: ${takenLabel}` : "Terpakai") : ""}
                     onClick={() => toggleKavling(n)}
-                    className={`rounded-lg border px-2 py-2 text-xs font-semibold ${
+                    className={`flex min-h-[2.5rem] items-center justify-center rounded-lg border px-2 py-2 text-xs font-bold transition-all active:scale-95 ${
                       selected
-                        ? "border-accent bg-accent/20 text-foreground"
+                        ? "border-primary bg-primary/10 text-primary shadow-sm"
                         : blocked
-                          ? "border-border bg-background text-muted opacity-60"
-                          : "border-border bg-surface text-foreground hover:bg-background"
+                          ? "border-border bg-background text-muted opacity-40 cursor-not-allowed"
+                          : "border-border bg-surface text-foreground hover:bg-background hover:border-primary/30"
                     }`}
                   >
                     {n}
@@ -738,7 +738,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
             <button
               type="button"
               onClick={() => setKavlingOpen(false)}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-sm font-bold text-foreground hover:bg-background transition-all active:scale-95 shadow-sm"
             >
               Batal
             </button>
@@ -746,7 +746,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
               type="button"
               disabled={kavlingLoading || kavlingSelected.length !== kavlingRequired}
               onClick={saveKavling}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl bg-primary px-8 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-60 transition-all active:scale-95 shadow-md shadow-primary/10"
             >
               Simpan
             </button>
@@ -790,7 +790,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
                 setDeleteConfirm("");
               }}
               disabled={deleting}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl border border-border bg-surface px-6 py-2 text-sm font-bold text-foreground hover:bg-background disabled:opacity-60 transition-all active:scale-95 shadow-sm"
             >
               Batal
             </button>
@@ -798,7 +798,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
               type="button"
               onClick={deleteBooking}
               disabled={deleting || !deleteTarget || deleteConfirm.trim() !== deleteTarget.code}
-              className="rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-60"
+              className="flex min-h-[2.75rem] items-center justify-center rounded-xl bg-red-600 px-8 py-2 text-sm font-bold text-white hover:bg-red-700 disabled:opacity-60 transition-all active:scale-95 shadow-md shadow-red-600/10"
             >
               {deleting ? "Menghapus..." : "Hapus Booking"}
             </button>

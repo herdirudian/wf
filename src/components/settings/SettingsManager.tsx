@@ -431,7 +431,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                 type="button"
                 onClick={save}
                 disabled={loading || saving}
-                className="h-9 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
               >
                 {saving ? "Menyimpan..." : "Simpan"}
               </button>
@@ -487,7 +487,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                 type="button"
                 onClick={save}
                 disabled={loading || saving}
-                className="h-9 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
               >
                 {saving ? "Menyimpan..." : "Simpan"}
               </button>
@@ -549,7 +549,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                 type="button"
                 onClick={setCropRectFull}
                 disabled={!siteMapCropNatural}
-                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-60"
               >
                 Full
               </button>
@@ -557,7 +557,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                 type="button"
                 onClick={() => setCropRectCenteredRatio(16 / 9)}
                 disabled={!siteMapCropNatural}
-                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-60"
               >
                 16:9
               </button>
@@ -573,7 +573,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                   setSiteMapFile(null);
                 }}
                 disabled={siteMapUploading}
-                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-60"
               >
                 Batal
               </button>
@@ -581,7 +581,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                 type="button"
                 onClick={() => void exportCropAndUpload()}
                 disabled={!siteMapCropNatural || !siteMapCropRect || siteMapUploading}
-                className="rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                className="flex min-h-[2.25rem] items-center justify-center rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
               >
                 {siteMapUploading ? "Mengupload..." : "Simpan & Upload"}
               </button>
@@ -962,7 +962,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                   else setSmtpTestResult("Test email berhasil dikirim. Cek inbox/spam.");
                   setSmtpTestSending(false);
                 }}
-                className="h-9 shrink-0 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground hover:bg-background disabled:opacity-60"
+                className="flex min-h-[2.25rem] shrink-0 items-center justify-center rounded-xl border border-border bg-surface px-4 text-sm font-medium text-foreground shadow-sm transition-all active:scale-95 hover:bg-background disabled:opacity-60"
               >
                 {smtpTestSending ? "Mengirim..." : "Kirim Test"}
               </button>
@@ -977,7 +977,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
               type="button"
               onClick={save}
               disabled={loading || saving}
-              className="h-9 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+              className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
             >
               {saving ? "Menyimpan..." : "Simpan"}
             </button>
