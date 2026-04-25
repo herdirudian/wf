@@ -2348,9 +2348,16 @@ export default function PublicBookingPage() {
                       </button>
                     </div>
 
-                    <div className="flex flex-col gap-12 lg:flex-row">
+                    <div className="flex flex-col gap-10 lg:flex-row">
                       {/* Map Preview */}
-                      <div className="shrink-0 lg:w-1/3">
+                      <div className="sticky top-0 z-30 shrink-0 bg-white/95 pb-6 pt-4 backdrop-blur-md lg:static lg:w-1/3 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+                        <div className="mb-3 flex items-center justify-between lg:hidden">
+                          <div className="flex items-center gap-2">
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]">Peta Lokasi</span>
+                          </div>
+                          <span className="text-[10px] font-bold text-primary/60 italic">Scroll ke bawah untuk pilih nomor</span>
+                        </div>
                         <button
                           type="button"
                           onClick={() => {
@@ -2358,7 +2365,7 @@ export default function PublicBookingPage() {
                             setKavlingMapZoom(1);
                             setKavlingMapOpen(true);
                           }}
-                          className="group relative block aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5"
+                          className="group relative block aspect-[16/10] w-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 lg:aspect-[4/3]"
                         >
                           <img
                             src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
