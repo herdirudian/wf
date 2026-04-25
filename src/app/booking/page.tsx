@@ -963,9 +963,9 @@ export default function PublicBookingPage() {
     <div className="sticky top-6 space-y-4">
       <div className="overflow-hidden rounded-[2.5rem] border border-border bg-white shadow-sm">
         {/* Header */}
-        <div className="bg-[#DEDCD1] px-8 py-5">
-          <h3 className="text-lg font-bold text-[#2D3E10]">Ringkasan Pesanan</h3>
-        </div>
+              <div className="bg-[#F1F3EE] px-8 py-5">
+                <h3 className="text-lg font-bold text-[#2D3E10]">Ringkasan Pesanan</h3>
+              </div>
         
         <div className="p-8 space-y-6">
           {/* Jadwal & Tamu */}
@@ -1047,7 +1047,7 @@ export default function PublicBookingPage() {
         </div>
 
         {/* Action Button Section */}
-        <div className="bg-[#DEDCD1] p-8">
+              <div className="bg-[#F1F3EE] p-8">
           <button
             onClick={() => {
               if (currentStep === 1) setCurrentStep(2);
@@ -1067,10 +1067,10 @@ export default function PublicBookingPage() {
         <p className="text-[10px] font-bold uppercase tracking-widest text-primary/40 mb-1">BUTUH BANTUAN?</p>
         <p className="text-xs font-bold text-foreground/80 mb-4">Hubungi Admin Woodforest</p>
         <a 
-          href="https://wa.me/628112090808" 
-          target="_blank" 
-          className="inline-flex h-10 items-center justify-center rounded-xl bg-[#F0EFE9] px-6 text-[10px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#2D3E10] hover:text-white w-full"
-        >
+                href="https://wa.me/628112090808" 
+                target="_blank" 
+                className="inline-flex h-10 items-center justify-center rounded-xl bg-[#F1F3EE] px-6 text-[10px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#2D3E10] hover:text-white w-full"
+              >
           WHATSAPP CHAT
         </a>
       </div>
