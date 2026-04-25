@@ -39,12 +39,12 @@ export function ImageCarousel({
 
   return (
     <>
-      <div className="relative overflow-hidden rounded-xl border border-border bg-surface">
-        <button type="button" onClick={() => setOpen(true)} className="block w-full">
+      <div className="relative group/carousel overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-surface">
+        <button type="button" onClick={() => setOpen(true)} className="block w-full overflow-hidden">
           <img
             src={safeImages[idx]}
             alt=""
-            className={`w-full object-cover ${heightClassName} cursor-zoom-in`}
+            className={`w-full object-cover ${heightClassName} cursor-zoom-in transition-transform duration-700 group-hover/carousel:scale-110`}
             loading="lazy"
           />
         </button>
@@ -57,9 +57,12 @@ export function ImageCarousel({
                 e.preventDefault();
                 prev();
               }}
-              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-surface/90 px-3 py-1 text-sm font-medium text-foreground shadow hover:bg-surface"
+              className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#2D3E10] shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:scale-110 active:scale-95 opacity-0 group-hover/carousel:opacity-100 -translate-x-4 group-hover/carousel:translate-x-0"
+              aria-label="Previous image"
             >
-              Prev
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
             <button
               type="button"
@@ -67,11 +70,14 @@ export function ImageCarousel({
                 e.preventDefault();
                 next();
               }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-surface/90 px-3 py-1 text-sm font-medium text-foreground shadow hover:bg-surface"
+              className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#2D3E10] shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:scale-110 active:scale-95 opacity-0 group-hover/carousel:opacity-100 translate-x-4 group-hover/carousel:translate-x-0"
+              aria-label="Next image"
             >
-              Next
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
-            <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
               {safeImages.map((_, di) => (
                 <button
                   key={di}
@@ -80,7 +86,7 @@ export function ImageCarousel({
                     e.preventDefault();
                     setI(di);
                   }}
-                  className={`h-2 w-2 rounded-full ${di === idx ? "bg-primary" : "bg-surface/80"} shadow`}
+                  className={`h-1.5 transition-all duration-500 rounded-full ${di === idx ? "w-6 bg-primary" : "w-1.5 bg-white/60 hover:bg-white"} shadow-sm`}
                   aria-label={`Go to image ${di + 1}`}
                 />
               ))}
@@ -91,23 +97,25 @@ export function ImageCarousel({
 
       {open ? (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 transition-all duration-500 animate-in fade-in"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) setOpen(false);
           }}
         >
-          <div className="relative w-full max-w-5xl">
-            <div className="absolute right-0 top-0 flex gap-2">
+          <div className="relative w-full max-w-5xl animate-in zoom-in-95 duration-500">
+            <div className="absolute -top-14 right-0 flex gap-2">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-xl bg-surface/90 px-3 py-2 text-sm font-medium text-foreground shadow hover:bg-surface"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-all hover:bg-white/20 hover:rotate-90"
               >
-                Tutup
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
-            <div className="mt-12 overflow-hidden rounded-2xl bg-black">
+            <div className="overflow-hidden rounded-[2.5rem] bg-black shadow-2xl">
               <img
                 src={safeImages[idx]}
                 alt=""
@@ -121,24 +129,28 @@ export function ImageCarousel({
                 <button
                   type="button"
                   onClick={prev}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-surface/90 px-3 py-2 text-sm font-medium text-foreground shadow hover:bg-surface"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110 active:scale-95"
                 >
-                  Prev
+                  <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
                 </button>
                 <button
                   type="button"
                   onClick={next}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-surface/90 px-3 py-2 text-sm font-medium text-foreground shadow hover:bg-surface"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110 active:scale-95"
                 >
-                  Next
+                  <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </button>
-                <div className="mt-3 flex justify-center gap-1">
+                <div className="mt-6 flex justify-center gap-2">
                   {safeImages.map((_, di) => (
                     <button
                       key={di}
                       type="button"
                       onClick={() => setI(di)}
-                      className={`h-2 w-2 rounded-full ${di === idx ? "bg-white" : "bg-white/40"}`}
+                      className={`h-1.5 transition-all duration-500 rounded-full ${di === idx ? "w-8 bg-white" : "w-1.5 bg-white/20 hover:bg-white/40"}`}
                       aria-label={`Go to image ${di + 1}`}
                     />
                   ))}
