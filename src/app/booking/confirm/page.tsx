@@ -759,7 +759,7 @@ export default function BookingConfirmPage() {
       </div>
 
       {/* Nature-Inspired Footer */}
-      <footer className="mt-20 border-t border-[#E8E8E1] bg-white py-20">
+      <footer className="mt-20 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center">
             <div className="w-full max-w-2xl rounded-[2.5rem] bg-[#F1F3EE] p-12 text-center relative overflow-hidden group">
@@ -789,7 +789,7 @@ export default function BookingConfirmPage() {
             </div>
           </div>
 
-          <div className="mt-16 border-t border-[#E8E8E1] pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="mt-16 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/30">
