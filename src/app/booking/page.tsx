@@ -1486,8 +1486,7 @@ export default function PublicBookingPage() {
                           return (
                             <div
                               key={cat}
-                              style={{ animationDelay: `${idx * 150}ms` }}
-                              className="group relative flex flex-col h-full animate-in fade-in slide-in-from-bottom-8 fill-mode-both"
+                              className="group relative flex flex-col h-full"
                             >
                               <button
                                 type="button"
@@ -1825,8 +1824,7 @@ export default function PublicBookingPage() {
                     return (
                       <div 
                         key={u.id} 
-                        style={{ animationDelay: `${idx * 100}ms` }}
-                        className={`group flex flex-col overflow-hidden rounded-[2.5rem] border border-border bg-surface transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both ${
+                        className={`group flex flex-col overflow-hidden rounded-[2.5rem] border border-border bg-surface transition-all duration-500 ${
                           isSelected 
                             ? "ring-2 ring-primary border-transparent shadow-2xl shadow-primary/5" 
                             : "hover:border-primary/40 hover:shadow-xl"
@@ -2091,7 +2089,6 @@ export default function PublicBookingPage() {
                               <button
                                 key={n}
                                 type="button"
-                                style={{ animationDelay: `${(idx % 20) * 30}ms` }}
                                 disabled={disabled && !isSelected}
                                 onClick={() => {
                                   if (isSelected) {
@@ -2102,7 +2099,7 @@ export default function PublicBookingPage() {
                                     }
                                   }
                                 }}
-                                className={`flex h-11 items-center justify-center rounded-xl border-2 text-[11px] font-black transition-all duration-300 animate-in zoom-in-50 fill-mode-both ${
+                                className={`flex h-11 items-center justify-center rounded-xl border-2 text-[11px] font-black transition-all duration-300 ${
                                   isSelected
                                     ? "border-primary bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-110 rotate-2 z-10"
                                     : isTaken
@@ -2417,8 +2414,7 @@ export default function PublicBookingPage() {
                     return (
                       <div 
                         key={a.id} 
-                        style={{ animationDelay: `${idx * 100}ms` }}
-                        className={`group relative overflow-hidden rounded-[2rem] border-2 p-6 transition-all duration-700 animate-in fade-in slide-in-from-bottom-6 fill-mode-both ${
+                        className={`group relative overflow-hidden rounded-[2rem] border-2 p-6 transition-all duration-700 ${
                           isSelected 
                             ? "border-primary bg-primary/[0.03] shadow-xl shadow-primary/10" 
                             : "border-border bg-surface hover:border-primary/40 hover:shadow-md"
