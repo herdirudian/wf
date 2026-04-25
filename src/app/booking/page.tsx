@@ -990,7 +990,7 @@ export default function PublicBookingPage() {
               <span className="text-2xl font-black text-primary">{formatIDR(estimatedAmount)}</span>
             </div>
             <p className="text-[10px] font-medium text-muted leading-relaxed">
-              * Harga sudah termasuk pajak dan biaya layanan.
+              * Harga sudah termasuk pajak dan belum termasuk biaya layanan.
             </p>
           </div>
         </div>
