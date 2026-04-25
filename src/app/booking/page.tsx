@@ -894,13 +894,13 @@ export default function PublicBookingPage() {
   }, [visibleUnits, unitQty]);
 
   const sidebarContent = (
-    <div className="sticky top-8 space-y-6">
+    <div className="sticky top-6 space-y-5">
       <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-2xl shadow-primary/5 backdrop-blur-xl">
-        <div className="border-b border-border bg-muted/30 px-8 py-6">
+        <div className="border-b border-border bg-muted/30 px-6 py-4">
           <h3 className="text-xl font-black text-foreground">Ringkasan Pesanan</h3>
         </div>
         
-        <div className="p-8 space-y-8">
+        <div className="p-6 space-y-6">
           {/* Stay Info */}
           <div className="space-y-4">
             <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-muted">
@@ -1132,32 +1132,32 @@ export default function PublicBookingPage() {
         <div className="absolute -right-1/4 -bottom-1/4 h-[100%] w-[100%] rounded-full bg-primary/[0.02] blur-[120px] animate-pulse duration-[10000ms]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className={`${success ? "no-print " : ""}mb-12 overflow-hidden rounded-[2.5rem] border border-border bg-surface/50 p-8 shadow-2xl shadow-primary/5 backdrop-blur-xl transition-all hover:shadow-primary/10`}>
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-[200px_1fr] sm:items-center">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className={`${success ? "no-print " : ""}mb-8 overflow-hidden rounded-[2.5rem] border border-border bg-surface/50 p-6 shadow-2xl shadow-primary/5 backdrop-blur-xl transition-all hover:shadow-primary/10`}>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-[180px_1fr] sm:items-center">
             <div className="flex justify-center sm:justify-start">
               <div className="relative group">
                 <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <img src="/brand/logowf.png" alt="Woodforest" className="relative h-32 w-32 shrink-0 rounded-2xl object-contain sm:h-48 sm:w-48 transition-transform duration-700 group-hover:scale-105" />
+                <img src="/brand/logowf.png" alt="Woodforest" className="relative h-24 w-24 shrink-0 rounded-2xl object-contain sm:h-36 sm:w-36 transition-transform duration-700 group-hover:scale-105" />
               </div>
             </div>
             <div className="sm:-mt-2">
-              <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4">
+              <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-3">
                 <span className="relative flex h-2 w-2 mr-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                 </span>
                 Luxury Camping Ground
               </div>
-              <h1 className="text-5xl font-black tracking-tighter text-foreground sm:text-6xl">
+              <h1 className="text-4xl font-black tracking-tighter text-foreground sm:text-5xl">
                 Woodforest <span className="text-primary italic">Booking</span>
               </h1>
-              <p className="mt-4 max-w-xl text-lg font-medium leading-relaxed text-muted">
+              <p className="mt-3 max-w-xl text-base font-medium leading-relaxed text-muted">
                 Grounded, calm, warm. Pilih tanggal, pilih paket, dan kami siapkan pengalaman yang tenang di alam untuk bonding keluarga.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-5 flex flex-wrap gap-2.5">
                 {["Quiet nature", "Family bonding", "Wellness", "Light adventure"].map((tag) => (
-                  <div key={tag} className="rounded-2xl border-2 border-border bg-surface px-4 py-2 text-[11px] font-black uppercase tracking-wider text-muted transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-1">
+                  <div key={tag} className="rounded-2xl border-2 border-border bg-surface px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-muted transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-1">
                     {tag}
                   </div>
                 ))}
@@ -1394,7 +1394,7 @@ export default function PublicBookingPage() {
             </div>
           </>
         ) : (
-          <div className="mt-8 space-y-12 pb-32">
+          <div className="mt-6 space-y-8 pb-20">
             {/* Step Indicators - Modern & Professional */}
             <div className="mx-auto max-w-4xl px-4">
               <div className="relative flex items-center justify-between gap-4">
@@ -1411,11 +1411,11 @@ export default function PublicBookingPage() {
                           if (isCompleted || (step < currentStep)) setCurrentStep(step);
                         }}
                         disabled={!isCompleted && step > currentStep}
-                        className="flex flex-col items-center gap-3 outline-none w-full"
+                        className="flex flex-col items-center gap-2 outline-none w-full"
                       >
                         {/* Line connector */}
                         {step < 3 && (
-                          <div className="absolute left-[calc(50%+24px)] right-[-calc(50%-24px)] top-6 h-[2px] bg-border/40">
+                          <div className="absolute left-[calc(50%+20px)] right-[-calc(50%-20px)] top-5 h-[2px] bg-border/40">
                             <div 
                               className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)" 
                               style={{ width: isCompleted ? "100%" : "0%" }}
@@ -1423,15 +1423,15 @@ export default function PublicBookingPage() {
                           </div>
                         )}
 
-                        <div className={`relative z-10 flex h-12 w-12 items-center justify-center rounded-2xl border-2 transition-all duration-500 ${
+                        <div className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-2xl border-2 transition-all duration-500 ${
                           isActive 
-                            ? "border-primary bg-primary text-white shadow-xl shadow-primary/20 scale-110" 
+                            ? "border-primary bg-primary text-white shadow-xl shadow-primary/20 scale-105" 
                             : isCompleted 
                               ? "border-primary bg-primary/10 text-primary" 
                               : "border-border bg-surface text-muted/30"
                         }`}>
                           {isCompleted ? (
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
                           ) : (
@@ -1458,20 +1458,20 @@ export default function PublicBookingPage() {
               </div>
             </div>
 
-            <div className="relative mt-12 mx-auto max-w-7xl">
-              <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_400px]">
+            <div className="relative mt-8 mx-auto max-w-7xl">
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px]">
                 {/* Main Content Area */}
-                <div className="space-y-12">
+                <div className="space-y-8">
                   {currentStep === 1 && (
                     <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                      <div className="mb-16 text-center">
-                        <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6 border border-primary/10 backdrop-blur-sm">
+                      <div className="mb-10 text-center">
+                        <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-4 border border-primary/10 backdrop-blur-sm">
                           Langkah Pertama
                         </div>
-                        <h2 className="text-4xl font-black tracking-tight text-foreground sm:text-7xl mb-6">
+                        <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-5xl mb-4">
                           Pilih <span className="text-primary italic font-serif">Pengalaman</span> Anda
                         </h2>
-                        <p className="mx-auto max-w-2xl text-lg font-medium text-muted/80 leading-relaxed">
+                        <p className="mx-auto max-w-2xl text-base font-medium text-muted/80 leading-relaxed">
                           Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri. 
                           Pilih kategori yang paling sesuai dengan rencana liburan Anda.
                         </p>
@@ -1501,7 +1501,7 @@ export default function PublicBookingPage() {
                                     : "border-border/60 bg-surface hover:border-primary/40"
                                 }`}
                               >
-                                <div className="relative h-64 w-full overflow-hidden">
+                                <div className="relative h-48 w-full overflow-hidden">
                                   {/* Placeholder Image or Pattern since we don't have real images for categories yet */}
                                   <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-1000 group-hover:scale-110 ${
                                     isGlamping ? "from-emerald-100 to-teal-50" : 
@@ -1509,41 +1509,41 @@ export default function PublicBookingPage() {
                                     "from-blue-100 to-indigo-50"
                                   }`} />
                                   <div className="absolute inset-0 flex items-center justify-center opacity-20 mix-blend-overlay">
-                                    <svg className="w-48 h-48" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                    <svg className="w-40 h-40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                                       <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
                                     </svg>
                                   </div>
                                   
-                                  <div className={`absolute top-6 left-6 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-700 ${
+                                  <div className={`absolute top-5 left-5 flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-700 ${
                                     filterCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-white/80 backdrop-blur-md text-primary group-hover:bg-primary group-hover:text-white group-hover:rotate-12"
                                   }`}>
                                     {isGlamping ? (
-                                      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                       </svg>
                                     ) : isPrivate ? (
-                                      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                       </svg>
                                     ) : (
-                                      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                       </svg>
                                     )}
                                   </div>
                                 </div>
 
-                                <div className="flex flex-col flex-1 p-8 text-left">
-                                  <h3 className="text-2xl font-black text-foreground mb-4 group-hover:text-primary transition-colors">{cat}</h3>
-                                  <p className="text-sm font-medium leading-relaxed text-muted/70 mb-8 flex-1">
+                                <div className="flex flex-col flex-1 p-6 text-left">
+                                  <h3 className="text-xl font-black text-foreground mb-3 group-hover:text-primary transition-colors">{cat}</h3>
+                                  <p className="text-sm font-medium leading-relaxed text-muted/70 mb-6 flex-1">
                                     {cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap di tengah rimbunnya hutan Jayagiri yang menenangkan." : 
                                      cat === "Paket" ? "Pilihan paket lengkap yang dirancang khusus untuk menciptakan momen berharga bersama keluarga tercinta." :
                                      "Pengalaman eksklusif dengan privasi tinggi untuk momen spesial Anda bersama orang terdekat di alam terbuka."}
                                   </p>
 
-                                  <div className="flex items-center justify-between pt-6 border-t border-border/40">
+                                  <div className="flex items-center justify-between pt-5 border-t border-border/40">
                                     <span className="text-[10px] font-black uppercase tracking-widest text-primary">Lihat Detail</span>
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1">
+                                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1">
                                       <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                       </svg>
@@ -1560,33 +1560,33 @@ export default function PublicBookingPage() {
 
             {currentStep === 2 && (
               <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                <div className="mb-12 text-center">
-                  <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6 border border-primary/10">
+                <div className="mb-8 text-center">
+                  <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4 border border-primary/10">
                     Step 02
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight text-foreground sm:text-6xl">
+                  <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-5xl">
                     Detail <span className="text-primary italic">Tamu</span>
                   </h2>
-                  <p className="mx-auto mt-4 max-w-2xl text-lg font-medium text-muted">
+                  <p className="mx-auto mt-3 max-w-2xl text-base font-medium text-muted">
                     Informasi jumlah tamu membantu kami menyiapkan fasilitas yang tepat untuk kenyamanan keluarga Anda.
                   </p>
                 </div>
 
                 <div className="mx-auto w-full">
-                  <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(3); }} className="space-y-12">
-                    <div className="space-y-12">
+                  <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(3); }} className="space-y-8">
+                    <div className="space-y-8">
                       {/* Section: Stay Details */}
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         <div className="flex items-center gap-4 mb-2">
                           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
-                          <h3 className="text-2xl font-black text-foreground">Detail Menginap</h3>
+                          <h3 className="text-xl font-black text-foreground">Detail Menginap</h3>
                         </div>
 
-                        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-sm transition-all hover:shadow-md p-8">
+                        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-sm transition-all hover:shadow-md p-6">
                           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                             <div className="space-y-3">
                               <label className="text-xs font-black uppercase tracking-widest text-muted ml-1">Check-in</label>
@@ -1595,7 +1595,7 @@ export default function PublicBookingPage() {
                                   type="date"
                                   value={checkIn}
                                   onChange={(e) => setCheckIn(e.target.value)}
-                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-4 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
                                   required
                                 />
                                 <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1610,7 +1610,7 @@ export default function PublicBookingPage() {
                                   type="date"
                                   value={checkOut}
                                   onChange={(e) => setCheckOut(e.target.value)}
-                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-4 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
                                   required
                                 />
                                 <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1620,10 +1620,10 @@ export default function PublicBookingPage() {
                             </div>
                           </div>
 
-                          <div className="mt-8 space-y-4 pt-8 border-t border-border/60">
+                          <div className="mt-6 space-y-3 pt-6 border-t border-border/60">
                             <label className="text-xs font-black uppercase tracking-widest text-muted ml-1">Jumlah Tamu</label>
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                              <div className="flex items-center justify-between rounded-2xl border border-border bg-muted/20 p-5 transition-all hover:bg-muted/30">
+                              <div className="flex items-center justify-between rounded-2xl border border-border bg-muted/20 p-4 transition-all hover:bg-muted/30">
                                 <div className="space-y-0.5">
                                   <p className="text-sm font-black text-foreground">Dewasa</p>
                                   <p className="text-[10px] font-bold text-muted">Usia 12+</p>
@@ -1635,7 +1635,7 @@ export default function PublicBookingPage() {
                                   onChange={setAdultPax} 
                                 />
                               </div>
-                              <div className="flex items-center justify-between rounded-2xl border border-border bg-muted/20 p-5 transition-all hover:bg-muted/30">
+                              <div className="flex items-center justify-between rounded-2xl border border-border bg-muted/20 p-4 transition-all hover:bg-muted/30">
                                 <div className="space-y-0.5">
                                   <p className="text-sm font-black text-foreground">Anak</p>
                                   <p className="text-[10px] font-bold text-muted">Usia &lt; 12</p>
@@ -1653,24 +1653,24 @@ export default function PublicBookingPage() {
                       </div>
 
                       {/* Section: Contact Info */}
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         <div className="flex items-center gap-4 mb-2">
                           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                           </div>
-                          <h3 className="text-2xl font-black text-foreground">Informasi Kontak</h3>
+                          <h3 className="text-xl font-black text-foreground">Informasi Kontak</h3>
                         </div>
 
-                        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-sm transition-all hover:shadow-md p-8 space-y-6">
+                        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-sm transition-all hover:shadow-md p-6 space-y-5">
                           <div className="space-y-3">
                             <label className="text-xs font-black uppercase tracking-widest text-muted ml-1">Nama Lengkap</label>
                             <div className="relative group">
                               <input
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-4 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
                                 placeholder="Sesuai KTP"
                                 required
                               />
@@ -1687,7 +1687,7 @@ export default function PublicBookingPage() {
                                 <input
                                   value={phone}
                                   onChange={(e) => setPhone(e.target.value)}
-                                  className="w-full rounded-2xl border border-border bg-surface pl-14 pr-4 py-4 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                  className="w-full rounded-2xl border border-border bg-surface pl-14 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
                                   placeholder="0812..."
                                   required
                                 />
@@ -1701,7 +1701,7 @@ export default function PublicBookingPage() {
                                   type="email"
                                   value={email}
                                   onChange={(e) => setEmail(e.target.value)}
-                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-4 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
+                                  className="w-full rounded-2xl border border-border bg-surface pl-12 pr-4 py-3.5 text-sm font-bold outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 group-hover:border-primary/40"
                                   placeholder="email@anda.com"
                                   required
                                 />
@@ -1712,12 +1712,12 @@ export default function PublicBookingPage() {
                             </div>
                           </div>
 
-                          <div className="space-y-3 pt-4">
+                          <div className="space-y-3 pt-3">
                             <label className="text-xs font-black uppercase tracking-widest text-muted ml-1">Permintaan Khusus</label>
                             <textarea
                               value={specialRequest}
                               onChange={(e) => setSpecialRequest(e.target.value)}
-                              className="h-32 w-full rounded-2xl border border-border bg-surface px-6 py-5 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 resize-none group-hover:border-primary/40"
+                              className="h-28 w-full rounded-2xl border border-border bg-surface px-5 py-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 resize-none group-hover:border-primary/40"
                               placeholder="Opsional: Request lokasi, check-in awal, dll."
                             />
                           </div>
@@ -1725,18 +1725,18 @@ export default function PublicBookingPage() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-4 pt-8 sm:flex-row">
+                    <div className="flex flex-col gap-3 pt-6 sm:flex-row">
                       <button
                         type="button"
                         onClick={() => setCurrentStep(1)}
-                        className="order-2 flex-1 rounded-2xl border-2 border-border bg-surface px-8 py-4.5 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95 sm:order-1"
+                        className="order-2 flex-1 rounded-2xl border-2 border-border bg-surface px-6 py-4 text-sm font-black text-foreground transition-all hover:bg-muted active:scale-95 sm:order-1"
                       >
                         Kembali
                       </button>
                       <button
                         type="submit"
                         disabled={!name || !phone || !email || !checkIn || !checkOut}
-                        className="order-1 flex-1 rounded-2xl bg-primary px-8 py-4.5 text-sm font-black text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:shadow-none sm:order-2"
+                        className="order-1 flex-1 rounded-2xl bg-primary px-6 py-4 text-sm font-black text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:shadow-none sm:order-2"
                       >
                         Lanjut Pilih Unit
                       </button>
@@ -1755,22 +1755,22 @@ export default function PublicBookingPage() {
                 className="relative z-10"
               >
                 <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                  <div className="mb-12 text-center">
-                    <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6 border border-primary/10">
+                  <div className="mb-8 text-center">
+                    <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4 border border-primary/10">
                       Step 03
                     </div>
-                    <h2 className="text-4xl font-black tracking-tight text-foreground sm:text-6xl">
+                    <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-5xl">
                       Pilihan <span className="text-primary italic">Unit & Kavling</span>
                     </h2>
-                    <p className="mx-auto mt-4 max-w-2xl text-lg font-medium text-muted">
+                    <p className="mx-auto mt-3 max-w-2xl text-base font-medium text-muted">
                       Tentukan unit dan lokasi kavling favorit Anda untuk pengalaman menginap yang tak terlupakan.
                     </p>
                   </div>
 
-                  <div className="mx-auto w-full space-y-12">
-                    <div className="mb-12 flex flex-col items-center justify-between gap-6 rounded-[2.5rem] border border-border bg-surface/50 p-6 backdrop-blur-xl shadow-sm sm:flex-row sm:p-8">
+                  <div className="mx-auto w-full space-y-8">
+                    <div className="mb-8 flex flex-col items-center justify-between gap-5 rounded-[2.5rem] border border-border bg-surface/50 p-5 backdrop-blur-xl shadow-sm sm:flex-row sm:p-6">
                       <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                           </svg>
@@ -1784,7 +1784,7 @@ export default function PublicBookingPage() {
                       <div className="h-8 w-px bg-border hidden sm:block" />
 
                       <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
@@ -1801,7 +1801,7 @@ export default function PublicBookingPage() {
                         <select
                           value={filterType}
                           onChange={(e) => setFilterType(e.target.value)}
-                          className="h-14 w-full appearance-none rounded-2xl border border-border bg-surface pl-6 pr-12 text-xs font-black text-foreground outline-none transition-all group-hover:border-primary/40 focus:border-primary focus:ring-4 focus:ring-primary/10 sm:w-48"
+                          className="h-12 w-full appearance-none rounded-2xl border border-border bg-surface pl-5 pr-12 text-xs font-black text-foreground outline-none transition-all group-hover:border-primary/40 focus:border-primary focus:ring-4 focus:ring-primary/10 sm:w-44"
                         >
                           <option value="">Semua Tipe</option>
                           {typeOptions.map((t) => (
@@ -1815,7 +1815,7 @@ export default function PublicBookingPage() {
                     </div>
                 
                 {/* Unit Grid */}
-                <div className="grid grid-cols-1 gap-8">
+                <div className="grid grid-cols-1 gap-6">
                   {pagedVisibleUnits.map((u, idx) => {
                     const inc = parseIncludesJson(u.includesJson);
                     const images = parseImagesJson(u.imagesJson);
@@ -1849,10 +1849,10 @@ export default function PublicBookingPage() {
                           </div>
                           
                           {/* Content Section */}
-                          <div className="flex flex-1 flex-col p-8 lg:p-10">
+                          <div className="flex flex-1 flex-col p-6 lg:p-8">
                             <div className="flex items-start justify-between gap-4">
                               <div className="space-y-2">
-                                <h3 className="text-2xl font-black leading-tight text-foreground transition-colors group-hover:text-primary">{u.name}</h3>
+                                <h3 className="text-xl font-black leading-tight text-foreground transition-colors group-hover:text-primary">{u.name}</h3>
                                 <div className="flex flex-wrap items-center gap-3">
                                   <span className="flex items-center rounded-lg bg-muted/50 px-2 py-1 text-[10px] font-bold text-muted-foreground">
                                     <svg className="mr-1.5 h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1963,7 +1963,7 @@ export default function PublicBookingPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="p-8">
+                  <div className="p-6">
                     <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                       <div className="flex-1 space-y-4">
                         <div className="rounded-2xl bg-primary/[0.03] p-5 border border-primary/10">
@@ -2471,7 +2471,7 @@ export default function PublicBookingPage() {
                   })}
                 </div>
                 {addons.length === 0 && (
-                  <div className="rounded-[2rem] border-2 border-dashed border-border bg-muted/10 p-16 text-center">
+                  <div className="rounded-[2rem] border-2 border-dashed border-border bg-muted/10 p-10 text-center">
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-muted/20">
                       <svg className="h-8 w-8 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
