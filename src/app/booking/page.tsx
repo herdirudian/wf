@@ -2921,9 +2921,9 @@ export default function PublicBookingPage() {
           <div className="w-full max-w-2xl rounded-[2rem] bg-[#F1F3EE] p-8 space-y-6 text-center">
             <h4 className="text-sm font-bold text-[#2D3E10]">Butuh bantuan reservasi?</h4>
             <p className="text-xs text-[#2D3E10]/60 leading-relaxed">Tim reservasi kami siap membantu Anda merencanakan liburan impian yang tak terlupakan.</p>
-            <a href="https://wa.me/6281234567890" target="_blank" className="mx-auto flex min-h-[3.5rem] w-full max-w-xs items-center justify-center rounded-xl bg-[#2D3E10] py-4 text-[13px] font-bold uppercase tracking-widest text-white shadow-lg shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:shadow-xl active:scale-95">
+            <a href="https://wa.me/628112090808" target="_blank" className="mx-auto flex min-h-[3.5rem] w-full max-w-xs items-center justify-center rounded-xl bg-[#2D3E10] py-4 text-[13px] font-bold uppercase tracking-widest text-white shadow-lg shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:shadow-xl active:scale-95">
                   Hubungi via WhatsApp
-                </a>
+            </a>
           </div>
         </div>
 
