@@ -29,7 +29,17 @@ function readDraft() {
   const raw = sessionStorage.getItem("wf_booking_draft");
   if (!raw) return null;
   try {
-    return JSON.parse(raw) as BookingDraft;
+    const d = JSON.parse(raw) as BookingDraft;
+    
+    // Verify hold expiration if present
+    if (d.hold?.expiresAt) {
+      const expiresMs = new Date(d.hold.expiresAt).getTime();
+      if (Number.isFinite(expiresMs) && expiresMs <= Date.now()) {
+        delete d.hold;
+      }
+    }
+    
+    return d;
   } catch {
     return null;
   }

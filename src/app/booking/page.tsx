@@ -81,6 +81,15 @@ function draftHoldCredsFor(params: { checkIn: string; checkOut: string }) {
   const d = readDraft();
   if (!d?.hold?.id || !d?.hold?.token) return null;
   if (d.checkIn !== params.checkIn || d.checkOut !== params.checkOut) return null;
+  
+  // Verify expiration
+  if (d.hold.expiresAt) {
+    const expiresMs = new Date(d.hold.expiresAt).getTime();
+    if (Number.isFinite(expiresMs) && expiresMs <= Date.now()) {
+      return null;
+    }
+  }
+
   return { id: d.hold.id, token: d.hold.token, expiresAt: d.hold.expiresAt ?? new Date(0).toISOString() };
 }
 
@@ -808,7 +817,7 @@ export default function PublicBookingPage() {
       ...d,
       kavlingScope: (effectiveKavlingScope ?? d.kavlingScope) as BookingDraft["kavlingScope"],
       kavlings: effectiveKavlingScope ? kavlingSelected : d.kavlings,
-      hold: hold?.id && hold?.token ? { id: hold.id, token: hold.token, expiresAt: hold.expiresAt } : d.hold,
+      hold: hold?.id && hold?.token ? { id: hold.id, token: hold.token, expiresAt: hold.expiresAt } : undefined,
     };
     try {
       window.sessionStorage.setItem("wf_booking_draft", JSON.stringify(next));
