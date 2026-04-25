@@ -45,6 +45,8 @@ export default function BookingConfirmPage() {
   const [paymentMethods, setPaymentMethods] = useState<PublicPaymentMethod[]>([]);
   const [paymentMethodCode, setPaymentMethodCode] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showCancellationModal, setShowCancellationModal] = useState(false);
 
   useEffect(() => {
     const d = readDraft();
@@ -438,9 +440,27 @@ export default function BookingConfirmPage() {
               </div>
               <span className="text-xs font-medium leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground">
                 Dengan melanjutkan ke pembayaran, Anda dianggap telah membaca dan menyetujui{" "}
-                <span className="font-bold text-foreground">Syarat & Ketentuan</span>,{" "}
-                <span className="font-bold text-foreground">Kebijakan Privasi</span>, serta{" "}
-                <span className="font-bold text-foreground">Kebijakan Pembatalan</span> yang berlaku di{" "}
+                <button 
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}
+                  className="font-bold text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+                >
+                  Syarat & Ketentuan
+                </button>,{" "}
+                <button 
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}
+                  className="font-bold text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+                >
+                  Kebijakan Privasi
+                </button>, serta{" "}
+                <button 
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); setShowCancellationModal(true); }}
+                  className="font-bold text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+                >
+                  Kebijakan Pembatalan
+                </button> yang berlaku di{" "}
                 <span className="font-bold text-foreground italic">Woodforest Jayagiri 48</span>.
               </span>
             </label>
@@ -488,6 +508,162 @@ export default function BookingConfirmPage() {
           ) : null}
         </div>
       </div>
+
+      {/* Modal Kebijakan Privasi & S&K */}
+      {showPrivacyModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowPrivacyModal(false)} />
+          <div className="relative w-full max-w-2xl overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="border-b border-border bg-muted/30 px-8 py-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-foreground">Kebijakan Privasi & S&K</h3>
+                  <p className="text-xs font-medium text-muted">Woodforest Jayagiri 48</p>
+                </div>
+                <button 
+                  onClick={() => setShowPrivacyModal(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="max-h-[60dvh] overflow-y-auto p-8">
+              <div className="prose prose-sm max-w-none space-y-6 text-sm font-medium leading-relaxed text-muted-foreground">
+                <p>Kami menghargai dan melindungi privasi setiap tamu yang melakukan pemesanan melalui sistem Woodforest Jayagiri 48.</p>
+                
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">1. Pengumpulan Data</h4>
+                  <p>Kami mengumpulkan informasi yang Anda berikan saat melakukan pemesanan, seperti:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Nama lengkap</li>
+                    <li>Nomor telepon</li>
+                    <li>Alamat email</li>
+                    <li>Data identitas (jika diperlukan)</li>
+                    <li>Informasi pembayaran</li>
+                  </ul>
+                </section>
+
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">2. Penggunaan Data</h4>
+                  <p>Data yang dikumpulkan digunakan untuk:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Memproses dan mengelola reservasi</li>
+                    <li>Menghubungi tamu terkait pemesanan</li>
+                    <li>Keperluan operasional dan pelayanan selama menginap</li>
+                    <li>Peningkatan kualitas layanan</li>
+                  </ul>
+                </section>
+
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">3. Perlindungan Data</h4>
+                  <p>Kami berkomitmen menjaga keamanan data pribadi Anda dan tidak akan menyebarluaskan atau menjual data kepada pihak lain tanpa izin, kecuali diwajibkan oleh hukum.</p>
+                </section>
+
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">4. Penyimpanan Data</h4>
+                  <p>Data akan disimpan selama diperlukan untuk keperluan operasional dan sesuai dengan ketentuan hukum yang berlaku.</p>
+                </section>
+
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">5. Persetujuan Pengguna</h4>
+                  <p>Dengan melakukan pemesanan, Anda menyetujui pengumpulan dan penggunaan data sesuai kebijakan ini.</p>
+                </section>
+              </div>
+            </div>
+            <div className="border-t border-border bg-muted/30 p-6">
+              <button 
+                onClick={() => setShowPrivacyModal(false)}
+                className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98]"
+              >
+                Saya Mengerti
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Kebijakan Pembatalan */}
+      {showCancellationModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCancellationModal(false)} />
+          <div className="relative w-full max-w-2xl overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="border-b border-border bg-muted/30 px-8 py-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-foreground">Kebijakan Pembatalan & Refund</h3>
+                  <p className="text-xs font-medium text-muted">Woodforest Jayagiri 48</p>
+                </div>
+                <button 
+                  onClick={() => setShowCancellationModal(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="max-h-[60dvh] overflow-y-auto p-8">
+              <div className="prose prose-sm max-w-none space-y-6 text-sm font-medium leading-relaxed text-muted-foreground">
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">1. Pembatalan oleh Tamu</h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Pembatalan yang dilakukan oleh tamu dapat dikenakan biaya sesuai dengan kebijakan yang berlaku pada saat pemesanan.</li>
+                    <li>Down Payment (DP) yang sudah dibayarkan bersifat <span className="font-bold text-destructive">non-refundable</span> (tidak dapat dikembalikan), kecuali dalam kondisi tertentu yang diatur pada poin force majeure.</li>
+                    <li>Perubahan jadwal (reschedule) dapat diajukan sesuai ketersediaan dan kebijakan manajemen.</li>
+                  </ul>
+                </section>
+
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">2. Force Majeure (Keadaan Kahar)</h4>
+                  <p>Yang termasuk force majeure antara lain:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Badai angin kencang</li>
+                    <li>Hujan ekstrem</li>
+                    <li>Bencana alam (longsor, gempa, dll)</li>
+                    <li>Kondisi lain yang membahayakan keselamatan dan kenyamanan tamu</li>
+                  </ul>
+                  <div className="rounded-2xl bg-amber-50 p-4 border border-amber-100 text-amber-700">
+                    <p className="font-bold mb-1">Penting:</p>
+                    <p>Mengingat lokasi Woodforest Jayagiri 48 berada di kawasan hutan, maka operasional akan ditutup sementara apabila terjadi badai angin atau kondisi berbahaya lainnya. Keputusan penutupan sepenuhnya merupakan wewenang manajemen demi keselamatan tamu.</p>
+                  </div>
+                </section>
+
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">3. Kebijakan dalam Kondisi Force Majeure</h4>
+                  <p>Apabila terjadi force majeure:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Tamu dapat melakukan reschedule tanpa biaya tambahan (sesuai ketersediaan)</li>
+                    <li>Atau memilih refund penuh / sebagian sesuai kebijakan manajemen</li>
+                    <li>Proses refund akan dilakukan dalam waktu maksimal 7–14 hari kerja</li>
+                  </ul>
+                </section>
+
+                <section className="space-y-3">
+                  <h4 className="text-base font-black text-foreground">4. Pembatalan oleh Pihak Woodforest</h4>
+                  <p>Woodforest Jayagiri 48 berhak membatalkan reservasi apabila:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Terjadi kondisi force majeure</li>
+                    <li>Terjadi kendala operasional yang tidak dapat dihindari</li>
+                  </ul>
+                  <p>Dalam hal ini, tamu berhak atas reschedule tanpa biaya, atau refund sesuai ketentuan yang berlaku.</p>
+                </section>
+              </div>
+            </div>
+            <div className="border-t border-border bg-muted/30 p-6">
+              <button 
+                onClick={() => setShowCancellationModal(false)}
+                className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98]"
+              >
+                Saya Mengerti
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
