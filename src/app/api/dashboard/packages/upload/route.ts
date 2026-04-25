@@ -34,7 +34,8 @@ export async function POST(req: Request) {
   await fs.mkdir(uploadDir, { recursive: true });
 
   const ext = safeExt(file.name) || ".jpg";
-  const name = `${category.toLowerCase()}-${Date.now()}-${crypto.randomBytes(4).toString("hex")}${ext}`;
+  const sanitizedCategory = category.toLowerCase().replace(/[^a-z0-9]/g, "-");
+  const name = `${sanitizedCategory}-${Date.now()}-${crypto.randomBytes(4).toString("hex")}${ext}`;
   const buf = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(path.join(uploadDir, name), buf);
 

@@ -1511,7 +1511,7 @@ export default function PublicBookingPage() {
                                 <div className="relative h-48 w-full overflow-hidden">
                                   {packageConfigs[cat]?.imageUrl ? (
                                     <img 
-                                      src={packageConfigs[cat].imageUrl} 
+                                      src={`${packageConfigs[cat].imageUrl}?t=${Date.now()}`} 
                                       alt={cat} 
                                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
                                     />

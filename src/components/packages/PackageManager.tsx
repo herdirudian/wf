@@ -107,7 +107,7 @@ export function PackageManager({ categories }: { categories: string[] }) {
             <div className="aspect-video relative bg-muted flex items-center justify-center overflow-hidden">
               {configs[cat]?.imageUrl ? (
                 <img
-                  src={configs[cat].imageUrl}
+                  src={`${configs[cat].imageUrl}?t=${Date.now()}`}
                   alt={cat}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
