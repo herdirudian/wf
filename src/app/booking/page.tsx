@@ -2385,7 +2385,7 @@ export default function PublicBookingPage() {
                       </div>
 
                       {/* Kavling Grid */}
-                      <div className="flex-1">
+                      <div className="flex-1 max-h-[60vh] overflow-y-auto overscroll-contain pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
                         <div className="grid grid-cols-5 gap-3 sm:grid-cols-8 md:grid-cols-10">
                           {kavlingAll.map((n, idx) => {
                             const isTaken = kavlingTaken.includes(n);
