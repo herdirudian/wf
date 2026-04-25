@@ -1262,7 +1262,7 @@ export default function PublicBookingPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-background selection:bg-primary/10 selection:text-primary">
+    <div className="relative min-h-screen overflow-x-hidden bg-background selection:bg-primary/10 selection:text-primary">
       {/* Premium Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute -left-1/4 -top-1/4 h-[100%] w-[100%] rounded-full bg-primary/[0.03] blur-[120px] animate-pulse" />
@@ -1533,15 +1533,15 @@ export default function PublicBookingPage() {
         ) : (
           <div className="mt-12 space-y-12 pb-20">
             {/* Step Indicators - Modern & Professional */}
-            <div className="mx-auto max-w-4xl px-4">
-              <div className="relative flex flex-col items-center justify-center gap-6 sm:flex-row sm:justify-between sm:gap-4">
+            <div className="mx-auto w-full max-w-7xl">
+              <div className="relative flex items-center justify-between gap-3 sm:gap-4">
                 {[1, 2, 3].map((step) => {
                   const isActive = currentStep === step;
                   const isCompleted = currentStep > step;
                   const labels = ["Pilih Paket", "Detail Tamu", "Pilihan Unit"];
                   
                   return (
-                    <div key={step} className="relative flex flex-1 flex-col items-center group">
+                    <div key={step} className="relative flex min-w-0 flex-1 flex-col items-center group">
                       <button 
                         type="button"
                         onClick={() => {
@@ -1552,27 +1552,17 @@ export default function PublicBookingPage() {
                       >
                         {/* Line connector */}
                         {step < 3 && (
-                          <>
-                            {/* Horizontal line for desktop */}
-                            <div className="absolute left-[calc(50%+20px)] right-[-calc(50%-20px)] top-5 hidden h-[2px] bg-[#E8E8E1] sm:block">
-                              <div 
-                                className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)" 
-                                style={{ width: isCompleted ? "100%" : "0%" }}
-                              />
-                              <div 
-                                className={`absolute -top-1 h-2 w-2 rounded-full border border-white bg-primary transition-all duration-1000 ${
-                                  isCompleted ? "left-full opacity-100" : "left-0 opacity-0"
-                                }`}
-                              />
-                            </div>
-                            {/* Vertical line for mobile */}
-                            <div className="absolute left-1/2 top-10 h-6 w-[2px] -translate-x-1/2 bg-[#E8E8E1] sm:hidden">
-                              <div 
-                                className="w-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)" 
-                                style={{ height: isCompleted ? "100%" : "0%" }}
-                              />
-                            </div>
-                          </>
+                          <div className="absolute left-[calc(50%+18px)] right-[-calc(50%-18px)] top-5 h-[2px] bg-[#E8E8E1] sm:left-[calc(50%+20px)] sm:right-[-calc(50%-20px)]">
+                            <div
+                              className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)"
+                              style={{ width: isCompleted ? "100%" : "0%" }}
+                            />
+                            <div
+                              className={`absolute -top-1 h-2 w-2 rounded-full border border-white bg-primary transition-all duration-1000 ${
+                                isCompleted ? "left-full opacity-100" : "left-0 opacity-0"
+                              }`}
+                            />
+                          </div>
                         )}
 
                         <div className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-2xl border-2 transition-all duration-700 ${
