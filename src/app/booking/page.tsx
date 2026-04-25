@@ -252,10 +252,12 @@ export default function PublicBookingPage() {
     setTotalGuest(adultPax + childPax);
   }, [adultPax, childPax]);
 
+  type QtyById = Record<string, number>;
+
   const [units, setUnits] = useState<AvailabilityUnit[]>([]);
   const [addons, setAddons] = useState<AvailabilityAddOn[]>([]);
-  const [unitQty, setUnitQty] = useState<Record<string, number>>({});
-  const [addonQty, setAddonQty] = useState<Record<string, number>>({});
+  const [unitQty, setUnitQty] = useState<QtyById>({});
+  const [addonQty, setAddonQty] = useState<QtyById>({});
 
   const [kavlingAll, setKavlingAll] = useState<number[]>([]);
   const [kavlingTaken, setKavlingTaken] = useState<number[]>([]);
@@ -1744,7 +1746,7 @@ export default function PublicBookingPage() {
               </div>
             )}
 
-            {currentStep === 3 && (
+            {currentStep === 3 ? (
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -2135,19 +2137,21 @@ export default function PublicBookingPage() {
                         </div>
                       </div>
                     </div>
-                    {holdError && <div className="mt-8 animate-in slide-in-from-top-4 duration-500">
-                      <div className="flex items-center gap-4 rounded-[1.5rem] border-2 border-destructive/20 bg-destructive/5 p-6 text-sm font-black text-destructive">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                          </svg>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="uppercase tracking-wider">Kesalahan Pemilihan</p>
-                          <p className="text-xs font-medium opacity-80">{holdError}</p>
+                    {holdError ? (
+                      <div className="mt-8 animate-in slide-in-from-top-4 duration-500">
+                        <div className="flex items-center gap-4 rounded-[1.5rem] border-2 border-destructive/20 bg-destructive/5 p-6 text-sm font-black text-destructive">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
+                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                          </div>
+                          <div className="space-y-1">
+                            <p className="uppercase tracking-wider">Kesalahan Pemilihan</p>
+                            <p className="text-xs font-medium opacity-80">{holdError}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>}
+                    ) : null}
 
                 {kavlingMapOpen ? (
                   <Modal
@@ -2385,6 +2389,9 @@ export default function PublicBookingPage() {
                     </div>
                   </Modal>
                 ) : null}
+                  </div>
+                </div>
+              )}
 
               {/* Add-Ons Section */}
               <div className="space-y-8">
@@ -2548,10 +2555,10 @@ export default function PublicBookingPage() {
                       Kembali ke Data Tamu
                     </button>
                   </div>
+                  </div>
                 </div>
-              </div>
-            </form>
-          )}
+              </form>
+          ) : null}
         </div>
 
         {/* Sidebar Summary - Sticky on Desktop */}
