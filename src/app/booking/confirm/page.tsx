@@ -44,6 +44,7 @@ export default function BookingConfirmPage() {
   const [nowMs, setNowMs] = useState(() => Date.now());
   const [paymentMethods, setPaymentMethods] = useState<PublicPaymentMethod[]>([]);
   const [paymentMethodCode, setPaymentMethodCode] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
   useEffect(() => {
     const d = readDraft();
@@ -416,6 +417,35 @@ export default function BookingConfirmPage() {
             </div>
           </div>
 
+          <div className="mt-6 px-2">
+            <label className="flex cursor-pointer items-start gap-3 group">
+              <div className="relative flex h-5 w-5 shrink-0 items-center justify-center mt-0.5">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                  className="peer h-5 w-5 cursor-pointer appearance-none rounded border-2 border-border bg-background transition-all checked:border-primary checked:bg-primary hover:border-primary/50"
+                />
+                <svg
+                  className="pointer-events-none absolute h-3.5 w-3.5 text-primary-foreground opacity-0 transition-opacity peer-checked:opacity-100"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={4}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-xs font-medium leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground">
+                Dengan melanjutkan ke pembayaran, Anda dianggap telah membaca dan menyetujui{" "}
+                <span className="font-bold text-foreground">Syarat & Ketentuan</span>,{" "}
+                <span className="font-bold text-foreground">Kebijakan Privasi</span>, serta{" "}
+                <span className="font-bold text-foreground">Kebijakan Pembatalan</span> yang berlaku di{" "}
+                <span className="font-bold text-foreground italic">Woodforest Jayagiri 48</span>.
+              </span>
+            </label>
+          </div>
+
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-surface p-4">
             <div>
               <div className="text-xs text-muted">Estimasi total</div>
@@ -433,9 +463,9 @@ export default function BookingConfirmPage() {
               </button>
               <button
                 type="button"
-                disabled={submitting}
+                disabled={submitting || !agreed}
                 onClick={() => confirmAndPay()}
-                className="h-10 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                className="h-10 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? "Memproses..." : "Checkout & Bayar Pelunasan"}
               </button>
