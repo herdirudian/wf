@@ -318,6 +318,8 @@ export default function PublicBookingPage() {
   }, [hold]);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const stepParam = params.get("step");
     const draft = readDraft();
     if (!draft) return;
     restoringDraftRef.current = true;
@@ -335,6 +337,10 @@ export default function PublicBookingPage() {
       kavlings: draft.kavlings ?? [],
       hold: draft.hold,
     };
+    if (stepParam) {
+      const s = parseInt(stepParam);
+      if (s >= 1 && s <= 3) setCurrentStep(s);
+    }
   }, []);
 
   useEffect(() => {
@@ -493,6 +499,7 @@ export default function PublicBookingPage() {
   useEffect(() => {
     const prev = prevKavlingAmbiguousRef.current;
     prevKavlingAmbiguousRef.current = kavlingAmbiguous;
+    if (restoringDraftRef.current && pendingKavlingRestoreRef.current) return;
     if (!kavlingAmbiguous || combinedNonPrivate || combinedAll || prev) return;
     if (!kavlingSelected.length && !hold?.id) return;
     if (hold?.id && hold?.token) void releaseHold(hold);
@@ -526,8 +533,9 @@ export default function PublicBookingPage() {
 
   useEffect(() => {
     if (!units.length) return;
+    if (restoringDraftRef.current && pendingKavlingRestoreRef.current) return;
     setKavlingSelected((prev) => prev.slice(0, requiredKavlings));
-  }, [requiredKavlings]);
+  }, [requiredKavlings, units.length]);
 
   useEffect(() => {
     if (!effectiveKavlingScope) {
@@ -546,14 +554,15 @@ export default function PublicBookingPage() {
     }
 
     // Auto-clear selection if scope changed and we're not restoring
-    if (!restoringDraftRef.current || !pendingKavlingRestoreRef.current) {
-      const isMismatch = pendingKavlingRestoreRef.current && pendingKavlingRestoreRef.current.scope !== effectiveKavlingScope;
-      if (isMismatch) {
-        setKavlingSelected([]);
-        if (hold?.id && hold?.token) void releaseHold(hold);
-        setHold(null);
-      }
+    if (restoringDraftRef.current && pendingKavlingRestoreRef.current) return;
+    
+    const isMismatch = pendingKavlingRestoreRef.current && pendingKavlingRestoreRef.current.scope !== effectiveKavlingScope;
+    if (isMismatch) {
+      setKavlingSelected([]);
+      if (hold?.id && hold?.token) void releaseHold(hold);
+      setHold(null);
     }
+    
 
     const scope = effectiveKavlingScope;
     let cancelled = false;
@@ -605,6 +614,8 @@ export default function PublicBookingPage() {
     if (!effectiveKavlingScope) return;
     if (!units.length) return;
     if (submitting) return;
+    if (restoringDraftRef.current && pendingKavlingRestoreRef.current) return;
+
     if (!hold?.id || !hold?.token) {
       if (requiredKavlings > 0) {
         const dHold = draftHoldCredsFor({ checkIn, checkOut });
@@ -614,12 +625,16 @@ export default function PublicBookingPage() {
         }
       }
     }
+
     if (!requiredKavlings) {
       if (hold?.id && hold?.token) void releaseHold(hold);
       setHold(null);
       setHoldError(null);
       return;
     }
+    
+    // During restoration, don't clear hold immediately if lengths don't match, 
+    // wait for kavlingSelected to be restored.
     if (kavlingSelected.length !== requiredKavlings) {
       if (hold?.id && hold?.token) void releaseHold(hold);
       setHold(null);

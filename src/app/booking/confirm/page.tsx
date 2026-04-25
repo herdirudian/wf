@@ -310,7 +310,7 @@ export default function BookingConfirmPage() {
                 <div className="font-semibold">Hold berakhir dalam {holdLeftLabel}</div>
                 <button
                   type="button"
-                  onClick={() => router.push("/booking")}
+                  onClick={() => router.push("/booking?step=3")}
                   className="rounded-xl border border-primary/20 bg-white px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/5"
                 >
                   Kembali pilih kavling
