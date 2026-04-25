@@ -303,7 +303,7 @@ export default function BookingConfirmPage() {
       <div className="mx-auto max-w-3xl px-4 py-8">
         <div className="rounded-3xl border border-border bg-surface/80 p-6 shadow-sm backdrop-blur">
           <div className="text-sm font-semibold text-foreground">Konfirmasi Pesanan</div>
-          <div className="mt-1 text-xs text-muted">Pastikan data sudah benar sebelum checkout.</div>
+          <div className="mt-1 text-xs text-primary/60">Pastikan data pemesanan Anda sudah benar sebelum melakukan pembayaran.</div>
           {draft.hold?.expiresAt && holdLeftLabel ? (
             <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -321,7 +321,7 @@ export default function BookingConfirmPage() {
 
           <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-border bg-surface p-4">
-              <div className="text-xs font-medium text-muted">Nama</div>
+              <div className="text-xs font-medium text-primary/40">Nama</div>
               <input
                 value={draft.customer.name}
                 onChange={(e) => setDraft((s) => (s ? { ...s, customer: { ...s.customer, name: e.target.value } } : s))}
@@ -329,7 +329,7 @@ export default function BookingConfirmPage() {
               />
             </div>
             <div className="rounded-2xl border border-border bg-surface p-4">
-              <div className="text-xs font-medium text-muted">No. Telp</div>
+              <div className="text-xs font-medium text-primary/40">No. Telp</div>
               <input
                 value={draft.customer.phone}
                 onChange={(e) => setDraft((s) => (s ? { ...s, customer: { ...s.customer, phone: e.target.value } } : s))}
@@ -337,7 +337,7 @@ export default function BookingConfirmPage() {
               />
             </div>
             <div className="rounded-2xl border border-border bg-surface p-4">
-              <div className="text-xs font-medium text-muted">Email</div>
+              <div className="text-xs font-medium text-primary/40">Email</div>
               <input
                 type="email"
                 value={draft.customer.email}
@@ -347,11 +347,11 @@ export default function BookingConfirmPage() {
               />
             </div>
             <div className="rounded-2xl border border-border bg-surface p-4">
-              <div className="text-xs font-medium text-muted">Tanggal</div>
+              <div className="text-xs font-medium text-primary/40">Tanggal</div>
               <div className="mt-1 text-sm font-semibold text-foreground">
                 {draft.checkIn} → {draft.checkOut}
               </div>
-              <div className="mt-1 text-xs text-muted">Total guest: {draft.totalGuest}</div>
+              <div className="mt-1 text-xs text-primary/40">Total guest: {draft.totalGuest}</div>
             </div>
           </div>
 
@@ -361,16 +361,16 @@ export default function BookingConfirmPage() {
               {draft.display.items.map((it) => (
                 <div key={it.unitId} className="flex items-center justify-between gap-3">
                   <div className="text-foreground">{it.name}</div>
-                  <div className="text-muted">x{it.quantity}</div>
+                  <div className="text-primary/60 font-medium">x{it.quantity}</div>
                 </div>
               ))}
-              {draft.display.items.length === 0 ? <div className="text-muted">-</div> : null}
+              {draft.display.items.length === 0 ? <div className="text-primary/40 italic">-</div> : null}
             </div>
           </div>
 
           <div className="mt-4 rounded-2xl border border-border bg-surface p-4">
             <div className="text-sm font-semibold text-foreground">Kavling</div>
-            <div className="mt-1 text-xs text-muted">Scope: {draft.kavlingScope || "-"}</div>
+            <div className="mt-1 text-xs text-primary/40">Scope: {draft.kavlingScope || "-"}</div>
             <div className="mt-2 text-sm text-foreground">{kavlingText}</div>
           </div>
 
@@ -380,12 +380,12 @@ export default function BookingConfirmPage() {
               {draft.display.addOns.map((a) => (
                 <div key={a.addOnId} className="flex items-center justify-between gap-3">
                   <div className="text-foreground">
-                    {a.name} <span className="text-xs text-muted">({formatIDR(a.price)})</span>
+                    {a.name} <span className="text-xs text-primary/40">({formatIDR(a.price)})</span>
                   </div>
-                  <div className="text-muted">x{a.quantity}</div>
+                  <div className="text-primary/60 font-medium">x{a.quantity}</div>
                 </div>
               ))}
-              {draft.display.addOns.length === 0 ? <div className="text-muted">-</div> : null}
+              {draft.display.addOns.length === 0 ? <div className="text-primary/40 italic">-</div> : null}
             </div>
           </div>
 
@@ -401,7 +401,7 @@ export default function BookingConfirmPage() {
 
           <div className="mt-4 rounded-2xl border border-border bg-surface p-4">
             <div className="text-sm font-semibold text-foreground">Metode Pembayaran</div>
-            <div className="mt-1 text-xs text-muted">Pilih metode pembayaran dan lihat biaya layanan.</div>
+            <div className="mt-1 text-xs text-primary/40">Pilih metode pembayaran dan lihat biaya layanan.</div>
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:items-end">
               <div className="space-y-1">
                 <label className="text-xs font-medium text-foreground">Metode</label>
@@ -420,9 +420,9 @@ export default function BookingConfirmPage() {
                 </select>
               </div>
               <div className="rounded-xl border border-border bg-background px-4 py-3 text-sm">
-                <div className="text-xs text-muted">Biaya layanan</div>
+                <div className="text-xs text-primary/40">Biaya layanan</div>
                 <div className="mt-1 font-semibold text-foreground">{formatIDR(serviceFeePreview)}</div>
-                <div className="mt-1 text-xs text-muted">
+                <div className="mt-1 text-xs text-primary/40">
                   Total dibayar: {formatIDR(Math.max(0, Math.round(Number(draft.amountEstimate) || 0)) + serviceFeePreview)}
                 </div>
               </div>
@@ -448,7 +448,7 @@ export default function BookingConfirmPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <span className="text-xs font-medium leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground">
+              <span className="text-xs font-medium leading-relaxed text-primary/60 transition-colors group-hover:text-foreground">
                 Dengan melanjutkan ke pembayaran, Anda dianggap telah membaca dan menyetujui{" "}
                 <button 
                   type="button"
@@ -478,9 +478,9 @@ export default function BookingConfirmPage() {
 
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-surface p-4">
             <div>
-              <div className="text-xs text-muted">Estimasi total</div>
+              <div className="text-xs text-primary/40">Estimasi total</div>
               <div className="text-lg font-semibold text-foreground">{formatIDR(draft.amountEstimate)}</div>
-              <div className="text-xs text-muted">Final total dihitung server saat checkout.</div>
+              <div className="text-xs text-primary/40">Final total dihitung server saat checkout.</div>
             </div>
             <div className="flex items-center gap-2">
               <button
@@ -524,15 +524,15 @@ export default function BookingConfirmPage() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowPrivacyModal(false)} />
           <div className="relative w-full max-w-2xl overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="border-b border-border bg-muted/30 px-8 py-6">
+            <div className="border-b border-border bg-primary/5 px-8 py-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-black text-foreground">Kebijakan Privasi & S&K</h3>
-                  <p className="text-xs font-medium text-muted">Woodforest Jayagiri 48</p>
+                  <p className="text-xs font-medium text-primary/40">Woodforest Jayagiri 48</p>
                 </div>
                 <button 
                   onClick={() => setShowPrivacyModal(false)}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-all hover:bg-primary/5 hover:text-primary"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-primary/40 transition-all hover:bg-primary/5 hover:text-primary"
                 >
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
@@ -541,7 +541,7 @@ export default function BookingConfirmPage() {
               </div>
             </div>
             <div className="max-h-[60dvh] overflow-y-auto p-8">
-              <div className="prose prose-sm max-w-none space-y-6 text-sm font-medium leading-relaxed text-muted-foreground">
+              <div className="prose prose-sm max-w-none space-y-6 text-sm font-medium leading-relaxed text-primary/60">
                 <p>Kami menghargai dan melindungi privasi setiap tamu yang melakukan pemesanan melalui sistem Woodforest Jayagiri 48.</p>
                 
                 <section className="space-y-3">
@@ -583,10 +583,10 @@ export default function BookingConfirmPage() {
                 </section>
               </div>
             </div>
-            <div className="border-t border-border bg-muted/30 p-6">
+            <div className="border-t border-border bg-primary/5 p-6">
               <button 
                 onClick={() => setShowPrivacyModal(false)}
-                className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98]"
+                className="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-95"
               >
                 Saya Mengerti
               </button>
@@ -600,15 +600,15 @@ export default function BookingConfirmPage() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCancellationModal(false)} />
           <div className="relative w-full max-w-2xl overflow-hidden rounded-[2.5rem] border border-border bg-surface shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="border-b border-border bg-muted/30 px-8 py-6">
+            <div className="border-b border-border bg-primary/5 px-8 py-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-black text-foreground">Kebijakan Pembatalan & Refund</h3>
-                  <p className="text-xs font-medium text-muted">Woodforest Jayagiri 48</p>
+                  <p className="text-xs font-medium text-primary/40">Woodforest Jayagiri 48</p>
                 </div>
                 <button 
                   onClick={() => setShowCancellationModal(false)}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-all hover:bg-primary/5 hover:text-primary"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-primary/40 transition-all hover:bg-primary/5 hover:text-primary"
                 >
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
@@ -617,7 +617,7 @@ export default function BookingConfirmPage() {
               </div>
             </div>
             <div className="max-h-[60dvh] overflow-y-auto p-8">
-              <div className="prose prose-sm max-w-none space-y-6 text-sm font-medium leading-relaxed text-muted-foreground">
+              <div className="prose prose-sm max-w-none space-y-6 text-sm font-medium leading-relaxed text-primary/60">
                 <section className="space-y-3">
                   <h4 className="text-base font-black text-foreground">1. Pembatalan oleh Tamu</h4>
                   <ul className="list-disc pl-5 space-y-1">
@@ -663,10 +663,10 @@ export default function BookingConfirmPage() {
                 </section>
               </div>
             </div>
-            <div className="border-t border-border bg-muted/30 p-6">
+            <div className="border-t border-border bg-primary/5 p-6">
               <button 
                 onClick={() => setShowCancellationModal(false)}
-                className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98]"
+                className="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-95"
               >
                 Saya Mengerti
               </button>

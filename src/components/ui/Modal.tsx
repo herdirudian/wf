@@ -35,7 +35,7 @@ export function Modal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg px-2 py-1 text-sm text-muted hover:bg-background hover:text-foreground"
+              className="rounded-lg px-2 py-1 text-sm text-primary/60 hover:bg-primary/5 hover:text-primary"
             >
               Tutup
             </button>
