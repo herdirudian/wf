@@ -958,8 +958,8 @@ export default function PublicBookingPage() {
   );
 
   const guestOverCapacity = useMemo(
-    () => (totalCapacity > 0 ? totalGuest > totalCapacity : false),
-    [totalGuest, totalCapacity],
+    () => (totalCapacity > 0 ? adultPax > totalCapacity : false),
+    [adultPax, totalCapacity],
   );
 
   const selectedVisibleUnits = useMemo(() => {
@@ -1820,7 +1820,7 @@ export default function PublicBookingPage() {
                               <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
                                 <div className="space-y-1">
                                   <p className="text-base font-bold text-[#2D3E10]">Dewasa</p>
-                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia di atas 12 tahun</p>
+                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia di atas 5 tahun</p>
                                 </div>
                                 <QuantityStepper 
                                   value={adultPax} 
@@ -1832,7 +1832,7 @@ export default function PublicBookingPage() {
                               <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
                                 <div className="space-y-1">
                                   <p className="text-base font-bold text-[#2D3E10]">Anak-anak</p>
-                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia di bawah 12 tahun</p>
+                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia di bawah 5 tahun</p>
                                 </div>
                                 <QuantityStepper 
                                   value={childPax} 
@@ -2858,7 +2858,7 @@ export default function PublicBookingPage() {
                       </div>
                       <div className="flex flex-col gap-1.5">
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-500/50">Kapasitas Terlampaui</span>
-                        <span className="text-sm font-bold text-amber-600 leading-relaxed">Total tamu melebihi kapasitas paket yang dipilih. Mohon sesuaikan jumlah tamu atau pilih unit tambahan.</span>
+                        <span className="text-sm font-bold text-amber-600 leading-relaxed">Jumlah tamu dewasa melebihi kapasitas paket yang dipilih. Mohon sesuaikan jumlah tamu dewasa atau pilih unit tambahan.</span>
                       </div>
                     </div>
                   </div>
