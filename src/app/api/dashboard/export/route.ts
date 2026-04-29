@@ -388,6 +388,61 @@ export async function GET(req: Request) {
       { key: "value", label: "value" },
     ]);
     filename = `export-dashboard.csv`;
+  } else if (resource === "front-office") {
+    const { startStr, start, end } = asDateRange(url);
+    if (!start || !end) return NextResponse.json({ message: "Tanggal tidak valid" }, { status: 400 });
+
+    const items = await prisma.booking.findMany({
+      where: {
+        status: { not: "cancelled" },
+        checkIn: { gte: start, lt: end },
+        payment: { status: { in: ["paid", "partial"] } },
+      },
+      orderBy: [{ checkIn: "asc" }, { code: "asc" }],
+      include: {
+        customer: true,
+        payment: true,
+        items: { include: { unit: true } },
+        kavlings: { include: { kavling: true } },
+      },
+    });
+
+    const rows = items.map((b) => ({
+      code: b.code,
+      status: b.status,
+      customerName: b.customer.name,
+      customerPhone: b.customer.phone,
+      checkIn: formatDateWIB(b.checkIn),
+      checkOut: formatDateWIB(b.checkOut),
+      totalGuest: b.totalGuest,
+      kavlings: b.kavlings.map((x) => x.kavling.number).sort((a, c) => a - c).join(", "),
+      items: b.items.map((x) => `${x.unit.name} x${x.quantity}`).join("; "),
+      paymentStatus: b.payment?.status ?? "",
+      paymentAmount: b.payment?.amount ?? 0,
+      paymentPaidAmount: b.payment?.paidAmount ?? 0,
+      paymentMethod: b.payment?.method ?? "",
+      checkedInAt: b.checkedInAt ? b.checkedInAt.toISOString() : "-",
+      checkedOutAt: b.checkedOutAt ? b.checkedOutAt.toISOString() : "-",
+    }));
+
+    csv = toCsv(rows, [
+      { key: "code", label: "Booking Code" },
+      { key: "status", label: "Status" },
+      { key: "customerName", label: "Customer Name" },
+      { key: "customerPhone", label: "Phone" },
+      { key: "checkIn", label: "Check In" },
+      { key: "checkOut", label: "Check Out" },
+      { key: "totalGuest", label: "Guest" },
+      { key: "kavlings", label: "Kavling" },
+      { key: "items", label: "Units" },
+      { key: "paymentStatus", label: "Payment" },
+      { key: "paymentAmount", label: "Total Amount" },
+      { key: "paymentPaidAmount", label: "Paid Amount" },
+      { key: "paymentMethod", label: "Method" },
+      { key: "checkedInAt", label: "Checked In At" },
+      { key: "checkedOutAt", label: "Checked Out At" },
+    ]);
+    filename = `front-office-${startStr}.csv`;
   } else {
     return NextResponse.json({ message: "Resource tidak valid" }, { status: 400 });
   }

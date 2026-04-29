@@ -35,6 +35,7 @@ export function FrontOfficeManager({
   const [actingId, setActingId] = useState<string | null>(null);
   const [q, setQ] = useState("");
   const [checkInDate, setCheckInDate] = useState(initialCheckInDate ?? "");
+  const [exporting, setExporting] = useState(false);
   const isFO = currentUserRole === "front_office";
 
   const filtered = useMemo(() => {
@@ -82,6 +83,15 @@ export function FrontOfficeManager({
     }
   }
 
+  function handleExportCsv() {
+    if (!checkInDate) {
+      alert("Silakan pilih tanggal check-in terlebih dahulu untuk export.");
+      return;
+    }
+    const url = `/api/dashboard/export?resource=front-office&start=${encodeURIComponent(checkInDate)}&end=${encodeURIComponent(checkInDate)}`;
+    window.open(url, "_blank");
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -91,6 +101,16 @@ export function FrontOfficeManager({
           {!isFO ? <p className="mt-1 text-xs text-muted">Akses terbaik untuk role front_office.</p> : null}
         </div>
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-end">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="flex h-10 items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 text-sm font-bold text-foreground transition-all hover:bg-muted/10 active:scale-95 sm:mb-0"
+          >
+            <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Export CSV
+          </button>
           <div className="w-full sm:w-56">
             <div className="text-xs font-medium text-foreground">Tanggal check-in</div>
             <input
