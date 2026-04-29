@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getAdminSession, requireAdminMutation } from "@/lib/auth";
 import { deleteUnit, updateUnit } from "@/services/unit.service";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/services/activity.service";
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -40,6 +41,16 @@ export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }
   if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
 
   const unit = await updateUnit(id, parsed.data);
+
+  const session = await getAdminSession();
+  await logActivity({
+    adminUserId: session.adminUser?.id,
+    action: "UPDATE_UNIT",
+    resource: "unit",
+    resourceId: id,
+    payload: { name: unit.name },
+  });
+
   return NextResponse.json({ item: unit });
 }
 
@@ -53,6 +64,16 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
 
   const unit = await prisma.unit.update({ where: { id }, data: { isActive: parsed.data.isActive } });
+
+  const session = await getAdminSession();
+  await logActivity({
+    adminUserId: session.adminUser?.id,
+    action: "TOGGLE_UNIT_ACTIVE",
+    resource: "unit",
+    resourceId: id,
+    payload: { name: unit.name, isActive: unit.isActive },
+  });
+
   return NextResponse.json({ item: unit });
 }
 
@@ -66,6 +87,15 @@ export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string 
     if (!unit) return NextResponse.json({ message: "Unit tidak ditemukan" }, { status: 404 });
 
     await deleteUnit(id);
+
+    const session = await getAdminSession();
+    await logActivity({
+      adminUserId: session.adminUser?.id,
+      action: "DELETE_UNIT",
+      resource: "unit",
+      resourceId: id,
+      payload: { name: unit.name },
+    });
 
     const dir = path.join(process.cwd(), "public", "uploads", "units", id);
     await fs.rm(dir, { recursive: true, force: true }).catch(() => null);

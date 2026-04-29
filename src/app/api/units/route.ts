@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminSession, requireAdminMutation } from "@/lib/auth";
 import { createUnit, listUnits } from "@/services/unit.service";
+import { logActivity } from "@/services/activity.service";
 
 const CreateUnitSchema = z.object({
   name: z.string().min(1),
@@ -54,6 +55,16 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
 
   const unit = await createUnit(parsed.data);
+
+  const session = await getAdminSession();
+  await logActivity({
+    adminUserId: session.adminUser?.id,
+    action: "CREATE_UNIT",
+    resource: "unit",
+    resourceId: unit.id,
+    payload: { name: unit.name },
+  });
+
   return NextResponse.json({ item: unit });
 }
 
