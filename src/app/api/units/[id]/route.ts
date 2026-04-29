@@ -83,7 +83,7 @@ export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string 
 
   const { id } = await ctx.params;
   try {
-    const unit = await prisma.unit.findUnique({ where: { id }, select: { id: true, imagesJson: true } });
+    const unit = await prisma.unit.findUnique({ where: { id }, select: { id: true, name: true, imagesJson: true } });
     if (!unit) return NextResponse.json({ message: "Unit tidak ditemukan" }, { status: 404 });
 
     await deleteUnit(id);
