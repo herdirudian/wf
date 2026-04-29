@@ -436,7 +436,10 @@ export default function BookingConfirmPage() {
                 </svg>
                 <div className="text-base font-bold text-[#2D3E10]">{draft.checkOut}</div>
               </div>
-              <div className="mt-1 text-[10px] font-black text-primary/40 uppercase tracking-widest">Total Tamu: {draft.totalGuest} Orang</div>
+              <div className="mt-1 flex items-center gap-2">
+                <div className="text-[10px] font-black text-primary/40 uppercase tracking-widest">Total Tamu: {draft.totalGuest} Orang</div>
+                <div className="text-[10px] font-medium text-primary/30 italic">({(draft as any).adultPax ?? draft.totalGuest} Dewasa, {(draft as any).childPax ?? 0} Anak)</div>
+              </div>
             </div>
           </div>
 

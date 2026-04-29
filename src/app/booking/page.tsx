@@ -39,6 +39,8 @@ type BookingDraft = {
   checkIn: string;
   checkOut: string;
   totalGuest: number;
+  adultPax: number;
+  childPax: number;
   kavlingScope: "" | "paket" | "mandiri" | "private" | "mixed";
   kavlings: number[];
   hold?: { id: string; token: string; expiresAt?: string };
@@ -342,6 +344,8 @@ export default function PublicBookingPage() {
       setName(draft.customer.name);
       setPhone(draft.customer.phone);
       setEmail(draft.customer.email);
+      setAdultPax(draft.adultPax ?? draft.totalGuest ?? 1);
+      setChildPax(draft.childPax ?? 0);
       setTotalGuest(draft.totalGuest);
       setSpecialRequest(draft.specialRequest ?? "");
       
@@ -1250,6 +1254,8 @@ export default function PublicBookingPage() {
       checkIn,
       checkOut,
       totalGuest: Number(totalGuest),
+      adultPax: Number(adultPax),
+      childPax: Number(childPax),
       kavlingScope: (effectiveKavlingScope ?? "") as BookingDraft["kavlingScope"],
       kavlings: effectiveKavlingScope ? kavlingSelected : [],
       hold: draftHold,
