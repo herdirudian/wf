@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getAdminSession } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { logActivity } from "@/services/activity.service";
 
 const UserSchema = z.object({
   id: z.string().optional(),
@@ -70,6 +71,14 @@ export async function POST(req: Request) {
     select: { id: true, email: true, role: true, createdAt: true },
   });
 
+  await logActivity({
+    adminUserId: session.adminUser.id,
+    action: "CREATE_USER",
+    resource: "admin_user",
+    resourceId: user.id,
+    payload: { email: user.email, role: user.role },
+  });
+
   return NextResponse.json({ user });
 }
 
@@ -99,6 +108,14 @@ export async function PUT(req: Request) {
     select: { id: true, email: true, role: true, createdAt: true },
   });
 
+  await logActivity({
+    adminUserId: session.adminUser.id,
+    action: "UPDATE_USER",
+    resource: "admin_user",
+    resourceId: user.id,
+    payload: { email: user.email, role: user.role },
+  });
+
   return NextResponse.json({ user });
 }
 
@@ -118,7 +135,16 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ message: "Tidak dapat menghapus diri sendiri" }, { status: 400 });
   }
 
+  const target = await prisma.adminUser.findUnique({ where: { id: json.id } });
   await prisma.adminUser.delete({ where: { id: json.id } });
+
+  await logActivity({
+    adminUserId: session.adminUser.id,
+    action: "DELETE_USER",
+    resource: "admin_user",
+    resourceId: json.id,
+    payload: { email: target?.email },
+  });
 
   return NextResponse.json({ ok: true });
 }

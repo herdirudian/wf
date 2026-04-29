@@ -20,6 +20,7 @@ const navItems = [
   { href: "/dashboard/ugc", label: "UGC" },
   { href: "/dashboard/customers", label: "Customer" },
   { href: "/dashboard/reports", label: "Reports" },
+  { href: "/dashboard/activity-logs", label: "Log Aktivitas" },
 ];
 
 export function DashboardShell({
@@ -76,7 +77,8 @@ export function DashboardShell({
                 item.href === "/dashboard/ugc" ||
                 item.href === "/dashboard/units" ||
                 item.href === "/dashboard/packages" ||
-                item.href === "/dashboard/reports")
+                item.href === "/dashboard/reports" ||
+                item.href === "/dashboard/activity-logs")
             )
               return false;
             return true;

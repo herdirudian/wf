@@ -17,6 +17,25 @@ model AdminUser {
   paymentTransactions PaymentTransaction[]
   checkedInBookings Booking[] @relation("Booking_checkedInBy")
   checkedOutBookings Booking[] @relation("Booking_checkedOutBy")
+  activityLogs      ActivityLog[]
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  adminUserId String?
+  action      String
+  resource    String?
+  resourceId  String?
+  payload     String?  @db.Text
+  ipAddress   String?
+  userAgent   String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  adminUser AdminUser? @relation(fields: [adminUserId], references: [id])
+
+  @@index([adminUserId])
+  @@index([resource, resourceId])
+  @@index([createdAt])
 }
 
 model Customer {

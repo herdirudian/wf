@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { assertXenditCallbackToken, handleXenditInvoiceCallback } from "@/services/xendit.service";
 import { prisma } from "@/lib/prisma";
 import { randomUUID } from "crypto";
+import { logActivity } from "@/services/activity.service";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,13 @@ export async function POST(req: Request) {
     try {
       await handleXenditInvoiceCallback(payload);
       await prisma.gatewayWebhookEvent.update({ where: { id: event.id }, data: { processedAt: new Date(), processError: null } });
+      
+      await logActivity({
+        action: "XENDIT_WEBHOOK_PROCESSED",
+        resource: "webhook_event",
+        resourceId: eventId,
+        payload: { externalId, status: payload.status },
+      });
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Webhook process error";
       await prisma.gatewayWebhookEvent.update({ where: { id: event.id }, data: { processError: msg } }).catch(() => null);

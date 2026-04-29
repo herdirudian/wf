@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/services/activity.service";
 
 export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const session = await getAdminSession();
@@ -23,6 +24,15 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
         checkedInByAdminId: booking.checkedInByAdminId ?? session.adminUser.id,
       },
     });
+
+    await logActivity({
+      adminUserId: session.adminUser.id,
+      action: "BOOKING_CHECKIN",
+      resource: "booking",
+      resourceId: id,
+      payload: { code: booking.code },
+    });
+
     return NextResponse.json({ item: updated });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Gagal check-in";

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/services/activity.service";
 
 const UpdateSchema = z
   .object({
@@ -188,6 +189,18 @@ export async function PUT(req: Request) {
       ...(typeof parsed.data.dpPercent === "number" ? { dpPercent: parsed.data.dpPercent } : {}),
       ...(typeof parsed.data.dpMinAmount === "number" ? { dpMinAmount: parsed.data.dpMinAmount } : {}),
       ...(parsed.data.reminderDays ? { reminderDays: parsed.data.reminderDays } : {}),
+    },
+  });
+
+  await logActivity({
+    adminUserId: session.adminUser.id,
+    action: "UPDATE_CONFIG",
+    resource: "app_config",
+    resourceId: "1",
+    payload: {
+      kavlingSellCount: config.kavlingSellCount,
+      balanceReminderDays: config.balanceReminderDays,
+      dpPercent: config.dpPercent,
     },
   });
 
