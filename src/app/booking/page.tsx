@@ -240,16 +240,11 @@ function QuantityStepper({
 
 export default function PublicBookingPage() {
   const router = useRouter();
-  const today = useMemo(() => new Date(), []);
-  const defaultCheckIn = useMemo(() => isoDate(today), [today]);
-  const defaultCheckOut = useMemo(() => {
-    const d = new Date(today);
-    d.setDate(d.getDate() + 1);
-    return isoDate(d);
-  }, [today]);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const [checkIn, setCheckIn] = useState(defaultCheckIn);
-  const [checkOut, setCheckOut] = useState(defaultCheckOut);
+  // Use stable initial values for SSR to prevent hydration mismatch
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
   const [filterType, setFilterType] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [unitPage, setUnitPage] = useState(1);
@@ -263,6 +258,10 @@ export default function PublicBookingPage() {
   const [email, setEmail] = useState("");
   const [totalGuest, setTotalGuest] = useState(1);
   const [specialRequest, setSpecialRequest] = useState("");
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     setTotalGuest(adultPax + childPax);
@@ -290,7 +289,7 @@ export default function PublicBookingPage() {
   const [kavlingMapHover, setKavlingMapHover] = useState(false);
   const [kavlingMapOrigin, setKavlingMapOrigin] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
   const [kavlingMapZoom, setKavlingMapZoom] = useState(1);
-  const [kavlingMapAssetVersion, setKavlingMapAssetVersion] = useState(() => Date.now());
+  const [kavlingMapAssetVersion, setKavlingMapAssetVersion] = useState(0);
   const kavlingMapViewportRef = useRef<HTMLDivElement | null>(null);
   const kavlingMapImgRef = useRef<HTMLImageElement | null>(null);
   const kavlingMapPinchRef = useRef<null | { startDist: number; startZoom: number }>(null);
@@ -299,7 +298,7 @@ export default function PublicBookingPage() {
   const kavlingMapManualZoomRef = useRef(false);
   const kavlingMapMoveRafRef = useRef<number | null>(null);
   const kavlingMapMovePosRef = useRef<{ x: number; y: number } | null>(null);
-  const [holdNow, setHoldNow] = useState(() => Date.now());
+  const [holdNow, setHoldNow] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -325,25 +324,43 @@ export default function PublicBookingPage() {
   }, [hold]);
 
   useEffect(() => {
+    // Only initialize dates and versions once mounted on the client
+    const today = new Date();
+    const defaultCheckIn = isoDate(today);
+    const dOut = new Date(today);
+    dOut.setDate(dOut.getDate() + 1);
+    const defaultCheckOut = isoDate(dOut);
+
+    setKavlingMapAssetVersion(Date.now());
+    setHoldNow(Date.now());
+
+    const draft = readDraft();
+    if (draft) {
+      restoringDraftRef.current = true;
+      setCheckIn(draft.checkIn);
+      setCheckOut(draft.checkOut);
+      setName(draft.customer.name);
+      setPhone(draft.customer.phone);
+      setEmail(draft.customer.email);
+      setTotalGuest(draft.totalGuest);
+      setSpecialRequest(draft.specialRequest ?? "");
+      
+      setUnitQty(Object.fromEntries(draft.items.map((it) => [it.unitId, it.quantity])));
+      setAddonQty(Object.fromEntries(draft.addOns.map((a) => [a.addOnId, a.quantity])));
+      pendingKavlingRestoreRef.current = {
+        scope: draft.kavlingScope ?? "",
+        kavlings: draft.kavlings ?? [],
+        hold: draft.hold,
+      };
+    } else {
+      setCheckIn((prev) => prev || defaultCheckIn);
+      setCheckOut((prev) => prev || defaultCheckOut);
+    }
+  }, []);
+
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const stepParam = params.get("step");
-    const draft = readDraft();
-    if (!draft) return;
-    restoringDraftRef.current = true;
-    setCheckIn(draft.checkIn);
-    setCheckOut(draft.checkOut);
-    setName(draft.customer.name);
-    setPhone(draft.customer.phone);
-    setEmail(draft.customer.email);
-    setTotalGuest(draft.totalGuest);
-    setSpecialRequest(draft.specialRequest ?? "");
-    setUnitQty(Object.fromEntries(draft.items.map((it) => [it.unitId, it.quantity])));
-    setAddonQty(Object.fromEntries(draft.addOns.map((a) => [a.addOnId, a.quantity])));
-    pendingKavlingRestoreRef.current = {
-      scope: draft.kavlingScope ?? "",
-      kavlings: draft.kavlings ?? [],
-      hold: draft.hold,
-    };
     if (stepParam) {
       const s = parseInt(stepParam);
       if (s >= 1 && s <= 3) setCurrentStep(s);
@@ -1663,7 +1680,7 @@ export default function PublicBookingPage() {
                                 <div className="relative h-56 w-full overflow-hidden">
                                   {packageConfigs[cat]?.imageUrl ? (
                                     <img 
-                                      src={`${packageConfigs[cat].imageUrl}?t=${Date.now()}`} 
+                                      src={`${packageConfigs[cat].imageUrl}?t=${kavlingMapAssetVersion}`} 
                                       alt={cat} 
                                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
                                     />
