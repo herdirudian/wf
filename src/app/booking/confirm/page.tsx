@@ -11,6 +11,8 @@ type BookingDraft = {
   checkIn: string;
   checkOut: string;
   totalGuest: number;
+  adultPax: number;
+  childPax: number;
   kavlingScope: "" | "paket" | "mandiri" | "private" | "mixed";
   kavlings: number[];
   hold?: { id: string; token: string; expiresAt?: string };
@@ -257,6 +259,8 @@ export default function BookingConfirmPage() {
           checkIn: payloadDraft.checkIn,
           checkOut: payloadDraft.checkOut,
           totalGuest: payloadDraft.totalGuest,
+          adultPax: payloadDraft.adultPax,
+          childPax: payloadDraft.childPax,
           kavlings: payloadDraft.kavlings,
           hold: payloadDraft.hold,
           items: payloadDraft.items,
