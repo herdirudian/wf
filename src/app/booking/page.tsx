@@ -864,6 +864,7 @@ export default function PublicBookingPage() {
   }, [checkIn, checkOut, effectiveKavlingScope, hold?.expiresAt, hold?.id, hold?.token, kavlingSelected]);
 
   useEffect(() => {
+    if (!checkIn || !checkOut) return;
     let cancelled = false;
     async function load() {
       setLoading(true);
