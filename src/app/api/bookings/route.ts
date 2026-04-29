@@ -4,6 +4,7 @@ import { getAdminSession } from "@/lib/auth";
 import { listBookings, type BookingStatus } from "@/services/booking.service";
 import { addDaysWIB, parseDateWIB } from "@/lib/time";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/services/activity.service";
 
 const QuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
@@ -48,10 +49,19 @@ export async function DELETE(req: Request) {
   const bookingId = url.searchParams.get("id") ?? "";
   if (!bookingId) return NextResponse.json({ message: "Booking id wajib" }, { status: 400 });
 
-  const exists = await prisma.booking.findUnique({ where: { id: bookingId }, select: { id: true } });
-  if (!exists) return NextResponse.json({ message: "Booking tidak ditemukan" }, { status: 404 });
+  const booking = await prisma.booking.findUnique({ where: { id: bookingId }, select: { id: true, code: true } });
+  if (!booking) return NextResponse.json({ message: "Booking tidak ditemukan" }, { status: 404 });
 
   await prisma.booking.delete({ where: { id: bookingId } });
+
+  await logActivity({
+    adminUserId: session.adminUser.id,
+    action: "DELETE_BOOKING",
+    resource: "booking",
+    resourceId: bookingId,
+    payload: { code: booking.code },
+  });
+
   return NextResponse.json({ ok: true });
 }
 
