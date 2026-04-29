@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/services/activity.service";
 
 const CreateSchema = z.object({
   name: z.string().min(1),
@@ -37,6 +38,15 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
 
   const item = await prisma.addOn.create({ data: parsed.data });
+
+  await logActivity({
+    adminUserId: session.adminUser.id,
+    action: "CREATE_ADDON",
+    resource: "addon",
+    resourceId: item.id,
+    payload: { name: item.name, price: item.price },
+  });
+
   return NextResponse.json({ item });
 }
 

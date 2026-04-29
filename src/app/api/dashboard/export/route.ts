@@ -5,6 +5,7 @@ import { addDaysWIB, formatDateWIB, parseDateWIB } from "@/lib/time";
 import { getDashboardMetrics, getReports } from "@/services/report.service";
 import type { BookingStatus } from "@/services/booking.service";
 import type { PaymentStatus } from "@/services/payment.service";
+import { logActivity } from "@/services/activity.service";
 
 function csvEscape(value: unknown) {
   if (value === null || value === undefined) return "";
@@ -446,6 +447,13 @@ export async function GET(req: Request) {
   } else {
     return NextResponse.json({ message: "Resource tidak valid" }, { status: 400 });
   }
+
+  await logActivity({
+    adminUserId: session.adminUser.id,
+    action: "EXPORT_CSV",
+    resource: resource,
+    payload: { filename },
+  });
 
   return new NextResponse(csv, {
     status: 200,
