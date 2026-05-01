@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth";
+import { logActivity } from "@/services/activity.service";
 import fs from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -38,6 +39,13 @@ export async function POST(req: Request) {
   const name = `${sanitizedCategory}-${Date.now()}-${crypto.randomBytes(4).toString("hex")}${ext}`;
   const buf = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(path.join(uploadDir, name), buf);
+
+  await logActivity({
+    adminUserId: session.adminUser.id,
+    action: "UPLOAD_PACKAGE_IMAGE",
+    resource: "package_category",
+    payload: { category, filename: name },
+  });
 
   return NextResponse.json({ url: `/uploads/packages/${name}` });
 }

@@ -56,6 +56,10 @@ export async function POST(req: Request) {
 
   const unit = await createUnit(parsed.data);
 
+  // Ensure public upload directory exists
+  const uploadDir = path.join(process.cwd(), "public", "uploads", "units", unit.id);
+  await fs.mkdir(uploadDir, { recursive: true });
+
   const session = await getAdminSession();
   await logActivity({
     adminUserId: session.adminUser?.id,

@@ -57,6 +57,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     const name = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${ext}`;
     const buf = Buffer.from(await file.arrayBuffer());
     await fs.writeFile(path.join(uploadDir, name), buf);
+    
+    // Add base URL for full path if needed, but standard is relative to public
     next.push(`/uploads/units/${id}/${name}`);
   }
 
