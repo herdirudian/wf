@@ -569,16 +569,9 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
               <div className="text-sm font-medium text-foreground">Preview (belum tersimpan)</div>
               <ImageCarousel images={localPreviews} heightClassName="h-40" />
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {localPreviews.map((url, idx) => (
-                  <div key={url} className="rounded-xl border border-border bg-surface p-2">
-                    <img src={url} alt="" className="h-20 w-full rounded-lg object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => setNewFiles((s) => s.filter((_, i) => i !== idx))}
-                      className="mt-2 flex min-h-[2rem] w-full items-center justify-center rounded-lg border border-border bg-surface px-2 py-1 text-xs text-foreground shadow-sm transition-all active:scale-95 hover:bg-background"
-                    >
-                      Hapus dari pilihan
-                    </button>
+                {localPreviews.map((url) => (
+                  <div key={url} className="aspect-square overflow-hidden rounded-xl border-2 border-primary/20 bg-muted shadow-sm">
+                    <img src={url} alt="Preview" className="h-full w-full object-cover opacity-60 grayscale-[50%]" />
                   </div>
                 ))}
               </div>
@@ -591,17 +584,21 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
               <ImageCarousel images={images} heightClassName="h-40" />
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {images.map((url) => (
-                  <div key={url} className="rounded-xl border border-border bg-surface p-2">
-                    <img src={url} alt="" className="h-20 w-full rounded-lg object-cover" />
-                    {editing ? (
+                  <div key={url} className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-muted shadow-sm">
+                    <img
+                      src={`${url}?t=${Date.now()}`}
+                      alt="Unit"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
                       <button
                         type="button"
                         onClick={() => removeImage(url)}
-                        className="mt-2 flex min-h-[2rem] w-full items-center justify-center rounded-lg border border-red-200 bg-white px-2 py-1 text-xs text-red-700 shadow-sm transition-all active:scale-95 hover:bg-red-50"
+                        className="rounded-lg bg-red-500 px-3 py-1.5 text-[10px] font-bold text-white shadow-lg transition-transform hover:bg-red-600 active:scale-90"
                       >
                         Hapus
                       </button>
-                    ) : null}
+                    </div>
                   </div>
                 ))}
               </div>
