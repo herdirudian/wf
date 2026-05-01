@@ -42,11 +42,11 @@ export function ImageCarousel({
   return (
     <>
       <div className={`relative group/carousel overflow-hidden bg-surface ${className}`}>
-        <button type="button" onClick={() => setOpen(true)} className="block w-full overflow-hidden">
+        <button type="button" onClick={() => setOpen(true)} className="block h-full w-full overflow-hidden">
           <img
             src={safeImages[idx]}
             alt=""
-            className={`w-full object-cover ${heightClassName} cursor-zoom-in transition-transform duration-700 group-hover/carousel:scale-110`}
+            className={`h-full w-full object-cover cursor-zoom-in transition-transform duration-700 group-hover/carousel:scale-110`}
             loading="lazy"
           />
         </button>
