@@ -5,9 +5,11 @@ import { useEffect, useMemo, useState } from "react";
 export function ImageCarousel({
   images,
   heightClassName = "h-40",
+  className = "rounded-[2rem] border border-[#E8E8E1]",
 }: {
   images: string[];
   heightClassName?: string;
+  className?: string;
 }) {
   const safeImages = useMemo(() => images.filter(Boolean), [images]);
   const [i, setI] = useState(0);
@@ -39,7 +41,7 @@ export function ImageCarousel({
 
   return (
     <>
-      <div className="relative group/carousel overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-surface">
+      <div className={`relative group/carousel overflow-hidden bg-surface ${className}`}>
         <button type="button" onClick={() => setOpen(true)} className="block w-full overflow-hidden">
           <img
             src={safeImages[idx]}

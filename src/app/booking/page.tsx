@@ -2094,10 +2094,10 @@ export default function PublicBookingPage() {
                             : "hover:border-primary/40 hover:shadow-xl"
                         }`}
                       >
-                        <div className="flex flex-col lg:flex-row">
+                        <div className="flex flex-col lg:flex-row lg:items-stretch">
                           {/* Image Section */}
-                          <div className="relative aspect-[16/10] lg:aspect-square lg:w-1/3 overflow-hidden">
-                            <ImageCarousel images={images} heightClassName="h-full" />
+                          <div className="relative aspect-[16/10] lg:aspect-auto lg:w-80 overflow-hidden lg:shrink-0">
+                            <ImageCarousel images={images} heightClassName="h-full" className="rounded-none border-none" />
                             {u.available <= 0 && (
                               <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
                                 <span className="rounded-full bg-destructive/10 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-destructive">Penuh</span>
