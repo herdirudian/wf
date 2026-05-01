@@ -2096,7 +2096,7 @@ export default function PublicBookingPage() {
                       >
                         <div className="flex flex-col lg:flex-row">
                           {/* Image Section */}
-                          <div className="relative aspect-[16/10] lg:aspect-auto lg:w-2/5 overflow-hidden">
+                          <div className="relative aspect-[16/10] lg:aspect-square lg:w-1/3 overflow-hidden">
                             <ImageCarousel images={images} heightClassName="h-full" />
                             {u.available <= 0 && (
                               <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
@@ -2111,7 +2111,7 @@ export default function PublicBookingPage() {
                           </div>
                           
                           {/* Content Section */}
-                          <div className="flex flex-1 flex-col p-6 lg:p-8 relative">
+                          <div className="flex flex-1 flex-col p-6 lg:p-10 relative">
                             {/* Organic Decoration for Unit Card */}
                             <div className="absolute -right-12 -bottom-12 h-48 w-48 opacity-[0.02] transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-12 pointer-events-none">
                               <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -2126,7 +2126,7 @@ export default function PublicBookingPage() {
                                   {u.name}
                                 </h3>
                                 <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
-                                  <span className="flex items-center rounded-lg bg-primary/5 px-2 py-1 text-[10px] font-bold text-primary/70 transition-colors group-hover:bg-primary/10">
+                                  <span className="flex items-center rounded-lg bg-[#2D3E10]/5 px-2 py-1 text-[10px] font-bold text-[#2D3E10]/70 transition-colors group-hover:bg-[#2D3E10]/10">
                                     <svg className="mr-1.5 h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
@@ -2141,33 +2141,36 @@ export default function PublicBookingPage() {
                                   </span>
                                 </div>
                               </div>
-                              <QuantityStepper
-                                value={unitQty[u.id] ?? 0}
-                                min={0}
-                                max={u.available}
-                                disabled={u.available <= 0}
-                                ariaLabel={`qty ${u.name}`}
-                                onChange={(next) =>
-                                  setUnitQty((s) => ({
-                                    ...s,
-                                    [u.id]: Math.max(0, Math.min(u.available, next)),
-                                  }))
-                                }
-                              />
+                              <div className="flex flex-col items-center gap-3">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/30 sm:hidden">Pilih Jumlah</p>
+                                <QuantityStepper
+                                  value={unitQty[u.id] ?? 0}
+                                  min={0}
+                                  max={u.available}
+                                  disabled={u.available <= 0}
+                                  ariaLabel={`qty ${u.name}`}
+                                  onChange={(next) =>
+                                    setUnitQty((s) => ({
+                                      ...s,
+                                      [u.id]: Math.max(0, Math.min(u.available, next)),
+                                    }))
+                                  }
+                                />
+                              </div>
                             </div>
 
                             {u.description && (
-                              <p className="mt-6 text-sm font-medium leading-relaxed text-primary/60 line-clamp-2 text-center sm:text-left">{u.description}</p>
+                              <p className="mt-6 text-sm font-medium leading-relaxed text-[#2D3E10]/60 line-clamp-2 text-center sm:text-left">{u.description}</p>
                             )}
 
                             <div className="mt-8 grid grid-cols-1 gap-6 border-t border-[#E8E8E1]/60 pt-8 sm:grid-cols-2">
                               <div className="space-y-1 text-center sm:text-left">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-primary/40">Per Malam</p>
-                                <p className="text-lg font-black text-[#2D3E10]">{priceRangeLabel(u)}</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/30">Per Malam</p>
+                                <p className="text-xl font-black text-[#2D3E10]">{priceRangeLabel(u)}</p>
                               </div>
                               <div className="space-y-1 text-center sm:text-right">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-primary/40">Total Menginap</p>
-                                <p className="text-xl font-black text-primary italic">{formatIDR(sumDailyPrice(u))}</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/30">Total Menginap</p>
+                                <p className="text-2xl font-black text-primary italic drop-shadow-sm">{formatIDR(sumDailyPrice(u))}</p>
                               </div>
                             </div>
 
