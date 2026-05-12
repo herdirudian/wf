@@ -926,10 +926,12 @@ export default function PublicBookingPage() {
       const qty = unitQty[u.id] ?? 0;
       if (!qty) continue;
       const addOnId = u.autoAddOnId ?? "";
-      const mode = (u.autoAddOnMode ?? "") as "per_pax" | "per_unit" | "per_booking" | "";
+      const mode = (u.autoAddOnMode ?? "") as "per_pax" | "per_unit" | "per_booking" | "per_adult" | "per_child_5_10" | "";
       if (!addOnId || !mode) continue;
       const current = map.get(addOnId) ?? 0;
-      if (mode === "per_pax") map.set(addOnId, Math.max(current, totalGuest));
+      if (mode === "per_pax") map.set(addOnId, current + totalGuest * qty);
+      else if (mode === "per_adult") map.set(addOnId, current + adultPax * qty);
+      else if (mode === "per_child_5_10") map.set(addOnId, current + child5to10Pax * qty);
       else if (mode === "per_unit") map.set(addOnId, current + qty);
       else if (mode === "per_booking") map.set(addOnId, current + 1);
     }

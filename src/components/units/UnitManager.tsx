@@ -433,6 +433,8 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
               >
                 <option value="">Tidak ada</option>
                 <option value="per_pax">Per pax (total guest)</option>
+                <option value="per_adult">Per Dewasa (10+ thn)</option>
+                <option value="per_child_5_10">Per Anak (5-10 thn)</option>
                 <option value="per_unit">Per unit (qty)</option>
                 <option value="per_booking">Per booking (1x)</option>
               </select>
