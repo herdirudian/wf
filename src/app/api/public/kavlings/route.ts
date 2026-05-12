@@ -71,6 +71,7 @@ export async function GET(req: Request) {
       : null;
 
   const excludeHoldId = myHold?.id ?? null;
+  const now = new Date();
 
   const rows = await prisma.bookingKavling.findMany({
     where: {
