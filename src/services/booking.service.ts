@@ -336,9 +336,9 @@ export async function createPublicBooking(input: {
   const capacityTotal = items.reduce((acc, it) => acc + (unitById.get(it.unitId)?.capacity ?? 0) * it.quantity, 0);
   if (input.totalGuest <= 0) throw new Error("Total guest tidak valid");
 
-  const guestToValidate = (input.adultPax ?? 0) + (input.child5to10Pax ?? 0);
+  const guestToValidate = input.adultPax ?? 0;
   if (capacityTotal > 0 && guestToValidate > capacityTotal) {
-    throw new Error(`Jumlah tamu melebihi kapasitas (hanya Dewasa & Anak 5-10 thn yang dihitung kuota). Maks: ${capacityTotal}`);
+    throw new Error(`Jumlah tamu dewasa melebihi kapasitas unit. Maks: ${capacityTotal} Dewasa.`);
   }
 
   await assertAvailabilityForItems({
@@ -903,6 +903,9 @@ export async function createAdminBooking(input: {
   checkIn: Date;
   checkOut: Date;
   totalGuest: number;
+  adultPax?: number;
+  child5to10Pax?: number;
+  childUnder5Pax?: number;
   kavlings?: number[];
   adminUserId?: string;
   paymentSeed?: { kind: "unpaid" | "dp_paid" | "paid"; paidAmount: number };
@@ -926,8 +929,9 @@ export async function createAdminBooking(input: {
   if (units.length !== unitIds.length) throw new Error("Ada unit yang tidak ditemukan");
 
   const capacityTotal = items.reduce((acc, it) => acc + (unitById.get(it.unitId)?.capacity ?? 0) * it.quantity, 0);
-  if (capacityTotal > 0 && input.totalGuest > capacityTotal) {
-    throw new Error(`Total guest melebihi kapasitas. Maks: ${capacityTotal}`);
+  const guestToValidate = input.adultPax ?? input.totalGuest;
+  if (capacityTotal > 0 && guestToValidate > capacityTotal) {
+    throw new Error(`Jumlah tamu dewasa melebihi kapasitas unit. Maks: ${capacityTotal} Dewasa.`);
   }
 
   const cfg = await getKavlingConfig(prisma);
@@ -1047,6 +1051,9 @@ export async function createAdminBooking(input: {
         checkIn: input.checkIn,
         checkOut: input.checkOut,
         totalGuest: input.totalGuest,
+        adultPax: input.adultPax ?? 0,
+        child5to10Pax: input.child5to10Pax ?? 0,
+        childUnder5Pax: input.childUnder5Pax ?? 0,
         status: bookingStatus,
         specialRequest: input.specialRequest ?? null,
         items: { create: items.map((it) => ({ unitId: it.unitId, quantity: it.quantity })) },

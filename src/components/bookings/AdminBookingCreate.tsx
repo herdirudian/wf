@@ -113,7 +113,14 @@ export function AdminBookingCreate() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [totalGuest, setTotalGuest] = useState(1);
+  const [adultPax, setAdultPax] = useState(1);
+  const [child5to10Pax, setChild5to10Pax] = useState(0);
+  const [childUnder5Pax, setChildUnder5Pax] = useState(0);
   const [status, setStatus] = useState<"pending" | "paid">("pending");
+
+  useEffect(() => {
+    setTotalGuest(adultPax + child5to10Pax + childUnder5Pax);
+  }, [adultPax, child5to10Pax, childUnder5Pax]);
   const [dpMode, setDpMode] = useState<"none" | "percent" | "nominal">("none");
   const [dpValue, setDpValue] = useState<number>(0);
   const [seedPaymentKind, setSeedPaymentKind] = useState<"unpaid" | "dp_paid" | "paid">("unpaid");
@@ -245,16 +252,37 @@ export function AdminBookingCreate() {
     for (const u of units) {
       const qty = unitQty[u.id] ?? 0;
       if (!qty) continue;
-      const addOnId = u.autoAddOnId ?? "";
-      const mode = (u.autoAddOnMode ?? "") as "per_pax" | "per_unit" | "per_booking" | "";
-      if (!addOnId || !mode) continue;
-      const current = map.get(addOnId) ?? 0;
-      if (mode === "per_pax") map.set(addOnId, Math.max(current, totalGuest));
-      else if (mode === "per_unit") map.set(addOnId, current + qty);
-      else if (mode === "per_booking") map.set(addOnId, current + 1);
+
+      const process = (addOnId: string, mode: string) => {
+        const current = map.get(addOnId) ?? 0;
+        if (mode === "per_pax") map.set(addOnId, current + totalGuest * qty);
+        else if (mode === "per_adult") map.set(addOnId, current + adultPax * qty);
+        else if (mode === "per_child_5_10") map.set(addOnId, current + child5to10Pax * qty);
+        else if (mode === "per_unit") map.set(addOnId, current + qty);
+        else if (mode === "per_booking") map.set(addOnId, current + 1);
+      };
+
+      // Old single autoAddOn logic (backward compatibility)
+      const oldAddOnId = u.autoAddOnId ?? "";
+      const oldMode = (u.autoAddOnMode ?? "") as "per_pax" | "per_unit" | "per_booking" | "per_adult" | "per_child_5_10" | "";
+      if (oldAddOnId && oldMode) {
+        process(oldAddOnId, oldMode);
+      }
+
+      // New multiple autoAddOns logic
+      if ((u as any).autoAddOnsJson) {
+        try {
+          const multi = JSON.parse((u as any).autoAddOnsJson) as { addOnId: string; mode: string }[];
+          for (const item of multi) {
+            if (item.addOnId && item.mode) {
+              process(item.addOnId, item.mode);
+            }
+          }
+        } catch {}
+      }
     }
     return Object.fromEntries(map.entries()) as Record<string, number>;
-  }, [units, unitQty, totalGuest]);
+  }, [units, unitQty, totalGuest, adultPax, child5to10Pax]);
 
   const effectiveAddonQty = useMemo(() => {
     const out: Record<string, number> = {};
@@ -530,6 +558,9 @@ export function AdminBookingCreate() {
         checkIn,
         checkOut,
         totalGuest,
+        adultPax,
+        child5to10Pax,
+        childUnder5Pax,
         status,
         paymentSeed: { kind: seedPaymentKind, paidAmount: seedPaidAmount },
         dp: dpPayload ?? undefined,
@@ -652,16 +683,6 @@ export function AdminBookingCreate() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-foreground">Total Guest</label>
-              <input
-                type="number"
-                min={1}
-                value={totalGuest}
-                onChange={(e) => setTotalGuest(Number(e.target.value))}
-                className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-              />
-            </div>
-            <div className="space-y-1 sm:col-span-2">
               <label className="text-sm font-medium text-foreground">WhatsApp</label>
               <input
                 value={phone}
@@ -669,6 +690,42 @@ export function AdminBookingCreate() {
                 className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
                 required
               />
+            </div>
+            <div className="space-y-3 sm:col-span-2 rounded-2xl border border-border bg-background p-4">
+              <label className="text-sm font-bold text-foreground uppercase tracking-widest">Konfigurasi Tamu</label>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-muted uppercase">Dewasa (10+ thn)</label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={adultPax}
+                    onChange={(e) => setAdultPax(Number(e.target.value))}
+                    className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-muted uppercase">Anak (5-10 thn)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={child5to10Pax}
+                    onChange={(e) => setChild5to10Pax(Number(e.target.value))}
+                    className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-muted uppercase">Balita (&lt;5 thn)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={childUnder5Pax}
+                    onChange={(e) => setChildUnder5Pax(Number(e.target.value))}
+                    className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+              <div className="text-xs text-muted italic">Total: {totalGuest} Tamu. (Hanya Dewasa yang dihitung kapasitas)</div>
             </div>
             <div className="space-y-1">
               <label className="text-sm font-medium text-foreground">Email (opsional)</label>
