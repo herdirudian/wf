@@ -62,16 +62,15 @@ export async function GET(req: Request) {
         : baseAll.filter((n) => n < privateStart || n > privateEnd);
   const allowedSet = new Set(allowed);
 
-  const now = new Date();
-  const excludeHoldId =
+  const myHold =
     parsed.data.holdId && parsed.data.holdToken
-      ? (
-          await prisma.kavlingHold.findFirst({
-            where: { id: parsed.data.holdId, token: parsed.data.holdToken },
-            select: { id: true },
-          })
-        )?.id ?? null
+      ? await prisma.kavlingHold.findFirst({
+          where: { id: parsed.data.holdId, token: parsed.data.holdToken },
+          include: { kavlings: { include: { kavling: true } } },
+        })
       : null;
+
+  const excludeHoldId = myHold?.id ?? null;
 
   const rows = await prisma.bookingKavling.findMany({
     where: {
@@ -117,12 +116,19 @@ export async function GET(req: Request) {
   const mandiri = Array.from(takenMandiri).sort((a, b) => a - b);
   const paket = Array.from(takenPaket).sort((a, b) => a - b);
   const taken = Array.from(new Set([...mandiri, ...paket])).sort((a, b) => a - b);
+  const now = new Date();
 
   return NextResponse.json({
     all: allowed,
     taken,
     takenMandiri: mandiri,
     takenPaket: paket,
+    myHold: myHold && myHold.expiresAt > now ? {
+      id: myHold.id,
+      token: myHold.token,
+      expiresAt: myHold.expiresAt,
+      numbers: myHold.kavlings.map(x => x.kavling.number).sort((a, b) => a - b)
+    } : null,
     scope,
     sellCount: cfg.kavlingSellCount,
     privateRange: { start: privateStart, end: privateEnd },

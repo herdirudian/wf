@@ -632,7 +632,7 @@ export default function PublicBookingPage() {
       }
       const res = await fetch(url.toString());
       const data = (await res.json().catch(() => null)) as
-        | { all?: number[]; taken?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; message?: string }
+        | { all?: number[]; taken?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; myHold?: { id: string; token: string; expiresAt: string; numbers: number[] }; message?: string }
         | null;
       if (cancelled) return;
       if (!res.ok) {
@@ -644,6 +644,13 @@ export default function PublicBookingPage() {
       }
       setKavlingAll((data?.all ?? []).filter((n) => typeof n === "number"));
       setKavlingTaken((data?.taken ?? []).filter((n) => typeof n === "number"));
+
+      // Auto-restore selection from server-side hold if local selection is empty
+      if (data?.myHold && data.myHold.numbers.length > 0 && kavlingSelected.length === 0) {
+        setKavlingSelected(data.myHold.numbers);
+        setHold({ id: data.myHold.id, token: data.myHold.token, expiresAt: data.myHold.expiresAt });
+      }
+
       if (typeof data?.sellCount === "number" && Number.isFinite(data.sellCount)) setKavlingSellCount(data.sellCount);
       const ps = data?.privateRange?.start;
       const pe = data?.privateRange?.end;
