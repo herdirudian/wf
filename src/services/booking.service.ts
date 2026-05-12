@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
 import { addDaysWIB, formatDateWIB, nightDatesWIB, startOfDayWIB } from "@/lib/time";
+import { notifyKavlingUpdated } from "@/lib/realtime";
 
 export type BookingStatus = "pending" | "paid" | "checked_in" | "cancelled" | "completed";
 
@@ -84,10 +85,16 @@ export async function updateBookingStatus(id: string, nextStatus: BookingStatus)
     throw new Error(`Transisi status tidak valid: ${current} -> ${nextStatus}`);
   }
 
-  return prisma.booking.update({
+  const updated = await prisma.booking.update({
     where: { id },
     data: { status: nextStatus },
   });
+
+  if (current === "cancelled" || nextStatus === "cancelled") {
+    notifyKavlingUpdated();
+  }
+
+  return updated;
 }
 
 function dateKey(d: Date) {
@@ -572,6 +579,8 @@ export async function createPublicBooking(input: {
       }
     }
 
+    notifyKavlingUpdated();
+
     return { bookingId: booking.id, code: booking.code, amount };
   });
 }
@@ -720,6 +729,8 @@ export async function rescheduleBooking(
       });
     }
   });
+
+  notifyKavlingUpdated();
 
   return prisma.booking.findUnique({
     where: { id },
@@ -1183,6 +1194,8 @@ export async function createAdminBooking(input: {
         await tx.kavlingHold.deleteMany({ where: { id: input.hold.id, token: input.hold.token } });
       }
     }
+
+    notifyKavlingUpdated();
 
     return { bookingId: booking.id, code: booking.code, amount };
   });

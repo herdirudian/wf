@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import crypto from "node:crypto";
 import { parseDateRangeWIB } from "@/lib/time";
+import { notifyKavlingUpdated } from "@/lib/realtime";
 
 const BodySchema = z.object({
   checkIn: z.string().min(1),
@@ -152,6 +153,8 @@ export async function POST(req: Request) {
 
       return { holdId: hold.id, holdToken: token, expiresAt: desiredExpiresAt };
     });
+
+    notifyKavlingUpdated();
 
     return NextResponse.json({ ...result, holdMinutes });
   } catch (e) {

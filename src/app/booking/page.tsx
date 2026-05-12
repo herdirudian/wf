@@ -289,6 +289,21 @@ export default function PublicBookingPage() {
   const [holdError, setHoldError] = useState<string | null>(null);
   const [holdSubmitting, setHoldSubmitting] = useState(false);
   const [holdHeartbeat, setHoldHeartbeat] = useState(0);
+
+  // Real-time kavling updates
+  useEffect(() => {
+    const es = new EventSource("/api/public/kavlings/realtime");
+    es.onmessage = () => {
+      setHoldHeartbeat((x) => x + 1);
+    };
+    es.onerror = () => {
+      es.close();
+      // Retry after 5s if connection lost
+      setTimeout(() => setHoldHeartbeat((x) => x + 1), 5000);
+    };
+    return () => es.close();
+  }, []);
+
   const [kavlingMapOpen, setKavlingMapOpen] = useState(false);
   const [kavlingMapHover, setKavlingMapHover] = useState(false);
   const [kavlingMapOrigin, setKavlingMapOrigin] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
