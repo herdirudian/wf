@@ -40,7 +40,8 @@ type BookingDraft = {
   checkOut: string;
   totalGuest: number;
   adultPax: number;
-  childPax: number;
+  child5to10Pax: number;
+  childUnder5Pax: number;
   kavlingScope: "" | "paket" | "mandiri" | "private" | "mixed";
   kavlings: number[];
   hold?: { id: string; token: string; expiresAt?: string };
@@ -253,7 +254,8 @@ export default function PublicBookingPage() {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [adultPax, setAdultPax] = useState(1);
-  const [childPax, setChildPax] = useState(0);
+  const [child5to10Pax, setChild5to10Pax] = useState(0);
+  const [childUnder5Pax, setChildUnder5Pax] = useState(0);
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -266,8 +268,8 @@ export default function PublicBookingPage() {
   }, []);
 
   useEffect(() => {
-    setTotalGuest(adultPax + childPax);
-  }, [adultPax, childPax]);
+    setTotalGuest(adultPax + child5to10Pax + childUnder5Pax);
+  }, [adultPax, child5to10Pax, childUnder5Pax]);
 
   type QtyById = Record<string, number>;
 
@@ -344,8 +346,9 @@ export default function PublicBookingPage() {
       setName(draft.customer.name);
       setPhone(draft.customer.phone);
       setEmail(draft.customer.email);
-      setAdultPax(draft.adultPax ?? draft.totalGuest ?? 1);
-      setChildPax(draft.childPax ?? 0);
+      setAdultPax(draft.adultPax ?? 1);
+      setChild5to10Pax(draft.child5to10Pax ?? 0);
+      setChildUnder5Pax(draft.childUnder5Pax ?? 0);
       setTotalGuest(draft.totalGuest);
       setSpecialRequest(draft.specialRequest ?? "");
       
@@ -1053,12 +1056,12 @@ export default function PublicBookingPage() {
                   </svg>
                 </div>
                 <div className="flex flex-col gap-1.5 py-0.5">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jumlah Tamu</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-[#2D3E10] tracking-tight">{totalGuest} Orang</span>
-                    <span className="text-[10px] font-medium text-primary/60 italic">({adultPax}D, {childPax}A)</span>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jumlah Tamu</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-[#2D3E10] tracking-tight">{totalGuest} Orang</span>
+                      <span className="text-[10px] font-medium text-primary/60 italic">({adultPax}D, {child5to10Pax + childUnder5Pax}A)</span>
+                    </div>
                   </div>
-                </div>
               </div>
             </div>
           </div>
@@ -1255,7 +1258,8 @@ export default function PublicBookingPage() {
       checkOut,
       totalGuest: Number(totalGuest),
       adultPax: Number(adultPax),
-      childPax: Number(childPax),
+      child5to10Pax: Number(child5to10Pax),
+      childUnder5Pax: Number(childUnder5Pax),
       kavlingScope: (effectiveKavlingScope ?? "") as BookingDraft["kavlingScope"],
       kavlings: effectiveKavlingScope ? kavlingSelected : [],
       hold: draftHold,
@@ -1840,11 +1844,11 @@ export default function PublicBookingPage() {
 
                           <div className="mt-12 space-y-6 pt-10 border-t border-[#E8E8E1]/60">
                             <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40 ml-1 block text-center sm:text-left">Konfigurasi Tamu</label>
-                            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                               <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
                                 <div className="space-y-1">
                                   <p className="text-base font-bold text-[#2D3E10]">Dewasa</p>
-                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia di atas 5 tahun</p>
+                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 10+ tahun</p>
                                 </div>
                                 <QuantityStepper 
                                   value={adultPax} 
@@ -1855,14 +1859,26 @@ export default function PublicBookingPage() {
                               </div>
                               <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
                                 <div className="space-y-1">
-                                  <p className="text-base font-bold text-[#2D3E10]">Anak-anak</p>
-                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia di bawah 5 tahun</p>
+                                  <p className="text-base font-bold text-[#2D3E10]">Anak</p>
+                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 5-10 tahun</p>
                                 </div>
                                 <QuantityStepper 
-                                  value={childPax} 
+                                  value={child5to10Pax} 
                                   min={0} 
                                   ariaLabel="Anak" 
-                                  onChange={setChildPax} 
+                                  onChange={setChild5to10Pax} 
+                                />
+                              </div>
+                              <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+                                <div className="space-y-1">
+                                  <p className="text-base font-bold text-[#2D3E10]">Balita</p>
+                                  <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia &lt; 5 tahun</p>
+                                </div>
+                                <QuantityStepper 
+                                  value={childUnder5Pax} 
+                                  min={0} 
+                                  ariaLabel="Balita" 
+                                  onChange={setChildUnder5Pax} 
                                 />
                               </div>
                             </div>

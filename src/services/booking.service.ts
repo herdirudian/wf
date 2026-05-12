@@ -308,7 +308,8 @@ export async function createPublicBooking(input: {
   checkOut: Date;
   totalGuest: number;
   adultPax?: number;
-  childPax?: number;
+  child5to10Pax?: number;
+  childUnder5Pax?: number;
   kavlings?: number[];
   hold?: { id: string; token: string };
   items: Array<{ unitId: string; quantity: number }>;
@@ -328,9 +329,9 @@ export async function createPublicBooking(input: {
   const capacityTotal = items.reduce((acc, it) => acc + (unitById.get(it.unitId)?.capacity ?? 0) * it.quantity, 0);
   if (input.totalGuest <= 0) throw new Error("Total guest tidak valid");
 
-  const guestToValidate = input.adultPax ?? input.totalGuest;
+  const guestToValidate = (input.adultPax ?? 0) + (input.child5to10Pax ?? 0);
   if (capacityTotal > 0 && guestToValidate > capacityTotal) {
-    throw new Error(`Jumlah tamu dewasa melebihi kapasitas. Maks: ${capacityTotal}`);
+    throw new Error(`Jumlah tamu melebihi kapasitas (hanya Dewasa & Anak 5-10 thn yang dihitung kuota). Maks: ${capacityTotal}`);
   }
 
   await assertAvailabilityForItems({
@@ -433,9 +434,12 @@ export async function createPublicBooking(input: {
         code: bookingCode(),
         customerId: customer.id,
         checkIn: input.checkIn,
-        checkOut: input.checkOut,
-        totalGuest: input.totalGuest,
-        status: "pending",
+      checkOut: input.checkOut,
+      totalGuest: input.totalGuest,
+      adultPax: input.adultPax ?? 0,
+      child5to10Pax: input.child5to10Pax ?? 0,
+      childUnder5Pax: input.childUnder5Pax ?? 0,
+      status: "pending",
         specialRequest: input.specialRequest ?? null,
         items: {
           create: items.map((it) => ({ unitId: it.unitId, quantity: it.quantity })),

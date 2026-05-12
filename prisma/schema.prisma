@@ -95,6 +95,9 @@ model Booking {
   checkIn    DateTime
   checkOut   DateTime
   totalGuest Int
+  adultPax   Int      @default(0)
+  child5to10Pax Int   @default(0)
+  childUnder5Pax Int  @default(0)
   status     String
   checkedInAt  DateTime?
   checkedInByAdminId String?

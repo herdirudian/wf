@@ -12,7 +12,8 @@ type BookingDraft = {
   checkOut: string;
   totalGuest: number;
   adultPax: number;
-  childPax: number;
+  child5to10Pax: number;
+  childUnder5Pax: number;
   kavlingScope: "" | "paket" | "mandiri" | "private" | "mixed";
   kavlings: number[];
   hold?: { id: string; token: string; expiresAt?: string };
@@ -260,7 +261,8 @@ export default function BookingConfirmPage() {
           checkOut: payloadDraft.checkOut,
           totalGuest: payloadDraft.totalGuest,
           adultPax: payloadDraft.adultPax,
-          childPax: payloadDraft.childPax,
+          child5to10Pax: payloadDraft.child5to10Pax,
+          childUnder5Pax: payloadDraft.childUnder5Pax,
           kavlings: payloadDraft.kavlings,
           hold: payloadDraft.hold,
           items: payloadDraft.items,
@@ -442,7 +444,7 @@ export default function BookingConfirmPage() {
               </div>
               <div className="mt-1 flex items-center gap-2">
                 <div className="text-[10px] font-black text-primary/40 uppercase tracking-widest">Total Tamu: {draft.totalGuest} Orang</div>
-                <div className="text-[10px] font-medium text-primary/30 italic">({(draft as any).adultPax ?? draft.totalGuest} Dewasa, {(draft as any).childPax ?? 0} Anak)</div>
+                <div className="text-[10px] font-medium text-primary/30 italic">({draft.adultPax}D, {draft.child5to10Pax}A, {draft.childUnder5Pax}B)</div>
               </div>
             </div>
           </div>

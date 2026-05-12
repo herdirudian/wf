@@ -14,7 +14,8 @@ const BodySchema = z.object({
   checkOut: z.string().min(1),
   totalGuest: z.coerce.number().int().min(1),
   adultPax: z.coerce.number().int().min(1).optional(),
-  childPax: z.coerce.number().int().min(0).optional(),
+  child5to10Pax: z.coerce.number().int().min(0).optional(),
+  childUnder5Pax: z.coerce.number().int().min(0).optional(),
   kavlings: z.array(z.coerce.number().int()).optional().default([]),
   hold: z
     .object({
@@ -54,7 +55,8 @@ export async function POST(req: Request) {
       checkOut: range.checkOut,
       totalGuest: parsed.data.totalGuest,
       adultPax: parsed.data.adultPax,
-      childPax: parsed.data.childPax,
+      child5to10Pax: parsed.data.child5to10Pax,
+      childUnder5Pax: parsed.data.childUnder5Pax,
       kavlings: parsed.data.kavlings,
       hold: parsed.data.hold,
       items: parsed.data.items,
