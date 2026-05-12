@@ -925,18 +925,38 @@ export default function PublicBookingPage() {
     for (const u of units) {
       const qty = unitQty[u.id] ?? 0;
       if (!qty) continue;
-      const addOnId = u.autoAddOnId ?? "";
-      const mode = (u.autoAddOnMode ?? "") as "per_pax" | "per_unit" | "per_booking" | "per_adult" | "per_child_5_10" | "";
-      if (!addOnId || !mode) continue;
-      const current = map.get(addOnId) ?? 0;
-      if (mode === "per_pax") map.set(addOnId, current + totalGuest * qty);
-      else if (mode === "per_adult") map.set(addOnId, current + adultPax * qty);
-      else if (mode === "per_child_5_10") map.set(addOnId, current + child5to10Pax * qty);
-      else if (mode === "per_unit") map.set(addOnId, current + qty);
-      else if (mode === "per_booking") map.set(addOnId, current + 1);
+
+      // Old single autoAddOn logic (backward compatibility)
+      const oldAddOnId = u.autoAddOnId ?? "";
+      const oldMode = (u.autoAddOnMode ?? "") as "per_pax" | "per_unit" | "per_booking" | "per_adult" | "per_child_5_10" | "";
+      
+      const process = (addOnId: string, mode: string) => {
+        const current = map.get(addOnId) ?? 0;
+        if (mode === "per_pax") map.set(addOnId, current + totalGuest * qty);
+        else if (mode === "per_adult") map.set(addOnId, current + adultPax * qty);
+        else if (mode === "per_child_5_10") map.set(addOnId, current + child5to10Pax * qty);
+        else if (mode === "per_unit") map.set(addOnId, current + qty);
+        else if (mode === "per_booking") map.set(addOnId, current + 1);
+      };
+
+      if (oldAddOnId && oldMode) {
+        process(oldAddOnId, oldMode);
+      }
+
+      // New multiple autoAddOns logic
+      if ((u as any).autoAddOnsJson) {
+        try {
+          const multi = JSON.parse((u as any).autoAddOnsJson) as { addOnId: string; mode: string }[];
+          for (const item of multi) {
+            if (item.addOnId && item.mode) {
+              process(item.addOnId, item.mode);
+            }
+          }
+        } catch {}
+      }
     }
     return Object.fromEntries(map.entries()) as Record<string, number>;
-  }, [units, unitQty, totalGuest]);
+  }, [units, unitQty, totalGuest, adultPax, child5to10Pax]);
 
   const effectiveAddonQty = useMemo(() => {
     const out: Record<string, number> = {};

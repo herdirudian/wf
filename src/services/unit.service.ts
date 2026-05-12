@@ -49,6 +49,7 @@ export type UpsertUnitInput = {
   kavlingScope?: string | null;
   autoAddOnId?: string | null;
   autoAddOnMode?: string | null;
+  autoAddOns?: { addOnId: string; mode: string }[];
   isActive?: boolean;
   facilities?: string[];
   capacity: number;
@@ -62,6 +63,7 @@ export type UpsertUnitInput = {
 export async function createUnit(input: UpsertUnitInput) {
   const includesJson = input.includes?.length ? JSON.stringify(input.includes) : null;
   const facilitiesJson = input.facilities?.length ? JSON.stringify(input.facilities) : null;
+  const autoAddOnsJson = input.autoAddOns?.length ? JSON.stringify(input.autoAddOns) : null;
   return prisma.unit.create({
     data: {
       name: input.name,
@@ -70,6 +72,7 @@ export async function createUnit(input: UpsertUnitInput) {
       kavlingScope: input.kavlingScope ?? null,
       autoAddOnId: input.autoAddOnId ?? null,
       autoAddOnMode: input.autoAddOnMode ?? null,
+      autoAddOnsJson,
       isActive: input.isActive ?? true,
       facilitiesJson,
       capacity: input.capacity,
@@ -85,6 +88,7 @@ export async function createUnit(input: UpsertUnitInput) {
 export async function updateUnit(id: string, input: UpsertUnitInput) {
   const includesJson = input.includes?.length ? JSON.stringify(input.includes) : null;
   const facilitiesJson = input.facilities?.length ? JSON.stringify(input.facilities) : null;
+  const autoAddOnsJson = input.autoAddOns?.length ? JSON.stringify(input.autoAddOns) : null;
   return prisma.unit.update({
     where: { id },
     data: {
@@ -94,6 +98,7 @@ export async function updateUnit(id: string, input: UpsertUnitInput) {
       kavlingScope: input.kavlingScope ?? null,
       autoAddOnId: input.autoAddOnId ?? null,
       autoAddOnMode: input.autoAddOnMode ?? null,
+      autoAddOnsJson,
       ...(typeof input.isActive === "boolean" ? { isActive: input.isActive } : {}),
       ...(typeof input.facilities !== "undefined" ? { facilitiesJson } : {}),
       capacity: input.capacity,

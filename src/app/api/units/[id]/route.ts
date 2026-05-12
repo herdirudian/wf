@@ -13,7 +13,11 @@ const UpdateUnitSchema = z.object({
   category: z.string().optional().nullable(),
   kavlingScope: z.enum(["paket", "mandiri", "private"]).optional().nullable(),
   autoAddOnId: z.string().min(1).optional().nullable(),
-  autoAddOnMode: z.enum(["per_pax", "per_unit", "per_booking"]).optional().nullable(),
+  autoAddOnMode: z.enum(["per_pax", "per_unit", "per_booking", "per_adult", "per_child_5_10"]).optional().nullable(),
+  autoAddOns: z.array(z.object({
+    addOnId: z.string().min(1),
+    mode: z.enum(["per_pax", "per_unit", "per_booking", "per_adult", "per_child_5_10"]),
+  })).optional(),
   isActive: z.boolean().optional(),
   facilities: z.array(z.string()).optional(),
   capacity: z.number().int().min(1),

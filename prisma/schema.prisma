@@ -55,6 +55,7 @@ model Unit {
   isActive     Boolean       @default(true)
   autoAddOnId  String?
   autoAddOnMode String?
+  autoAddOnsJson String?     @db.Text
   facilitiesJson String?     @db.Text
   capacity     Int
   totalUnits   Int

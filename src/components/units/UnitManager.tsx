@@ -12,8 +12,9 @@ type FormState = {
   type: string;
   category: string;
   kavlingScope: "" | "paket" | "mandiri" | "private";
-  autoAddOnMode: "" | "per_pax" | "per_unit" | "per_booking";
+  autoAddOnMode: "" | "per_pax" | "per_unit" | "per_booking" | "per_adult" | "per_child_5_10";
   autoAddOnId: string;
+  autoAddOns: { addOnId: string; mode: string }[];
   isActive: boolean;
   facilities: string[];
   capacity: number;
@@ -46,12 +47,24 @@ function safeParseStringArrayJson(input: unknown) {
   }
 }
 
+function safeParseAutoAddOnsJson(input: unknown) {
+  if (typeof input !== "string" || !input.trim()) return [];
+  try {
+    const v = JSON.parse(input) as unknown;
+    if (Array.isArray(v)) return v.filter((x) => x && typeof x === "object" && x.addOnId && x.mode);
+    return [];
+  } catch {
+    return [];
+  }
+}
+
 function toForm(u?: Unit): FormState {
   const anyU = (u ?? {}) as unknown as {
     category?: string | null;
     kavlingScope?: string | null;
     autoAddOnId?: string | null;
     autoAddOnMode?: string | null;
+    autoAddOnsJson?: string | null;
     description?: string | null;
     includesJson?: string | null;
     imagesJson?: string | null;
@@ -59,6 +72,7 @@ function toForm(u?: Unit): FormState {
   };
   const includes = safeParseIncludesJson(anyU.includesJson ?? null);
   const facilities = safeParseStringArrayJson(anyU.facilitiesJson ?? null);
+  const autoAddOns = safeParseAutoAddOnsJson(anyU.autoAddOnsJson ?? null);
   return {
     name: u?.name ?? "",
     type: u?.type ?? "tenda",
@@ -66,6 +80,7 @@ function toForm(u?: Unit): FormState {
     kavlingScope: (anyU.kavlingScope as FormState["kavlingScope"]) ?? "",
     autoAddOnMode: (anyU.autoAddOnMode as FormState["autoAddOnMode"]) ?? "",
     autoAddOnId: anyU.autoAddOnId ?? "",
+    autoAddOns,
     isActive: u?.isActive ?? true,
     facilities,
     capacity: u?.capacity ?? 2,
@@ -195,6 +210,7 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
       kavlingScope: form.kavlingScope ? form.kavlingScope : null,
       autoAddOnMode: form.autoAddOnMode ? form.autoAddOnMode : null,
       autoAddOnId: form.autoAddOnId ? form.autoAddOnId : null,
+      autoAddOns: form.autoAddOns.filter(x => x.addOnId && x.mode),
       capacity: Number(form.capacity),
       totalUnits: Number(form.totalUnits),
       priceWeekday: Number(form.priceWeekday),
@@ -236,6 +252,28 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
     closeModal();
     setSubmitting(false);
     router.refresh();
+  }
+
+  function addAutoAddOn() {
+    setForm(s => ({
+      ...s,
+      autoAddOns: [...s.autoAddOns, { addOnId: "", mode: "per_pax" }]
+    }));
+  }
+
+  function removeAutoAddOn(index: number) {
+    setForm(s => ({
+      ...s,
+      autoAddOns: s.autoAddOns.filter((_, i) => i !== index)
+    }));
+  }
+
+  function updateAutoAddOn(index: number, field: keyof { addOnId: string; mode: string }, value: string) {
+    setForm(s => {
+      const next = [...s.autoAddOns];
+      next[index] = { ...next[index], [field]: value };
+      return { ...s, autoAddOns: next };
+    });
   }
 
   async function onDelete(u: Unit) {
@@ -421,41 +459,59 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
               </select>
               <div className="text-xs text-muted">Dipakai untuk membatasi pilihan nomor kavling.</div>
             </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-foreground">Auto Add-On (conditional)</label>
-              <select
-                value={form.autoAddOnMode}
-                onChange={(e) => {
-                  const v = e.target.value as FormState["autoAddOnMode"];
-                  setForm((s) => ({ ...s, autoAddOnMode: v, autoAddOnId: v ? s.autoAddOnId : "" }));
-                }}
-                className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-              >
-                <option value="">Tidak ada</option>
-                <option value="per_pax">Per pax (total guest)</option>
-                <option value="per_adult">Per Dewasa (10+ thn)</option>
-                <option value="per_child_5_10">Per Anak (5-10 thn)</option>
-                <option value="per_unit">Per unit (qty)</option>
-                <option value="per_booking">Per booking (1x)</option>
-              </select>
-              <div className="text-xs text-muted">Aktif saat unit ini dipilih pada booking.</div>
-            </div>
-            <div className="space-y-1 sm:col-span-2">
-              <label className="text-sm font-medium text-foreground">Pilih Add-On</label>
-              <select
-                value={form.autoAddOnId}
-                onChange={(e) => setForm((s) => ({ ...s, autoAddOnId: e.target.value }))}
-                disabled={!form.autoAddOnMode}
-                className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary disabled:opacity-60"
-              >
-                <option value="">Tidak ada</option>
-                {addOnOptions.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.name}
-                  </option>
+            <div className="space-y-4 sm:col-span-2 border-y border-border py-4 my-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-bold text-foreground uppercase tracking-widest">Multi Auto Add-Ons</label>
+                <button
+                  type="button"
+                  onClick={addAutoAddOn}
+                  className="text-xs font-bold text-primary hover:underline"
+                >
+                  + Tambah Aturan
+                </button>
+              </div>
+              
+              <div className="space-y-3">
+                {form.autoAddOns.map((item, idx) => (
+                  <div key={idx} className="flex flex-col gap-2 rounded-xl border border-border bg-background p-3 sm:flex-row sm:items-center">
+                    <select
+                      value={item.addOnId}
+                      onChange={(e) => updateAutoAddOn(idx, "addOnId", e.target.value)}
+                      className="flex-1 rounded-lg border border-border bg-surface px-2 py-1.5 text-sm outline-none focus:border-primary"
+                    >
+                      <option value="">Pilih Add-On...</option>
+                      {addOnOptions.map((a) => (
+                        <option key={a.id} value={a.id}>{a.name}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={item.mode}
+                      onChange={(e) => updateAutoAddOn(idx, "mode", e.target.value)}
+                      className="rounded-lg border border-border bg-surface px-2 py-1.5 text-sm outline-none focus:border-primary sm:w-48"
+                    >
+                      <option value="per_pax">Per pax (total guest)</option>
+                      <option value="per_adult">Per Dewasa (10+ thn)</option>
+                      <option value="per_child_5_10">Per Anak (5-10 thn)</option>
+                      <option value="per_unit">Per unit (qty)</option>
+                      <option value="per_booking">Per booking (1x)</option>
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => removeAutoAddOn(idx)}
+                      className="text-red-500 hover:text-red-700 p-1"
+                    >
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 ))}
-              </select>
+                {form.autoAddOns.length === 0 && (
+                  <p className="text-center text-xs text-muted py-2 italic">Belum ada aturan add-on otomatis.</p>
+                )}
+              </div>
             </div>
+
             <div className="flex items-end">
               <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <input
