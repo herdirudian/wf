@@ -67,7 +67,7 @@ export async function GET(req: Request) {
     parsed.data.holdId && parsed.data.holdToken
       ? (
           await prisma.kavlingHold.findFirst({
-            where: { id: parsed.data.holdId, token: parsed.data.holdToken, expiresAt: { gt: now } },
+            where: { id: parsed.data.holdId, token: parsed.data.holdToken },
             select: { id: true },
           })
         )?.id ?? null

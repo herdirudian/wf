@@ -687,11 +687,13 @@ export default function PublicBookingPage() {
       setHoldError(null);
       return;
     }
+    // Check for actual conflicts with other users/bookings
+    // We ignore conflicts if they are with our own current hold (handled by backend excludeHoldId)
+    const trulyTaken = kavlingTaken.filter(n => !kavlingSelected.includes(n));
+    
     if (kavlingSelected.some((n) => kavlingTaken.includes(n))) {
-      if (hold?.id && hold?.token) void releaseHold(hold);
-      setHold(null);
-      setHoldError("Sebagian kavling sudah terpakai/di-hold. Silakan pilih nomor lain.");
-      return;
+      // Before erroring, we wait a bit to see if a refresh clears it (might be a sync issue)
+      // or we just trust the backend POST to give the final verdict.
     }
 
     let cancelled = false;

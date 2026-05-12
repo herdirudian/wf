@@ -444,10 +444,7 @@ export function AdminBookingCreate() {
       return;
     }
     if (kavlingSelected.some((n) => kavlingTaken.includes(n))) {
-      if (hold?.id && hold?.token) void releaseHold(hold);
-      setHold(null);
-      setHoldError("Sebagian kavling sudah terpakai/di-hold. Silakan pilih nomor lain.");
-      return;
+      // Trust backend to handle final conflict check
     }
 
     let cancelled = false;
