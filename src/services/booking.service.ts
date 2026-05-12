@@ -377,14 +377,42 @@ export async function createPublicBooking(input: {
     const base = input.addOns.filter((x) => x.quantity > 0);
     const map = new Map<string, number>();
     for (const it of base) map.set(it.addOnId, (map.get(it.addOnId) ?? 0) + it.quantity);
+
+    const totalGuest = input.totalGuest;
+    const adultPax = input.adultPax ?? 0;
+    const child5to10Pax = input.child5to10Pax ?? 0;
+
     for (const it of items) {
-      const u = unitById.get(it.unitId) as unknown as { autoAddOnId?: string | null; autoAddOnMode?: string | null };
-      const addOnId = u.autoAddOnId ?? "";
-      const mode = (u.autoAddOnMode ?? "") as "per_pax" | "per_unit" | "per_booking" | "";
-      if (!addOnId || !mode) continue;
-      if (mode === "per_pax") map.set(addOnId, Math.max(map.get(addOnId) ?? 0, input.totalGuest));
-      else if (mode === "per_unit") map.set(addOnId, (map.get(addOnId) ?? 0) + it.quantity);
-      else if (mode === "per_booking") map.set(addOnId, (map.get(addOnId) ?? 0) + 1);
+      const u = unitById.get(it.unitId) as any;
+      const qty = it.quantity;
+
+      const process = (addOnId: string, mode: string) => {
+        const current = map.get(addOnId) ?? 0;
+        if (mode === "per_pax") map.set(addOnId, current + totalGuest * qty);
+        else if (mode === "per_adult") map.set(addOnId, current + adultPax * qty);
+        else if (mode === "per_child_5_10") map.set(addOnId, current + child5to10Pax * qty);
+        else if (mode === "per_unit") map.set(addOnId, current + qty);
+        else if (mode === "per_booking") map.set(addOnId, current + 1);
+      };
+
+      // Old single autoAddOn logic (backward compatibility)
+      const oldAddOnId = u.autoAddOnId ?? "";
+      const oldMode = (u.autoAddOnMode ?? "") as string;
+      if (oldAddOnId && oldMode) {
+        process(oldAddOnId, oldMode);
+      }
+
+      // New multiple autoAddOns logic
+      if (u.autoAddOnsJson) {
+        try {
+          const multi = JSON.parse(u.autoAddOnsJson) as { addOnId: string; mode: string }[];
+          for (const item of multi) {
+            if (item.addOnId && item.mode) {
+              process(item.addOnId, item.mode);
+            }
+          }
+        } catch {}
+      }
     }
     return Array.from(map.entries())
       .filter(([, quantity]) => quantity > 0)
@@ -964,14 +992,42 @@ export async function createAdminBooking(input: {
     const base = (input.addOns ?? []).filter((x) => x.quantity > 0);
     const map = new Map<string, number>();
     for (const it of base) map.set(it.addOnId, (map.get(it.addOnId) ?? 0) + it.quantity);
+
+    const totalGuest = input.totalGuest;
+    const adultPax = input.adultPax ?? 0;
+    const child5to10Pax = input.child5to10Pax ?? 0;
+
     for (const it of items) {
-      const u = unitById.get(it.unitId) as unknown as { autoAddOnId?: string | null; autoAddOnMode?: string | null };
-      const addOnId = u.autoAddOnId ?? "";
-      const mode = (u.autoAddOnMode ?? "") as "per_pax" | "per_unit" | "per_booking" | "";
-      if (!addOnId || !mode) continue;
-      if (mode === "per_pax") map.set(addOnId, Math.max(map.get(addOnId) ?? 0, input.totalGuest));
-      else if (mode === "per_unit") map.set(addOnId, (map.get(addOnId) ?? 0) + it.quantity);
-      else if (mode === "per_booking") map.set(addOnId, (map.get(addOnId) ?? 0) + 1);
+      const u = unitById.get(it.unitId) as any;
+      const qty = it.quantity;
+
+      const process = (addOnId: string, mode: string) => {
+        const current = map.get(addOnId) ?? 0;
+        if (mode === "per_pax") map.set(addOnId, current + totalGuest * qty);
+        else if (mode === "per_adult") map.set(addOnId, current + adultPax * qty);
+        else if (mode === "per_child_5_10") map.set(addOnId, current + child5to10Pax * qty);
+        else if (mode === "per_unit") map.set(addOnId, current + qty);
+        else if (mode === "per_booking") map.set(addOnId, current + 1);
+      };
+
+      // Old single autoAddOn logic (backward compatibility)
+      const oldAddOnId = u.autoAddOnId ?? "";
+      const oldMode = (u.autoAddOnMode ?? "") as string;
+      if (oldAddOnId && oldMode) {
+        process(oldAddOnId, oldMode);
+      }
+
+      // New multiple autoAddOns logic
+      if (u.autoAddOnsJson) {
+        try {
+          const multi = JSON.parse(u.autoAddOnsJson) as { addOnId: string; mode: string }[];
+          for (const item of multi) {
+            if (item.addOnId && item.mode) {
+              process(item.addOnId, item.mode);
+            }
+          }
+        } catch {}
+      }
     }
     return Array.from(map.entries())
       .filter(([, quantity]) => quantity > 0)
