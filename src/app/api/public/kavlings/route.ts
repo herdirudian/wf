@@ -117,7 +117,6 @@ export async function GET(req: Request) {
   const mandiri = Array.from(takenMandiri).sort((a, b) => a - b);
   const paket = Array.from(takenPaket).sort((a, b) => a - b);
   const taken = Array.from(new Set([...mandiri, ...paket])).sort((a, b) => a - b);
-  const now = new Date();
 
   return NextResponse.json({
     all: allowed,
