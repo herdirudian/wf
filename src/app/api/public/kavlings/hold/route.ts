@@ -87,7 +87,11 @@ export async function POST(req: Request) {
             expiresAt: { gt: now },
             checkIn: { lt: range.checkOut },
             checkOut: { gt: range.checkIn },
-            ...(parsed.data.holdId ? { id: { not: parsed.data.holdId } } : {}),
+            AND: [
+              parsed.data.holdId ? { id: { not: parsed.data.holdId } } : {},
+              // If we have a draft hold from localStorage, also exclude it
+              parsed.data.holdToken ? { token: { not: parsed.data.holdToken } } : {},
+            ],
           },
         },
         include: { kavling: true },
