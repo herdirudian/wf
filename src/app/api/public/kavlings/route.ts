@@ -76,7 +76,7 @@ export async function GET(req: Request) {
   const oooRows = await prisma.kavlingOOO.findMany({
     where: {
       startDate: { lt: range.checkOut },
-      endDate: { gt: range.checkIn },
+      endDate: { gte: range.checkIn },
     },
     include: { kavling: true },
   });

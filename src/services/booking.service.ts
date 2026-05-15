@@ -554,7 +554,7 @@ export async function createPublicBooking(input: {
         where: {
           kavlingId: { in: kavlingIds },
           startDate: { lt: input.checkOut },
-          endDate: { gt: input.checkIn },
+          endDate: { gte: input.checkIn },
         },
         include: { kavling: true },
       });

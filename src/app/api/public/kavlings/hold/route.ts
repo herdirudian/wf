@@ -84,7 +84,7 @@ export async function POST(req: Request) {
         where: {
           kavlingId: { in: kavlingIds },
           startDate: { lt: range.checkOut },
-          endDate: { gt: range.checkIn },
+          endDate: { gte: range.checkIn },
         },
         include: { kavling: true },
       });
