@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { formatDateWIB } from "@/lib/time";
-import { toast } from "react-hot-toast";
 
 export default function KavlingOOOPage() {
   const [oooList, setOOOList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // Form state
   const [kavlingNumber, setKavlingNumber] = useState("");
@@ -23,7 +23,7 @@ export default function KavlingOOOPage() {
       setOOOList(data.ooo || []);
     } catch (e) {
       console.error(e);
-      toast.error("Gagal memuat data OOO");
+      setStatusMsg({ type: "error", text: "Gagal memuat data OOO" });
     } finally {
       setLoading(false);
     }
@@ -32,6 +32,7 @@ export default function KavlingOOOPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
+    setStatusMsg(null);
     try {
       const res = await fetch("/api/dashboard/kavlings/ooo", {
         method: "POST",
@@ -41,12 +42,12 @@ export default function KavlingOOOPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Gagal menyimpan data");
       
-      toast.success("Kavling OOO berhasil ditambahkan");
+      setStatusMsg({ type: "success", text: "Kavling OOO berhasil ditambahkan" });
       setKavlingNumber("");
       setReason("");
       fetchOOO();
     } catch (err: any) {
-      toast.error(err.message);
+      setStatusMsg({ type: "error", text: err.message });
     } finally {
       setSubmitting(false);
     }
@@ -54,13 +55,14 @@ export default function KavlingOOOPage() {
 
   async function onDelete(id: string) {
     if (!confirm("Hapus jadwal perbaikan ini? Kavling akan kembali tersedia.")) return;
+    setStatusMsg(null);
     try {
       const res = await fetch(`/api/dashboard/kavlings/ooo?id=${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Gagal menghapus");
-      toast.success("Jadwal perbaikan dihapus");
+      setStatusMsg({ type: "success", text: "Jadwal perbaikan dihapus" });
       fetchOOO();
     } catch (err: any) {
-      toast.error(err.message);
+      setStatusMsg({ type: "error", text: err.message });
     }
   }
 
@@ -79,6 +81,13 @@ export default function KavlingOOOPage() {
         {/* Form Section */}
         <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
           <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-foreground">Tambah Perbaikan</h2>
+          
+          {statusMsg && (
+            <div className={`mb-4 rounded-xl p-3 text-xs font-bold ${statusMsg.type === "success" ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-red-50 text-red-700 border border-red-100"}`}>
+              {statusMsg.text}
+            </div>
+          )}
+
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-1">
               <label className="text-xs font-bold text-muted uppercase">Nomor Kavling</label>
