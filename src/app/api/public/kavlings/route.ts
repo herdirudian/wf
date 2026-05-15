@@ -73,6 +73,14 @@ export async function GET(req: Request) {
   const excludeHoldId = myHold?.id ?? null;
   const now = new Date();
 
+  const oooRows = await prisma.kavlingOOO.findMany({
+    where: {
+      startDate: { lt: range.checkOut },
+      endDate: { gt: range.checkIn },
+    },
+    include: { kavling: true },
+  });
+
   const rows = await prisma.bookingKavling.findMany({
     where: {
       booking: {
@@ -102,6 +110,12 @@ export async function GET(req: Request) {
 
   const takenPaid = new Set<number>();
   const takenHeld = new Set<number>();
+  const takenOOO = new Set<number>();
+
+  for (const r of oooRows) {
+    if (!allowedSet.has(r.kavling.number)) continue;
+    takenOOO.add(r.kavling.number);
+  }
 
   for (const r of rows) {
     if (!allowedSet.has(r.kavling.number)) continue;
@@ -120,13 +134,15 @@ export async function GET(req: Request) {
 
   const paid = Array.from(takenPaid).sort((a, b) => a - b);
   const held = Array.from(takenHeld).sort((a, b) => a - b);
-  const taken = Array.from(new Set([...paid, ...held])).sort((a, b) => a - b);
+  const ooo = Array.from(takenOOO).sort((a, b) => a - b);
+  const taken = Array.from(new Set([...paid, ...held, ...ooo])).sort((a, b) => a - b);
 
   return NextResponse.json({
     all: allowed,
     taken,
     paid,
     held,
+    ooo,
     myHold: myHold && myHold.expiresAt > now ? {
       id: myHold.id,
       token: myHold.token,

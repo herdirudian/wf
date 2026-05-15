@@ -17,6 +17,7 @@ const navItems = [
   { href: "/dashboard/settings", label: "Settings" },
   { href: "/dashboard/users", label: "Pengguna" },
   { href: "/dashboard/addons", label: "Add-Ons" },
+  { href: "/dashboard/kavlings/ooo", label: "Kavling OOO" },
   { href: "/dashboard/ugc", label: "UGC" },
   { href: "/dashboard/customers", label: "Customer" },
   { href: "/dashboard/reports", label: "Reports" },
@@ -78,7 +79,8 @@ export function DashboardShell({
                 item.href === "/dashboard/units" ||
                 item.href === "/dashboard/packages" ||
                 item.href === "/dashboard/reports" ||
-                item.href === "/dashboard/activity-logs")
+                item.href === "/dashboard/activity-logs" ||
+                item.href === "/dashboard/kavlings/ooo")
             )
               return false;
             return true;

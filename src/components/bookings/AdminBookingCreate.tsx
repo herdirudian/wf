@@ -144,6 +144,7 @@ export function AdminBookingCreate() {
   const [kavlingTaken, setKavlingTaken] = useState<number[]>([]);
   const [kavlingPaid, setKavlingPaid] = useState<number[]>([]);
   const [kavlingHeld, setKavlingHeld] = useState<number[]>([]);
+  const [kavlingOOO, setKavlingOOO] = useState<number[]>([]);
   const [kavlingSelected, setKavlingSelected] = useState<number[]>([]);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
@@ -434,7 +435,7 @@ export function AdminBookingCreate() {
       }
       const res = await fetch(url.toString());
       const data = (await res.json().catch(() => null)) as
-        | { all?: number[]; taken?: number[]; paid?: number[]; held?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; message?: string }
+        | { all?: number[]; taken?: number[]; paid?: number[]; held?: number[]; ooo?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; message?: string }
         | null;
       if (cancelled) return;
       if (!res.ok) {
@@ -442,6 +443,7 @@ export function AdminBookingCreate() {
         setKavlingTaken([]);
         setKavlingPaid([]);
         setKavlingHeld([]);
+        setKavlingOOO([]);
         setKavlingLoading(false);
         setKavlingError(data?.message ?? "Gagal load kavling");
         return;
@@ -450,6 +452,7 @@ export function AdminBookingCreate() {
       setKavlingTaken((data?.taken ?? []).filter((n) => typeof n === "number"));
       setKavlingPaid((data?.paid ?? []).filter((n) => typeof n === "number"));
       setKavlingHeld((data?.held ?? []).filter((n) => typeof n === "number"));
+      setKavlingOOO((data?.ooo ?? []).filter((n) => typeof n === "number"));
       if (typeof data?.sellCount === "number" && Number.isFinite(data.sellCount)) setKavlingSellCount(data.sellCount);
       const ps = data?.privateRange?.start;
       const pe = data?.privateRange?.end;
@@ -1002,6 +1005,14 @@ export function AdminBookingCreate() {
                 <div className="h-4 w-4 rounded-full bg-amber-400" />
                 <span className="text-[11px] text-muted">Proses / Hold</span>
               </div>
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 rounded-full bg-gray-200 flex items-center justify-center">
+                  <svg className="h-2 w-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <span className="text-[11px] text-muted">Perbaikan (OOO)</span>
+              </div>
             </div>
 
             <div className="mt-3 grid grid-cols-8 gap-2 sm:grid-cols-12">
@@ -1026,6 +1037,7 @@ export function AdminBookingCreate() {
                 return allNums.map((n) => {
                   const isPaid = kavlingPaid.includes(n);
                   const isHeld = kavlingHeld.includes(n);
+                  const isOOO = kavlingOOO.includes(n);
                   const isTaken = kavlingTaken.includes(n);
                   const isSelected = kavlingSelected.includes(n);
                   const inPrivate = combinedAll && pr ? n >= pr.start && n <= pr.end : false;
@@ -1035,6 +1047,7 @@ export function AdminBookingCreate() {
                   
                   let cls = "bg-background text-foreground hover:bg-surface";
                   if (isSelected) cls = "bg-emerald-500 text-white border-emerald-600";
+                  else if (isOOO) cls = "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed grayscale";
                   else if (isPaid) cls = "bg-red-500 text-white border-red-600 cursor-not-allowed";
                   else if (isHeld) cls = "bg-amber-400 text-white border-amber-500 cursor-not-allowed";
                   else if (isTaken) cls = "bg-muted/30 text-muted cursor-not-allowed";
@@ -1063,10 +1076,17 @@ export function AdminBookingCreate() {
                           return Array.from(set).sort((a, b) => a - b);
                         });
                       }}
-                      className={`flex min-h-[2.5rem] items-center justify-center rounded-xl border border-border text-xs font-black ${cls} disabled:opacity-60 transition-all active:scale-95`}
+                      className={`relative flex min-h-[2.5rem] items-center justify-center rounded-xl border border-border text-xs font-black ${cls} disabled:opacity-60 transition-all active:scale-95 overflow-hidden`}
                       aria-label={`Kavling ${n}${isTaken ? " terbooking" : ""}`}
                     >
-                      {n}
+                      {isOOO && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50">
+                          <svg className="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                        </div>
+                      )}
+                      <span className="relative z-10">{n}</span>
                     </button>
                   );
                 });

@@ -283,6 +283,7 @@ export default function PublicBookingPage() {
   const [kavlingTaken, setKavlingTaken] = useState<number[]>([]);
   const [kavlingPaid, setKavlingPaid] = useState<number[]>([]);
   const [kavlingHeld, setKavlingHeld] = useState<number[]>([]);
+  const [kavlingOOO, setKavlingOOO] = useState<number[]>([]);
   const [kavlingSelected, setKavlingSelected] = useState<number[]>([]);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
@@ -635,7 +636,7 @@ export default function PublicBookingPage() {
       }
       const res = await fetch(url.toString());
       const data = (await res.json().catch(() => null)) as
-        | { all?: number[]; taken?: number[]; paid?: number[]; held?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; myHold?: { id: string; token: string; expiresAt: string; numbers: number[] }; message?: string }
+        | { all?: number[]; taken?: number[]; paid?: number[]; held?: number[]; ooo?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; myHold?: { id: string; token: string; expiresAt: string; numbers: number[] }; message?: string }
         | null;
       if (cancelled) return;
       if (!res.ok) {
@@ -643,6 +644,7 @@ export default function PublicBookingPage() {
         setKavlingTaken([]);
         setKavlingPaid([]);
         setKavlingHeld([]);
+        setKavlingOOO([]);
         setKavlingLoading(false);
         setKavlingError(data?.message ?? "Gagal load kavling");
         return;
@@ -651,6 +653,7 @@ export default function PublicBookingPage() {
       setKavlingTaken((data?.taken ?? []).filter((n) => typeof n === "number"));
       setKavlingPaid((data?.paid ?? []).filter((n) => typeof n === "number"));
       setKavlingHeld((data?.held ?? []).filter((n) => typeof n === "number"));
+      setKavlingOOO((data?.ooo ?? []).filter((n) => typeof n === "number"));
 
       // Auto-restore selection from server-side hold if local selection is empty
       if (data?.myHold && data.myHold.numbers.length > 0 && kavlingSelected.length === 0) {
@@ -2496,6 +2499,7 @@ export default function PublicBookingPage() {
                           {kavlingAll.map((n, idx) => {
                             const isPaid = kavlingPaid.includes(n);
                             const isHeld = kavlingHeld.includes(n);
+                            const isOOO = kavlingOOO.includes(n);
                             const isTaken = kavlingTaken.includes(n);
                             const isSelected = kavlingSelected.includes(n);
                             const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
@@ -2524,6 +2528,8 @@ export default function PublicBookingPage() {
                                 className={`group/kavling relative flex min-h-[3.25rem] items-center justify-center rounded-[1rem] border-2 text-[13px] font-black transition-all duration-500 overflow-hidden ${
                                   isSelected
                                     ? "border-primary bg-[#2D3E10] text-white shadow-xl shadow-primary/20 scale-105 z-10"
+                                    : isOOO
+                                    ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed grayscale"
                                     : isPaid
                                     ? "border-red-100 bg-red-50 text-red-700 cursor-not-allowed"
                                     : isHeld
@@ -2533,14 +2539,21 @@ export default function PublicBookingPage() {
                                     : "border-emerald-100 bg-emerald-50/30 text-emerald-700 hover:border-emerald-500 hover:bg-emerald-50 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/10"
                                 }`}
                               >
-                                {isSelected && (
-                                  <div className="absolute inset-0 opacity-10 pointer-events-none">
-                                    <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                      <path fill="currentColor" d="M0,0 L100,0 L100,100 L0,100 Z" />
+                                {isOOO && (
+                                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50">
+                                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                     </svg>
                                   </div>
                                 )}
-                                <span className="relative z-10">{n}</span>
+                                {!isOOO && isSelected && (
+                                   <div className="absolute inset-0 opacity-10 pointer-events-none">
+                                     <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                       <path fill="currentColor" d="M0,0 L100,0 L100,100 L0,100 Z" />
+                                     </svg>
+                                   </div>
+                                 )}
+                                 <span className="relative z-10">{n}</span>
                                 {!disabled && !isTaken && !isSelected && (
                                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-emerald-500 opacity-0 transition-all duration-300 group-hover/kavling:opacity-100 group-hover/kavling:bottom-1" />
                                 )}
@@ -2567,6 +2580,14 @@ export default function PublicBookingPage() {
                           <div className="flex items-center gap-3 group/legend">
                             <div className="h-4 w-4 rounded-full bg-amber-100 border border-amber-200 transition-all duration-300 group-hover/legend:scale-110" />
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-700/60">Dalam Proses / Hold</span>
+                          </div>
+                          <div className="flex items-center gap-3 group/legend">
+                            <div className="h-4 w-4 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center transition-all duration-300 group-hover/legend:scale-110">
+                              <svg className="h-2 w-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                              </svg>
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500/60">Perbaikan (OOO)</span>
                           </div>
                         </div>
                       </div>
