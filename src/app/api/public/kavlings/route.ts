@@ -83,6 +83,7 @@ export async function GET(req: Request) {
     },
     include: {
       kavling: true,
+      booking: { select: { status: true } },
       unit: { select: { category: true, name: true, kavlingScope: true } },
     },
   });
@@ -99,30 +100,33 @@ export async function GET(req: Request) {
     include: { kavling: true, hold: { select: { scope: true } } },
   });
 
-  const takenMandiri = new Set<number>();
-  const takenPaket = new Set<number>();
+  const takenPaid = new Set<number>();
+  const takenHeld = new Set<number>();
+
   for (const r of rows) {
     if (!allowedSet.has(r.kavling.number)) continue;
-    const cat = deriveCategoryFromUnit(r.unit);
-    if (cat === "mandiri") takenMandiri.add(r.kavling.number);
-    else takenPaket.add(r.kavling.number);
+    const status = r.booking.status;
+    if (status === "pending") {
+      takenHeld.add(r.kavling.number);
+    } else {
+      takenPaid.add(r.kavling.number);
+    }
   }
 
   for (const r of holdRows) {
     if (!allowedSet.has(r.kavling.number)) continue;
-    if (r.hold.scope === "mandiri") takenMandiri.add(r.kavling.number);
-    else takenPaket.add(r.kavling.number);
+    takenHeld.add(r.kavling.number);
   }
 
-  const mandiri = Array.from(takenMandiri).sort((a, b) => a - b);
-  const paket = Array.from(takenPaket).sort((a, b) => a - b);
-  const taken = Array.from(new Set([...mandiri, ...paket])).sort((a, b) => a - b);
+  const paid = Array.from(takenPaid).sort((a, b) => a - b);
+  const held = Array.from(takenHeld).sort((a, b) => a - b);
+  const taken = Array.from(new Set([...paid, ...held])).sort((a, b) => a - b);
 
   return NextResponse.json({
     all: allowed,
     taken,
-    takenMandiri: mandiri,
-    takenPaket: paket,
+    paid,
+    held,
     myHold: myHold && myHold.expiresAt > now ? {
       id: myHold.id,
       token: myHold.token,

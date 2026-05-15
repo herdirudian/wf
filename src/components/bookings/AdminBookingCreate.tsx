@@ -142,6 +142,8 @@ export function AdminBookingCreate() {
 
   const [kavlingAll, setKavlingAll] = useState<number[]>([]);
   const [kavlingTaken, setKavlingTaken] = useState<number[]>([]);
+  const [kavlingPaid, setKavlingPaid] = useState<number[]>([]);
+  const [kavlingHeld, setKavlingHeld] = useState<number[]>([]);
   const [kavlingSelected, setKavlingSelected] = useState<number[]>([]);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
@@ -432,18 +434,22 @@ export function AdminBookingCreate() {
       }
       const res = await fetch(url.toString());
       const data = (await res.json().catch(() => null)) as
-        | { all?: number[]; taken?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; message?: string }
+        | { all?: number[]; taken?: number[]; paid?: number[]; held?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; message?: string }
         | null;
       if (cancelled) return;
       if (!res.ok) {
         setKavlingAll([]);
         setKavlingTaken([]);
+        setKavlingPaid([]);
+        setKavlingHeld([]);
         setKavlingLoading(false);
         setKavlingError(data?.message ?? "Gagal load kavling");
         return;
       }
       setKavlingAll((data?.all ?? []).filter((n) => typeof n === "number"));
       setKavlingTaken((data?.taken ?? []).filter((n) => typeof n === "number"));
+      setKavlingPaid((data?.paid ?? []).filter((n) => typeof n === "number"));
+      setKavlingHeld((data?.held ?? []).filter((n) => typeof n === "number"));
       if (typeof data?.sellCount === "number" && Number.isFinite(data.sellCount)) setKavlingSellCount(data.sellCount);
       const ps = data?.privateRange?.start;
       const pe = data?.privateRange?.end;
@@ -979,19 +985,23 @@ export function AdminBookingCreate() {
               </div>
             </button>
 
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              <div className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] text-muted">Kosong</div>
-              {effectiveKavlingScope === "private" || effectiveKavlingScope === "mixed" ? (
-                <div className="rounded-full border border-border bg-red-500/15 px-2.5 py-1 text-[11px] text-foreground">
-                  Dipilih (Private)
-                </div>
-              ) : null}
-              {effectiveKavlingScope === "private" ? null : (
-                <div className="rounded-full border border-border bg-primary/25 px-2.5 py-1 text-[11px] text-foreground">
-                  Dipilih
-                </div>
-              )}
-              <div className="rounded-full border border-border bg-muted/30 px-2.5 py-1 text-[11px] text-muted">Terbooking</div>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 rounded-full border border-border bg-background" />
+                <span className="text-[11px] text-muted">Tersedia</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 rounded-full bg-emerald-500" />
+                <span className="text-[11px] text-muted">Dipilih</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 rounded-full bg-red-500" />
+                <span className="text-[11px] text-muted">Booked (Lunas)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 rounded-full bg-amber-400" />
+                <span className="text-[11px] text-muted">Proses / Hold</span>
+              </div>
             </div>
 
             <div className="mt-3 grid grid-cols-8 gap-2 sm:grid-cols-12">
@@ -1014,26 +1024,27 @@ export function AdminBookingCreate() {
                 }
 
                 return allNums.map((n) => {
+                  const isPaid = kavlingPaid.includes(n);
+                  const isHeld = kavlingHeld.includes(n);
                   const isTaken = kavlingTaken.includes(n);
                   const isSelected = kavlingSelected.includes(n);
                   const inPrivate = combinedAll && pr ? n >= pr.start && n <= pr.end : false;
                   const outOfScope = effectiveKavlingScope === "private" && pr ? n < pr.start || n > pr.end : false;
                   const quotaFull = combinedAll && pr ? (inPrivate ? privatePicked >= privateNeed : nonPicked >= nonNeed) : false;
                   const disabled = outOfScope || isTaken || (!isSelected && (kavlingSelected.length >= requiredKavlings || quotaFull));
-                  const cls = isTaken
-                    ? "bg-muted/30 text-muted"
-                    : isSelected
-                      ? effectiveKavlingScope === "private" || inPrivate
-                        ? "bg-red-500/15 text-foreground"
-                        : "bg-primary/25 text-foreground"
-                      : outOfScope
-                        ? "bg-muted/20 text-muted"
-                        : "bg-background text-foreground hover:bg-surface";
+                  
+                  let cls = "bg-background text-foreground hover:bg-surface";
+                  if (isSelected) cls = "bg-emerald-500 text-white border-emerald-600";
+                  else if (isPaid) cls = "bg-red-500 text-white border-red-600 cursor-not-allowed";
+                  else if (isHeld) cls = "bg-amber-400 text-white border-amber-500 cursor-not-allowed";
+                  else if (isTaken) cls = "bg-muted/30 text-muted cursor-not-allowed";
+                  else if (outOfScope) cls = "bg-muted/20 text-muted cursor-not-allowed";
+
                   return (
                     <button
                       key={n}
                       type="button"
-                      disabled={kavlingLoading || disabled || !requiredKavlings}
+                      disabled={kavlingLoading || (disabled && !isSelected) || !requiredKavlings}
                       onClick={() => {
                         setKavlingSelected((prev) => {
                           const set = new Set(prev);
@@ -1052,7 +1063,7 @@ export function AdminBookingCreate() {
                           return Array.from(set).sort((a, b) => a - b);
                         });
                       }}
-                      className={`flex min-h-[2.5rem] items-center justify-center rounded-xl border border-border text-xs font-semibold ${cls} disabled:opacity-60 transition-all active:scale-95`}
+                      className={`flex min-h-[2.5rem] items-center justify-center rounded-xl border border-border text-xs font-black ${cls} disabled:opacity-60 transition-all active:scale-95`}
                       aria-label={`Kavling ${n}${isTaken ? " terbooking" : ""}`}
                     >
                       {n}

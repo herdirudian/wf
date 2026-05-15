@@ -281,6 +281,8 @@ export default function PublicBookingPage() {
 
   const [kavlingAll, setKavlingAll] = useState<number[]>([]);
   const [kavlingTaken, setKavlingTaken] = useState<number[]>([]);
+  const [kavlingPaid, setKavlingPaid] = useState<number[]>([]);
+  const [kavlingHeld, setKavlingHeld] = useState<number[]>([]);
   const [kavlingSelected, setKavlingSelected] = useState<number[]>([]);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
@@ -633,18 +635,22 @@ export default function PublicBookingPage() {
       }
       const res = await fetch(url.toString());
       const data = (await res.json().catch(() => null)) as
-        | { all?: number[]; taken?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; myHold?: { id: string; token: string; expiresAt: string; numbers: number[] }; message?: string }
+        | { all?: number[]; taken?: number[]; paid?: number[]; held?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; myHold?: { id: string; token: string; expiresAt: string; numbers: number[] }; message?: string }
         | null;
       if (cancelled) return;
       if (!res.ok) {
         setKavlingAll([]);
         setKavlingTaken([]);
+        setKavlingPaid([]);
+        setKavlingHeld([]);
         setKavlingLoading(false);
         setKavlingError(data?.message ?? "Gagal load kavling");
         return;
       }
       setKavlingAll((data?.all ?? []).filter((n) => typeof n === "number"));
       setKavlingTaken((data?.taken ?? []).filter((n) => typeof n === "number"));
+      setKavlingPaid((data?.paid ?? []).filter((n) => typeof n === "number"));
+      setKavlingHeld((data?.held ?? []).filter((n) => typeof n === "number"));
 
       // Auto-restore selection from server-side hold if local selection is empty
       if (data?.myHold && data.myHold.numbers.length > 0 && kavlingSelected.length === 0) {
@@ -2488,6 +2494,8 @@ export default function PublicBookingPage() {
                       <div className="flex-1 max-h-[60vh] overflow-y-auto overscroll-contain pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
                         <div className="grid grid-cols-5 gap-3 sm:grid-cols-8 md:grid-cols-10">
                           {kavlingAll.map((n, idx) => {
+                            const isPaid = kavlingPaid.includes(n);
+                            const isHeld = kavlingHeld.includes(n);
                             const isTaken = kavlingTaken.includes(n);
                             const isSelected = kavlingSelected.includes(n);
                             const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
@@ -2516,11 +2524,13 @@ export default function PublicBookingPage() {
                                 className={`group/kavling relative flex min-h-[3.25rem] items-center justify-center rounded-[1rem] border-2 text-[13px] font-black transition-all duration-500 overflow-hidden ${
                                   isSelected
                                     ? "border-primary bg-[#2D3E10] text-white shadow-xl shadow-primary/20 scale-105 z-10"
-                                    : isTaken
-                                    ? "border-[#F1F3EE] bg-[#F1F3EE]/30 text-[#2D3E10]/10 cursor-not-allowed"
+                                    : isPaid
+                                    ? "border-red-100 bg-red-50 text-red-700 cursor-not-allowed"
+                                    : isHeld
+                                    ? "border-amber-100 bg-amber-50 text-amber-700 cursor-not-allowed"
                                     : disabled
                                     ? "border-[#F1F3EE] bg-[#F1F3EE]/20 text-[#2D3E10]/10 cursor-not-allowed opacity-40"
-                                    : "border-[#E8E8E1] bg-white text-[#2D3E10] hover:border-primary/50 hover:bg-[#F1F3EE] hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
+                                    : "border-emerald-100 bg-emerald-50/30 text-emerald-700 hover:border-emerald-500 hover:bg-emerald-50 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/10"
                                 }`}
                               >
                                 {isSelected && (
@@ -2532,7 +2542,7 @@ export default function PublicBookingPage() {
                                 )}
                                 <span className="relative z-10">{n}</span>
                                 {!disabled && !isTaken && !isSelected && (
-                                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-primary opacity-0 transition-all duration-300 group-hover/kavling:opacity-100 group-hover/kavling:bottom-1" />
+                                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-emerald-500 opacity-0 transition-all duration-300 group-hover/kavling:opacity-100 group-hover/kavling:bottom-1" />
                                 )}
                               </button>
                             );
@@ -2547,16 +2557,16 @@ export default function PublicBookingPage() {
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 transition-colors group-hover/legend:text-primary">Terpilih</span>
                           </div>
                           <div className="flex items-center gap-3 group/legend">
-                            <div className="h-4 w-4 rounded-full border-2 border-[#E8E8E1] bg-white transition-all duration-300 group-hover/legend:border-primary/40 group-hover/legend:scale-110" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 transition-colors group-hover/legend:text-primary">Tersedia</span>
+                            <div className="h-4 w-4 rounded-full border-2 border-emerald-200 bg-emerald-50 transition-all duration-300 group-hover/legend:border-emerald-500 group-hover/legend:scale-110" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700/60 transition-colors group-hover/legend:text-emerald-700">Tersedia</span>
                           </div>
                           <div className="flex items-center gap-3 group/legend">
-                            <div className="h-4 w-4 rounded-full bg-[#F1F3EE] opacity-50 grayscale transition-all duration-300 group-hover/legend:opacity-100 group-hover/legend:grayscale-0" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Sudah Terisi</span>
+                            <div className="h-4 w-4 rounded-full bg-red-100 border border-red-200 transition-all duration-300 group-hover/legend:scale-110" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-700/60">Sudah Dibooking</span>
                           </div>
                           <div className="flex items-center gap-3 group/legend">
-                            <div className="h-4 w-4 rounded-full border border-[#E8E8E1] bg-[#F1F3EE]/50 opacity-40 transition-all duration-300 group-hover/legend:opacity-100" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Tidak Sesuai</span>
+                            <div className="h-4 w-4 rounded-full bg-amber-100 border border-amber-200 transition-all duration-300 group-hover/legend:scale-110" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-700/60">Dalam Proses / Hold</span>
                           </div>
                         </div>
                       </div>
