@@ -686,12 +686,12 @@ export default function PublicBookingPage() {
       return;
     }
     
-    // During restoration, don't clear hold immediately if lengths don't match, 
-    // wait for kavlingSelected to be restored.
+    // During restoration or change, don't clear hold immediately if lengths don't match.
+    // Let the user adjust their selection. Only release if they explicitly want to or if we need a new hold.
     if (kavlingSelected.length !== requiredKavlings) {
-      if (hold?.id && hold?.token) void releaseHold(hold);
-      setHold(null);
-      setHoldError(null);
+      // if (hold?.id && hold?.token) void releaseHold(hold);
+      // setHold(null);
+      // setHoldError(null);
       return;
     }
     // Check for actual conflicts with other users/bookings
