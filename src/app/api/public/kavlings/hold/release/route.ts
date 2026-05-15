@@ -9,16 +9,21 @@ const BodySchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const json = (await req.json().catch(() => null)) as unknown;
-  const parsed = BodySchema.safeParse(json);
-  if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
+  try {
+    const json = (await req.json().catch(() => null)) as unknown;
+    const parsed = BodySchema.safeParse(json);
+    if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
 
-  await prisma.kavlingHold.deleteMany({
-    where: { id: parsed.data.holdId, token: parsed.data.holdToken },
-  });
+    await prisma.kavlingHold.deleteMany({
+      where: { id: parsed.data.holdId, token: parsed.data.holdToken },
+    });
 
-  notifyKavlingUpdated();
+    await notifyKavlingUpdated();
 
-  return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true });
+  } catch (err: any) {
+    console.error("Release hold error:", err);
+    return NextResponse.json({ message: err.message || "Gagal melepas hold" }, { status: 500 });
+  }
 }
 

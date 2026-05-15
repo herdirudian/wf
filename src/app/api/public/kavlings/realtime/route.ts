@@ -9,20 +9,28 @@ export async function GET() {
   const stream = new ReadableStream({
     start(controller) {
       const listener = (data: any) => {
-        const chunk = `data: ${JSON.stringify(data)}\n\n`;
-        controller.enqueue(encoder.encode(chunk));
+        try {
+          const chunk = `data: ${JSON.stringify(data)}\n\n`;
+          controller.enqueue(encoder.encode(chunk));
+        } catch (e) {
+          console.error("SSE enqueue error:", e);
+        }
       };
 
       kavlingBus.on(KAVLING_EVENTS.UPDATED, listener);
 
-      // Heartbeat to keep connection alive
+      // Heartbeat to keep connection alive (Cloudflare timeout is 100s, let's do 15s)
       const heartbeat = setInterval(() => {
-        controller.enqueue(encoder.encode(": heartbeat\n\n"));
-      }, 30000);
+        try {
+          controller.enqueue(encoder.encode(": heartbeat\n\n"));
+        } catch (e) {
+          clearInterval(heartbeat);
+          kavlingBus.off(KAVLING_EVENTS.UPDATED, listener);
+        }
+      }, 15000);
 
-      // Clean up when client disconnects
-      // Note: In Next.js App Router, detecting client disconnect can be tricky 
-      // but usually the stream closure handles it or we can use a signal if available.
+      // Next.js App Router doesn't have a clean way to detect close in Response(stream)
+      // but the heartbeat error above will eventually clean up if the stream is closed.
     },
     cancel() {
       // Cleanup is usually handled by individual frameworks/runtimes
@@ -34,6 +42,8 @@ export async function GET() {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache, no-transform",
       "Connection": "keep-alive",
+      "X-Accel-Buffering": "no",
+      "X-Content-Type-Options": "nosniff",
     },
   });
 }

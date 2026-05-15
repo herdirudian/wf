@@ -91,7 +91,7 @@ export async function updateBookingStatus(id: string, nextStatus: BookingStatus)
   });
 
   if (current === "cancelled" || nextStatus === "cancelled") {
-    notifyKavlingUpdated();
+    await notifyKavlingUpdated();
   }
 
   return updated;
@@ -607,7 +607,7 @@ export async function createPublicBooking(input: {
       }
     }
 
-    notifyKavlingUpdated();
+    await notifyKavlingUpdated();
 
     return { bookingId: booking.id, code: booking.code, amount };
   });
@@ -758,7 +758,7 @@ export async function rescheduleBooking(
     }
   });
 
-  notifyKavlingUpdated();
+  await notifyKavlingUpdated();
 
   return prisma.booking.findUnique({
     where: { id },

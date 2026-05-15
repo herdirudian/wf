@@ -160,7 +160,7 @@ export async function POST(req: Request) {
       return { holdId: hold.id, holdToken: token, expiresAt: desiredExpiresAt };
     });
 
-    notifyKavlingUpdated();
+    await notifyKavlingUpdated();
 
     return NextResponse.json({ ...result, holdMinutes });
   } catch (e) {

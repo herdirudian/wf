@@ -732,6 +732,16 @@ export default function PublicBookingPage() {
         setHold(null);
         setHoldError(data?.message ?? "Gagal hold kavling");
         setHoldHeartbeat((x) => x + 1);
+        
+        // If the server says it's already held, and we were trying to use a draft hold,
+        // it might be a stale/sync issue. Clear the draft so next attempt starts fresh.
+        if (res.status === 400 && data?.message?.includes("sedang di-hold")) {
+          const d = readDraft();
+          if (d) {
+            delete d.hold;
+            window.sessionStorage.setItem("wf_booking_draft", JSON.stringify(d));
+          }
+        }
         return;
       }
       if (data?.holdId && data?.holdToken && data?.expiresAt) {
