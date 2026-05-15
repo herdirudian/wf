@@ -35,6 +35,13 @@ export async function POST(req: Request) {
     const parsed = CreateSchema.safeParse(json);
     if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
 
+    // Auto-create kavling record if it doesn't exist yet
+    await prisma.kavling.upsert({
+      where: { number: parsed.data.kavlingNumber },
+      create: { number: parsed.data.kavlingNumber },
+      update: {},
+    });
+
     const kavling = await prisma.kavling.findUnique({
       where: { number: parsed.data.kavlingNumber },
     });

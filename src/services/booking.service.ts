@@ -550,6 +550,19 @@ export async function createPublicBooking(input: {
 
       await lockKavlings(tx, kavlingIds);
 
+      const oooConflicts = await tx.kavlingOOO.findMany({
+        where: {
+          kavlingId: { in: kavlingIds },
+          startDate: { lt: input.checkOut },
+          endDate: { gt: input.checkIn },
+        },
+        include: { kavling: true },
+      });
+      if (oooConflicts.length) {
+        const used = Array.from(new Set(oooConflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        throw new Error(`Kavling sedang dalam perbaikan: ${used.join(", ")}`);
+      }
+
       const conflicts = await tx.bookingKavling.findMany({
         where: {
           kavlingId: { in: kavlingIds },

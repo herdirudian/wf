@@ -80,6 +80,19 @@ export async function POST(req: Request) {
 
       const now = new Date();
 
+      const oooConflicts = await tx.kavlingOOO.findMany({
+        where: {
+          kavlingId: { in: kavlingIds },
+          startDate: { lt: range.checkOut },
+          endDate: { gt: range.checkIn },
+        },
+        include: { kavling: true },
+      });
+      if (oooConflicts.length) {
+        const used = Array.from(new Set(oooConflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        throw new Error(`Kavling sedang dalam perbaikan: ${used.join(", ")}`);
+      }
+
       const holdConflicts = await tx.kavlingHoldKavling.findMany({
         where: {
           kavlingId: { in: kavlingIds },
