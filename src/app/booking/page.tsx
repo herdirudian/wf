@@ -2951,16 +2951,15 @@ export default function PublicBookingPage() {
                 </div>
               </form>
             )}
-        </div>
+          </div>
 
-        {/* Sidebar Summary - Sticky on Desktop */}
-        <div className="hidden lg:block">
-          {sidebarContent}
+          <div className="hidden lg:block">
+            {sidebarContent}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-)}
+  )}
 </div>
 
     {/* Nature-Inspired Footer */}
