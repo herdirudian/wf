@@ -2075,7 +2075,6 @@ export default function PublicBookingPage() {
                     );
                   })}
                 </div>
-              </div>
 
               {visibleUnits.length > shownUnitBaseCount && (
                 <div className="flex justify-center pt-8">
@@ -2644,6 +2643,8 @@ export default function PublicBookingPage() {
                     </div>
                   </Modal>
                 ) : null}
+                </div>
+              </div>
 
               {/* Add-Ons Section */}
               <div className="space-y-8">
