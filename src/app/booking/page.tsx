@@ -2643,9 +2643,6 @@ export default function PublicBookingPage() {
                     </div>
                   </Modal>
                 ) : null}
-                  </div>
-                </div>
-              )}
 
               {/* Add-Ons Section */}
               <div className="space-y-8">
@@ -2833,7 +2830,6 @@ export default function PublicBookingPage() {
                       </div>
                     </button>
                   </div>
-                  </div>
                 </div>
               </div>
             )}
@@ -2986,7 +2982,6 @@ export default function PublicBookingPage() {
     </footer>
   </div>
 )}
-</div>
 </div>
 );
 }
