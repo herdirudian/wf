@@ -1818,13 +1818,13 @@ export default function PublicBookingPage() {
                                     </div>
                                   </div>
                                 </div>
-                              </button>
-                            </div>
-                          );
-                        })}
-                      </div>
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
-                  )}
+                  </div>
+                )}
 
             {currentStep === 2 && (
               <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
@@ -2075,6 +2075,7 @@ export default function PublicBookingPage() {
                     );
                   })}
                 </div>
+              </div>
 
               {visibleUnits.length > shownUnitBaseCount && (
                 <div className="flex justify-center pt-8">
@@ -2831,8 +2832,7 @@ export default function PublicBookingPage() {
                     </button>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {currentStep === 3 && (
               <form 
