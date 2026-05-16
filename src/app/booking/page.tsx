@@ -2143,7 +2143,6 @@ export default function PublicBookingPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent -translate-y-full animate-shimmer" />
                         </div>
                       </div>
-                    </div>
                   </div>
                   <div className="p-8">
                     <div className="mb-12 flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
@@ -2645,6 +2644,8 @@ export default function PublicBookingPage() {
                 ) : null}
                 </div>
               </div>
+            </div>
+          )}
 
               {/* Add-Ons Section */}
               <div className="space-y-8">
@@ -2833,7 +2834,8 @@ export default function PublicBookingPage() {
                     </button>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
             {currentStep === 3 && (
               <form 
