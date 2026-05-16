@@ -2832,8 +2832,7 @@ export default function PublicBookingPage() {
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
             {currentStep === 3 && (
               <form 
@@ -2960,6 +2959,7 @@ export default function PublicBookingPage() {
         </div>
       </div>
     </div>
+  </div>
     
     {/* Nature-Inspired Footer */}
     <footer className="mt-20 py-16">
