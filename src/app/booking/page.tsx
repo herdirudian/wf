@@ -2831,7 +2831,6 @@ export default function PublicBookingPage() {
                     </button>
                   </div>
                 </div>
-              </div>
             )}
 
             {currentStep === 3 && (
@@ -2959,7 +2958,9 @@ export default function PublicBookingPage() {
         </div>
       </div>
     </div>
-  )}
+  </div>
+)}
+</div>
 </div>
 
     {/* Nature-Inspired Footer */}
