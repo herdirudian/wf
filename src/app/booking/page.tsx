@@ -1164,8 +1164,8 @@ export default function PublicBookingPage() {
                   </svg>
                 </div>
                 <p className="text-[10px] font-bold text-[#2D3E10]/30 uppercase tracking-[0.2em]">Belum Ada Pilihan</p>
-              </div>
-            )}
+                </div>
+              )}
           </div>
 
           {/* Add-ons if any */}
@@ -2832,7 +2832,8 @@ export default function PublicBookingPage() {
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
             {currentStep === 3 && (
               <form 
