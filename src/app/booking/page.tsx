@@ -2932,7 +2932,7 @@ export default function PublicBookingPage() {
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-xs font-medium text-[#2D3E10]/60">Total Tamu</span>
-                            <span className="text-xs font-bold text-[#2D3E10]">{totalPax} Orang</span>
+                            <span className="text-xs font-bold text-[#2D3E10]">{totalGuest} Orang</span>
                           </div>
                           <div className="pt-3 border-t border-[#E8E8E1] flex justify-between items-center">
                             <span className="text-xs font-black text-[#2D3E10]">Estimasi Total</span>
