@@ -2936,7 +2936,7 @@ export default function PublicBookingPage() {
                           </div>
                           <div className="pt-3 border-t border-[#E8E8E1] flex justify-between items-center">
                             <span className="text-xs font-black text-[#2D3E10]">Estimasi Total</span>
-                            <span className="text-sm font-black text-primary">{formatIDR(totalPrice)}</span>
+                            <span className="text-sm font-black text-primary">{formatIDR(estimatedAmount)}</span>
                           </div>
                         </div>
                       </div>
