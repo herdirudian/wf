@@ -1360,7 +1360,7 @@ export default function PublicBookingPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background selection:bg-primary/10 selection:text-primary pb-24 sm:pb-0">
+    <div className="relative min-h-screen overflow-x-hidden bg-background selection:bg-primary/10 selection:text-primary pb-48 sm:pb-0">
       {/* Premium Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute -left-1/4 -top-1/4 h-[100%] w-[100%] rounded-full bg-primary/[0.03] blur-[120px] animate-pulse" />
@@ -2846,23 +2846,13 @@ export default function PublicBookingPage() {
                 </div>
               )}
 
-                  <div className="fixed bottom-0 left-0 right-0 z-[100] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:relative sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:pt-10 sm:backdrop-blur-none">
+                  <div className="fixed bottom-0 left-0 right-0 z-[1000] border-t border-[#E8E8E1] bg-white p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] sm:relative sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:pt-10 sm:shadow-none">
                     <div className="mx-auto flex max-w-xl flex-col gap-3 sm:flex-row">
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(2)}
-                        className="group order-2 flex min-h-[3.5rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1 sm:min-h-[3.75rem]"
-                      >
-                        <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                        Kembali
-                      </button>
                       <button
                         type="button"
                         onClick={() => setCurrentStep(3)}
                         disabled={selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings) || guestOverCapacity}
-                        className="group relative order-1 flex min-h-[3.5rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:order-2 sm:min-h-[3.75rem]"
+                        className="group relative order-1 flex min-h-[3.5rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:min-h-[3.75rem]"
                       >
                         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                         <div className="relative z-10 flex items-center gap-3">
@@ -2871,6 +2861,16 @@ export default function PublicBookingPage() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                           </svg>
                         </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCurrentStep(2)}
+                        className="group order-2 flex min-h-[3.5rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:min-h-[3.75rem]"
+                      >
+                        <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Kembali
                       </button>
                     </div>
                   </div>
@@ -2945,13 +2945,13 @@ export default function PublicBookingPage() {
                     </div>
 
                     {/* Navigation Buttons for Step 3 */}
-                    <div className="fixed bottom-0 left-0 right-0 z-[100] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:relative sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:pt-10 sm:backdrop-blur-none">
+                    <div className="fixed bottom-0 left-0 right-0 z-[1000] border-t border-[#E8E8E1] bg-white p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] sm:relative sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:pt-10 sm:shadow-none">
                       <div className="mx-auto flex max-w-xl flex-col gap-3 sm:flex-row">
-                        <button type="button" onClick={() => setCurrentStep(2)} className="group order-2 flex min-h-[3.5rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1 sm:min-h-[3.75rem]">
-                          Kembali
-                        </button>
-                        <button type="submit" disabled={submitting || loading || !name || !phone || !email} className="group relative order-1 flex min-h-[3.5rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:order-2 sm:min-h-[3.75rem]">
+                        <button type="submit" disabled={submitting || loading || !name || !phone || !email} className="group relative order-1 flex min-h-[3.5rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:min-h-[3.75rem]">
                           {submitting || loading ? "Memproses..." : "Konfirmasi Booking"}
+                        </button>
+                        <button type="button" onClick={() => setCurrentStep(2)} className="group order-2 flex min-h-[3.5rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:min-h-[3.75rem]">
+                          Kembali
                         </button>
                       </div>
                     </div>

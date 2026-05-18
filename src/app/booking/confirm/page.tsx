@@ -306,7 +306,7 @@ export default function BookingConfirmPage() {
   if (!draft) return null;
 
   return (
-    <div className="min-h-dvh bg-[#F8F9F6] relative overflow-hidden pb-24 sm:pb-0">
+    <div className="min-h-dvh bg-[#F8F9F6] relative overflow-hidden pb-48 sm:pb-0">
       {/* Nature-inspired background decorations */}
       <div className="absolute left-[-10%] top-[-5%] h-[40%] w-[40%] opacity-[0.03] pointer-events-none -rotate-12">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -661,30 +661,30 @@ export default function BookingConfirmPage() {
               </span>
             </label>
 
-            <div className="fixed bottom-0 left-0 right-0 z-[100] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:relative sm:z-auto sm:mt-10 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+            <div className="fixed bottom-0 left-0 right-0 z-[1000] border-t border-[#E8E8E1] bg-white p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] sm:relative sm:z-auto sm:mt-10 sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
               <div className="mx-auto flex max-w-xl flex-col gap-3 sm:flex-row">
-                <button
-                  type="button"
-                  disabled={submitting}
-                  onClick={() => router.back()}
-                  className="group order-2 flex min-h-[3.5rem] flex-1 items-center justify-center rounded-[1.5rem] border border-[#E8E8E1] bg-white px-8 py-5 text-[13px] font-black uppercase tracking-[0.3em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 sm:order-1 sm:min-h-[4rem]"
-                >
-                  <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                  </svg>
-                  Kembali
-                </button>
                 <button
                   type="button"
                   disabled={submitting || !agreed}
                   onClick={() => confirmAndPay()}
-                  className="group relative order-1 flex min-h-[3.5rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#2D3E10] px-8 py-5 text-[13px] font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#2D3E10]/20 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-95 disabled:opacity-30 disabled:shadow-none sm:order-2 sm:min-h-[4rem]"
+                  className="group relative order-1 flex min-h-[3.5rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#2D3E10] px-8 py-5 text-[13px] font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#2D3E10]/20 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-95 disabled:opacity-30 disabled:shadow-none sm:min-h-[4rem]"
                 >
                   <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
                   <span className="relative z-10">{submitting ? "Memproses..." : "Konfirmasi & Bayar Sekarang"}</span>
                   <svg className="relative z-10 ml-3 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
+                </button>
+                <button
+                  type="button"
+                  disabled={submitting}
+                  onClick={() => router.back()}
+                  className="group order-2 flex min-h-[3.5rem] flex-1 items-center justify-center rounded-[1.5rem] border border-[#E8E8E1] bg-white px-8 py-5 text-[13px] font-black uppercase tracking-[0.3em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 sm:min-h-[4rem]"
+                >
+                  <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Kembali
                 </button>
               </div>
             </div>
