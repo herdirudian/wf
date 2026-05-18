@@ -1367,32 +1367,32 @@ export default function PublicBookingPage() {
         <div className="absolute -right-1/4 -bottom-1/4 h-[100%] w-[100%] rounded-full bg-primary/[0.02] blur-[120px] animate-pulse duration-[10000ms]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-2 py-8 sm:px-6 lg:px-8">
-        <div className={`${success ? "no-print " : ""}mb-8 overflow-hidden rounded-[1.5rem] border border-[#E8E8E1] bg-white px-4 py-8 shadow-2xl shadow-[#2D3E10]/5 backdrop-blur-xl transition-all hover:shadow-primary/10 sm:rounded-[2.5rem] sm:p-8`}>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-[180px_1fr] sm:items-center">
+      <div className="relative mx-auto w-full max-w-7xl px-3 py-6 sm:px-6 lg:px-8">
+        <div className={`${success ? "no-print " : ""}mb-6 overflow-hidden rounded-[1.2rem] border border-[#E8E8E1] bg-white px-4 py-6 shadow-xl shadow-[#2D3E10]/5 backdrop-blur-xl transition-all hover:shadow-primary/10 sm:rounded-[2.5rem] sm:p-8`}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-[180px_1fr] sm:items-center">
             <div className="flex justify-center sm:justify-start">
               <div className="relative group">
                 <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <img src="/brand/logowf.png" alt="Woodforest" className="relative h-24 w-24 shrink-0 rounded-2xl object-contain sm:h-36 sm:w-36 transition-transform duration-700 group-hover:scale-105" />
+                <img src="/brand/logowf.png" alt="Woodforest" className="relative h-20 w-24 shrink-0 rounded-xl object-contain sm:h-36 sm:w-36 transition-transform duration-700 group-hover:scale-105" />
               </div>
             </div>
-            <div className="flex flex-col items-center text-center sm:items-start sm:text-left sm:-mt-2">
-              <div className="inline-flex items-center rounded-full bg-primary/10 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-3">
-                <span className="relative flex h-2 w-2 mr-3">
+            <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
+              <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-primary mb-2 sm:mb-3">
+                <span className="relative flex h-1.5 w-1.5 mr-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
                 </span>
                 Luxury Camping Ground
               </div>
-              <h1 className="text-4xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
+              <h1 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
                 Woodforest <span className="text-primary italic">Booking</span>
               </h1>
-              <p className="mx-auto mt-3 max-w-xl text-sm font-medium leading-relaxed text-primary/60 italic sm:mx-0">
+              <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium leading-relaxed text-primary/60 italic sm:mx-0 sm:mt-3 sm:text-sm">
                 "Grounded, calm, warm. Pilih tanggal, pilih paket, dan nikmati pengalaman yang tenang di alam untuk bonding keluarga."
               </p>
-              <div className="mt-6 flex flex-wrap justify-center gap-2.5 sm:justify-start">
+              <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start sm:mt-6 sm:gap-2.5">
                 {["Quiet nature", "Family bonding", "Wellness", "Light adventure"].map((tag) => (
-                  <div key={tag} className="rounded-2xl border border-[#E8E8E1] bg-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40 transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-0.5">
+                  <div key={tag} className="rounded-xl border border-[#E8E8E1] bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] text-primary/40 transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-0.5 sm:rounded-2xl sm:px-4 sm:py-1.5 sm:text-[10px]">
                     {tag}
                   </div>
                 ))}
@@ -1629,14 +1629,14 @@ export default function PublicBookingPage() {
             </div>
           </>
         ) : (
-          <div className="mt-12 space-y-12 pb-20">
+          <div className="mt-8 space-y-8 pb-20 sm:mt-12 sm:space-y-12">
             {/* Step Indicators - Modern & Professional */}
             <div className="mx-auto w-full max-w-7xl">
-              <div className="relative flex items-center justify-between gap-3 sm:gap-4">
+              <div className="relative flex items-center justify-between gap-2 sm:gap-4">
                 {[1, 2, 3].map((step) => {
                   const isActive = currentStep === step;
                   const isCompleted = currentStep > step;
-                  const labels = ["Pilih Kategori", "Pilih Unit & Kavling", "Isi Identitas"];
+                  const labels = ["Pilih Kategori", "Pilih Unit", "Isi Identitas"];
                   
                   return (
                     <div key={step} className="relative flex min-w-0 flex-1 flex-col items-center group">
@@ -1646,57 +1646,43 @@ export default function PublicBookingPage() {
                           if (isCompleted || (step < currentStep)) setCurrentStep(step);
                         }}
                         disabled={!isCompleted && step > currentStep}
-                        className="flex flex-col items-center gap-2 outline-none w-full"
+                        className="flex flex-col items-center gap-1.5 outline-none w-full sm:gap-2"
                       >
                         {/* Line connector */}
                         {step < 3 && (
-                          <div className="absolute left-[calc(50%+18px)] right-[-calc(50%-18px)] top-5 h-[2px] bg-[#E8E8E1] sm:left-[calc(50%+20px)] sm:right-[-calc(50%-20px)]">
+                          <div className="absolute left-[calc(50%+16px)] right-[-calc(50%-16px)] top-4 h-[1.5px] bg-[#E8E8E1] sm:left-[calc(50%+18px)] sm:right-[-calc(50%-18px)] sm:top-5 sm:h-[2px]">
                             <div
                               className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)"
                               style={{ width: isCompleted ? "100%" : "0%" }}
                             />
-                            <div
-                              className={`absolute -top-1 h-2 w-2 rounded-full border border-white bg-primary transition-all duration-1000 ${
-                                isCompleted ? "left-full opacity-100" : "left-0 opacity-0"
-                              }`}
-                            />
                           </div>
                         )}
 
-                        <div className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-2xl border-2 transition-all duration-700 ${
+                        <div className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-[0.8rem] border-[1.5px] transition-all duration-700 sm:h-10 sm:w-10 sm:rounded-2xl sm:border-2 ${
                           isActive 
-                            ? "border-primary bg-primary text-white shadow-xl shadow-primary/20 scale-110 rotate-3" 
+                            ? "border-primary bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
                             : isCompleted 
                               ? "border-primary bg-primary/10 text-primary" 
                               : "border-[#E8E8E1] bg-white text-[#2D3E10]/20"
                         }`}>
-                          {/* Active Step Decoration */}
-                          {isActive && (
-                            <div className="absolute -inset-2 opacity-20 animate-spin-slow">
-                              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
-                              </svg>
-                            </div>
-                          )}
-                          
                           {isCompleted ? (
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
                           ) : (
-                            <span className="text-sm font-black tracking-tight relative z-10">{step}</span>
+                            <span className="text-[11px] font-black tracking-tight sm:text-sm">{step}</span>
                           )}
                         </div>
                         
                         <div className="flex flex-col items-center text-center">
-                          <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors duration-300 ${
+                          <span className={`text-[8px] font-black uppercase tracking-[0.15em] transition-colors duration-300 sm:text-[9px] ${
                             isActive ? "text-primary" : isCompleted ? "text-[#2D3E10]" : "text-[#2D3E10]/20"
                           }`}>
                             Langkah {step}
                           </span>
-                          <span className={`text-xs font-bold transition-colors duration-300 ${
+                          <span className={`text-[10px] font-bold transition-colors duration-300 sm:text-xs ${
                             isActive ? "text-[#2D3E10]" : isCompleted ? "text-[#2D3E10]/70" : "text-[#2D3E10]/20"
-                          }`}>
+                          } hidden sm:block`}>
                             {labels[step-1]}
                           </span>
                         </div>
@@ -1707,25 +1693,25 @@ export default function PublicBookingPage() {
               </div>
             </div>
 
-            <div className="relative mt-8 mx-auto max-w-7xl">
+            <div className="relative mt-6 mx-auto max-w-7xl sm:mt-8">
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px]">
                 {/* Main Content Area */}
                 <div className="space-y-8">
                   {currentStep === 1 && (
-                    <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                      <div className="mb-12 flex flex-col items-center text-center">
-                        <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10] mb-6 border border-[#E8E8E1]">
+                    <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
+                      <div className="mb-8 flex flex-col items-center text-center sm:mb-12">
+                        <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] mb-4 border border-[#E8E8E1] sm:px-5 sm:py-2 sm:text-[10px] sm:tracking-[0.3em] sm:mb-6">
                           Langkah 01
                         </div>
-                        <h2 className="text-3xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
+                        <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
                           Pilih <span className="text-primary italic">Pengalaman</span> Anda
                         </h2>
-                        <p className="mx-auto mt-4 max-w-xl text-sm font-medium text-primary/60 italic">
-                          "Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri. Pilih kategori yang paling sesuai dengan rencana liburan Anda."
+                        <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium text-primary/60 italic sm:mt-4 sm:text-sm">
+                          "Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri."
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
                         {categoryOptions.map((cat, idx) => {
                           const isGlamping = cat.toLowerCase().includes('glamp');
                           const isPaket = cat.toLowerCase().includes('paket');
@@ -1745,20 +1731,13 @@ export default function PublicBookingPage() {
                                   setFilterCategory(cat);
                                   setCurrentStep(2);
                                 }}
-                                className={`flex flex-col h-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] transition-all duration-700 hover:shadow-[0_32px_64px_-16px_rgba(45,62,16,0.1)] hover:-translate-y-2 sm:rounded-[2.5rem] ${
+                                className={`flex flex-col h-full overflow-hidden rounded-[1.2rem] border border-[#E8E8E1] transition-all duration-700 hover:shadow-xl hover:-translate-y-1 sm:rounded-[2.5rem] sm:hover:shadow-[0_32px_64px_-16px_rgba(45,62,16,0.1)] sm:hover:-translate-y-2 ${
                                   filterCategory === cat 
-                                    ? "border-primary bg-white shadow-2xl shadow-primary/5" 
+                                    ? "border-primary bg-white shadow-lg shadow-primary/5" 
                                     : "bg-white hover:border-primary/40"
                                 }`}
                               >
-                                {/* Subtle Organic Decoration for Category Card */}
-                                <div className="absolute -right-12 -top-12 h-48 w-48 opacity-[0.03] transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-12 pointer-events-none">
-                                  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-                                  </svg>
-                                </div>
-                                
-                                <div className="relative h-56 w-full overflow-hidden">
+                                <div className="relative h-40 w-full overflow-hidden sm:h-56">
                                   {packageConfigs[cat]?.imageUrl ? (
                                     <img 
                                       src={`${packageConfigs[cat].imageUrl}?t=${kavlingMapAssetVersion}`} 
@@ -1772,47 +1751,40 @@ export default function PublicBookingPage() {
                                       "from-[#E8E8E1] to-[#F1F3EE]"
                                     }`} />
                                   )}
-                                  
-                                  {/* Organic SVG Overlay */}
-                                  <div className="absolute inset-0 flex items-center justify-center opacity-5 mix-blend-multiply transition-opacity group-hover:opacity-10">
-                                    <svg className="w-64 h-64" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                      <path fill="#2D3E10" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
-                                    </svg>
-                                  </div>
 
-                                  <div className={`absolute top-6 left-6 flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-700 ${
+                                  <div className={`absolute top-4 left-4 flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-700 sm:top-6 sm:left-6 sm:h-12 sm:w-12 sm:rounded-2xl ${
                                     filterCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-white/90 backdrop-blur-md text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
                                   }`}>
                                     {isGlamping ? (
-                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" />
                                       </svg>
                                     ) : isPrivate ? (
-                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                       </svg>
                                     ) : (
-                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                       </svg>
                                     )}
                                   </div>
                                 </div>
 
-                                <div className="flex flex-col flex-1 p-8 text-center sm:text-left">
-                                  <h3 className="text-2xl font-bold text-[#2D3E10] mb-3 group-hover:text-primary transition-colors">{cat}</h3>
-                                  <p className="text-sm font-medium leading-relaxed text-primary/60 mb-8 flex-1 italic">
+                                <div className="flex flex-col flex-1 p-5 text-center sm:p-8 sm:text-left">
+                                  <h3 className="text-lg font-bold text-[#2D3E10] mb-2 group-hover:text-primary transition-colors sm:text-2xl sm:mb-3">{cat}</h3>
+                                  <p className="text-[12px] font-medium leading-relaxed text-primary/60 mb-6 flex-1 italic sm:text-sm sm:mb-8">
                                     {packageConfigs[cat]?.description || (
-                                      cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap di tengah rimbunnya hutan Jayagiri yang menenangkan." : 
-                                      cat === "Paket" ? "Pilihan paket lengkap yang dirancang khusus untuk menciptakan momen berharga bersama keluarga tercinta." :
-                                      "Pengalaman eksklusif dengan privasi tinggi untuk momen spesial Anda bersama orang terdekat di alam terbuka."
+                                      cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap." : 
+                                      cat === "Paket" ? "Pilihan paket lengkap untuk momen berharga bersama keluarga." :
+                                      "Pengalaman eksklusif dengan privasi tinggi di alam terbuka."
                                     )}
                                   </p>
 
-                                  <div className="flex items-center justify-between pt-6 border-t border-[#E8E8E1]">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]">Eksplorasi Detail</span>
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1">
-                                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <div className="flex items-center justify-between pt-4 border-t border-[#E8E8E1] sm:pt-6">
+                                    <span className="text-[9px] font-bold uppercase tracking-widest text-[#2D3E10] sm:text-[10px]">Eksplorasi Detail</span>
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1 sm:h-10 sm:w-10">
+                                      <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                       </svg>
                                     </div>
@@ -2858,62 +2830,116 @@ export default function PublicBookingPage() {
                 }}
                 className="relative z-10"
               >
-                <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                  <div className="mb-12 flex flex-col items-center text-center relative group">
-                    <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10] mb-6 border border-[#E8E8E1] relative z-10">
-                      Langkah 03
+                <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
+                  <div className="mb-10 flex flex-col items-center text-center sm:items-start sm:text-left">
+                    <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-primary mb-4 border border-primary/10">
+                      Konfirmasi Akhir
                     </div>
-                    <h2 className="text-3xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl relative z-10">
-                      Isi <span className="text-primary italic">Identitas</span>
+                    <h2 className="text-2xl font-black tracking-tight text-[#2D3E10] sm:text-4xl">
+                      Lengkapi <span className="italic text-primary">Identitas</span>
                     </h2>
-                    <p className="mx-auto mt-4 max-w-xl text-sm font-medium text-primary/60 italic relative z-10">
-                      "Silakan lengkapi identitas Anda untuk penyelesaian pesanan."
+                    <p className="mt-3 text-sm font-medium text-[#2D3E10]/50 max-w-md leading-relaxed">
+                      Lengkapi data diri Anda untuk penyelesaian pesanan dan pengiriman invoice.
                     </p>
                   </div>
 
-                  <div className="mx-auto w-full space-y-12">
+                  <div className="space-y-6 sm:space-y-8">
                     {/* Informasi Kontak */}
-                    <div className="space-y-6 relative group">
-                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start relative z-10">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
+                    <div className="grid grid-cols-1 gap-5">
+                      <div className="group rounded-[1.5rem] border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:rounded-[2rem] sm:p-8">
+                        <div className="mb-6 flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                           </div>
-                          <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Informasi Kontak</h3>
+                          <h3 className="text-lg font-black tracking-tight text-[#2D3E10]">Data Personal</h3>
                         </div>
 
-                        <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-10 shadow-xl shadow-[#2D3E10]/5 space-y-10 relative group/card">
-                          <div className="group rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 relative z-10">
-                            <div className="flex items-center gap-2 ml-1">
-                              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Nama Lengkap Sesuai Identitas</label>
-                            </div>
-                            <input value={name} onChange={(e) => setName(e.target.value)} className="mt-2 w-full bg-transparent text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20" placeholder="Contoh: Budi Santoso" required />
-                          </div>
-                          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2">
-                            <div className="group rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
-                              <div className="flex items-center gap-2 ml-1">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Nomor WhatsApp</label>
+                        <div className="grid grid-cols-1 gap-6">
+                          <div className="relative space-y-1.5">
+                            <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Nama Lengkap</label>
+                            <div className="relative group/input">
+                              <input 
+                                value={name} 
+                                onChange={(e) => setName(e.target.value)} 
+                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20" 
+                                placeholder="Sesuai Identitas (KTP/Passport)" 
+                                required 
+                              />
+                              <div className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/20 opacity-0 transition-opacity group-focus-within/input:opacity-100">
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                </svg>
                               </div>
-                              <div className="mt-2 flex items-center">
-                                <span className="text-base font-bold text-primary mr-2">+62</span>
-                                <input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full bg-transparent text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20" placeholder="8123456789" required />
-                              </div>
-                            </div>
-                            <div className="group rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
-                              <div className="flex items-center gap-2 ml-1">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Alamat Email Aktif</label>
-                              </div>
-                              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 w-full bg-transparent text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20" placeholder="nama@email.com" required />
                             </div>
                           </div>
-                          <div className="group rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
-                            <div className="flex items-center gap-2 ml-1">
-                              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Permintaan Khusus atau Catatan Tambahan</label>
+                          
+                          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div className="relative space-y-1.5">
+                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">WhatsApp</label>
+                              <div className="relative flex items-center group/input">
+                                <div className="absolute left-5 text-sm font-black text-primary">
+                                  +62
+                                </div>
+                                <input 
+                                  value={phone} 
+                                  onChange={(e) => setPhone(e.target.value)} 
+                                  className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] py-4 pl-14 pr-5 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20" 
+                                  placeholder="8123..." 
+                                  required 
+                                />
+                              </div>
                             </div>
-                            <textarea value={specialRequest} onChange={(e) => setSpecialRequest(e.target.value)} className="mt-3 h-32 w-full bg-transparent text-base font-medium text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20 resize-none leading-relaxed" placeholder="Contoh: Request lokasi dekat parkir, check-in lebih awal." />
+                            <div className="relative space-y-1.5">
+                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Email</label>
+                              <input 
+                                type="email" 
+                                value={email} 
+                                onChange={(e) => setEmail(e.target.value)} 
+                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20" 
+                                placeholder="nama@email.com" 
+                                required 
+                              />
+                            </div>
+                          </div>
+
+                          <div className="relative space-y-1.5">
+                            <div className="flex items-center justify-between px-1">
+                              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Catatan Khusus</label>
+                              <span className="text-[9px] font-bold text-primary/40 uppercase">Opsional</span>
+                            </div>
+                            <textarea 
+                              value={specialRequest} 
+                              onChange={(e) => setSpecialRequest(e.target.value)} 
+                              className="h-32 w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 text-sm font-medium text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 resize-none leading-relaxed" 
+                              placeholder="Contoh: Request lokasi dekat parkir, alergi makanan, dll." 
+                            />
                           </div>
                         </div>
+                      </div>
+
+                      {/* Summary Minimalist for Mobile */}
+                      <div className="rounded-[1.5rem] border border-[#E8E8E1] bg-[#F1F3EE]/30 p-6 sm:hidden">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Ringkasan Reservasi</h4>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs font-medium text-[#2D3E10]/60">Durasi</span>
+                            <span className="text-xs font-bold text-[#2D3E10]">{checkIn} — {checkOut}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs font-medium text-[#2D3E10]/60">Total Tamu</span>
+                            <span className="text-xs font-bold text-[#2D3E10]">{totalPax} Orang</span>
+                          </div>
+                          <div className="pt-3 border-t border-[#E8E8E1] flex justify-between items-center">
+                            <span className="text-xs font-black text-[#2D3E10]">Estimasi Total</span>
+                            <span className="text-sm font-black text-primary">{formatIDR(totalPrice)}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2932,30 +2958,27 @@ export default function PublicBookingPage() {
 
 {/* Sticky Navigation Bar for Step 2 & 3 - Moved to top level for correct stacking context */}
 {currentStep === 2 && (
-  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] sm:hidden">
+  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:hidden">
     <div className="mx-auto flex max-w-xl flex-col gap-3">
       <button
         type="button"
         onClick={() => setCurrentStep(3)}
         disabled={selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings) || guestOverCapacity}
-        className="group relative flex min-h-[3.5rem] w-full items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none"
+        className="group relative flex min-h-[3.5rem] w-full items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-10 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 active:scale-[0.98] disabled:opacity-30 disabled:shadow-none"
       >
         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
         <div className="relative z-10 flex items-center gap-3">
           <span>Lanjut Isi Identitas</span>
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
         </div>
       </button>
       <button
         type="button"
         onClick={() => setCurrentStep(2)}
-        className="group flex min-h-[3.5rem] w-full items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] active:scale-[0.98]"
+        className="group flex min-h-[3.5rem] w-full items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-[#2D3E10] active:scale-[0.98]"
       >
-        <svg className="mr-3 h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
         Kembali
       </button>
     </div>
@@ -2963,25 +2986,25 @@ export default function PublicBookingPage() {
 )}
 
 {currentStep === 3 && (
-  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] sm:hidden">
+  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:hidden">
     <div className="mx-auto flex max-w-xl flex-col gap-3">
       <button
         type="submit"
         form="booking-form"
         disabled={submitting || loading || !name || !phone || !email}
-        className="group relative flex min-h-[3.5rem] w-full items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none"
+        className="group relative flex min-h-[3.5rem] w-full items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-10 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 active:scale-[0.98] disabled:opacity-30 disabled:shadow-none"
       >
         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
         <span className="relative z-10">{submitting || loading ? "Memproses..." : "Konfirmasi Booking"}</span>
+        <svg className="relative z-10 ml-3 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
       </button>
       <button
         type="button"
         onClick={() => setCurrentStep(2)}
-        className="group flex min-h-[3.5rem] w-full items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] active:scale-[0.98]"
+        className="group flex min-h-[3.5rem] w-full items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-[#2D3E10] active:scale-[0.98]"
       >
-        <svg className="mr-3 h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
         Kembali
       </button>
     </div>
@@ -2994,39 +3017,40 @@ export default function PublicBookingPage() {
     <div className="grid grid-cols-1 lg:grid-cols-3">
       <div className="lg:col-span-2">
         {currentStep === 2 && (
-          <div className="mt-10 flex flex-col sm:flex-row gap-4">
+          <div className="mt-12 flex flex-col sm:flex-row gap-4">
             <button
               type="button"
               onClick={() => setCurrentStep(3)}
               disabled={selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings) || guestOverCapacity}
-              className="group relative order-1 flex min-h-[3.75rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:order-2"
+              className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-10 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 sm:order-2"
             >
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
               <div className="relative z-10 flex items-center gap-3">
                 <span>Lanjut Isi Identitas</span>
                 <svg className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </div>
             </button>
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="group order-2 flex min-h-[3.75rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1"
+              className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1"
             >
-              <svg className="mr-3 h-4 w-4 text-primary transition-transform duration-500 group-hover:-translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
               Kembali
             </button>
           </div>
         )}
         {currentStep === 3 && (
-          <div className="mt-10 flex flex-col sm:flex-row gap-4">
-            <button type="submit" form="booking-form" disabled={submitting || loading || !name || !phone || !email} className="group relative order-1 flex min-h-[3.75rem] flex-[2] items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50 disabled:shadow-none sm:order-2">
-              {submitting || loading ? "Memproses..." : "Konfirmasi Booking"}
+          <div className="mt-12 flex flex-col sm:flex-row gap-4">
+            <button type="submit" form="booking-form" disabled={submitting || loading || !name || !phone || !email} className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-10 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 sm:order-2">
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+              <span className="relative z-10">{submitting || loading ? "Memproses..." : "Konfirmasi Booking"}</span>
+              <svg className="relative z-10 ml-3 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
             </button>
-            <button type="button" onClick={() => setCurrentStep(2)} className="group order-2 flex min-h-[3.75rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] sm:order-1">
+            <button type="button" onClick={() => setCurrentStep(2)} className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1">
               Kembali
             </button>
           </div>
@@ -3037,22 +3061,32 @@ export default function PublicBookingPage() {
 </div>
 
     {/* Nature-Inspired Footer */}
-    <footer className="mt-20 py-16">
+    <footer className="mt-24 py-20 border-t border-[#E8E8E1]/40">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center">
-          <div className="w-full max-w-2xl rounded-[2rem] bg-[#F1F3EE] p-8 space-y-6 text-center">
-            <h4 className="text-sm font-bold text-[#2D3E10]">Butuh bantuan reservasi?</h4>
-            <p className="text-xs text-[#2D3E10]/60 leading-relaxed">Tim reservasi kami siap membantu Anda merencanakan liburan impian yang tak terlupakan.</p>
-            <a href="https://wa.me/628112090808" target="_blank" className="mx-auto flex min-h-[3.5rem] w-full max-w-xs items-center justify-center rounded-xl bg-[#2D3E10] py-4 text-[13px] font-bold uppercase tracking-widest text-white shadow-lg shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:shadow-xl active:scale-95">
-                  Hubungi via WhatsApp
+          <div className="w-full max-w-xl rounded-[2.5rem] bg-[#F1F3EE]/50 p-10 space-y-8 text-center border border-[#E8E8E1]/60">
+            <div className="space-y-2">
+              <h4 className="text-lg font-black text-[#2D3E10]">Butuh bantuan reservasi?</h4>
+              <p className="text-sm font-medium text-[#2D3E10]/50 leading-relaxed">Tim reservasi kami siap membantu Anda merencanakan liburan impian.</p>
+            </div>
+            <a href="https://wa.me/628112090808" target="_blank" className="group relative mx-auto flex min-h-[3.75rem] w-full max-w-xs items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-8 py-4 text-[13px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98]">
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+              <span className="relative z-10">Hubungi WhatsApp</span>
+              <svg className="relative z-10 ml-3 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
             </a>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col md:flex-row justify-center items-center gap-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">
-            &copy; 2026 Woodforest Jayagiri 48. All rights reserved.
+        <div className="mt-20 pt-10 border-t border-[#E8E8E1]/40 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#2D3E10]/20">
+            &copy; 2026 Woodforest Jayagiri 48.
           </p>
+          <div className="flex gap-8">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#2D3E10]/20 cursor-default">Privacy</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#2D3E10]/20 cursor-default">Terms</span>
+          </div>
         </div>
       </div>
     </footer>
