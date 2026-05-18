@@ -1897,6 +1897,45 @@ export default function PublicBookingPage() {
                           </div>
                         </div>
                     </div>
+
+                    {/* Konfigurasi Tamu Section */}
+                    <div className="space-y-6 relative group">
+                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start relative z-10">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
+                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                          </div>
+                          <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
+                        </div>
+
+                        <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-6 sm:p-10 shadow-xl shadow-[#2D3E10]/5 relative group/card">
+                          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 relative z-10">
+                            <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+                              <div className="space-y-1">
+                                <p className="text-base font-bold text-[#2D3E10]">Dewasa</p>
+                                <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 10+ tahun</p>
+                              </div>
+                              <QuantityStepper value={adultPax} min={1} ariaLabel="Dewasa" onChange={setAdultPax} />
+                            </div>
+                            <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+                              <div className="space-y-1">
+                                <p className="text-base font-bold text-[#2D3E10]">Anak</p>
+                                <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 5-10 tahun</p>
+                              </div>
+                              <QuantityStepper value={child5to10Pax} min={0} ariaLabel="Anak" onChange={setChild5to10Pax} />
+                            </div>
+                            <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+                              <div className="space-y-1">
+                                <p className="text-base font-bold text-[#2D3E10]">Balita</p>
+                                <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia &lt; 5 tahun</p>
+                              </div>
+                              <QuantityStepper value={childUnder5Pax} min={0} ariaLabel="Balita" onChange={setChildUnder5Pax} />
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
                     <div className="mb-8 flex flex-col items-center justify-between gap-5 rounded-[2.5rem] border border-[#E8E8E1] bg-[#F1F3EE]/30 p-5 backdrop-blur-xl shadow-sm sm:flex-row sm:p-6 relative group/filter overflow-hidden">
                       {/* Subtle organic decoration for filter bar */}
                       <div className="absolute -right-12 -bottom-12 h-40 w-40 opacity-[0.02] transition-transform duration-1000 group-hover/filter:scale-125 group-hover/filter:rotate-12 pointer-events-none">
@@ -2806,44 +2845,6 @@ export default function PublicBookingPage() {
                   </div>
                 </div>
               )}
-
-              {/* Konfigurasi Tamu Section */}
-              <div className="mt-12 space-y-6 relative group">
-                  <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start relative z-10">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
-                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
-                  </div>
-
-                  <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-6 sm:p-10 shadow-xl shadow-[#2D3E10]/5 relative group/card">
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 relative z-10">
-                      <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                        <div className="space-y-1">
-                          <p className="text-base font-bold text-[#2D3E10]">Dewasa</p>
-                          <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 10+ tahun</p>
-                        </div>
-                        <QuantityStepper value={adultPax} min={1} ariaLabel="Dewasa" onChange={setAdultPax} />
-                      </div>
-                      <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                        <div className="space-y-1">
-                          <p className="text-base font-bold text-[#2D3E10]">Anak</p>
-                          <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 5-10 tahun</p>
-                        </div>
-                        <QuantityStepper value={child5to10Pax} min={0} ariaLabel="Anak" onChange={setChild5to10Pax} />
-                      </div>
-                      <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                        <div className="space-y-1">
-                          <p className="text-base font-bold text-[#2D3E10]">Balita</p>
-                          <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia &lt; 5 tahun</p>
-                        </div>
-                        <QuantityStepper value={childUnder5Pax} min={0} ariaLabel="Balita" onChange={setChildUnder5Pax} />
-                      </div>
-                    </div>
-                  </div>
-              </div>
 
                   <div className="flex flex-col gap-4 pt-10 sm:flex-row">
                     <button
