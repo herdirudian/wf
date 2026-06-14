@@ -241,6 +241,13 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
                   </button>
                   <button
                     type="button"
+                    onClick={() => window.open(`/api/payments/${p.id}/invoice`, "_blank")}
+                    className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background"
+                  >
+                    Invoice
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => openHistory(p)}
                     className="flex min-h-[2rem] items-center justify-center rounded-lg border border-border bg-surface px-3 py-1 text-xs shadow-sm transition-all active:scale-95 hover:bg-background"
                   >
