@@ -607,8 +607,8 @@ export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" |
           `Jatuh tempo: ${formatDateWIB(dueAt)}\n\n` +
           `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`;
 
-  const html = renderInvoiceEmailHtml(model, { title, body });
-  await sendEmail(smtp, { to, subject: `${title}: Booking ${payment.booking.code} - Woodforest Jayagiri 48`, html });
+  const html = renderInvoiceEmailHtml({ ...model, notice: { title, body } });
+   await sendEmail(smtp, { to, subject: `${title}: Booking ${payment.booking.code} - Woodforest Jayagiri 48`, html });
   await prisma.paymentTransaction.create({
     data: {
       paymentId,
