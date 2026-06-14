@@ -193,11 +193,28 @@ function normalizePhoneId(phone: string) {
   return p;
 }
 
-async function getXenditConfig() {
+export async function getXenditConfig() {
   const cfg = await prisma.appConfig.findUnique({ where: { id: 1 } });
   const secretKey = cfg?.xenditSecretKey ?? process.env.XENDIT_SECRET_KEY ?? "";
   const callbackToken = cfg?.xenditCallbackToken ?? process.env.XENDIT_CALLBACK_TOKEN ?? "";
   return { secretKey, callbackToken };
+}
+
+export function feeConfigFromPaymentSnapshot(payment: any) {
+  const bps = Math.max(0, Math.min(10_000, Math.round(Number(payment.invoiceFeeBps ?? 0) || 0)));
+  const flat = Math.max(0, Math.round(Number(payment.invoiceFeeFlat ?? 0) || 0));
+  if (bps > 0 || flat > 0) return { feeBps: bps, feeFlat: flat };
+  return null;
+}
+
+export function feeConfigForPayment(methodsJson: string | null | undefined, methodCode: string | null) {
+  const methods = parseXenditPaymentMethodsJson(methodsJson);
+  const code = toBroadXenditMethod(methodCode ?? "BANK_TRANSFER");
+  const cfg = methods.find((m) => m.code === code) ?? null;
+  return {
+    feeBps: cfg?.feeBps ?? 0,
+    feeFlat: cfg?.feeFlat ?? 0,
+  };
 }
 
 async function getXenditSecretKey() {
