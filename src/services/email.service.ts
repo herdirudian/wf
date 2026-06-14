@@ -514,7 +514,7 @@ export async function maybeSendDpReceivedEmails(paymentId: string) {
   return { ok: true };
 }
 
-export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" | "balance") {
+export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" | "balance" | "partial") {
   const smtp = await getSmtpConfigOrNull();
   if (!smtp) return { ok: true, skipped: true };
 
@@ -551,14 +551,18 @@ export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" |
   const already = await prisma.paymentTransaction.findFirst({ where: { paymentId, action: idempotencyKey }, select: { id: true } });
   if (already) return { ok: true, skipped: true };
 
-  const title = kind === "dp" ? "Link Pembayaran DP" : "Link Pembayaran Pelunasan";
+  const title = kind === "dp" ? "Link Pembayaran DP" : kind === "partial" ? "Link Pembayaran Cicilan" : "Link Pembayaran Pelunasan";
   const body =
     kind === "dp"
       ? `Silakan lakukan pembayaran DP untuk booking ${payment.booking.code}.\n\n` + `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`
-      : `Silakan selesaikan pelunasan untuk booking ${payment.booking.code} sebelum jatuh tempo.\n\n` +
-        `Sisa tagihan: ${formatIDR(outstanding)}\n` +
-        `Jatuh tempo: ${formatDateWIB(dueAt)}\n\n` +
-        `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`;
+      : kind === "partial"
+        ? `Silakan lakukan pembayaran cicilan untuk booking ${payment.booking.code}.\n\n` +
+          `Sisa tagihan total: ${formatIDR(outstanding)}\n\n` +
+          `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`
+        : `Silakan selesaikan pelunasan untuk booking ${payment.booking.code} sebelum jatuh tempo.\n\n` +
+          `Sisa tagihan: ${formatIDR(outstanding)}\n` +
+          `Jatuh tempo: ${formatDateWIB(dueAt)}\n\n` +
+          `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`;
 
   const invoiceModel: InvoiceEmailModel = {
     booking: {
