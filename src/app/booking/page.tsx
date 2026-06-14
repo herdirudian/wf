@@ -1145,16 +1145,33 @@ export default function PublicBookingPage() {
                     <div key={u.id} className="group flex justify-between items-start gap-4">
                       <div className="flex flex-col gap-2">
                         <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{u.name}</span>
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-2">
                           <span className="rounded-full bg-[#F1F3EE] px-2.5 py-0.5 text-[9px] font-bold text-[#2D3E10]/60 uppercase tracking-wider">
                             {qty} Unit
                           </span>
+                          {u.capacity > 0 && (
+                            <span className="text-[9px] font-medium text-primary/40 uppercase tracking-widest">
+                              Kap: {u.capacity * qty} Orang
+                            </span>
+                          )}
                         </div>
                       </div>
                       <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(sumDailyPrice(u) * qty)}</span>
                     </div>
                   );
                 })}
+
+                {/* Kavling Selection Info */}
+                {kavlingSelected.length > 0 && (
+                  <div className="rounded-2xl bg-[#F1F3EE]/50 p-4 border border-[#E8E8E1]/60">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[9px] font-black text-[#2D3E10]/40 uppercase tracking-widest">Kavling Terpilih</span>
+                      <span className="text-xs font-black text-primary tracking-tight">
+                        {kavlingSelected.sort((a, b) => Number(a) - Number(b)).join(", ")}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-10 text-center rounded-[2rem] border-2 border-dashed border-[#E8E8E1] bg-[#F1F3EE]/20">
@@ -1168,25 +1185,45 @@ export default function PublicBookingPage() {
               )}
           </div>
 
-          {/* Add-ons if any */}
-          {Object.keys(addonQty).some(id => addonQty[id] > 0) && (
+          {/* Layanan Tambahan (Manual + Auto) */}
+          {addons.some(a => effectiveAddonQty[a.id] > 0) && (
             <div className="space-y-8">
               <div className="border-b border-[#E8E8E1] pb-4">
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Layanan Tambahan</span>
               </div>
               <div className="space-y-6">
-                {addons.filter(a => addonQty[a.id] > 0).map(a => (
+                {addons.filter(a => effectiveAddonQty[a.id] > 0).map(a => (
                   <div key={a.id} className="group flex justify-between items-start gap-4">
                     <div className="flex flex-col gap-2">
-                      <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{a.name}</span>
-                      <span className="text-[9px] font-bold text-[#2D3E10]/40 uppercase tracking-widest">Qty: {addonQty[a.id]}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{a.name}</span>
+                        {autoAddonQty[a.id] > 0 && (
+                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[7px] font-black text-primary uppercase tracking-tighter">Auto</span>
+                        )}
+                      </div>
+                      <span className="text-[9px] font-bold text-[#2D3E10]/40 uppercase tracking-widest">Qty: {effectiveAddonQty[a.id]}</span>
                     </div>
-                    <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(a.price * addonQty[a.id])}</span>
+                    <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(a.price * effectiveAddonQty[a.id])}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
+
+          {/* Rincian Biaya */}
+          <div className="space-y-6 pt-4 border-t border-[#E8E8E1]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Rincian Biaya</span>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-medium text-[#2D3E10]/50">Subtotal Akomodasi</span>
+                <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(selectedVisibleUnits.reduce((acc, u) => acc + (sumDailyPrice(u) * (unitQty[u.id] || 0)), 0))}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-medium text-[#2D3E10]/50">Layanan Tambahan</span>
+                <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(addons.reduce((acc, a) => acc + (a.price * (effectiveAddonQty[a.id] || 0)), 0))}</span>
+              </div>
+            </div>
+          </div>
 
           {/* Summary Footer */}
           <div className="pt-4">
@@ -2925,15 +2962,38 @@ export default function PublicBookingPage() {
                           <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                           <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Ringkasan Reservasi</h4>
                         </div>
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs font-medium text-[#2D3E10]/60">Durasi</span>
-                            <span className="text-xs font-bold text-[#2D3E10]">{checkIn} — {checkOut}</span>
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs font-medium text-[#2D3E10]/60">Durasi</span>
+                              <span className="text-xs font-bold text-[#2D3E10]">{checkIn} — {checkOut}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs font-medium text-[#2D3E10]/60">Total Tamu</span>
+                              <span className="text-xs font-bold text-[#2D3E10]">{totalGuest} Orang</span>
+                            </div>
+                            {kavlingSelected.length > 0 && (
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs font-medium text-[#2D3E10]/60">Kavling</span>
+                                <span className="text-xs font-bold text-primary">{kavlingSelected.join(", ")}</span>
+                              </div>
+                            )}
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs font-medium text-[#2D3E10]/60">Total Tamu</span>
-                            <span className="text-xs font-bold text-[#2D3E10]">{totalGuest} Orang</span>
+
+                          {/* Breakdown for Mobile */}
+                          <div className="pt-3 border-t border-[#E8E8E1]/60 space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-[10px] font-medium text-[#2D3E10]/40 uppercase tracking-widest">Akomodasi</span>
+                              <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(selectedVisibleUnits.reduce((acc, u) => acc + (sumDailyPrice(u) * (unitQty[u.id] || 0)), 0))}</span>
+                            </div>
+                            {addons.some(a => effectiveAddonQty[a.id] > 0) && (
+                              <div className="flex justify-between items-center">
+                                <span className="text-[10px] font-medium text-[#2D3E10]/40 uppercase tracking-widest">Add-ons ({addons.filter(a => effectiveAddonQty[a.id] > 0).length})</span>
+                                <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(addons.reduce((acc, a) => acc + (a.price * (effectiveAddonQty[a.id] || 0)), 0))}</span>
+                              </div>
+                            )}
                           </div>
+
                           <div className="pt-3 border-t border-[#E8E8E1] flex justify-between items-center">
                             <span className="text-xs font-black text-[#2D3E10]">Estimasi Total</span>
                             <span className="text-sm font-black text-primary">{formatIDR(estimatedAmount)}</span>
