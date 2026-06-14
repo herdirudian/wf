@@ -28,6 +28,7 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
   const [addOpen, setAddOpen] = useState(false);
   const [addTarget, setAddTarget] = useState<PaymentRow | null>(null);
   const [addMethod, setAddMethod] = useState("manual");
+  const [addGateway, setAddGateway] = useState<"manual" | "xendit">("manual");
   const [addAmount, setAddAmount] = useState<number>(0);
   const [histOpen, setHistOpen] = useState(false);
   const [histTarget, setHistTarget] = useState<PaymentRow | null>(null);
@@ -66,6 +67,7 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
   function openAdd(p: PaymentRow) {
     setAddTarget(p);
     setAddMethod("manual");
+    setAddGateway("manual");
     setAddAmount(Math.max(0, p.amount - p.paidAmount));
     setError(null);
     setAddOpen(true);
@@ -132,14 +134,19 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
     const res = await fetch(`/api/payments/${addTarget.id}/add`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ amount: addAmount, method: addMethod }),
+      body: JSON.stringify({ amount: addAmount, method: addMethod, gateway: addGateway }),
     });
 
+    const data = (await res.json().catch(() => null)) as { invoiceUrl?: string; message?: string } | null;
+
     if (!res.ok) {
-      const data = (await res.json().catch(() => null)) as { message?: string } | null;
       setError(data?.message ?? "Gagal tambah pembayaran");
       setSubmitting(false);
       return;
+    }
+
+    if (data?.invoiceUrl) {
+      window.open(data.invoiceUrl, "_blank");
     }
 
     setSubmitting(false);
@@ -314,14 +321,46 @@ export function PaymentManager({ rows, currentUserRole }: { rows: PaymentRow[]; 
             />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-medium text-foreground">Method</label>
-            <input
-              value={addMethod}
-              onChange={(e) => setAddMethod(e.target.value)}
-              className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
-              required
-            />
+            <label className="text-sm font-medium text-foreground">Tipe Gateway</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setAddGateway("manual")}
+                className={`flex h-10 items-center justify-center rounded-xl border px-3 text-xs font-bold transition-all ${
+                  addGateway === "manual" ? "border-primary bg-primary text-primary-foreground" : "border-border bg-surface text-muted-foreground hover:bg-background"
+                }`}
+              >
+                Manual (Rekening)
+              </button>
+              <button
+                type="button"
+                onClick={() => setAddGateway("xendit")}
+                className={`flex h-10 items-center justify-center rounded-xl border px-3 text-xs font-bold transition-all ${
+                  addGateway === "xendit" ? "border-emerald-600 bg-emerald-600 text-white" : "border-border bg-surface text-muted-foreground hover:bg-background"
+                }`}
+              >
+                Xendit (Link)
+              </button>
+            </div>
           </div>
+          {addGateway === "manual" ? (
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-foreground">Method</label>
+              <input
+                value={addMethod}
+                onChange={(e) => setAddMethod(e.target.value)}
+                className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
+                placeholder="Misal: BCA, Mandiri, Cash"
+                required
+              />
+            </div>
+          ) : (
+            <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-3">
+              <p className="text-[11px] leading-relaxed text-emerald-700">
+                Memilih <b>Xendit</b> akan membuat link pembayaran baru di Xendit untuk nominal di atas. Pelanggan bisa membayar via VA, E-Wallet, dll.
+              </p>
+            </div>
+          )}
 
           {error ? <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div> : null}
 

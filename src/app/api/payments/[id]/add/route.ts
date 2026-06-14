@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminSession } from "@/lib/auth";
 import { addPaymentAmount } from "@/services/payment.service";
+import { createXenditInvoiceForBooking } from "@/services/xendit.service";
+import { prisma } from "@/lib/prisma";
 
 const BodySchema = z.object({
   amount: z.coerce.number(),
   method: z.string().min(1).optional(),
+  gateway: z.enum(["manual", "xendit"]).optional().default("manual"),
 });
 
 export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
@@ -17,8 +20,35 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
   const parsed = BodySchema.safeParse(json);
   if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
 
+  const { amount, method, gateway } = parsed.data;
+
   try {
-    const item = await addPaymentAmount(id, parsed.data.amount, parsed.data.method, session.adminUser.id);
+    if (gateway === "xendit") {
+      const payment = await prisma.payment.findUnique({
+        where: { id },
+        include: {
+          booking: {
+            include: {
+              customer: true,
+              items: { include: { unit: true } },
+              addOns: { include: { addOn: true } },
+              kavlings: { include: { kavling: true } },
+            },
+          },
+        },
+      });
+      if (!payment) return NextResponse.json({ message: "Payment tidak ditemukan" }, { status: 404 });
+
+      // Create partial invoice in Xendit
+      const result = await createXenditInvoiceForBooking(payment.booking as any, "partial", {
+        partialAmount: amount,
+        origin: new URL(req.url).origin,
+      });
+
+      return NextResponse.json({ invoiceUrl: result.invoiceUrl });
+    }
+
+    const item = await addPaymentAmount(id, amount, method, session.adminUser.id);
     return NextResponse.json({ item });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Gagal tambah pembayaran";
