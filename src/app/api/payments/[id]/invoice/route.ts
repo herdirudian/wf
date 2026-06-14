@@ -22,7 +22,9 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
         },
       },
       transactions: {
-        where: { status: "success" },
+        where: {
+          amountDelta: { gt: 0 },
+        },
         orderBy: { createdAt: "asc" },
       },
     },

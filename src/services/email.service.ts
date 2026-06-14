@@ -533,7 +533,9 @@ export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" |
         },
       },
       transactions: {
-        where: { status: "success" },
+        where: {
+          amountDelta: { gt: 0 },
+        },
         orderBy: { createdAt: "asc" },
       },
     },
