@@ -427,19 +427,28 @@ export default function BookingConfirmPage() {
                 </div>
 
                 {/* Kavlings & Addons */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4">
                   <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5">
                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Nomor Kavling</span>
-                    <p className="mt-1 text-base font-black text-[#2D3E10] tracking-tight">{kavlingText}</p>
+                    <p className="mt-1 text-base font-black text-primary tracking-tight">{kavlingText}</p>
                   </div>
-                  <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Layanan Tambahan</span>
-                    <p className="mt-1 text-sm font-bold text-[#2D3E10]">
-                      {draft.display.addOns.length > 0 
-                        ? `${draft.display.addOns.length} Layanan Terpilih`
-                        : "Tidak ada add-ons"}
-                    </p>
-                  </div>
+                  
+                  {draft.display.addOns.length > 0 && (
+                    <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5 space-y-4">
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Layanan Tambahan</span>
+                      <div className="space-y-3">
+                        {draft.display.addOns.map((a) => (
+                          <div key={a.addOnId} className="flex justify-between items-center">
+                            <div className="flex flex-col">
+                              <span className="text-xs font-bold text-[#2D3E10]">{a.name}</span>
+                              <span className="text-[9px] font-medium text-[#2D3E10]/40">Qty: {a.quantity}</span>
+                            </div>
+                            <span className="text-xs font-black text-[#2D3E10]">{formatIDR(a.price * a.quantity)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {draft.specialRequest && (
