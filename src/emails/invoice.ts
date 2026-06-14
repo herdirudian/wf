@@ -57,6 +57,34 @@ export function renderInvoiceEmailHtml(model: InvoiceEmailModel) {
   const grossRemainingEstimate = remainingAmount + feeEstimateRemaining;
   const addOnAmount = booking.addOns.reduce((acc, a) => acc + a.quantity * a.price, 0);
   const baseAmount = Math.max(0, payment.amount - addOnAmount);
+
+  const breakdownRows = [
+    ...booking.items.map((it) => ({
+      name: it.name,
+      qty: it.quantity,
+      price: 0, // Base amount logic handles this
+      isBase: true,
+    })),
+    ...booking.addOns.map((a) => ({
+      name: a.name,
+      qty: a.quantity,
+      price: a.price,
+      isBase: false,
+    })),
+  ]
+    .map((row) => {
+      const label = row.isBase ? esc(row.name) : `${esc(row.name)} <span style="color:#6b7280;font-size:10px">(${esc(formatIDR(row.price))})</span>`;
+      const lineTotal = row.isBase ? "" : esc(formatIDR(row.price * row.qty));
+      return `
+      <tr>
+        <td style="color:#6b7280;padding:4px 0;font-size:11px">${label}</td>
+        <td style="text-align:right;padding:4px 0;font-size:11px;color:#6b7280">x${row.qty}</td>
+      </tr>
+      ${row.isBase ? "" : `<tr><td colspan="2" style="text-align:right;font-size:11px;font-weight:700;padding-bottom:4px">${lineTotal}</td></tr>`}
+    `;
+    })
+    .join("");
+
   const itemRows = booking.items
     .map((it) => `<tr><td>${esc(it.name)}</td><td style="text-align:right">x${it.quantity}</td></tr>`)
     .join("");
@@ -212,19 +240,12 @@ export function renderInvoiceEmailHtml(model: InvoiceEmailModel) {
               <div class="wf-tight wf-cardBlock" style="border:1px solid #e5e7eb;border-radius:12px;padding:14px">
                 <div style="font-size:13px;font-weight:800;margin-bottom:10px">Ringkasan Pembayaran</div>
                 <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:12px">
+                  ${breakdownRows}
                   <tr>
-                    <td style="color:#6b7280;padding:6px 0">Room / Paket</td>
-                    <td style="text-align:right;padding:6px 0">${esc(formatIDR(baseAmount))}</td>
+                    <td colspan="2" style="height:1px;background:#eef2f7;margin:8px 0"></td>
                   </tr>
                   <tr>
-                    <td style="color:#6b7280;padding:6px 0">Add-Ons</td>
-                    <td style="text-align:right;padding:6px 0">${esc(formatIDR(addOnAmount))}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" style="height:1px;background:#eef2f7"></td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:800;padding:10px 0">Total pembayaran</td>
+                    <td style="font-weight:800;padding:10px 0">Total tagihan</td>
                     <td style="text-align:right;font-weight:800;padding:10px 0">${esc(formatIDR(payment.amount))}</td>
                   </tr>
                   <tr>
