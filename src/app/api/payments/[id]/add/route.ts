@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminSession } from "@/lib/auth";
 import { addPaymentAmount } from "@/services/payment.service";
-import { createXenditInvoiceForBooking } from "@/services/xendit.service";
+import { createXenditInvoiceByBookingCode } from "@/services/xendit.service";
 import { prisma } from "@/lib/prisma";
 
 const BodySchema = z.object({
@@ -40,7 +40,9 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
       if (!payment) return NextResponse.json({ message: "Payment tidak ditemukan" }, { status: 404 });
 
       // Create partial invoice in Xendit
-      const result = await createXenditInvoiceForBooking(payment.booking as any, "partial", {
+      const result = await createXenditInvoiceByBookingCode({
+        bookingCode: payment.booking.code,
+        mode: "partial",
         partialAmount: amount,
         origin: new URL(req.url).origin,
       });

@@ -230,8 +230,9 @@ function xenditInvoicePaymentMethodsForConfigCode(code: string) {
 export async function createXenditInvoiceByBookingCode(params: {
   bookingCode: string;
   origin: string;
-  mode?: "dp" | "balance";
+  mode?: "dp" | "balance" | "partial";
   paymentMethodCode?: string;
+  partialAmount?: number;
 }) {
   const booking = await prisma.booking.findUnique({
     where: { code: params.bookingCode },
@@ -267,11 +268,17 @@ export async function createXenditInvoiceByBookingCode(params: {
     ),
   );
 
-  const invoiceKind = mode === "dp" ? "dp" : "balance";
+  const invoiceKind = mode;
   const plannedDp = Math.max(0, booking.payment.dpPlannedAmount ?? 0);
   const defaultDp = Math.max(dpMinAmount, Math.round((booking.payment.amount ?? outstanding) * dpPercent));
   const targetDp = plannedDp > 0 ? plannedDp : defaultDp;
-  const invoiceAmount = invoiceKind === "dp" ? Math.min(outstanding, targetDp) : outstanding;
+
+  let invoiceAmount = outstanding;
+  if (invoiceKind === "dp") {
+    invoiceAmount = Math.min(outstanding, targetDp);
+  } else if (invoiceKind === "partial" && params.partialAmount) {
+    invoiceAmount = Math.min(outstanding, Math.round(params.partialAmount));
+  }
 
   const selectedMethod = params.paymentMethodCode ? String(params.paymentMethodCode).trim().toUpperCase() : null;
   const selectedAllowed = selectedMethod && allowedConfigMethodCodes.has(selectedMethod);
@@ -314,7 +321,9 @@ export async function createXenditInvoiceByBookingCode(params: {
     description:
       invoiceKind === "dp"
         ? `Booking ${booking.code} (DP) - Sisa ${formatIDR(remainingAfter)}`
-        : `Booking ${booking.code} (Pelunasan) - Sisa ${formatIDR(remainingAfter)}`,
+        : invoiceKind === "partial"
+          ? `Booking ${booking.code} (Cicilan) - Sisa ${formatIDR(remainingAfter)}`
+          : `Booking ${booking.code} (Pelunasan) - Sisa ${formatIDR(remainingAfter)}`,
     invoice_duration: 60 * 60,
     ...(paymentMethodsForInvoice.length ? { payment_methods: paymentMethodsForInvoice } : {}),
     customer: {
