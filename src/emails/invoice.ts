@@ -24,6 +24,13 @@ export type InvoiceEmailModel = {
     paidAt: Date | null;
     method: string | null;
     checkoutUrl?: string | null;
+    history?: Array<{
+      id: string;
+      createdAt: Date;
+      amountDelta: number;
+      method: string | null;
+      action: string;
+    }>;
   };
   notice?: { title: string; body: string } | null;
 };
@@ -102,6 +109,28 @@ export function renderInvoiceEmailHtml(model: InvoiceEmailModel) {
   const checkInText = formatDateWIB(booking.checkIn);
   const checkOutText = formatDateWIB(booking.checkOut);
   const dueText = payment.dueAt ? formatDateWIB(payment.dueAt) : "-";
+
+  // Build payment history rows
+  let dpCounter = 1;
+  const historyRows = (payment.history || [])
+    .filter((h) => h.amountDelta > 0)
+    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+    .map((h, i, arr) => {
+      const isLast = i === arr.length - 1 && payment.paidAmount >= payment.amount;
+      const label = isLast ? "Pelunasan" : `DP ${dpCounter++}`;
+      return `
+      <tr>
+        <td style="color:#6b7280;padding:4px 0;font-size:11px">
+          ${esc(label)} 
+          <div style="font-size:9px;color:#9ca3af">${esc(formatDateWIB(h.createdAt))}</div>
+        </td>
+        <td style="text-align:right;padding:4px 0;font-size:11px;font-weight:700">
+          ${esc(formatIDR(h.amountDelta))}
+        </td>
+      </tr>
+    `;
+    })
+    .join("");
 
   return `<!doctype html>
 <html>
@@ -248,6 +277,20 @@ export function renderInvoiceEmailHtml(model: InvoiceEmailModel) {
                     <td style="font-weight:800;padding:10px 0">Total tagihan</td>
                     <td style="text-align:right;font-weight:800;padding:10px 0">${esc(formatIDR(payment.amount))}</td>
                   </tr>
+                  
+                  ${
+                    historyRows
+                      ? `
+                  <tr>
+                    <td colspan="2" style="font-size:11px;font-weight:800;padding:8px 0 4px;color:#111827;border-top:1px dashed #e5e7eb">Riwayat Pembayaran</td>
+                  </tr>
+                  ${historyRows}
+                  <tr style="border-top:1px solid #eef2f7">
+                    <td style="color:#111827;padding:8px 0;font-weight:800">Total dibayar</td>
+                    <td style="text-align:right;padding:8px 0;font-weight:800;color:#059669">${esc(formatIDR(payment.paidAmount))}</td>
+                  </tr>
+                  `
+                      : `
                   <tr>
                     <td style="color:#6b7280;padding:6px 0">Biaya layanan (dibayar)</td>
                     <td style="text-align:right;padding:6px 0">${esc(formatIDR(feePaid))}</td>
@@ -256,6 +299,9 @@ export function renderInvoiceEmailHtml(model: InvoiceEmailModel) {
                     <td style="color:#6b7280;padding:6px 0">Total dibayar</td>
                     <td style="text-align:right;padding:6px 0">${esc(formatIDR(grossPaid))}</td>
                   </tr>
+                  `
+                  }
+
                   <tr>
                     <td style="color:#6b7280;padding:6px 0">Sisa pembayaran</td>
                     <td style="text-align:right;padding:6px 0;font-weight:800">${esc(formatIDR(grossRemainingEstimate))}</td>

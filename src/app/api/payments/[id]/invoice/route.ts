@@ -21,6 +21,10 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
           kavlings: { include: { kavling: true } },
         },
       },
+      transactions: {
+        where: { status: "success" },
+        orderBy: { createdAt: "asc" },
+      },
     },
   });
 
@@ -58,6 +62,13 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
       paidAt: payment.paidAt,
       method: payment.method ?? null,
       checkoutUrl: payment.checkoutUrl,
+      history: payment.transactions.map((t) => ({
+        id: t.id,
+        createdAt: t.createdAt,
+        amountDelta: t.amountDelta,
+        method: t.method,
+        action: t.action,
+      })),
     },
   };
 

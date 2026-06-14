@@ -532,6 +532,10 @@ export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" |
           kavlings: { include: { kavling: true } },
         },
       },
+      transactions: {
+        where: { status: "success" },
+        orderBy: { createdAt: "asc" },
+      },
     },
   });
   if (!payment) return { ok: false };
@@ -542,29 +546,7 @@ export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" |
   const dueAt = new Date(payment.booking.checkIn.getTime() - balanceDueDays * 24 * 60 * 60 * 1000);
   const feeCfg = feeConfigFromPaymentSnapshot(payment) ?? feeConfigForPayment(cfg?.xenditPaymentMethodsJson, payment.method ?? null);
 
-  const outstanding = payment.amount - payment.paidAmount;
-  if (outstanding <= 0) return { ok: true, skipped: true };
-  if (!payment.checkoutUrl) return { ok: true, skipped: true };
-
-  const externalId = (payment.gatewayExternalId ?? "").trim();
-  const idempotencyKey = `email_payment_link_sent:${kind}:${externalId || payment.checkoutUrl}`;
-  const already = await prisma.paymentTransaction.findFirst({ where: { paymentId, action: idempotencyKey }, select: { id: true } });
-  if (already) return { ok: true, skipped: true };
-
-  const title = kind === "dp" ? "Link Pembayaran DP" : kind === "partial" ? "Link Pembayaran Cicilan" : "Link Pembayaran Pelunasan";
-  const body =
-    kind === "dp"
-      ? `Silakan lakukan pembayaran DP untuk booking ${payment.booking.code}.\n\n` + `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`
-      : kind === "partial"
-        ? `Silakan lakukan pembayaran cicilan untuk booking ${payment.booking.code}.\n\n` +
-          `Sisa tagihan total: ${formatIDR(outstanding)}\n\n` +
-          `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`
-        : `Silakan selesaikan pelunasan untuk booking ${payment.booking.code} sebelum jatuh tempo.\n\n` +
-          `Sisa tagihan: ${formatIDR(outstanding)}\n` +
-          `Jatuh tempo: ${formatDateWIB(dueAt)}\n\n` +
-          `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`;
-
-  const invoiceModel: InvoiceEmailModel = {
+  const model: InvoiceEmailModel = {
     booking: {
       code: payment.booking.code,
       checkIn: payment.booking.checkIn,
@@ -591,11 +573,39 @@ export async function maybeSendPaymentLinkEmails(paymentId: string, kind: "dp" |
       paidAt: payment.paidAt,
       method: payment.method ?? null,
       checkoutUrl: payment.checkoutUrl,
+      history: payment.transactions.map((t) => ({
+        id: t.id,
+        createdAt: t.createdAt,
+        amountDelta: t.amountDelta,
+        method: t.method,
+        action: t.action,
+      })),
     },
-    notice: { title, body },
   };
 
-  const html = renderInvoiceEmailHtml(invoiceModel);
+  const outstanding = payment.amount - payment.paidAmount;
+  if (outstanding <= 0 && kind !== "balance") return { ok: true, skipped: true };
+  if (!payment.checkoutUrl && kind !== "balance") return { ok: true, skipped: true };
+
+  const externalId = (payment.gatewayExternalId ?? "").trim();
+  const idempotencyKey = `email_payment_link_sent:${kind}:${externalId || payment.checkoutUrl}`;
+  const already = await prisma.paymentTransaction.findFirst({ where: { paymentId, action: idempotencyKey }, select: { id: true } });
+  if (already) return { ok: true, skipped: true };
+
+  const title = kind === "dp" ? "Link Pembayaran DP" : kind === "partial" ? "Link Pembayaran Cicilan" : "Link Pembayaran Pelunasan";
+  const body =
+    kind === "dp"
+      ? `Silakan lakukan pembayaran DP untuk booking ${payment.booking.code}.\n\n` + `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`
+      : kind === "partial"
+        ? `Silakan lakukan pembayaran cicilan untuk booking ${payment.booking.code}.\n\n` +
+          `Sisa tagihan total: ${formatIDR(outstanding)}\n\n` +
+          `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`
+        : `Silakan selesaikan pelunasan untuk booking ${payment.booking.code} sebelum jatuh tempo.\n\n` +
+          `Sisa tagihan: ${formatIDR(outstanding)}\n` +
+          `Jatuh tempo: ${formatDateWIB(dueAt)}\n\n` +
+          `Klik tombol "Bayar Sekarang" di email ini untuk melanjutkan pembayaran.`;
+
+  const html = renderInvoiceEmailHtml(model, { title, body });
   await sendEmail(smtp, { to, subject: `${title}: Booking ${payment.booking.code} - Woodforest Jayagiri 48`, html });
   await prisma.paymentTransaction.create({
     data: {
