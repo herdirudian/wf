@@ -430,6 +430,14 @@ export async function createPublicBooking(input: {
     items: items.map((it) => ({ unitId: it.unitId, quantity: it.quantity })),
   });
 
+  // STOCK VALIDATION
+  for (const aReq of addOns) {
+    const a = addOnById.get(aReq.addOnId);
+    if (a && aReq.quantity > a.stock) {
+      throw new Error(`Stok add-on "${a.name}" tidak mencukupi. Tersedia: ${a.stock}`);
+    }
+  }
+
   const addOnAmount = addOns.reduce((acc, it) => acc + (addOnById.get(it.addOnId)?.price ?? 0) * it.quantity, 0);
   const amount = baseAmount + addOnAmount;
   const requestedKavlings = (input.kavlings ?? []).map((n) => Number(n)).filter((n) => Number.isFinite(n));

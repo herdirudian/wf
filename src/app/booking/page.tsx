@@ -31,6 +31,7 @@ type AvailabilityAddOn = {
   id: string;
   name: string;
   price: number;
+  stock: number;
 };
 
 type BookingDraft = {
@@ -2750,6 +2751,12 @@ export default function PublicBookingPage() {
                               <span className="text-lg sm:text-xl font-black text-primary tracking-tight">{formatIDR(a.price)}</span>
                               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/30">/ unit</span>
                             </div>
+                            <div className="flex items-center justify-center gap-2 sm:justify-start">
+                              <div className={`h-1.5 w-1.5 rounded-full ${a.stock - auto <= 5 ? "bg-amber-500 animate-pulse" : "bg-emerald-500"}`} />
+                              <span className={`text-[9px] font-black uppercase tracking-widest ${a.stock - auto <= 5 ? "text-amber-600" : "text-[#2D3E10]/30"}`}>
+                                {a.stock - auto > 0 ? `Tersedia: ${a.stock - auto}` : "Stok Habis"}
+                              </span>
+                            </div>
                             {auto > 0 && (
                               <div className="flex items-center justify-center gap-2 rounded-xl bg-primary/5 p-2.5 sm:p-3 sm:justify-start">
                                 <svg className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2770,6 +2777,7 @@ export default function PublicBookingPage() {
                               <QuantityStepper
                                 value={effectiveAddonQty[a.id] ?? 0}
                                 min={autoAddonQty[a.id] ?? 0}
+                                max={a.stock}
                                 ariaLabel={`qty ${a.name}`}
                                 onChange={(next) => {
                                   const auto = autoAddonQty[a.id] ?? 0;

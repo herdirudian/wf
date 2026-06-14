@@ -5,10 +5,10 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/Modal";
 
-type FormState = { name: string; price: number };
+type FormState = { name: string; price: number; stock: number };
 
 function toForm(a?: AddOn): FormState {
-  return { name: a?.name ?? "", price: a?.price ?? 0 };
+  return { name: a?.name ?? "", price: a?.price ?? 0, stock: a?.stock ?? 0 };
 }
 
 export function AddOnManager({ items, currentUserRole }: { items: AddOn[]; currentUserRole: string }) {
@@ -91,15 +91,21 @@ export function AddOnManager({ items, currentUserRole }: { items: AddOn[]; curre
           <thead className="bg-background text-left text-muted">
             <tr>
               <th className="px-4 py-3 font-medium">Nama</th>
-              <th className="px-4 py-3 font-medium">Harga</th>
+              <th className="px-4 py-3 font-medium text-right">Harga</th>
+              <th className="px-4 py-3 font-medium text-center">Stok</th>
               <th className="px-4 py-3 font-medium">Aksi</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border bg-surface">
             {items.map((a) => (
               <tr key={a.id} className="text-foreground">
-                <td className="px-4 py-3">{a.name}</td>
-                <td className="px-4 py-3">{a.price}</td>
+                <td className="px-4 py-3 font-medium">{a.name}</td>
+                <td className="px-4 py-3 text-right tabular-nums">{a.price.toLocaleString("id-ID")}</td>
+                <td className="px-4 py-3 text-center">
+                  <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-widest ${a.stock <= 5 ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>
+                    {a.stock} unit
+                  </span>
+                </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-2">
                     {!isOwner && (
@@ -153,6 +159,17 @@ export function AddOnManager({ items, currentUserRole }: { items: AddOn[]; curre
               min={0}
               value={form.price}
               onChange={(e) => setForm((s) => ({ ...s, price: Number(e.target.value) }))}
+              className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
+              required
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-foreground">Stok Tersedia</label>
+            <input
+              type="number"
+              min={0}
+              value={form.stock}
+              onChange={(e) => setForm((s) => ({ ...s, stock: Number(e.target.value) }))}
               className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-primary"
               required
             />

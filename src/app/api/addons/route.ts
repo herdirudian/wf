@@ -7,6 +7,7 @@ import { logActivity } from "@/services/activity.service";
 const CreateSchema = z.object({
   name: z.string().min(1),
   price: z.number().int().min(0),
+  stock: z.number().int().min(0).optional().default(0),
 });
 
 export async function GET(req: Request) {

@@ -159,6 +159,7 @@ model AddOn {
   id           String        @id @default(cuid())
   name         String
   price        Int
+  stock        Int           @default(0)
   bookingAddOns BookingAddOn[]
 }
 
