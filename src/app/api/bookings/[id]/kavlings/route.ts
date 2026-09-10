@@ -4,6 +4,7 @@ import { getAdminSession } from "@/lib/auth";
 import { getKavlingContext, setKavlingAssignment } from "@/services/booking.service";
 import { prisma } from "@/lib/prisma";
 import { parseDateRangeWIB } from "@/lib/time";
+import { getKavlingSets } from "@/lib/kavling-config";
 
 const QuerySchema = z.object({
   unitId: z.string().min(1),
@@ -43,8 +44,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
     });
     if (!unit) return NextResponse.json({ message: "Unit tidak ditemukan" }, { status: 404 });
 
-    const privateStart = Math.max(1, Math.min(cfg.privateKavlingStart, cfg.kavlingSellCount));
-    const privateEnd = Math.max(privateStart, Math.min(cfg.privateKavlingEnd, cfg.kavlingSellCount));
+    const sets = getKavlingSets(cfg);
     const scopeRaw = (unit.kavlingScope ?? "").toLowerCase();
     const raw = (unit.category ?? "").toLowerCase();
     const n = unit.name.toLowerCase();
@@ -61,13 +61,16 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
                 ? "mandiri"
                 : "paket";
 
-    const baseAll = Array.from({ length: cfg.kavlingSellCount }).map((_, i) => i + 1);
-    const allowed =
-      scope === "private"
-        ? baseAll.filter((x) => x >= privateStart && x <= privateEnd)
-        : baseAll.filter((x) => x < privateStart || x > privateEnd);
+    const allowed = scope === "private" ? sets.privateList : sets.regularList;
 
-    return NextResponse.json({ ...ctxData, all: allowed, scope, privateRange: { start: privateStart, end: privateEnd } });
+    return NextResponse.json({
+      ...ctxData,
+      all: allowed,
+      scope,
+      privateRange: sets.privateList.length ? { start: sets.privateList[0], end: sets.privateList[sets.privateList.length - 1] } : { start: 58, end: 65 },
+      privateKavlings: sets.privateList,
+      regularKavlings: sets.regularList,
+    });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Gagal load kavling";
     return NextResponse.json({ message }, { status: 400 });

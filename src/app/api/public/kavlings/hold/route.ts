@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import crypto from "node:crypto";
 import { parseDateRangeWIB } from "@/lib/time";
 import { notifyKavlingUpdated } from "@/lib/realtime";
+import { getKavlingSets } from "@/lib/kavling-config";
 
 const BodySchema = z.object({
   checkIn: z.string().min(1),
@@ -42,28 +43,29 @@ export async function POST(req: Request) {
     create: { id: 1, kavlingSellCount: 110, privateKavlingStart: 58, privateKavlingEnd: 65, mandiriAutoAddOnId: null },
     update: {},
   });
+  const sets = getKavlingSets(cfg);
   const holdMinutes = Math.max(1, Math.min(30, cfg.holdMinutes ?? 5));
-  const privateStart = Math.max(1, Math.min(cfg.privateKavlingStart, cfg.kavlingSellCount));
-  const privateEnd = Math.max(privateStart, Math.min(cfg.privateKavlingEnd, cfg.kavlingSellCount));
 
   const unique = Array.from(new Set(parsed.data.numbers.map((n) => Number(n)).filter((n) => Number.isFinite(n))));
   unique.sort((a, b) => a - b);
   if (unique.length !== parsed.data.numbers.length) return NextResponse.json({ message: "Nomor kavling duplikat" }, { status: 400 });
 
   if (parsed.data.scope === "private") {
-    if (unique.some((n) => n < privateStart || n > privateEnd)) {
-      return NextResponse.json({ message: `Nomor kavling Paket Private harus ${privateStart} - ${privateEnd}` }, { status: 400 });
+    if (unique.some((n) => !sets.privateSet.has(n))) {
+      return NextResponse.json({ message: `Nomor kavling harus berada di dalam daftar Paket Private (${sets.privateList.join(", ")})` }, { status: 400 });
     }
   } else if (parsed.data.scope === "mixed") {
-    if (unique.some((n) => n < 1 || n > cfg.kavlingSellCount)) {
-      return NextResponse.json({ message: `Nomor kavling harus 1 - ${cfg.kavlingSellCount}` }, { status: 400 });
+    const allSet = new Set(sets.allList);
+    if (unique.some((n) => !allSet.has(n))) {
+      return NextResponse.json({ message: `Nomor kavling tidak valid` }, { status: 400 });
     }
   } else {
-    if (unique.some((n) => n < 1 || n > cfg.kavlingSellCount)) {
-      return NextResponse.json({ message: `Nomor kavling harus 1 - ${cfg.kavlingSellCount}` }, { status: 400 });
+    const allSet = new Set(sets.allList);
+    if (unique.some((n) => !allSet.has(n))) {
+      return NextResponse.json({ message: `Nomor kavling tidak valid` }, { status: 400 });
     }
-    if (unique.some((n) => n >= privateStart && n <= privateEnd)) {
-      return NextResponse.json({ message: `Range ${privateStart} - ${privateEnd} khusus untuk Paket Private` }, { status: 400 });
+    if (unique.some((n) => sets.privateSet.has(n))) {
+      return NextResponse.json({ message: `Kavling Private (${sets.privateList.join(", ")}) khusus untuk Paket Private` }, { status: 400 });
     }
   }
 

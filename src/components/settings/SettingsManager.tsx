@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "@/components/ui/Modal";
+import { parseKavlingList } from "@/lib/kavling-config";
 
 export function SettingsManager({ currentUserRole }: { currentUserRole: string }) {
   const isOwner = currentUserRole === "owner";
@@ -18,6 +19,8 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
   const [kavlingSellCount, setKavlingSellCount] = useState(110);
   const [privateKavlingStart, setPrivateKavlingStart] = useState(58);
   const [privateKavlingEnd, setPrivateKavlingEnd] = useState(65);
+  const [regularKavlingsList, setRegularKavlingsList] = useState("1-57, 66-110");
+  const [privateKavlingsList, setPrivateKavlingsList] = useState("58-65");
   const [holdMinutes, setHoldMinutes] = useState(5);
   const [balanceReminderDays, setBalanceReminderDays] = useState(3);
   const [xenditSecretKeySet, setXenditSecretKeySet] = useState(false);
@@ -77,6 +80,8 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
               kavlingSellCount?: number;
               privateKavlingStart?: number;
               privateKavlingEnd?: number;
+              regularKavlingsList?: string;
+              privateKavlingsList?: string;
               holdMinutes?: number;
               xenditSecretKeySet?: boolean;
               xenditCallbackTokenSet?: boolean;
@@ -108,6 +113,8 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
       if (typeof ps === "number" && Number.isFinite(ps)) setPrivateKavlingStart(ps);
       const pe = data?.config?.privateKavlingEnd;
       if (typeof pe === "number" && Number.isFinite(pe)) setPrivateKavlingEnd(pe);
+      if (typeof data?.config?.regularKavlingsList === "string") setRegularKavlingsList(data.config.regularKavlingsList);
+      if (typeof data?.config?.privateKavlingsList === "string") setPrivateKavlingsList(data.config.privateKavlingsList);
       const hm = data?.config?.holdMinutes;
       if (typeof hm === "number" && Number.isFinite(hm)) setHoldMinutes(hm);
       setXenditSecretKeySet(!!data?.config?.xenditSecretKeySet);
@@ -166,9 +173,8 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
       body: JSON.stringify(
         Object.fromEntries(
           Object.entries({
-            kavlingSellCount,
-            privateKavlingStart,
-            privateKavlingEnd,
+            regularKavlingsList: regularKavlingsList.trim(),
+            privateKavlingsList: privateKavlingsList.trim(),
             holdMinutes,
             xenditSecretKey: xenditSecretKeyInput.trim() ? xenditSecretKeyInput.trim() : undefined,
             xenditCallbackToken: xenditCallbackTokenInput.trim() ? xenditCallbackTokenInput.trim() : undefined,
@@ -199,6 +205,8 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
             kavlingSellCount?: number;
             privateKavlingStart?: number;
             privateKavlingEnd?: number;
+            regularKavlingsList?: string;
+            privateKavlingsList?: string;
             holdMinutes?: number;
             xenditSecretKeySet?: boolean;
             xenditCallbackTokenSet?: boolean;
@@ -228,6 +236,8 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
     if (typeof ps === "number" && Number.isFinite(ps)) setPrivateKavlingStart(ps);
     const pe = data?.config?.privateKavlingEnd;
     if (typeof pe === "number" && Number.isFinite(pe)) setPrivateKavlingEnd(pe);
+    if (typeof data?.config?.regularKavlingsList === "string") setRegularKavlingsList(data.config.regularKavlingsList);
+    if (typeof data?.config?.privateKavlingsList === "string") setPrivateKavlingsList(data.config.privateKavlingsList);
     const hm = data?.config?.holdMinutes;
     if (typeof hm === "number" && Number.isFinite(hm)) setHoldMinutes(hm);
     setXenditSecretKeySet(!!data?.config?.xenditSecretKeySet);
@@ -359,13 +369,13 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
         <p className="text-sm text-muted">Pengaturan global untuk sistem booking.</p>
       </div>
 
-      <div className="rounded-2xl border border-border bg-surface p-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="rounded-2xl border border-border bg-surface p-4 space-y-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="text-sm font-semibold text-foreground">Pengaturan Kavling</div>
-            <div className="mt-1 text-xs text-muted">Berlaku untuk pilihan nomor kavling di halaman booking.</div>
+            <div className="text-sm font-semibold text-foreground">Pengaturan Penomoran Kavling</div>
+            <div className="mt-1 text-xs text-muted">Input manual nomor kavling untuk Paket & Mandiri serta Paket Private. Format: range (misal: 1-57, 66-110) atau dipisah koma (misal: 1, 2, 3).</div>
           </div>
-          <div className="flex flex-wrap items-end gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="space-y-1">
               <label className="text-xs font-medium text-foreground">Hold (menit)</label>
               <input
@@ -375,7 +385,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                 value={holdMinutes}
                 onChange={(e) => setHoldMinutes(Number(e.target.value))}
                 disabled={loading || saving}
-                className="h-9 w-28 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
+                className="h-9 w-24 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
               />
             </div>
             <div className="space-y-1">
@@ -387,43 +397,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                 value={balanceReminderDays}
                 onChange={(e) => setBalanceReminderDays(Number(e.target.value))}
                 disabled={loading || saving}
-                className="h-9 w-28 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Jumlah kavling dijual</label>
-              <input
-                type="number"
-                min={1}
-                max={110}
-                value={kavlingSellCount}
-                onChange={(e) => setKavlingSellCount(Number(e.target.value))}
-                disabled={loading || saving}
-                className="h-9 w-40 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Private start</label>
-              <input
-                type="number"
-                min={1}
-                max={110}
-                value={privateKavlingStart}
-                onChange={(e) => setPrivateKavlingStart(Number(e.target.value))}
-                disabled={loading || saving}
-                className="h-9 w-32 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground">Private end</label>
-              <input
-                type="number"
-                min={1}
-                max={110}
-                value={privateKavlingEnd}
-                onChange={(e) => setPrivateKavlingEnd(Number(e.target.value))}
-                disabled={loading || saving || isOwner}
-                className="h-9 w-32 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
+                className="h-9 w-24 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
               />
             </div>
             {!isOwner && (
@@ -431,11 +405,58 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
                 type="button"
                 onClick={save}
                 disabled={loading || saving}
-                className="flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
+                className="mt-5 flex min-h-[2.25rem] items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all active:scale-95 hover:bg-primary/90 disabled:opacity-60"
               >
                 {saving ? "Menyimpan..." : "Simpan"}
               </button>
             )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-border/50">
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-medium text-foreground">Nomor Kavling Regular & Mandiri</label>
+              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                {parseKavlingList(regularKavlingsList).length} kavling
+              </span>
+            </div>
+            <input
+              type="text"
+              value={regularKavlingsList}
+              onChange={(e) => setRegularKavlingsList(e.target.value)}
+              disabled={loading || saving}
+              placeholder="Contoh: 1-57, 66-110"
+              className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
+            />
+            <p className="text-[11px] text-muted">Nomor kavling yang dapat dipesan untuk Paket Standar dan Mandiri.</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-medium text-foreground">Nomor Kavling Private</label>
+              <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                {parseKavlingList(privateKavlingsList).length} kavling
+              </span>
+            </div>
+            <input
+              type="text"
+              value={privateKavlingsList}
+              onChange={(e) => setPrivateKavlingsList(e.target.value)}
+              disabled={loading || saving || isOwner}
+              placeholder="Contoh: 58-65"
+              className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
+            />
+            <p className="text-[11px] text-muted">Nomor kavling khusus untuk penginapan Paket Private.</p>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between rounded-xl bg-background p-3 text-xs text-foreground">
+          <div className="flex items-center gap-4">
+            <div>
+              <span className="text-muted">Total Kavling Terdaftar: </span>
+              <strong className="font-semibold">{new Set([...parseKavlingList(regularKavlingsList), ...parseKavlingList(privateKavlingsList)]).size} Kavling</strong>
+            </div>
           </div>
         </div>
         {error ? <div className="mt-2 text-xs text-red-600">{error}</div> : null}

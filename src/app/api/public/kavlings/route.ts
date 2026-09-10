@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { parseDateRangeWIB } from "@/lib/time";
+import { getKavlingSets } from "@/lib/kavling-config";
 
 const QuerySchema = z.object({
   checkIn: z.string().min(1),
@@ -49,17 +50,15 @@ export async function GET(req: Request) {
     update: {},
   });
 
-  const privateStart = Math.max(1, Math.min(cfg.privateKavlingStart, cfg.kavlingSellCount));
-  const privateEnd = Math.max(privateStart, Math.min(cfg.privateKavlingEnd, cfg.kavlingSellCount));
+  const sets = getKavlingSets(cfg);
   const scope = parsed.data.scope ?? "paket";
 
-  const baseAll = Array.from({ length: cfg.kavlingSellCount }).map((_, i) => i + 1);
   const allowed =
     scope === "mixed"
-      ? baseAll
+      ? sets.allList
       : scope === "private"
-        ? baseAll.filter((n) => n >= privateStart && n <= privateEnd)
-        : baseAll.filter((n) => n < privateStart || n > privateEnd);
+        ? sets.privateList
+        : sets.regularList;
   const allowedSet = new Set(allowed);
 
   const myHold =
@@ -150,7 +149,9 @@ export async function GET(req: Request) {
       numbers: myHold.kavlings.map(x => x.kavling.number).sort((a, b) => a - b)
     } : null,
     scope,
-    sellCount: cfg.kavlingSellCount,
-    privateRange: { start: privateStart, end: privateEnd },
+    sellCount: sets.totalCount,
+    privateRange: sets.privateList.length ? { start: sets.privateList[0], end: sets.privateList[sets.privateList.length - 1] } : { start: 58, end: 65 },
+    privateKavlings: sets.privateList,
+    regularKavlings: sets.regularList,
   });
 }

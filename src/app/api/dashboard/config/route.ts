@@ -4,11 +4,15 @@ import { getAdminSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/services/activity.service";
 
+import { parseKavlingList, getKavlingSets } from "@/lib/kavling-config";
+
 const UpdateSchema = z
   .object({
-    kavlingSellCount: z.coerce.number().int().min(1).max(110),
-    privateKavlingStart: z.coerce.number().int().min(1).max(110),
-    privateKavlingEnd: z.coerce.number().int().min(1).max(110),
+    kavlingSellCount: z.coerce.number().int().min(1).max(500).optional(),
+    privateKavlingStart: z.coerce.number().int().min(1).max(500).optional(),
+    privateKavlingEnd: z.coerce.number().int().min(1).max(500).optional(),
+    regularKavlingsList: z.string().optional(),
+    privateKavlingsList: z.string().optional(),
     holdMinutes: z.coerce.number().int().min(1).max(30).optional(),
     xenditSecretKey: z.string().min(1).optional(),
     xenditCallbackToken: z.string().min(1).optional(),
@@ -35,14 +39,22 @@ const UpdateSchema = z
     dpMinAmount: z.coerce.number().int().min(0).optional(),
     reminderDays: z.string().optional(),
   })
-  .refine((v) => v.privateKavlingStart <= v.privateKavlingEnd, {
-    message: "Range private tidak valid",
-    path: ["privateKavlingEnd"],
-  })
-  .refine((v) => v.privateKavlingEnd <= v.kavlingSellCount, {
-    message: "Range private harus berada di dalam jumlah kavling dijual",
-    path: ["privateKavlingEnd"],
-  });
+  .refine(
+    (v) => {
+      if (typeof v.regularKavlingsList === "string" && typeof v.privateKavlingsList === "string") {
+        const reg = parseKavlingList(v.regularKavlingsList);
+        const priv = parseKavlingList(v.privateKavlingsList);
+        const regSet = new Set(reg);
+        const overlap = priv.filter((n) => regSet.has(n));
+        return overlap.length === 0;
+      }
+      return true;
+    },
+    {
+      message: "Nomor kavling Regular/Mandiri dan Private tidak boleh bentrok",
+      path: ["privateKavlingsList"],
+    },
+  );
 
 export async function GET() {
   const session = await getAdminSession();
@@ -97,11 +109,18 @@ export async function GET() {
     }
   })();
 
+  const kavlingSets = getKavlingSets(config);
+
   return NextResponse.json({
     config: {
       kavlingSellCount: config.kavlingSellCount,
       privateKavlingStart: config.privateKavlingStart,
       privateKavlingEnd: config.privateKavlingEnd,
+      regularKavlingsList: config.regularKavlingsList ?? "1-57, 66-110",
+      privateKavlingsList: config.privateKavlingsList ?? "58-65",
+      regularCount: kavlingSets.regularList.length,
+      privateCount: kavlingSets.privateList.length,
+      totalCount: kavlingSets.totalCount,
       holdMinutes: config.holdMinutes,
       xenditSecretKeySet: !!config.xenditSecretKey,
       xenditCallbackTokenSet: !!config.xenditCallbackToken,
@@ -127,7 +146,10 @@ export async function PUT(req: Request) {
 
   const json = (await req.json().catch(() => null)) as unknown;
   const parsed = UpdateSchema.safeParse(json);
-  if (!parsed.success) return NextResponse.json({ message: "Input tidak valid" }, { status: 400 });
+  if (!parsed.success) {
+    const errorMsg = parsed.error.issues?.[0]?.message ?? "Input tidak valid";
+    return NextResponse.json({ message: errorMsg }, { status: 400 });
+  }
 
   const nextPaymentMethodsJson = (() => {
     const arr = parsed.data.xenditPaymentMethods;
@@ -145,13 +167,28 @@ export async function PUT(req: Request) {
     return normalized.length ? JSON.stringify(normalized) : undefined;
   })();
 
+  const newRegularListStr = parsed.data.regularKavlingsList ?? undefined;
+  const newPrivateListStr = parsed.data.privateKavlingsList ?? undefined;
+
+  const kavlingSets = getKavlingSets({
+    regularKavlingsList: newRegularListStr,
+    privateKavlingsList: newPrivateListStr,
+    kavlingSellCount: parsed.data.kavlingSellCount,
+    privateKavlingStart: parsed.data.privateKavlingStart,
+    privateKavlingEnd: parsed.data.privateKavlingEnd,
+  });
+
+  const updatedSellCount = kavlingSets.totalCount > 0 ? kavlingSets.totalCount : (parsed.data.kavlingSellCount ?? 110);
+
   const config = await prisma.appConfig.upsert({
     where: { id: 1 },
     create: {
       id: 1,
-      kavlingSellCount: parsed.data.kavlingSellCount,
-      privateKavlingStart: parsed.data.privateKavlingStart,
-      privateKavlingEnd: parsed.data.privateKavlingEnd,
+      kavlingSellCount: updatedSellCount,
+      privateKavlingStart: parsed.data.privateKavlingStart ?? 58,
+      privateKavlingEnd: parsed.data.privateKavlingEnd ?? 65,
+      regularKavlingsList: newRegularListStr ?? "1-57, 66-110",
+      privateKavlingsList: newPrivateListStr ?? "58-65",
       holdMinutes: parsed.data.holdMinutes ?? 5,
       xenditSecretKey: parsed.data.xenditSecretKey ?? null,
       xenditCallbackToken: parsed.data.xenditCallbackToken ?? null,
@@ -169,9 +206,11 @@ export async function PUT(req: Request) {
       reminderDays: parsed.data.reminderDays ?? "7,3,0,-1",
     },
     update: {
-      kavlingSellCount: parsed.data.kavlingSellCount,
-      privateKavlingStart: parsed.data.privateKavlingStart,
-      privateKavlingEnd: parsed.data.privateKavlingEnd,
+      kavlingSellCount: updatedSellCount,
+      ...(typeof parsed.data.privateKavlingStart === "number" ? { privateKavlingStart: parsed.data.privateKavlingStart } : {}),
+      ...(typeof parsed.data.privateKavlingEnd === "number" ? { privateKavlingEnd: parsed.data.privateKavlingEnd } : {}),
+      ...(typeof newRegularListStr === "string" ? { regularKavlingsList: newRegularListStr } : {}),
+      ...(typeof newPrivateListStr === "string" ? { privateKavlingsList: newPrivateListStr } : {}),
       ...(typeof parsed.data.holdMinutes === "number" ? { holdMinutes: parsed.data.holdMinutes } : {}),
       ...(parsed.data.xenditSecretKey ? { xenditSecretKey: parsed.data.xenditSecretKey } : {}),
       ...(parsed.data.xenditCallbackToken ? { xenditCallbackToken: parsed.data.xenditCallbackToken } : {}),
@@ -199,16 +238,25 @@ export async function PUT(req: Request) {
     resourceId: "1",
     payload: {
       kavlingSellCount: config.kavlingSellCount,
+      regularKavlingsList: config.regularKavlingsList,
+      privateKavlingsList: config.privateKavlingsList,
       balanceReminderDays: config.balanceReminderDays,
       dpPercent: config.dpPercent,
     },
   });
+
+  const updatedKavlingSets = getKavlingSets(config);
 
   return NextResponse.json({
     config: {
       kavlingSellCount: config.kavlingSellCount,
       privateKavlingStart: config.privateKavlingStart,
       privateKavlingEnd: config.privateKavlingEnd,
+      regularKavlingsList: config.regularKavlingsList ?? "1-57, 66-110",
+      privateKavlingsList: config.privateKavlingsList ?? "58-65",
+      regularCount: updatedKavlingSets.regularList.length,
+      privateCount: updatedKavlingSets.privateList.length,
+      totalCount: updatedKavlingSets.totalCount,
       holdMinutes: config.holdMinutes,
       xenditSecretKeySet: !!config.xenditSecretKey,
       xenditCallbackTokenSet: !!config.xenditCallbackToken,

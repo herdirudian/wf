@@ -223,16 +223,24 @@ function bookingCode() {
   return `WFJ-${y}${m}${day}-${rand}`;
 }
 
+import { getKavlingSets } from "@/lib/kavling-config";
+
 async function getKavlingConfig(tx: typeof prisma) {
   const cfg = await tx.appConfig.upsert({
     where: { id: 1 },
     create: { id: 1, kavlingSellCount: 110, privateKavlingStart: 58, privateKavlingEnd: 65, mandiriAutoAddOnId: null, holdMinutes: 5 },
     update: {},
   });
+  const sets = getKavlingSets(cfg);
   return {
-    sellCount: cfg.kavlingSellCount,
-    privateStart: cfg.privateKavlingStart,
-    privateEnd: cfg.privateKavlingEnd,
+    sellCount: sets.totalCount,
+    privateStart: sets.privateList.length ? sets.privateList[0] : cfg.privateKavlingStart,
+    privateEnd: sets.privateList.length ? sets.privateList[sets.privateList.length - 1] : cfg.privateKavlingEnd,
+    regularList: sets.regularList,
+    privateList: sets.privateList,
+    regularSet: sets.regularSet,
+    privateSet: sets.privateSet,
+    allSet: new Set(sets.allList),
     mandiriAutoAddOnId: cfg.mandiriAutoAddOnId,
   };
 }
