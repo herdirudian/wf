@@ -2467,14 +2467,14 @@ export default function PublicBookingPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {addons.slice(0, showAllAddons ? addons.length : 3).map((a, idx) => {
+                <div className="grid grid-cols-2 gap-2.5 sm:gap-6 lg:grid-cols-3">
+                  {addons.slice(0, showAllAddons ? addons.length : (typeof window !== "undefined" && window.innerWidth < 640 ? 4 : 3)).map((a, idx) => {
                     const isSelected = (effectiveAddonQty[a.id] ?? 0) > (autoAddonQty[a.id] ?? 0);
                     const auto = autoAddonQty[a.id] ?? 0;
                     return (
                       <div 
                         key={a.id} 
-                        className={`group relative overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border p-5 sm:p-7 transition-all duration-700 ${
+                        className={`group relative overflow-hidden rounded-2xl sm:rounded-[2.5rem] border p-3.5 sm:p-7 transition-all duration-700 ${
                           isSelected 
                             ? "border-primary/20 bg-[#F1F3EE] shadow-xl shadow-primary/5 scale-[1.01] sm:scale-[1.02]" 
                             : "border-[#E8E8E1] bg-white hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
@@ -2489,49 +2489,50 @@ export default function PublicBookingPage() {
                           </div>
                         )}
 
-                        <div className="flex flex-col h-full items-center text-center justify-between gap-6 sm:gap-8 sm:items-start sm:text-left">
-                          <div className="space-y-3 sm:space-y-4 w-full">
-                            <div className="flex flex-col items-center justify-between gap-2 sm:gap-3 sm:flex-row sm:items-start">
-                              <h4 className="text-[15px] sm:text-[17px] font-black tracking-tight text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">
+                        <div className="flex flex-col h-full items-center text-center justify-between gap-3 sm:gap-8 sm:items-start sm:text-left">
+                          <div className="space-y-1.5 sm:space-y-4 w-full">
+                            <div className="flex flex-col items-center justify-between gap-1 sm:gap-3 sm:flex-row sm:items-start">
+                              <h4 className="text-xs sm:text-[17px] font-black tracking-tight text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">
                                 {a.name}
                               </h4>
                               {auto > 0 && (
-                                <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-primary">
+                                <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 sm:px-3 sm:py-1 text-[7px] sm:text-[9px] font-bold uppercase tracking-widest text-primary">
                                   Included
                                 </span>
                               )}
                             </div>
                             <div className="flex items-baseline justify-center gap-1 sm:gap-1.5 sm:justify-start">
-                              <span className="text-lg sm:text-xl font-black text-primary tracking-tight">{formatIDR(a.price)}</span>
-                              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/30">/ unit</span>
+                              <span className="text-sm sm:text-xl font-black text-primary tracking-tight">{formatIDR(a.price)}</span>
+                              <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider sm:tracking-[0.2em] text-[#2D3E10]/30">/ unit</span>
                             </div>
-                            <div className="flex items-center justify-center gap-2 sm:justify-start">
+                            <div className="flex items-center justify-center gap-1.5 sm:justify-start">
                               <div className={`h-1.5 w-1.5 rounded-full ${a.stock - auto <= 5 ? "bg-amber-500 animate-pulse" : "bg-emerald-500"}`} />
-                              <span className={`text-[9px] font-black uppercase tracking-widest ${a.stock - auto <= 5 ? "text-amber-600" : "text-[#2D3E10]/30"}`}>
-                                {a.stock - auto > 0 ? `Tersedia: ${a.stock - auto}` : "Stok Habis"}
+                              <span className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-wider ${a.stock - auto <= 5 ? "text-amber-600" : "text-[#2D3E10]/40"}`}>
+                                {a.stock - auto > 0 ? `Stok: ${a.stock - auto}` : "Habis"}
                               </span>
                             </div>
                             {auto > 0 && (
-                              <div className="flex items-center justify-center gap-2 rounded-xl bg-primary/5 p-2.5 sm:p-3 sm:justify-start">
-                                <svg className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <div className="flex items-center justify-center gap-1.5 rounded-lg bg-primary/5 p-1.5 sm:p-3 sm:justify-start">
+                                <svg className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                                 </svg>
-                                <p className="text-[8px] sm:text-[10px] font-bold text-primary/70 leading-relaxed uppercase tracking-widest">
-                                  {auto} unit termasuk dalam paket
+                                <p className="text-[7px] sm:text-[10px] font-bold text-primary/70 leading-tight uppercase tracking-wider">
+                                  {auto} unit inc.
                                 </p>
                               </div>
                             )}
                           </div>
                           
-                          <div className="flex w-full flex-col items-center justify-between pt-4 sm:pt-6 border-t border-[#E8E8E1] gap-3 sm:gap-4 sm:flex-row">
-                            <div className="flex flex-col items-center sm:items-start">
+                          <div className="flex w-full flex-col items-center justify-between pt-2.5 sm:pt-6 border-t border-[#E8E8E1] gap-1.5 sm:gap-4 sm:flex-row">
+                            <div className="flex flex-col items-center sm:items-start hidden sm:flex">
                               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Atur Jumlah</span>
                             </div>
-                            <div className="scale-100 sm:scale-110 sm:origin-right">
+                            <div className="w-full flex justify-center sm:w-auto sm:scale-110 sm:origin-right">
                               <QuantityStepper
                                 value={effectiveAddonQty[a.id] ?? 0}
                                 min={autoAddonQty[a.id] ?? 0}
                                 max={a.stock}
+                                size="sm"
                                 ariaLabel={`qty ${a.name}`}
                                 onChange={(next) => {
                                   const auto = autoAddonQty[a.id] ?? 0;
