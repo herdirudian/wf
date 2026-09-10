@@ -176,17 +176,18 @@ export function InteractiveMapViewer({
   };
 
   return (
-    <div className={`relative flex flex-col overflow-hidden rounded-[2rem] border border-[#2D3E10]/20 bg-[#161B11] shadow-2xl select-none ${className}`}>
-      {/* Top Floating Glassmorphism Controls */}
-      <div className="absolute top-4 inset-x-4 z-20 flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/40 shadow-lg text-[#2D3E10]">
-        <div className="flex items-center gap-2">
+    <div className={`relative flex flex-col overflow-hidden rounded-2xl sm:rounded-[2rem] border border-[#2D3E10]/20 bg-[#161B11] shadow-2xl select-none ${className}`}>
+      {/* Top Floating Controls - Split into 2 compact side pods so top-center image is clear */}
+      <div className="absolute top-2.5 left-2.5 right-2.5 sm:top-4 sm:left-4 sm:right-4 z-20 flex items-center justify-between gap-2 pointer-events-none">
+        {/* Left Pod: Compact Zoom Controls */}
+        <div className="pointer-events-auto flex items-center gap-1 sm:gap-2 p-1 sm:p-1.5 rounded-xl sm:rounded-2xl bg-white/95 backdrop-blur-md border border-white/60 shadow-md text-[#2D3E10]">
           {/* Zoom Out */}
           <button
             type="button"
             onClick={zoomOut}
             disabled={scale <= 1}
             title="Zoom Out"
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F1F3EE] text-base font-bold text-[#2D3E10] transition-all hover:bg-primary hover:text-white disabled:opacity-30 disabled:pointer-events-none active:scale-95 shadow-sm"
+            className="flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center rounded-lg sm:rounded-xl bg-[#F1F3EE] text-xs sm:text-base font-bold text-[#2D3E10] transition-all hover:bg-primary hover:text-white disabled:opacity-30 disabled:pointer-events-none active:scale-95 shadow-sm"
           >
             −
           </button>
@@ -196,7 +197,7 @@ export function InteractiveMapViewer({
             type="button"
             onClick={resetZoom}
             title="Reset Zoom & Posisi"
-            className="flex h-9 items-center justify-center rounded-xl bg-[#F1F3EE] px-3.5 text-xs font-black tracking-wider text-[#2D3E10] transition-all hover:bg-primary hover:text-white active:scale-95 shadow-sm"
+            className="flex h-7 sm:h-9 items-center justify-center rounded-lg sm:rounded-xl bg-[#F1F3EE] px-2 sm:px-3 text-[10px] sm:text-xs font-black tracking-wider text-[#2D3E10] transition-all hover:bg-primary hover:text-white active:scale-95 shadow-sm"
           >
             {Math.round(scale * 100)}%
           </button>
@@ -207,14 +208,12 @@ export function InteractiveMapViewer({
             onClick={zoomIn}
             disabled={scale >= 5}
             title="Zoom In"
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F1F3EE] text-base font-bold text-[#2D3E10] transition-all hover:bg-primary hover:text-white disabled:opacity-30 disabled:pointer-events-none active:scale-95 shadow-sm"
+            className="flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center rounded-lg sm:rounded-xl bg-[#F1F3EE] text-xs sm:text-base font-bold text-[#2D3E10] transition-all hover:bg-primary hover:text-white disabled:opacity-30 disabled:pointer-events-none active:scale-95 shadow-sm"
           >
             +
           </button>
 
-          <div className="h-5 w-px bg-slate-200 mx-1 hidden sm:block" />
-
-          {/* Reset Position button if zoomed */}
+          {/* Reset Position button (Desktop only when zoomed) */}
           {scale > 1 && (
             <button
               type="button"
@@ -226,29 +225,34 @@ export function InteractiveMapViewer({
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Right Pod: Buka Tab Baru */}
+        <div className="pointer-events-auto">
           {onOpenNewTab ? (
             <button
               type="button"
               onClick={onOpenNewTab}
-              className="flex h-9 items-center gap-1.5 rounded-xl border border-[#E8E8E1] bg-white px-3.5 text-xs font-bold uppercase tracking-wider text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 shadow-sm"
+              title="Buka Peta Ukuran Penuh di Tab Baru"
+              className="flex h-7 sm:h-9 items-center gap-1 sm:gap-1.5 rounded-xl sm:rounded-2xl border border-white/60 bg-white/95 backdrop-blur-md px-2.5 sm:px-3.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#2D3E10] transition-all hover:bg-primary hover:text-white active:scale-95 shadow-md"
             >
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
-              <span>Buka Tab Baru</span>
+              <span className="hidden sm:inline">Buka Tab Baru</span>
+              <span className="sm:hidden text-[10px]">Full</span>
             </button>
           ) : (
             <a
               href={src}
               target="_blank"
               rel="noreferrer"
-              className="flex h-9 items-center gap-1.5 rounded-xl border border-[#E8E8E1] bg-white px-3.5 text-xs font-bold uppercase tracking-wider text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 shadow-sm"
+              title="Buka Peta Ukuran Penuh di Tab Baru"
+              className="flex h-7 sm:h-9 items-center gap-1 sm:gap-1.5 rounded-xl sm:rounded-2xl border border-white/60 bg-white/95 backdrop-blur-md px-2.5 sm:px-3.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#2D3E10] transition-all hover:bg-primary hover:text-white active:scale-95 shadow-md"
             >
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
-              <span>Buka Tab Baru</span>
+              <span className="hidden sm:inline">Buka Tab Baru</span>
+              <span className="sm:hidden text-[10px]">Full</span>
             </a>
           )}
         </div>
@@ -266,7 +270,7 @@ export function InteractiveMapViewer({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`relative flex-1 w-full h-[60dvh] sm:h-[68dvh] overflow-hidden flex items-center justify-center ${
+        className={`relative flex-1 w-full h-[55dvh] sm:h-[68dvh] max-h-[75vh] overflow-hidden flex items-center justify-center ${
           isDragging ? "cursor-grabbing" : scale > 1 ? "cursor-grab" : "cursor-zoom-in"
         }`}
         style={{ touchAction: "none" }}
@@ -300,18 +304,19 @@ export function InteractiveMapViewer({
       </div>
 
       {/* Bottom Floating UX Hint */}
-      <div className="absolute bottom-3 inset-x-4 z-20 pointer-events-none flex items-center justify-center">
-        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white/80 text-[11px] font-medium shadow-lg">
-          <svg className="h-3.5 w-3.5 text-emerald-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="absolute bottom-2 inset-x-2 sm:bottom-3 sm:inset-x-4 z-20 pointer-events-none flex items-center justify-center">
+        <div className="flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-black/75 backdrop-blur-md text-white/90 text-[10px] sm:text-[11px] font-medium shadow-md">
+          <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-400 shrink-0 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
           </svg>
-          <span>
+          <span className="truncate">
             {scale > 1
-              ? "Drag / geser untuk memindahkan peta • Double click untuk reset"
-              : "Scroll Wheel / Pinch untuk zoom • Drag untuk menggeser • Double click zoom 2.5x"}
+              ? "Drag / geser peta • Double click reset"
+              : "Pinch / scroll zoom • Drag menggeser"}
           </span>
         </div>
       </div>
     </div>
   );
 }
+
