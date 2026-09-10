@@ -2000,30 +2000,30 @@ export default function PublicBookingPage() {
                     return (
                       <div 
                         key={u.id} 
-                        className={`group flex flex-col overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white transition-all duration-500 ${
+                        className={`group flex flex-col overflow-hidden rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white transition-all duration-500 ${
                           isSelected 
-                            ? "ring-2 ring-primary border-transparent shadow-2xl shadow-primary/5" 
+                            ? "ring-2 ring-primary border-transparent shadow-xl shadow-primary/5" 
                             : "hover:border-primary/40 hover:shadow-xl"
                         }`}
                       >
                         <div className="flex flex-col lg:flex-row lg:items-stretch">
                           {/* Image Section */}
-                          <div className="relative aspect-[16/10] lg:aspect-auto lg:w-80 overflow-hidden lg:shrink-0">
+                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-80 overflow-hidden lg:shrink-0">
                             <ImageCarousel images={images} className="h-full rounded-none border-none" />
                             {u.available <= 0 && (
                               <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
-                                <span className="rounded-full bg-destructive/10 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-destructive">Penuh</span>
+                                <span className="rounded-full bg-destructive/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-destructive">Penuh</span>
                               </div>
                             )}
-                            <div className="absolute left-6 top-6">
-                              <div className="rounded-xl bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-[#2D3E10] backdrop-blur-md shadow-sm">
+                            <div className="absolute left-3 top-3 sm:left-6 sm:top-6">
+                              <div className="rounded-lg sm:rounded-xl bg-white/90 px-2.5 py-1 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#2D3E10] backdrop-blur-md shadow-sm">
                                 {u.type}
                               </div>
                             </div>
                           </div>
                           
                           {/* Content Section */}
-                          <div className="flex flex-1 flex-col p-6 lg:p-10 relative">
+                          <div className="flex flex-1 flex-col p-3.5 sm:p-6 lg:p-10 relative">
                             {/* Organic Decoration for Unit Card */}
                             <div className="absolute -right-12 -bottom-12 h-48 w-48 opacity-[0.02] transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-12 pointer-events-none">
                               <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -2031,34 +2031,30 @@ export default function PublicBookingPage() {
                               </svg>
                             </div>
                             
-                            <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-4 relative z-10">
-                              <div className="flex flex-col items-center text-center sm:items-start sm:text-left space-y-2 group/title">
-                                <h3 className="text-xl font-black leading-tight text-[#2D3E10] transition-all duration-300 group-hover/title:translate-x-1 flex items-center gap-2">
-                                  <span className="h-1.5 w-1.5 rounded-full bg-primary opacity-0 -ml-3 transition-all duration-300 group-hover/title:opacity-100 group-hover/title:ml-0 hidden sm:block" />
+                            <div className="flex flex-row items-center justify-between gap-3.5 w-full relative z-10">
+                              <div className="flex flex-col items-start text-left space-y-1">
+                                <h3 className="text-base sm:text-xl font-black leading-tight text-[#2D3E10] transition-all duration-300 group-hover/title:translate-x-1 flex items-center gap-2">
                                   {u.name}
                                 </h3>
-                                <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
-                                  <span className="flex items-center rounded-lg bg-[#2D3E10]/5 px-2 py-1 text-[10px] font-bold text-[#2D3E10]/70 transition-colors group-hover:bg-[#2D3E10]/10">
-                                    <svg className="mr-1.5 h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div className="flex flex-wrap items-center gap-1.5 sm:gap-3">
+                                  <span className="flex items-center rounded-md bg-[#2D3E10]/5 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-[#2D3E10]/70">
+                                    <svg className="mr-1 h-3 w-3 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
                                     {u.capacity} Tamu
                                   </span>
-                                  <span className={`flex items-center rounded-lg px-2 py-1 text-[10px] font-bold transition-all duration-300 ${u.available > 2 ? 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100' : 'bg-amber-50 text-amber-600 group-hover:bg-amber-100'}`}>
-                                    <span className="relative flex h-2 w-2 mr-2">
-                                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${u.available > 2 ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
-                                      <span className={`relative inline-flex rounded-full h-2 w-2 ${u.available > 2 ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
-                                    </span>
+                                  <span className={`flex items-center rounded-md px-2 py-0.5 text-[9px] sm:text-[10px] font-bold ${u.available > 2 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+                                    <span className={`h-1.5 w-1.5 mr-1 rounded-full shrink-0 ${u.available > 2 ? 'bg-emerald-500' : 'bg-amber-500'}`} />
                                     Sisa {u.available} Unit
                                   </span>
                                 </div>
                               </div>
-                              <div className="flex flex-col items-center gap-3">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/30 sm:hidden">Pilih Jumlah</p>
+                              <div className="shrink-0">
                                 <QuantityStepper
                                   value={unitQty[u.id] ?? 0}
                                   min={0}
                                   max={u.available}
+                                  size="sm"
                                   disabled={u.available <= 0}
                                   ariaLabel={`qty ${u.name}`}
                                   onChange={(next) =>
@@ -2072,37 +2068,32 @@ export default function PublicBookingPage() {
                             </div>
 
                             {u.description && (
-                              <p className="mt-6 text-sm font-medium leading-relaxed text-[#2D3E10]/60 line-clamp-2 text-center sm:text-left">{u.description}</p>
+                              <p className="mt-2 sm:mt-4 text-xs sm:text-sm font-medium leading-relaxed text-[#2D3E10]/60 line-clamp-2 text-left">{u.description}</p>
                             )}
 
-                            <div className="mt-8 grid grid-cols-1 gap-6 border-t border-[#E8E8E1]/60 pt-8 sm:grid-cols-2">
-                              <div className="space-y-1 text-center sm:text-left">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/30">Per Malam</p>
-                                <p className="text-xl font-black text-[#2D3E10]">{priceRangeLabel(u)}</p>
+                            <div className="mt-3 sm:mt-8 grid grid-cols-2 gap-2 border-t border-[#E8E8E1]/60 pt-3 sm:pt-8">
+                              <div className="space-y-0.5 text-left">
+                                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/40">Per Malam</p>
+                                <p className="text-sm sm:text-xl font-black text-[#2D3E10]">{priceRangeLabel(u)}</p>
                               </div>
-                              <div className="space-y-1 text-center sm:text-right">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/30">Total Menginap</p>
-                                <p className="text-2xl font-black text-primary italic drop-shadow-sm">{formatIDR(sumDailyPrice(u))}</p>
+                              <div className="space-y-0.5 text-right">
+                                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/40">Total Menginap</p>
+                                <p className="text-base sm:text-2xl font-black text-primary italic drop-shadow-sm">{formatIDR(sumDailyPrice(u))}</p>
                               </div>
                             </div>
 
                             {inc.length > 0 && (
-                              <div className="mt-8 rounded-[1.5rem] bg-[#F1F3EE]/50 p-6 border border-[#E8E8E1]/40 relative overflow-hidden group/inc">
-                                <div className="absolute -right-4 -top-4 h-16 w-16 opacity-[0.05] transition-transform duration-700 group-hover/inc:scale-125 group-hover/inc:-rotate-12">
-                                  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-                                  </svg>
-                                </div>
-                                <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-primary/40 text-center sm:text-left">Fasilitas Termasuk</p>
-                                <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 relative z-10">
+                              <div className="mt-3 sm:mt-8 rounded-xl sm:rounded-[1.5rem] bg-[#F1F3EE]/50 p-3 sm:p-6 border border-[#E8E8E1]/40 relative overflow-hidden">
+                                <p className="mb-2 text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-primary/50 text-left">Fasilitas Termasuk</p>
+                                <ul className="grid grid-cols-2 gap-1.5 sm:gap-3 relative z-10">
                                   {inc.slice(0, 4).map((t, idx) => (
-                                    <li key={idx} className="flex items-center justify-center text-[10px] font-bold text-[#2D3E10] group/item sm:justify-start">
-                                      <div className="mr-3 flex h-5 w-5 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] transition-transform group-hover/item:scale-110">
-                                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+                                    <li key={idx} className="flex items-center text-[9px] sm:text-[10px] font-bold text-[#2D3E10] justify-start">
+                                      <div className="mr-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] shrink-0">
+                                        <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                         </svg>
                                       </div>
-                                      <span className="transition-colors group-hover/item:text-primary">{t}</span>
+                                      <span className="truncate">{t}</span>
                                     </li>
                                   ))}
                                 </ul>
@@ -2468,7 +2459,7 @@ export default function PublicBookingPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5 sm:gap-6 lg:grid-cols-3">
-                  {addons.slice(0, showAllAddons ? addons.length : (typeof window !== "undefined" && window.innerWidth < 640 ? 4 : 3)).map((a, idx) => {
+                  {addons.slice(0, showAllAddons ? addons.length : 3).map((a, idx) => {
                     const isSelected = (effectiveAddonQty[a.id] ?? 0) > (autoAddonQty[a.id] ?? 0);
                     const auto = autoAddonQty[a.id] ?? 0;
                     return (
