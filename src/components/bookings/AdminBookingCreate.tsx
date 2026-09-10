@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatIDR, formatTimeWIB } from "@/lib/format";
 import { addDaysWIB, formatDateWIB, parseDateWIB } from "@/lib/time";
 import { Modal } from "@/components/ui/Modal";
+import { InteractiveMapViewer } from "@/components/ui/InteractiveMapViewer";
 
 type AvailabilityUnit = {
   id: string;
@@ -1101,32 +1102,7 @@ export function AdminBookingCreate() {
             ) : null}
 
             <Modal open={kavlingMapOpen} title="Site Map Kavling" onClose={() => setKavlingMapOpen(false)} maxWidthClassName="max-w-5xl">
-              <div className="space-y-2">
-                <div className="text-xs text-muted">Arahkan kursor ke gambar untuk zoom.</div>
-                <div
-                  className="w-full overflow-hidden rounded-xl border border-border bg-background"
-                  onMouseEnter={() => setKavlingMapHover(true)}
-                  onMouseLeave={() => setKavlingMapHover(false)}
-                  onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = ((e.clientX - rect.left) / rect.width) * 100;
-                    const y = ((e.clientY - rect.top) / rect.height) * 100;
-                    setKavlingMapOrigin({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
-                  }}
-                >
-                  <img
-                    src={`/kavling/site-map.png?v=${siteMapVersion}`}
-                    alt="Site Map Kavling"
-                    className={`w-full select-none ${kavlingMapHover ? "cursor-zoom-in" : ""}`}
-                    style={{
-                      transformOrigin: `${kavlingMapOrigin.x}% ${kavlingMapOrigin.y}%`,
-                      transform: kavlingMapHover ? "scale(2.5)" : "scale(1)",
-                      transition: "transform 120ms ease-out",
-                    }}
-                    draggable={false}
-                  />
-                </div>
-              </div>
+              <InteractiveMapViewer src={`/kavling/site-map.png?v=${siteMapVersion}`} />
             </Modal>
           </div>
         ) : null}

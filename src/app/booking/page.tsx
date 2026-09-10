@@ -6,6 +6,7 @@ import { formatIDR, formatTimeWIB } from "@/lib/format";
 import { formatDateWIB } from "@/lib/time";
 import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { Modal } from "@/components/ui/Modal";
+import { InteractiveMapViewer } from "@/components/ui/InteractiveMapViewer";
 
 type AvailabilityUnit = {
   id: string;
@@ -310,18 +311,7 @@ export default function PublicBookingPage() {
   }, []);
 
   const [kavlingMapOpen, setKavlingMapOpen] = useState(false);
-  const [kavlingMapHover, setKavlingMapHover] = useState(false);
-  const [kavlingMapOrigin, setKavlingMapOrigin] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
-  const [kavlingMapZoom, setKavlingMapZoom] = useState(1);
   const [kavlingMapAssetVersion, setKavlingMapAssetVersion] = useState(0);
-  const kavlingMapViewportRef = useRef<HTMLDivElement | null>(null);
-  const kavlingMapImgRef = useRef<HTMLImageElement | null>(null);
-  const kavlingMapPinchRef = useRef<null | { startDist: number; startZoom: number }>(null);
-  const kavlingMapDragRef = useRef<null | { pointerId: number; startX: number; startY: number; left: number; top: number }>(null);
-  const [kavlingMapDragging, setKavlingMapDragging] = useState(false);
-  const kavlingMapManualZoomRef = useRef(false);
-  const kavlingMapMoveRafRef = useRef<number | null>(null);
-  const kavlingMapMovePosRef = useRef<{ x: number; y: number } | null>(null);
   const [holdNow, setHoldNow] = useState(0);
 
   const [loading, setLoading] = useState(false);
@@ -2282,7 +2272,6 @@ export default function PublicBookingPage() {
                         type="button"
                         onClick={() => {
                           setKavlingMapAssetVersion(Date.now());
-                          setKavlingMapZoom(1);
                           setKavlingMapOpen(true);
                         }}
                         className="group relative flex min-h-[3.75rem] shrink-0 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 lg:w-auto overflow-hidden"
@@ -2309,7 +2298,6 @@ export default function PublicBookingPage() {
                           type="button"
                           onClick={() => {
                             setKavlingMapAssetVersion(Date.now());
-                            setKavlingMapZoom(1);
                             setKavlingMapOpen(true);
                           }}
                           className="group relative block aspect-[16/10] w-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 lg:aspect-[4/3]"
@@ -2454,241 +2442,7 @@ export default function PublicBookingPage() {
                     onClose={() => setKavlingMapOpen(false)}
                     maxWidthClassName="max-w-6xl"
                   >
-                    <div className="space-y-6">
-                      <div className="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-center">
-                        <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              kavlingMapManualZoomRef.current = true;
-                              setKavlingMapZoom((z) => Math.max(1, Number((z - 0.25).toFixed(2))));
-                            }}
-                            disabled={kavlingMapZoom <= 1}
-                            className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white text-lg font-bold text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 disabled:opacity-30 disabled:hover:bg-white active:scale-95"
-                          >
-                            −
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              kavlingMapManualZoomRef.current = false;
-                              setKavlingMapOrigin({ x: 50, y: 50 });
-                              setKavlingMapZoom(1);
-                            }}
-                            className="flex h-12 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-5 text-[12px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
-                          >
-                            100%
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              kavlingMapManualZoomRef.current = true;
-                              setKavlingMapZoom((z) => Math.min(4, Number((z + 0.25).toFixed(2))));
-                            }}
-                            className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white text-lg font-bold text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
-                          >
-                            +
-                          </button>
-                          <div className="h-6 w-px bg-[#E8E8E1] mx-1 hidden sm:block" />
-                          <a
-                            href={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex h-12 items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-6 text-[12px] font-bold uppercase tracking-widest text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95"
-                          >
-                            Buka Tab Baru
-                          </a>
-                        </div>
-                        <div className="flex flex-col items-center gap-1.5 sm:items-end">
-                          <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/40 text-center sm:text-right">
-                            Arahkan kursor untuk zoom otomatis
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="h-1.5 w-1.5 rounded-full bg-primary/40 animate-pulse" />
-                            <div className="text-[11px] font-bold text-[#2D3E10]">
-                              Zoom: <span className="font-serif italic opacity-60">{Math.round(kavlingMapZoom * 100)}%</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        className={`max-h-[70dvh] overflow-auto rounded-[2rem] border-4 border-[#F1F3EE] bg-[#F1F3EE]/30 shadow-inner ${kavlingMapDragging ? "cursor-grabbing" : "cursor-grab"}`}
-                        ref={kavlingMapViewportRef}
-                        onMouseEnter={() => {
-                          setKavlingMapHover(true);
-                          if (!kavlingMapManualZoomRef.current && kavlingMapZoom === 1) setKavlingMapZoom(2);
-                        }}
-                        onMouseLeave={() => {
-                          setKavlingMapHover(false);
-                          if (kavlingMapMoveRafRef.current) {
-                            cancelAnimationFrame(kavlingMapMoveRafRef.current);
-                            kavlingMapMoveRafRef.current = null;
-                          }
-                          kavlingMapMovePosRef.current = null;
-                          if (!kavlingMapManualZoomRef.current) {
-                            setKavlingMapOrigin({ x: 50, y: 50 });
-                            setKavlingMapZoom(1);
-                          }
-                        }}
-                        onMouseMove={(e) => {
-                          if (kavlingMapDragRef.current) return;
-                          if (!kavlingMapHover) return;
-                          if (kavlingMapPinchRef.current) return;
-                          const img = kavlingMapImgRef.current;
-                          if (!img) return;
-                          kavlingMapMovePosRef.current = { x: e.clientX, y: e.clientY };
-                          if (kavlingMapMoveRafRef.current) return;
-                          kavlingMapMoveRafRef.current = requestAnimationFrame(() => {
-                            kavlingMapMoveRafRef.current = null;
-                            const pos = kavlingMapMovePosRef.current;
-                            if (!pos) return;
-                            const r = img.getBoundingClientRect();
-                            const x = ((pos.x - r.left) / Math.max(1, r.width)) * 100;
-                            const y = ((pos.y - r.top) / Math.max(1, r.height)) * 100;
-                            setKavlingMapOrigin({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
-                          });
-                        }}
-                        onWheel={(e) => {
-                          if (!e.ctrlKey) return;
-                          e.preventDefault();
-                          kavlingMapManualZoomRef.current = true;
-                          const img = kavlingMapImgRef.current;
-                          if (!img) return;
-                          const r = img.getBoundingClientRect();
-                          const x = ((e.clientX - r.left) / Math.max(1, r.width)) * 100;
-                          const y = ((e.clientY - r.top) / Math.max(1, r.height)) * 100;
-                          setKavlingMapOrigin({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
-                          setKavlingMapZoom((z) => {
-                            const next = z * Math.exp(-e.deltaY * 0.0012);
-                            return Math.max(1, Math.min(4, Number(next.toFixed(3))));
-                          });
-                        }}
-                        onPointerDown={(e) => {
-                          if (e.pointerType === "mouse" && e.button !== 0) return;
-                          if (kavlingMapPinchRef.current) return;
-                          const el = kavlingMapViewportRef.current;
-                          if (!el) return;
-                          if (e.pointerType === "touch" && !kavlingMapManualZoomRef.current && kavlingMapZoom === 1) {
-                            const img = kavlingMapImgRef.current;
-                            if (img) {
-                              const r = img.getBoundingClientRect();
-                              const x = ((e.clientX - r.left) / Math.max(1, r.width)) * 100;
-                              const y = ((e.clientY - r.top) / Math.max(1, r.height)) * 100;
-                              setKavlingMapOrigin({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
-                            }
-                            setKavlingMapZoom(2);
-                          }
-                          kavlingMapDragRef.current = {
-                            pointerId: e.pointerId,
-                            startX: e.clientX,
-                            startY: e.clientY,
-                            left: el.scrollLeft,
-                            top: el.scrollTop,
-                          };
-                          setKavlingMapDragging(true);
-                          el.setPointerCapture(e.pointerId);
-                        }}
-                        onPointerMove={(e) => {
-                          const el = kavlingMapViewportRef.current;
-                          const st = kavlingMapDragRef.current;
-                          if (!el || !st) return;
-                          if (st.pointerId !== e.pointerId) return;
-                          e.preventDefault();
-                          const dx = e.clientX - st.startX;
-                          const dy = e.clientY - st.startY;
-                          el.scrollLeft = st.left - dx;
-                          el.scrollTop = st.top - dy;
-                          if (e.pointerType === "touch" && kavlingMapZoom > 1) {
-                            const img = kavlingMapImgRef.current;
-                            if (!img) return;
-                            kavlingMapMovePosRef.current = { x: e.clientX, y: e.clientY };
-                            if (kavlingMapMoveRafRef.current) return;
-                            kavlingMapMoveRafRef.current = requestAnimationFrame(() => {
-                              kavlingMapMoveRafRef.current = null;
-                              const pos = kavlingMapMovePosRef.current;
-                              if (!pos) return;
-                              const r = img.getBoundingClientRect();
-                              const x = ((pos.x - r.left) / Math.max(1, r.width)) * 100;
-                              const y = ((pos.y - r.top) / Math.max(1, r.height)) * 100;
-                              setKavlingMapOrigin({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
-                            });
-                          }
-                        }}
-                        onPointerUp={(e) => {
-                          const el = kavlingMapViewportRef.current;
-                          const st = kavlingMapDragRef.current;
-                          if (!el || !st) return;
-                          if (st.pointerId !== e.pointerId) return;
-                          kavlingMapDragRef.current = null;
-                          setKavlingMapDragging(false);
-                          el.releasePointerCapture(e.pointerId);
-                        }}
-                        onPointerCancel={() => {
-                          kavlingMapDragRef.current = null;
-                          setKavlingMapDragging(false);
-                        }}
-                        onTouchStart={() => setKavlingMapHover(true)}
-                        onTouchEnd={() => setKavlingMapHover(false)}
-                        onTouchStartCapture={(e) => {
-                          if (e.touches.length !== 2) return;
-                          kavlingMapDragRef.current = null;
-                          setKavlingMapDragging(false);
-                          const a = e.touches.item(0);
-                          const b = e.touches.item(1);
-                          if (!a || !b) return;
-                          const dx = a.clientX - b.clientX;
-                          const dy = a.clientY - b.clientY;
-                          const dist = Math.hypot(dx, dy);
-                          kavlingMapManualZoomRef.current = true;
-                          kavlingMapPinchRef.current = { startDist: dist, startZoom: kavlingMapZoom };
-                        }}
-                        onTouchMoveCapture={(e) => {
-                          if (e.touches.length !== 2) return;
-                          const img = kavlingMapImgRef.current;
-                          const pinch = kavlingMapPinchRef.current;
-                          if (!img || !pinch) return;
-                          const a = e.touches.item(0);
-                          const b = e.touches.item(1);
-                          if (!a || !b) return;
-                          const dx = a.clientX - b.clientX;
-                          const dy = a.clientY - b.clientY;
-                          const dist = Math.hypot(dx, dy);
-                          const scale = dist / Math.max(1, pinch.startDist);
-                          const nextZoom = Math.max(1, Math.min(4, pinch.startZoom * scale));
-
-                          const midX = (a.clientX + b.clientX) / 2;
-                          const midY = (a.clientY + b.clientY) / 2;
-                          const r = img.getBoundingClientRect();
-                          const x = ((midX - r.left) / Math.max(1, r.width)) * 100;
-                          const y = ((midY - r.top) / Math.max(1, r.height)) * 100;
-                          setKavlingMapOrigin({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
-                          setKavlingMapZoom(Number(nextZoom.toFixed(3)));
-                        }}
-                        onTouchEndCapture={(e) => {
-                          if (e.touches.length >= 2) return;
-                          kavlingMapPinchRef.current = null;
-                        }}
-                        style={{ touchAction: "none" }}
-                      >
-                        <div className="flex min-h-[360px] min-w-0 items-center justify-center p-2 sm:min-w-[680px] sm:p-4">
-                          <img
-                            src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
-                            alt="Site Map Kavling"
-                            className="h-auto max-w-full select-none sm:max-w-none"
-                            ref={kavlingMapImgRef}
-                            draggable={false}
-                            decoding="async"
-                            style={{
-                              transform: `translateZ(0) scale(${kavlingMapZoom})`,
-                              transformOrigin: `${kavlingMapOrigin.x}% ${kavlingMapOrigin.y}%`,
-                              transition: "transform 120ms ease",
-                              willChange: "transform",
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <InteractiveMapViewer src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`} />
                   </Modal>
                 ) : null}
                 </div>
