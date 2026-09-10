@@ -1,54 +1,57 @@
 /**
- * Utility functions for parsing and managing Kavling number lists.
- * Supports ranges (e.g. "1-57, 66-110") and individual numbers (e.g. "1, 2, 3, 5, 10").
+ * Utility functions for parsing and managing Kavling number/code lists.
+ * Supports alphanumeric codes (e.g. "S1", "V1", "C1", "N1"),
+ * range formats (e.g. "S1-S4", "V1-V6", "1-57"), and individual comma-separated codes.
  */
 
-export function parseKavlingList(input: string | null | undefined): number[] {
+export function parseKavlingList(input: string | null | undefined): string[] {
   if (!input || !input.trim()) return [];
-  const numbers = new Set<number>();
+  const items = new Set<string>();
   const parts = input.split(",");
+
   for (const part of parts) {
     const trimmed = part.trim();
     if (!trimmed) continue;
+
+    // Check if range format like s1-s4 or 1-57 or c1-c11
     if (trimmed.includes("-")) {
       const segments = trimmed.split("-").map((s) => s.trim());
       if (segments.length === 2) {
-        const start = parseInt(segments[0], 10);
-        const end = parseInt(segments[1], 10);
-        if (!isNaN(start) && !isNaN(end) && start <= end) {
-          for (let i = start; i <= end; i++) {
-            numbers.add(i);
+        const matchStart = segments[0].match(/^([a-zA-Z]*)(\d+)$/);
+        const matchEnd = segments[1].match(/^([a-zA-Z]*)(\d+)$/);
+
+        if (matchStart && matchEnd) {
+          const prefixStart = matchStart[1].toUpperCase();
+          const prefixEnd = matchEnd[1].toUpperCase();
+          const startNum = parseInt(matchStart[2], 10);
+          const endNum = parseInt(matchEnd[2], 10);
+
+          if ((prefixStart === prefixEnd || !prefixEnd) && startNum <= endNum) {
+            const prefix = prefixStart;
+            for (let i = startNum; i <= endNum; i++) {
+              items.add(prefix ? `${prefix}${i}` : `${i}`);
+            }
+            continue;
           }
         }
       }
-    } else {
-      const num = parseInt(trimmed, 10);
-      if (!isNaN(num) && Number.isFinite(num)) {
-        numbers.add(num);
-      }
     }
+
+    items.add(trimmed.toUpperCase());
   }
-  return Array.from(numbers).sort((a, b) => a - b);
+
+  return Array.from(items).sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+  );
 }
 
-export function formatKavlingList(numbers: number[]): string {
-  if (!numbers || !numbers.length) return "";
-  const sorted = Array.from(new Set(numbers)).sort((a, b) => a - b);
-  const ranges: string[] = [];
-  let start = sorted[0];
-  let end = sorted[0];
-
-  for (let i = 1; i < sorted.length; i++) {
-    if (sorted[i] === end + 1) {
-      end = sorted[i];
-    } else {
-      ranges.push(start === end ? `${start}` : `${start}-${end}`);
-      start = sorted[i];
-      end = sorted[i];
-    }
-  }
-  ranges.push(start === end ? `${start}` : `${start}-${end}`);
-  return ranges.join(", ");
+export function formatKavlingList(codes: (string | number)[]): string {
+  if (!codes || !codes.length) return "";
+  const strCodes = codes.map((c) => String(c).toUpperCase());
+  const sorted = Array.from(new Set(strCodes)).sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+  );
+  return sorted.join(", ");
 }
 
 export function getKavlingSets(config: {
@@ -65,20 +68,25 @@ export function getKavlingSets(config: {
   let regularList = parseKavlingList(config.regularKavlingsList);
   let privateList = parseKavlingList(config.privateKavlingsList);
 
-  // Fallback if regularList is empty
-  if (regularList.length === 0) {
-    const all = Array.from({ length: sellCount }, (_, i) => i + 1);
-    regularList = all.filter((n) => n < pStart || n > pEnd);
+  // Fallback if regularList is empty and no string was supplied
+  if (regularList.length === 0 && (!config.regularKavlingsList || !config.regularKavlingsList.trim())) {
+    const all = Array.from({ length: sellCount }, (_, i) => String(i + 1));
+    regularList = all.filter((n) => {
+      const num = parseInt(n, 10);
+      return num < pStart || num > pEnd;
+    });
   }
 
-  // Fallback if privateList is empty
-  if (privateList.length === 0) {
-    privateList = Array.from({ length: Math.max(0, pEnd - pStart + 1) }, (_, i) => pStart + i);
+  // Fallback if privateList is empty and no string was supplied
+  if (privateList.length === 0 && (!config.privateKavlingsList || !config.privateKavlingsList.trim())) {
+    privateList = Array.from({ length: Math.max(0, pEnd - pStart + 1) }, (_, i) => String(pStart + i));
   }
 
   const regularSet = new Set(regularList);
   const privateSet = new Set(privateList);
-  const allList = Array.from(new Set([...regularList, ...privateList])).sort((a, b) => a - b);
+  const allList = Array.from(new Set([...regularList, ...privateList])).sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+  );
 
   return {
     regularList,

@@ -21,7 +21,7 @@ export type BookingRow = {
   paymentAmount: number;
   paymentPaidAmount: number;
   specialRequest: string | null;
-  kavlings: Array<{ unitId: string; unitName: string; scope: "paket" | "mandiri" | "private"; required: number; assigned: number[] }>;
+  kavlings: Array<{ unitId: string; unitName: string; scope: "paket" | "mandiri" | "private"; required: number; assigned: (string | number)[] }>;
 };
 
 function isoDate(iso: string) {
@@ -46,7 +46,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [paying, setPaying] = useState<string | null>(null);
-  const [rescheduleKavlings, setRescheduleKavlings] = useState<Record<string, number[]>>({});
+  const [rescheduleKavlings, setRescheduleKavlings] = useState<Record<string, (string | number)[]>>({});
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<BookingRow | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState("");
@@ -60,10 +60,10 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
   >(
     null,
   );
-  const [kavlingAll, setKavlingAll] = useState<number[]>([]);
-  const [kavlingTaken, setKavlingTaken] = useState<Record<number, boolean>>({});
-  const [kavlingTakenBy, setKavlingTakenBy] = useState<Record<number, string>>({});
-  const [kavlingSelected, setKavlingSelected] = useState<number[]>([]);
+  const [kavlingAll, setKavlingAll] = useState<(string | number)[]>([]);
+  const [kavlingTaken, setKavlingTaken] = useState<Record<string | number, boolean>>({});
+  const [kavlingTakenBy, setKavlingTakenBy] = useState<Record<string | number, string>>({});
+  const [kavlingSelected, setKavlingSelected] = useState<(string | number)[]>([]);
   const [kavlingRequired, setKavlingRequired] = useState(0);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
@@ -79,8 +79,8 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
     setCheckOut(isoDate(b.checkOut));
     setError(null);
     setRescheduleKavlings(
-      b.kavlings.reduce<Record<string, number[]>>((acc, k) => {
-        acc[k.unitId] = (k.assigned ?? []).slice().sort((a, c) => a - c);
+      b.kavlings.reduce<Record<string, (string | number)[]>>((acc, k) => {
+        acc[k.unitId] = (k.assigned ?? []).slice().sort((a, c) => String(a).localeCompare(String(c), undefined, { numeric: true, sensitivity: "base" }));
         return acc;
       }, {}),
     );
@@ -160,7 +160,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
 
     const kavlingsByUnit = Object.fromEntries(
       target.kavlings
-        .map((k) => [k.unitId, (rescheduleKavlings[k.unitId] ?? k.assigned ?? []).slice().sort((a, c) => a - c)] as const)
+        .map((k) => [k.unitId, (rescheduleKavlings[k.unitId] ?? k.assigned ?? []).slice().sort((a, c) => String(a).localeCompare(String(c), undefined, { numeric: true, sensitivity: "base" }))] as const)
         .filter(([, nums]) => nums.length > 0),
     );
 
@@ -198,7 +198,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
     url.searchParams.set("unitId", k.unitId);
     const res = await fetch(url.toString());
     const data = (await res.json().catch(() => null)) as
-      | { required?: number; assigned?: number[]; taken?: number[]; takenBy?: Record<string, string>; all?: number[]; message?: string }
+      | { required?: number; assigned?: (string | number)[]; taken?: (string | number)[]; takenBy?: Record<string, string>; all?: (string | number)[]; message?: string }
       | null;
     if (!res.ok) {
       setKavlingError(data?.message ?? "Gagal load kavling");
@@ -206,19 +206,18 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
       return;
     }
     const all = data?.all ?? Array.from({ length: 110 }).map((_, i) => i + 1);
-    const taken = (data?.taken ?? []).reduce<Record<number, boolean>>((acc, n) => {
+    const taken = (data?.taken ?? []).reduce<Record<string | number, boolean>>((acc, n) => {
       acc[n] = true;
       return acc;
     }, {});
     setKavlingAll(all);
     setKavlingTaken(taken);
-    const takenBy = Object.entries(data?.takenBy ?? {}).reduce<Record<number, string>>((acc, [k, v]) => {
-      const n = Number(k);
-      if (Number.isFinite(n)) acc[n] = v;
+    const takenBy = Object.entries(data?.takenBy ?? {}).reduce<Record<string | number, string>>((acc, [k, v]) => {
+      acc[k] = v;
       return acc;
     }, {});
     setKavlingTakenBy(takenBy);
-    setKavlingSelected((data?.assigned ?? []).slice().sort((a, b) => a - b));
+    setKavlingSelected((data?.assigned ?? []).slice().sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" })));
     setKavlingRequired(data?.required ?? k.required);
     setKavlingLoading(false);
   }
@@ -242,7 +241,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
     url.searchParams.set("checkOut", checkOut);
     const res = await fetch(url.toString());
     const data = (await res.json().catch(() => null)) as
-      | { required?: number; assigned?: number[]; taken?: number[]; takenBy?: Record<string, string>; all?: number[]; message?: string }
+      | { required?: number; assigned?: (string | number)[]; taken?: (string | number)[]; takenBy?: Record<string, string>; all?: (string | number)[]; message?: string }
       | null;
     if (!res.ok) {
       setKavlingError(data?.message ?? "Gagal load kavling");
@@ -250,31 +249,30 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
       return;
     }
     const all = data?.all ?? Array.from({ length: 110 }).map((_, i) => i + 1);
-    const taken = (data?.taken ?? []).reduce<Record<number, boolean>>((acc, n) => {
+    const taken = (data?.taken ?? []).reduce<Record<string | number, boolean>>((acc, n) => {
       acc[n] = true;
       return acc;
     }, {});
     setKavlingAll(all);
     setKavlingTaken(taken);
-    const takenBy = Object.entries(data?.takenBy ?? {}).reduce<Record<number, string>>((acc, [k, v]) => {
-      const n = Number(k);
-      if (Number.isFinite(n)) acc[n] = v;
+    const takenBy = Object.entries(data?.takenBy ?? {}).reduce<Record<string | number, string>>((acc, [k, v]) => {
+      acc[k] = v;
       return acc;
     }, {});
     setKavlingTakenBy(takenBy);
-    const selectedBase = (rescheduleKavlings[k.unitId] ?? k.assigned ?? []).slice().sort((a, b) => a - b);
+    const selectedBase = (rescheduleKavlings[k.unitId] ?? k.assigned ?? []).slice().sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" }));
     setKavlingSelected(selectedBase);
     setKavlingRequired(data?.required ?? k.required);
     setKavlingLoading(false);
   }
 
-  function toggleKavling(n: number) {
+  function toggleKavling(n: string | number) {
     setKavlingSelected((s) => {
       const exists = s.includes(n);
       if (exists) return s.filter((x) => x !== n);
       if (!!kavlingTaken[n]) return s;
       if (s.length >= kavlingRequired) return s;
-      return [...s, n].sort((a, b) => a - b);
+      return [...s, n].sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" }));
     });
   }
 
@@ -285,7 +283,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
       return;
     }
     if (kavlingMode === "reschedule") {
-      setRescheduleKavlings((s) => ({ ...s, [kavlingTarget.unitId]: kavlingSelected.slice().sort((a, b) => a - b) }));
+      setRescheduleKavlings((s) => ({ ...s, [kavlingTarget.unitId]: kavlingSelected.slice().sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" })) }));
       setKavlingOpen(false);
       return;
     }

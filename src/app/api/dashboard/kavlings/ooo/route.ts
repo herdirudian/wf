@@ -7,7 +7,7 @@ import { logActivity } from "@/services/activity.service";
 import { notifyKavlingUpdated } from "@/lib/realtime";
 
 const CreateSchema = z.object({
-  kavlingNumber: z.coerce.number().int().min(1),
+  kavlingNumber: z.union([z.string(), z.number()]).transform((val) => String(val).trim().toUpperCase()),
   startDate: z.string().min(1),
   endDate: z.string().min(1),
   reason: z.string().optional().nullable(),

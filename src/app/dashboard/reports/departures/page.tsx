@@ -74,7 +74,7 @@ export default async function DeparturesPage({ searchParams }: { searchParams: P
                     </td>
                     <td className="px-6 py-4">
                       <div className="font-medium">{b.items.map(it => `${it.unit.name} x${it.quantity}`).join(", ")}</div>
-                      <div className="text-xs text-primary font-bold">Kavling: {b.kavlings.map(k => k.kavling.number).sort((a,c) => a-c).join(", ")}</div>
+                      <div className="text-xs text-primary font-bold">Kavling: {b.kavlings.map(k => k.kavling.number).sort((a,c) => a.localeCompare(c, undefined, { numeric: true, sensitivity: "base" })).join(", ")}</div>
                     </td>
                     <td className="px-6 py-4">{b.totalGuest} Orang</td>
                     <td className="px-6 py-4">

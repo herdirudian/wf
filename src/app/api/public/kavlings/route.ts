@@ -107,9 +107,9 @@ export async function GET(req: Request) {
     include: { kavling: true, hold: { select: { scope: true } } },
   });
 
-  const takenPaid = new Set<number>();
-  const takenHeld = new Set<number>();
-  const takenOOO = new Set<number>();
+  const takenPaid = new Set<string>();
+  const takenHeld = new Set<string>();
+  const takenOOO = new Set<string>();
 
   for (const r of oooRows) {
     if (!allowedSet.has(r.kavling.number)) continue;
@@ -131,10 +131,11 @@ export async function GET(req: Request) {
     takenHeld.add(r.kavling.number);
   }
 
-  const paid = Array.from(takenPaid).sort((a, b) => a - b);
-  const held = Array.from(takenHeld).sort((a, b) => a - b);
-  const ooo = Array.from(takenOOO).sort((a, b) => a - b);
-  const taken = Array.from(new Set([...paid, ...held, ...ooo])).sort((a, b) => a - b);
+  const nSort = (a: string, b: string) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
+  const paid = Array.from(takenPaid).sort(nSort);
+  const held = Array.from(takenHeld).sort(nSort);
+  const ooo = Array.from(takenOOO).sort(nSort);
+  const taken = Array.from(new Set([...paid, ...held, ...ooo])).sort(nSort);
 
   return NextResponse.json({
     all: allowed,
@@ -146,7 +147,7 @@ export async function GET(req: Request) {
       id: myHold.id,
       token: myHold.token,
       expiresAt: myHold.expiresAt,
-      numbers: myHold.kavlings.map(x => x.kavling.number).sort((a, b) => a - b)
+      numbers: myHold.kavlings.map(x => x.kavling.number).sort(nSort)
     } : null,
     scope,
     sellCount: sets.totalCount,

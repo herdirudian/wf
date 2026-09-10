@@ -79,7 +79,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
 
 const PutSchema = z.object({
   unitId: z.string().min(1),
-  numbers: z.array(z.number().int()),
+  numbers: z.array(z.union([z.string(), z.number()])).transform((arr) => arr.map((x) => String(x).trim().toUpperCase()).filter(Boolean)),
 });
 
 export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }) {

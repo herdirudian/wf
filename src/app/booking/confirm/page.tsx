@@ -15,7 +15,7 @@ type BookingDraft = {
   child5to10Pax: number;
   childUnder5Pax: number;
   kavlingScope: "" | "paket" | "mandiri" | "private" | "mixed";
-  kavlings: number[];
+  kavlings: (string | number)[];
   hold?: { id: string; token: string; expiresAt?: string };
   items: Array<{ unitId: string; quantity: number }>;
   addOns: Array<{ addOnId: string; quantity: number }>;
@@ -206,7 +206,7 @@ export default function BookingConfirmPage() {
 
   const kavlingText = useMemo(() => {
     if (!draft?.kavlings?.length) return "-";
-    return draft.kavlings.slice().sort((a, b) => a - b).join(", ");
+    return draft.kavlings.slice().sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" })).join(", ");
   }, [draft?.kavlings]);
 
   const selectedPaymentMethod = useMemo(() => {

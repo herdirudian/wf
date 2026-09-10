@@ -140,15 +140,15 @@ export function AdminBookingCreate() {
   const [paymentMethods, setPaymentMethods] = useState<Array<{ code: string; label: string; feeFlat: number; feeBps: number }>>([]);
   const [paymentMethodCode, setPaymentMethodCode] = useState<string>("");
 
-  const [kavlingAll, setKavlingAll] = useState<number[]>([]);
-  const [kavlingTaken, setKavlingTaken] = useState<number[]>([]);
-  const [kavlingPaid, setKavlingPaid] = useState<number[]>([]);
-  const [kavlingHeld, setKavlingHeld] = useState<number[]>([]);
-  const [kavlingOOO, setKavlingOOO] = useState<number[]>([]);
-  const [kavlingSelected, setKavlingSelected] = useState<number[]>([]);
+  const [kavlingAll, setKavlingAll] = useState<any[]>([]);
+  const [kavlingTaken, setKavlingTaken] = useState<any[]>([]);
+  const [kavlingPaid, setKavlingPaid] = useState<any[]>([]);
+  const [kavlingHeld, setKavlingHeld] = useState<any[]>([]);
+  const [kavlingOOO, setKavlingOOO] = useState<any[]>([]);
+  const [kavlingSelected, setKavlingSelected] = useState<any[]>([]);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
-  const [kavlingPrivateRange, setKavlingPrivateRange] = useState<null | { start: number; end: number }>(null);
+  const [kavlingPrivateRange, setKavlingPrivateRange] = useState<null | { start: string | number; end: string | number }>(null);
   const [kavlingSellCount, setKavlingSellCount] = useState<number | null>(null);
   const [hold, setHold] = useState<null | { id: string; token: string; expiresAt: string }>(null);
   const [holdError, setHoldError] = useState<string | null>(null);
@@ -435,7 +435,7 @@ export function AdminBookingCreate() {
       }
       const res = await fetch(url.toString());
       const data = (await res.json().catch(() => null)) as
-        | { all?: number[]; taken?: number[]; paid?: number[]; held?: number[]; ooo?: number[]; sellCount?: number; privateRange?: { start?: number; end?: number }; message?: string }
+        | { all?: (string | number)[]; taken?: (string | number)[]; paid?: (string | number)[]; held?: (string | number)[]; ooo?: (string | number)[]; sellCount?: number; privateRange?: { start?: string | number; end?: string | number }; message?: string }
         | null;
       if (cancelled) return;
       if (!res.ok) {
@@ -448,15 +448,15 @@ export function AdminBookingCreate() {
         setKavlingError(data?.message ?? "Gagal load kavling");
         return;
       }
-      setKavlingAll((data?.all ?? []).filter((n) => typeof n === "number"));
-      setKavlingTaken((data?.taken ?? []).filter((n) => typeof n === "number"));
-      setKavlingPaid((data?.paid ?? []).filter((n) => typeof n === "number"));
-      setKavlingHeld((data?.held ?? []).filter((n) => typeof n === "number"));
-      setKavlingOOO((data?.ooo ?? []).filter((n) => typeof n === "number"));
+      setKavlingAll((data?.all ?? []).filter((n): n is string | number => typeof n === "number" || (typeof n === "string" && Boolean(n.trim()))));
+      setKavlingTaken((data?.taken ?? []).filter((n): n is string | number => typeof n === "number" || (typeof n === "string" && Boolean(n.trim()))));
+      setKavlingPaid((data?.paid ?? []).filter((n): n is string | number => typeof n === "number" || (typeof n === "string" && Boolean(n.trim()))));
+      setKavlingHeld((data?.held ?? []).filter((n): n is string | number => typeof n === "number" || (typeof n === "string" && Boolean(n.trim()))));
+      setKavlingOOO((data?.ooo ?? []).filter((n): n is string | number => typeof n === "number" || (typeof n === "string" && Boolean(n.trim()))));
       if (typeof data?.sellCount === "number" && Number.isFinite(data.sellCount)) setKavlingSellCount(data.sellCount);
       const ps = data?.privateRange?.start;
       const pe = data?.privateRange?.end;
-      if (typeof ps === "number" && typeof pe === "number") setKavlingPrivateRange({ start: ps, end: pe });
+      if (ps !== undefined && pe !== undefined) setKavlingPrivateRange({ start: ps, end: pe });
       setKavlingLoading(false);
     }
     load();

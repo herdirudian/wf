@@ -37,7 +37,7 @@ export default async function BookingsPage({
 
     const byUnit = new Map<
       string,
-      { unitId: string; unitName: string; scope: "paket" | "mandiri" | "private"; required: number; assigned: number[] }
+      { unitId: string; unitName: string; scope: "paket" | "mandiri" | "private"; required: number; assigned: (string | number)[] }
     >();
     for (const it of b.items) {
       const u = it.unit as unknown as { kavlingScope?: string | null; category?: string | null; name: string };
@@ -56,7 +56,7 @@ export default async function BookingsPage({
       item.assigned.push(kv.kavling.number);
     }
     const kavlings = Array.from(byUnit.values())
-      .map((k) => ({ ...k, assigned: k.assigned.sort((a, b) => a - b) }))
+      .map((k) => ({ ...k, assigned: k.assigned.sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" })) }))
       .sort((a, b) => {
         const w = (x: string) => (x === "private" ? 0 : x === "paket" ? 1 : 2);
         return w(a.scope) - w(b.scope) || a.unitName.localeCompare(b.unitName);

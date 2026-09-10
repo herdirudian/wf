@@ -16,7 +16,7 @@ type Row = {
   checkedOutAt: string | null;
   customer: { name: string; phone: string; email: string | null };
   payment: { status: string; amount: number; paidAmount: number; serviceFeeAmount: number; method: string | null } | null;
-  kavlings: number[];
+  kavlings: (string | number)[];
   items: Array<{ name: string; quantity: number }>;
 };
 
@@ -29,7 +29,7 @@ export function FrontOfficeManager({
   rows: Row[];
   currentUserRole: string;
   initialCheckInDate?: string;
-  kavlingBoard?: { numbers: number[]; statusByNumber: Record<number, "booked" | "checked_in" | "checked_out"> } | null;
+  kavlingBoard?: { numbers: (string | number)[]; statusByNumber: Record<string | number, "booked" | "checked_in" | "checked_out"> } | null;
 }) {
   const router = useRouter();
   const [actingId, setActingId] = useState<string | null>(null);

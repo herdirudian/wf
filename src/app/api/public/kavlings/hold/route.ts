@@ -10,7 +10,7 @@ const BodySchema = z.object({
   checkIn: z.string().min(1),
   checkOut: z.string().min(1),
   scope: z.enum(["paket", "mandiri", "private", "mixed"]),
-  numbers: z.array(z.coerce.number().int()).min(1),
+  numbers: z.array(z.union([z.string(), z.number()])).min(1),
   holdId: z.string().optional(),
   holdToken: z.string().optional(),
 });
@@ -46,8 +46,9 @@ export async function POST(req: Request) {
   const sets = getKavlingSets(cfg);
   const holdMinutes = Math.max(1, Math.min(30, cfg.holdMinutes ?? 5));
 
-  const unique = Array.from(new Set(parsed.data.numbers.map((n) => Number(n)).filter((n) => Number.isFinite(n))));
-  unique.sort((a, b) => a - b);
+  const rawNumbers = parsed.data.numbers.map((n) => String(n).trim().toUpperCase()).filter(Boolean);
+  const unique = Array.from(new Set(rawNumbers));
+  unique.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
   if (unique.length !== parsed.data.numbers.length) return NextResponse.json({ message: "Nomor kavling duplikat" }, { status: 400 });
 
   if (parsed.data.scope === "private") {
@@ -91,7 +92,7 @@ export async function POST(req: Request) {
         include: { kavling: true },
       });
       if (oooConflicts.length) {
-        const used = Array.from(new Set(oooConflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        const used = Array.from(new Set(oooConflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sedang dalam perbaikan: ${used.join(", ")}`);
       }
 
@@ -114,7 +115,7 @@ export async function POST(req: Request) {
         include: { kavling: true },
       });
       if (holdConflicts.length) {
-        const used = Array.from(new Set(holdConflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        const used = Array.from(new Set(holdConflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sedang di-hold: ${used.join(", ")}`);
       }
 
@@ -130,7 +131,7 @@ export async function POST(req: Request) {
         include: { kavling: true },
       });
       if (bookingConflicts.length) {
-        const used = Array.from(new Set(bookingConflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        const used = Array.from(new Set(bookingConflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sudah terpakai pada tanggal tersebut: ${used.join(", ")}`);
       }
 

@@ -325,7 +325,7 @@ export async function createPublicBooking(input: {
   adultPax?: number;
   child5to10Pax?: number;
   childUnder5Pax?: number;
-  kavlings?: number[];
+  kavlings?: (string | number)[];
   hold?: { id: string; token: string };
   items: Array<{ unitId: string; quantity: number }>;
   addOns: Array<{ addOnId: string; quantity: number }>;
@@ -356,8 +356,6 @@ export async function createPublicBooking(input: {
   });
 
   const cfg = await getKavlingConfig(prisma);
-  const privateStart = Math.max(1, Math.min(cfg.privateStart, cfg.sellCount));
-  const privateEnd = Math.max(privateStart, Math.min(cfg.privateEnd, cfg.sellCount));
   function deriveCategoryFromUnit(u: { category: string | null; name: string; kavlingScope?: string | null }) {
     const scope = (u.kavlingScope ?? "").toLowerCase();
     if (scope === "private") return "private";
@@ -448,7 +446,7 @@ export async function createPublicBooking(input: {
 
   const addOnAmount = addOns.reduce((acc, it) => acc + (addOnById.get(it.addOnId)?.price ?? 0) * it.quantity, 0);
   const amount = baseAmount + addOnAmount;
-  const requestedKavlings = (input.kavlings ?? []).map((n) => Number(n)).filter((n) => Number.isFinite(n));
+  const requestedKavlings = (input.kavlings ?? []).map((n) => String(n).trim().toUpperCase()).filter(Boolean);
   const totalKavlingRequired = mandiriRequired + paketRequired + privateRequired;
   const nonPrivateKavlingRequired = mandiriRequired + paketRequired;
   if (!totalKavlingRequired && requestedKavlings.length) {
@@ -456,13 +454,13 @@ export async function createPublicBooking(input: {
   }
   if (totalKavlingRequired) {
     const unique = Array.from(new Set(requestedKavlings));
-    unique.sort((a, b) => a - b);
+    unique.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
     if (unique.length !== requestedKavlings.length) throw new Error("Nomor kavling duplikat");
     if (unique.length !== totalKavlingRequired) throw new Error(`Jumlah kavling harus ${totalKavlingRequired}`);
-    if (unique.some((n) => n < 1 || n > cfg.sellCount)) throw new Error(`Nomor kavling harus 1 - ${cfg.sellCount}`);
+    if (unique.some((n) => !cfg.allSet.has(n))) throw new Error("Ada nomor kavling yang tidak terdaftar");
 
-    const privateNums = unique.filter((n) => n >= privateStart && n <= privateEnd);
-    const nonPrivateNums = unique.filter((n) => n < privateStart || n > privateEnd);
+    const privateNums = unique.filter((n) => cfg.privateSet.has(n));
+    const nonPrivateNums = unique.filter((n) => cfg.regularSet.has(n));
     if (privateNums.length !== privateRequired) {
       throw new Error(`Jumlah kavling Paket Private harus ${privateRequired}`);
     }
@@ -506,13 +504,13 @@ export async function createPublicBooking(input: {
 
     if (mandiriRequired || paketRequired || privateRequired) {
       const unique = Array.from(new Set(requestedKavlings));
-      unique.sort((a, b) => a - b);
+      unique.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
       const required = mandiriRequired + paketRequired + privateRequired;
       const requiredNonPrivate = mandiriRequired + paketRequired;
       if (unique.length !== required) throw new Error(`Jumlah kavling harus ${required}`);
 
-      const privateNums = unique.filter((n) => n >= privateStart && n <= privateEnd);
-      const nonPrivateNums = unique.filter((n) => n < privateStart || n > privateEnd);
+      const privateNums = unique.filter((n) => cfg.privateSet.has(n));
+      const nonPrivateNums = unique.filter((n) => cfg.regularSet.has(n));
       if (privateNums.length !== privateRequired) throw new Error(`Jumlah kavling Paket Private harus ${privateRequired}`);
       if (nonPrivateNums.length !== requiredNonPrivate) throw new Error(`Jumlah kavling Paket/Camping Mandiri harus ${requiredNonPrivate}`);
 
@@ -548,7 +546,7 @@ export async function createPublicBooking(input: {
                   ? "mandiri"
                   : "paket";
         if (hold.scope !== expectedScope) throw new Error("Hold kavling tidak sesuai kategori");
-        const holdNums = hold.kavlings.map((x) => x.kavling.number).sort((a, b) => a - b);
+        const holdNums = hold.kavlings.map((x) => x.kavling.number).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         if (holdNums.length !== unique.length || holdNums.some((n, i) => n !== unique[i])) {
           throw new Error("Hold kavling tidak sesuai pilihan");
         }
@@ -575,7 +573,7 @@ export async function createPublicBooking(input: {
         include: { kavling: true },
       });
       if (oooConflicts.length) {
-        const used = Array.from(new Set(oooConflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        const used = Array.from(new Set(oooConflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sedang dalam perbaikan: ${used.join(", ")}`);
       }
 
@@ -591,7 +589,7 @@ export async function createPublicBooking(input: {
         include: { kavling: true },
       });
       if (conflicts.length) {
-        const used = Array.from(new Set(conflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        const used = Array.from(new Set(conflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sudah terpakai pada tanggal tersebut: ${used.join(", ")}`);
       }
 
@@ -609,12 +607,12 @@ export async function createPublicBooking(input: {
         include: { kavling: true },
       });
       if (holdConflicts.length) {
-        const used = Array.from(new Set(holdConflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        const used = Array.from(new Set(holdConflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sedang di-hold: ${used.join(", ")}`);
       }
 
       const assigned = (() => {
-        const rows: Array<{ unitId: string; numbers: number[] }> = [];
+        const rows: Array<{ unitId: string; numbers: string[] }> = [];
         if (privateRequired) rows.push({ unitId: privateUnitIds[0]!, numbers: privateNums });
         if (paketRequired) rows.push({ unitId: paketUnitIds[0]!, numbers: nonPrivateNums.slice(0, paketRequired) });
         if (mandiriRequired) rows.push({ unitId: mandiriUnitIds[0]!, numbers: nonPrivateNums.slice(paketRequired) });
@@ -664,17 +662,19 @@ export async function rescheduleBooking(
     excludeBookingId: id,
   });
 
-  const existingByUnit = booking0.kavlings.reduce<Record<string, number[]>>((acc, r) => {
+  const existingByUnit = booking0.kavlings.reduce<Record<string, string[]>>((acc, r) => {
     (acc[r.unitId] ??= []).push(r.kavling.number);
     return acc;
   }, {});
-  for (const k of Object.keys(existingByUnit)) existingByUnit[k].sort((a, b) => a - b);
+  for (const k of Object.keys(existingByUnit)) existingByUnit[k].sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
 
-  const desiredByUnit: Record<string, number[] | undefined> = { ...existingByUnit };
+  const desiredByUnit: Record<string, string[] | undefined> = { ...existingByUnit };
   const incoming = opts?.kavlingsByUnit ?? {};
-  for (const [unitId, numbers] of Object.entries(incoming)) desiredByUnit[unitId] = numbers;
+  for (const [unitId, numbers] of Object.entries(incoming)) {
+    desiredByUnit[unitId] = numbers ? numbers.map((n) => String(n).trim().toUpperCase()) : undefined;
+  }
 
-  const seenAcross = new Set<number>();
+  const seenAcross = new Set<string>();
   for (const [unitId, numbers] of Object.entries(desiredByUnit)) {
     if (!numbers?.length) continue;
     for (const n of numbers) {
@@ -691,8 +691,6 @@ export async function rescheduleBooking(
     await tx.booking.update({ where: { id }, data: { checkIn, checkOut } });
 
     const cfg = await getKavlingConfig(tx as unknown as typeof prisma);
-    const privateStart = Math.max(1, Math.min(cfg.privateStart, cfg.sellCount));
-    const privateEnd = Math.max(privateStart, Math.min(cfg.privateEnd, cfg.sellCount));
 
     const unitIds = Object.keys(desiredByUnit).filter((unitId) => (desiredByUnit[unitId] ?? []).length > 0);
     const units = unitIds.length
@@ -718,8 +716,8 @@ export async function rescheduleBooking(
       const reqQty = reqQtyForUnit(unitId);
       if (reqQty <= 0) continue;
 
-      const unique = Array.from(new Set(numbers.map((n) => Number(n)).filter((n) => Number.isFinite(n))));
-      unique.sort((a, b) => a - b);
+      const unique = Array.from(new Set(numbers.map((n) => String(n).trim().toUpperCase()).filter(Boolean)));
+      unique.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
       if (unique.length !== numbers.length) throw new Error("Nomor kavling duplikat");
       if (unique.length !== reqQty) throw new Error(`Jumlah kavling harus ${reqQty}`);
 
@@ -728,13 +726,12 @@ export async function rescheduleBooking(
       const scope = scopeFromUnit(unit);
 
       if (scope === "private") {
-        if (unique.some((n) => n < privateStart || n > privateEnd)) {
-          throw new Error(`Nomor kavling Paket Private harus ${privateStart} - ${privateEnd}`);
+        if (unique.some((n) => !cfg.privateSet.has(n))) {
+          throw new Error(`Nomor kavling untuk Paket Private harus terdaftar di daftar kavling Private`);
         }
       } else {
-        if (unique.some((n) => n < 1 || n > cfg.sellCount)) throw new Error(`Nomor kavling harus 1 - ${cfg.sellCount}`);
-        if (unique.some((n) => n >= privateStart && n <= privateEnd)) {
-          throw new Error(`Range ${privateStart} - ${privateEnd} khusus untuk Paket Private`);
+        if (unique.some((n) => !cfg.regularSet.has(n))) {
+          throw new Error(`Nomor kavling harus terdaftar di daftar kavling Regular & Mandiri`);
         }
       }
 
@@ -759,7 +756,7 @@ export async function rescheduleBooking(
         include: { booking: { select: { code: true, customer: { select: { name: true } } } }, kavling: true },
       });
       if (conflicts.length) {
-        const nums = Array.from(new Set(conflicts.map((c) => c.kavling.number))).sort((a, b) => a - b);
+        const nums = Array.from(new Set(conflicts.map((c) => c.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sudah terpakai pada tanggal baru: ${nums.join(", ")}`);
       }
 
@@ -776,7 +773,7 @@ export async function rescheduleBooking(
         include: { kavling: true },
       });
       if (holdConflicts.length) {
-        const nums = Array.from(new Set(holdConflicts.map((c) => c.kavling.number))).sort((a, b) => a - b);
+        const nums = Array.from(new Set(holdConflicts.map((c) => c.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sedang di-hold pada tanggal baru: ${nums.join(", ")}`);
       }
 
@@ -828,7 +825,7 @@ export async function getKavlingContext(params: { bookingId: string; unitId: str
     },
     include: { kavling: true, booking: { select: { code: true, customer: { select: { name: true } } } } },
   });
-  const takenMeta = new Map<number, string>();
+  const takenMeta = new Map<string, string>();
   for (const r of takenRows) {
     const label = `${r.booking.code} - ${r.booking.customer.name}`;
     takenMeta.set(r.kavling.number, label);
@@ -849,8 +846,8 @@ export async function getKavlingContext(params: { bookingId: string; unitId: str
     if (!takenMeta.has(r.kavling.number)) takenMeta.set(r.kavling.number, `HOLD (${r.hold.scope})`);
   }
 
-  const taken = Array.from(takenMeta.keys()).sort((a, b) => a - b);
-  const takenBy = Object.fromEntries(Array.from(takenMeta.entries()).sort((a, b) => a[0] - b[0]));
+  const taken = Array.from(takenMeta.keys()).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
+  const takenBy = Object.fromEntries(Array.from(takenMeta.entries()).sort((a, b) => a[0].localeCompare(b[0], undefined, { numeric: true, sensitivity: "base" })));
 
   return {
     required: reqQty,
@@ -861,7 +858,7 @@ export async function getKavlingContext(params: { bookingId: string; unitId: str
   };
 }
 
-export async function setKavlingAssignment(params: { bookingId: string; unitId: string; numbers: number[] }) {
+export async function setKavlingAssignment(params: { bookingId: string; unitId: string; numbers: (string | number)[] }) {
   const booking = await prisma.booking.findUnique({
     where: { id: params.bookingId },
     include: { items: true },
@@ -874,8 +871,6 @@ export async function setKavlingAssignment(params: { bookingId: string; unitId: 
   if (reqQty <= 0) throw new Error("Booking tidak memiliki item untuk unit ini");
 
   const cfg = await getKavlingConfig(prisma);
-  const privateStart = Math.max(1, Math.min(cfg.privateStart, cfg.sellCount));
-  const privateEnd = Math.max(privateStart, Math.min(cfg.privateEnd, cfg.sellCount));
 
   const unit = await prisma.unit.findUnique({
     where: { id: params.unitId },
@@ -896,18 +891,17 @@ export async function setKavlingAssignment(params: { bookingId: string; unitId: 
   }
 
   const scope = scopeFromUnit(unit);
-  const unique = Array.from(new Set(params.numbers.map((n) => Number(n)).filter((n) => Number.isFinite(n))));
-  unique.sort((a, b) => a - b);
+  const unique = Array.from(new Set(params.numbers.map((n) => String(n).trim().toUpperCase()).filter(Boolean)));
+  unique.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
   if (unique.length !== params.numbers.length) throw new Error("Nomor kavling duplikat");
   if (unique.length !== reqQty) throw new Error(`Jumlah kavling harus ${reqQty}`);
   if (scope === "private") {
-    if (unique.some((n) => n < privateStart || n > privateEnd)) {
-      throw new Error(`Nomor kavling Paket Private harus ${privateStart} - ${privateEnd}`);
+    if (unique.some((n) => !cfg.privateSet.has(n))) {
+      throw new Error(`Nomor kavling untuk Paket Private harus terdaftar di daftar kavling Private`);
     }
   } else {
-    if (unique.some((n) => n < 1 || n > cfg.sellCount)) throw new Error(`Nomor kavling harus 1 - ${cfg.sellCount}`);
-    if (unique.some((n) => n >= privateStart && n <= privateEnd)) {
-      throw new Error(`Range ${privateStart} - ${privateEnd} khusus untuk Paket Private`);
+    if (unique.some((n) => !cfg.regularSet.has(n))) {
+      throw new Error(`Nomor kavling harus terdaftar di daftar kavling Regular & Mandiri`);
     }
   }
 
@@ -937,7 +931,7 @@ export async function setKavlingAssignment(params: { bookingId: string; unitId: 
       include: { kavling: true },
     });
     if (conflicts.length) {
-      const used = Array.from(new Set(conflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+      const used = Array.from(new Set(conflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
       throw new Error(`Kavling sudah terpakai pada tanggal tersebut: ${used.join(", ")}`);
     }
 
@@ -963,7 +957,7 @@ export async function createAdminBooking(input: {
   adultPax?: number;
   child5to10Pax?: number;
   childUnder5Pax?: number;
-  kavlings?: number[];
+  kavlings?: (string | number)[];
   adminUserId?: string;
   paymentSeed?: { kind: "unpaid" | "dp_paid" | "paid"; paidAmount: number };
   dp?: { mode: "percent" | "nominal"; value: number };
@@ -992,8 +986,6 @@ export async function createAdminBooking(input: {
   }
 
   const cfg = await getKavlingConfig(prisma);
-  const privateStart = Math.max(1, Math.min(cfg.privateStart, cfg.sellCount));
-  const privateEnd = Math.max(privateStart, Math.min(cfg.privateEnd, cfg.sellCount));
   function deriveCategoryFromUnit(u: { category: string | null; name: string; kavlingScope?: string | null }) {
     const scope = (u.kavlingScope ?? "").toLowerCase();
     if (scope === "private") return "private";
@@ -1100,7 +1092,7 @@ export async function createAdminBooking(input: {
   const method = seedKind === "paid" || paymentStatus === "partial" ? "rekening_perusahaan" : null;
   const paidAt = seedKind === "paid" || paymentStatus === "partial" ? new Date() : null;
   const plannedDpAmount = seedKind === "unpaid" ? safeDpPlannedAmount : 0;
-  const requestedKavlings = (input.kavlings ?? []).map((n) => Number(n)).filter((n) => Number.isFinite(n));
+  const requestedKavlings = (input.kavlings ?? []).map((n) => String(n).trim().toUpperCase()).filter(Boolean);
 
   const totalKavlingRequired = mandiriRequired + paketRequired + privateRequired;
   const nonPrivateKavlingRequired = mandiriRequired + paketRequired;
@@ -1110,12 +1102,12 @@ export async function createAdminBooking(input: {
   const required = totalKavlingRequired;
   if (required) {
     const unique = Array.from(new Set(requestedKavlings));
-    unique.sort((a, b) => a - b);
+    unique.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
     if (unique.length !== requestedKavlings.length) throw new Error("Nomor kavling duplikat");
     if (unique.length !== required) throw new Error(`Jumlah kavling harus ${required}`);
-    if (unique.some((n) => n < 1 || n > cfg.sellCount)) throw new Error(`Nomor kavling harus 1 - ${cfg.sellCount}`);
-    const privateNums = unique.filter((n) => n >= privateStart && n <= privateEnd);
-    const nonPrivateNums = unique.filter((n) => n < privateStart || n > privateEnd);
+    if (unique.some((n) => !cfg.allSet.has(n))) throw new Error("Ada nomor kavling yang tidak terdaftar");
+    const privateNums = unique.filter((n) => cfg.privateSet.has(n));
+    const nonPrivateNums = unique.filter((n) => cfg.regularSet.has(n));
     if (privateNums.length !== privateRequired) throw new Error(`Jumlah kavling Paket Private harus ${privateRequired}`);
     if (nonPrivateNums.length !== nonPrivateKavlingRequired) throw new Error(`Jumlah kavling Paket/Camping Mandiri harus ${nonPrivateKavlingRequired}`);
   }
@@ -1173,10 +1165,10 @@ export async function createAdminBooking(input: {
 
     if (required) {
       const unique = Array.from(new Set(requestedKavlings));
-      unique.sort((a, b) => a - b);
+      unique.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
       if (unique.length !== required) throw new Error(`Jumlah kavling harus ${required}`);
-      const privateNums = unique.filter((n) => n >= privateStart && n <= privateEnd);
-      const nonPrivateNums = unique.filter((n) => n < privateStart || n > privateEnd);
+      const privateNums = unique.filter((n) => cfg.privateSet.has(n));
+      const nonPrivateNums = unique.filter((n) => cfg.regularSet.has(n));
       const requiredNonPrivate = mandiriRequired + paketRequired;
       if (privateNums.length !== privateRequired) throw new Error(`Jumlah kavling Paket Private harus ${privateRequired}`);
       if (nonPrivateNums.length !== requiredNonPrivate) throw new Error(`Jumlah kavling Paket/Camping Mandiri harus ${requiredNonPrivate}`);
@@ -1211,7 +1203,7 @@ export async function createAdminBooking(input: {
                   ? "mandiri"
                   : "paket";
         if (hold.scope !== expectedScope) throw new Error("Hold kavling tidak sesuai kategori");
-        const holdNums = hold.kavlings.map((x) => x.kavling.number).sort((a, b) => a - b);
+        const holdNums = hold.kavlings.map((x) => x.kavling.number).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         if (holdNums.length !== unique.length || holdNums.some((n, i) => n !== unique[i])) {
           throw new Error("Hold kavling tidak sesuai pilihan");
         }
@@ -1242,7 +1234,7 @@ export async function createAdminBooking(input: {
         include: { kavling: true },
       });
       if (conflicts.length) {
-        const used = Array.from(new Set(conflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        const used = Array.from(new Set(conflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sudah terpakai pada tanggal tersebut: ${used.join(", ")}`);
       }
 
@@ -1260,12 +1252,12 @@ export async function createAdminBooking(input: {
         include: { kavling: true },
       });
       if (holdConflicts.length) {
-        const used = Array.from(new Set(holdConflicts.map((x) => x.kavling.number))).sort((a, b) => a - b);
+        const used = Array.from(new Set(holdConflicts.map((x) => x.kavling.number))).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
         throw new Error(`Kavling sedang di-hold: ${used.join(", ")}`);
       }
 
       const assigned = (() => {
-        const rows: Array<{ unitId: string; numbers: number[] }> = [];
+        const rows: Array<{ unitId: string; numbers: string[] }> = [];
         if (privateRequired) rows.push({ unitId: privateUnitIds[0]!, numbers: privateNums });
         if (paketRequired) rows.push({ unitId: paketUnitIds[0]!, numbers: nonPrivateNums.slice(0, paketRequired) });
         if (mandiriRequired) rows.push({ unitId: mandiriUnitIds[0]!, numbers: nonPrivateNums.slice(paketRequired) });

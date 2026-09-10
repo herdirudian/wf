@@ -11,7 +11,7 @@ export type InvoiceEmailModel = {
     customer: { name: string; phone: string; email: string };
     items: Array<{ name: string; quantity: number }>;
     addOns: Array<{ name: string; quantity: number; price: number }>;
-    kavlings: number[];
+    kavlings: (string | number)[];
   };
   payment: {
     amount: number;
@@ -104,7 +104,12 @@ export function renderInvoiceEmailHtml(model: InvoiceEmailModel) {
         .join("")
     : `<tr><td style="color:#6b7280" colspan="2">-</td></tr>`;
 
-  const kavlingText = booking.kavlings.length ? booking.kavlings.slice().sort((a, b) => a - b).join(", ") : "-";
+  const kavlingText = booking.kavlings.length
+    ? booking.kavlings
+        .slice()
+        .sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" }))
+        .join(", ")
+    : "-";
   const paidAt = payment.paidAt ? `${formatDateWIB(payment.paidAt)} WIB` : "-";
   const checkInText = formatDateWIB(booking.checkIn);
   const checkOutText = formatDateWIB(booking.checkOut);
