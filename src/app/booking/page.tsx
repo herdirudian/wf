@@ -1828,38 +1828,38 @@ export default function PublicBookingPage() {
 
             {currentStep === 2 && (
               <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                <div className="mb-12 flex flex-col items-center text-center">
-                  <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10] mb-6 border border-[#E8E8E1]">
+                <div className="mb-6 sm:mb-12 flex flex-col items-center text-center">
+                  <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-3.5 py-1 sm:px-5 sm:py-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#2D3E10] mb-3 sm:mb-6 border border-[#E8E8E1]">
                     Langkah 02
                   </div>
-                  <h2 className="text-3xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
+                  <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
                     Pilihan <span className="text-primary italic">Unit & Kavling</span>
                   </h2>
-                  <p className="mx-auto mt-4 max-w-xl text-sm font-medium text-primary/60 italic">
+                  <p className="mx-auto mt-2 sm:mt-4 max-w-xl text-xs sm:text-sm font-medium text-primary/60 italic">
                     "Tentukan unit dan lokasi kavling favorit Anda untuk pengalaman menginap yang tak terlupakan."
                   </p>
                 </div>
 
-                  <div className="mx-auto w-full space-y-12">
+                  <div className="mx-auto w-full space-y-6 sm:space-y-12">
                     {/* Date Selection */}
-                    <div className="space-y-6 relative group">
-                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start relative z-10">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="space-y-3 sm:space-y-6 relative group">
+                        <div className="flex items-center justify-start gap-2.5 sm:gap-4 relative z-10">
+                          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
+                            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
-                          <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
+                          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
                         </div>
 
-                        <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-6 sm:p-10 shadow-xl shadow-[#2D3E10]/5 relative group/card">
-                          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 relative z-10">
-                            <div className="group rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
-                              <div className="flex items-center gap-2 ml-1">
+                        <div className="overflow-hidden rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white p-3.5 sm:p-10 shadow-lg sm:shadow-xl shadow-[#2D3E10]/5 relative group/card">
+                          <div className="grid grid-cols-2 gap-2.5 sm:gap-8 relative z-10">
+                            <div className="group rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
+                              <div className="flex items-center gap-1.5 ml-0.5">
                                 <svg className="h-3 w-3 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Tanggal Check-in</label>
+                                <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-[0.2em] text-[#2D3E10]/40">Check-in</label>
                               </div>
                               <input
                                 type="date"
@@ -1870,16 +1870,16 @@ export default function PublicBookingPage() {
                                   }
                                   setCheckIn(e.target.value);
                                 }}
-                                className="mt-2 w-full bg-transparent text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20"
+                                className="mt-1 sm:mt-2 w-full bg-transparent text-xs sm:text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20"
                                 required
                               />
                             </div>
-                            <div className="group rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
-                              <div className="flex items-center gap-2 ml-1">
+                            <div className="group rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
+                              <div className="flex items-center gap-1.5 ml-0.5">
                                 <svg className="h-3 w-3 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Tanggal Check-out</label>
+                                <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-[0.2em] text-[#2D3E10]/40">Check-out</label>
                               </div>
                               <input
                                 type="date"
@@ -1890,7 +1890,7 @@ export default function PublicBookingPage() {
                                   }
                                   setCheckOut(e.target.value);
                                 }}
-                                className="mt-2 w-full bg-transparent text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20"
+                                className="mt-1 sm:mt-2 w-full bg-transparent text-xs sm:text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20"
                                 required
                               />
                             </div>
@@ -1899,44 +1899,44 @@ export default function PublicBookingPage() {
                     </div>
 
                     {/* Konfigurasi Tamu Section */}
-                    <div className="space-y-6 relative group">
-                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start relative z-10">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="space-y-3 sm:space-y-6 relative group">
+                        <div className="flex items-center justify-start gap-2.5 sm:gap-4 relative z-10">
+                          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
+                            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                           </div>
-                          <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
+                          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
                         </div>
 
-                        <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white p-6 sm:p-10 shadow-xl shadow-[#2D3E10]/5 relative group/card">
-                          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 relative z-10">
-                            <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                              <div className="space-y-1">
-                                <p className="text-base font-bold text-[#2D3E10]">Dewasa</p>
-                                <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 10+ tahun</p>
+                        <div className="overflow-hidden rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white p-3.5 sm:p-10 shadow-lg sm:shadow-xl shadow-[#2D3E10]/5 relative group/card">
+                          <div className="grid grid-cols-1 gap-2.5 sm:gap-6 sm:grid-cols-3 relative z-10">
+                            <div className="flex items-center justify-between rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+                              <div className="space-y-0.5 sm:space-y-1">
+                                <p className="text-sm sm:text-base font-bold text-[#2D3E10]">Dewasa</p>
+                                <p className="text-[9px] sm:text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 10+ tahun</p>
                               </div>
-                              <QuantityStepper value={adultPax} min={1} ariaLabel="Dewasa" onChange={setAdultPax} />
+                              <QuantityStepper value={adultPax} min={1} size="sm" ariaLabel="Dewasa" onChange={setAdultPax} />
                             </div>
-                            <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                              <div className="space-y-1">
-                                <p className="text-base font-bold text-[#2D3E10]">Anak</p>
-                                <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 5-10 tahun</p>
+                            <div className="flex items-center justify-between rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+                              <div className="space-y-0.5 sm:space-y-1">
+                                <p className="text-sm sm:text-base font-bold text-[#2D3E10]">Anak</p>
+                                <p className="text-[9px] sm:text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 5-10 tahun</p>
                               </div>
-                              <QuantityStepper value={child5to10Pax} min={0} ariaLabel="Anak" onChange={setChild5to10Pax} />
+                              <QuantityStepper value={child5to10Pax} min={0} size="sm" ariaLabel="Anak" onChange={setChild5to10Pax} />
                             </div>
-                            <div className="flex items-center justify-between rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                              <div className="space-y-1">
-                                <p className="text-base font-bold text-[#2D3E10]">Balita</p>
-                                <p className="text-[10px] font-medium text-primary/60 italic tracking-wide">Usia &lt; 5 tahun</p>
+                            <div className="flex items-center justify-between rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+                              <div className="space-y-0.5 sm:space-y-1">
+                                <p className="text-sm sm:text-base font-bold text-[#2D3E10]">Balita</p>
+                                <p className="text-[9px] sm:text-[10px] font-medium text-primary/60 italic tracking-wide">Usia &lt; 5 tahun</p>
                               </div>
-                              <QuantityStepper value={childUnder5Pax} min={0} ariaLabel="Balita" onChange={setChildUnder5Pax} />
+                              <QuantityStepper value={childUnder5Pax} min={0} size="sm" ariaLabel="Balita" onChange={setChildUnder5Pax} />
                             </div>
                           </div>
                         </div>
                     </div>
 
-                    <div className="mb-8 flex flex-col items-center justify-between gap-5 rounded-[2.5rem] border border-[#E8E8E1] bg-[#F1F3EE]/30 p-5 backdrop-blur-xl shadow-sm sm:flex-row sm:p-6 relative group/filter overflow-hidden">
+                    <div className="mb-6 sm:mb-8 flex flex-col items-center justify-between gap-3 sm:gap-5 rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-[#F1F3EE]/30 p-3.5 sm:p-6 backdrop-blur-xl shadow-sm sm:flex-row relative group/filter overflow-hidden">
                       {/* Subtle organic decoration for filter bar */}
                       <div className="absolute -right-12 -bottom-12 h-40 w-40 opacity-[0.02] transition-transform duration-1000 group-hover/filter:scale-125 group-hover/filter:rotate-12 pointer-events-none">
                         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -1944,29 +1944,29 @@ export default function PublicBookingPage() {
                         </svg>
                       </div>
 
-                      <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left relative z-10">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-primary transition-transform group-hover/filter:rotate-6">
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className="flex flex-col items-center gap-2 sm:gap-4 text-center sm:flex-row sm:text-left relative z-10">
+                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#F1F3EE] text-primary transition-transform group-hover/filter:rotate-6">
+                          <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-primary/40">Kategori</p>
-                          <p className="text-sm font-bold text-[#2D3E10]">{filterCategory || "Semua Paket"}</p>
+                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-primary/40">Kategori</p>
+                          <p className="text-xs sm:text-sm font-bold text-[#2D3E10]">{filterCategory || "Semua Paket"}</p>
                         </div>
                       </div>
 
                       <div className="h-8 w-px bg-[#E8E8E1] hidden sm:block relative z-10" />
 
-                      <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left relative z-10">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F1F3EE] text-primary transition-transform group-hover/filter:-rotate-6">
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className="flex flex-col items-center gap-2 sm:gap-4 text-center sm:flex-row sm:text-left relative z-10">
+                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#F1F3EE] text-primary transition-transform group-hover/filter:-rotate-6">
+                          <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-primary/40">Jadwal</p>
-                          <p className="text-sm font-bold text-[#2D3E10]">{checkIn} - {checkOut}</p>
+                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-primary/40">Jadwal</p>
+                          <p className="text-xs sm:text-sm font-bold text-[#2D3E10]">{checkIn} - {checkOut}</p>
                         </div>
                       </div>
 
@@ -1976,7 +1976,7 @@ export default function PublicBookingPage() {
                         <select
                           value={filterType}
                           onChange={(e) => setFilterType(e.target.value)}
-                          className="h-14 w-full appearance-none rounded-2xl border border-[#E8E8E1] bg-white pl-5 pr-12 text-sm font-bold text-[#2D3E10] outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-48"
+                          className="h-11 sm:h-14 w-full appearance-none rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-white pl-4 sm:pl-5 pr-10 sm:pr-12 text-xs sm:text-sm font-bold text-[#2D3E10] outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-48"
                         >
                           <option value="">Semua Tipe</option>
                           {typeOptions.map((t) => (
@@ -2778,56 +2778,56 @@ export default function PublicBookingPage() {
   )}
 </div>
 
-{/* Sticky Navigation Bar for Step 2 & 3 - Moved to top level for correct stacking context */}
+{/* Sticky Navigation Bar for Step 2 & 3 - Compact side-by-side layout on mobile */}
 {currentStep === 2 && (
-  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:hidden">
-    <div className="mx-auto flex max-w-xl flex-col gap-3">
+  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 pb-4 backdrop-blur-xl sm:hidden shadow-2xl">
+    <div className="mx-auto flex max-w-xl flex-row items-center gap-2.5">
+      <button
+        type="button"
+        onClick={() => setCurrentStep(1)}
+        className="group flex flex-1 min-h-[3rem] items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[#2D3E10] active:scale-[0.98]"
+      >
+        Kembali
+      </button>
       <button
         type="button"
         onClick={() => setCurrentStep(3)}
         disabled={selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings) || guestOverCapacity}
-        className="group relative flex min-h-[3.5rem] w-full items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-10 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 active:scale-[0.98] disabled:opacity-30 disabled:shadow-none"
+        className="group relative flex flex-[2.5] min-h-[3rem] items-center justify-center overflow-hidden rounded-xl bg-[#2D3E10] px-4 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-md active:scale-[0.98] disabled:opacity-30 disabled:shadow-none"
       >
         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
-        <div className="relative z-10 flex items-center gap-3">
+        <div className="relative z-10 flex items-center gap-2">
           <span>Lanjut Isi Identitas</span>
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
         </div>
-      </button>
-      <button
-        type="button"
-        onClick={() => setCurrentStep(2)}
-        className="group flex min-h-[3.5rem] w-full items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-[#2D3E10] active:scale-[0.98]"
-      >
-        Kembali
       </button>
     </div>
   </div>
 )}
 
 {currentStep === 3 && (
-  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:hidden">
-    <div className="mx-auto flex max-w-xl flex-col gap-3">
+  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 pb-4 backdrop-blur-xl sm:hidden shadow-2xl">
+    <div className="mx-auto flex max-w-xl flex-row items-center gap-2.5">
+      <button
+        type="button"
+        onClick={() => setCurrentStep(2)}
+        className="group flex flex-1 min-h-[3rem] items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[#2D3E10] active:scale-[0.98]"
+      >
+        Kembali
+      </button>
       <button
         type="submit"
         form="booking-form"
         disabled={submitting || loading || !name || !phone || !email}
-        className="group relative flex min-h-[3.5rem] w-full items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-10 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 active:scale-[0.98] disabled:opacity-30 disabled:shadow-none"
+        className="group relative flex flex-[2.5] min-h-[3rem] items-center justify-center overflow-hidden rounded-xl bg-[#2D3E10] px-4 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-md active:scale-[0.98] disabled:opacity-30 disabled:shadow-none"
       >
         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
         <span className="relative z-10">{submitting || loading ? "Memproses..." : "Konfirmasi Booking"}</span>
-        <svg className="relative z-10 ml-3 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="relative z-10 ml-2 h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
         </svg>
-      </button>
-      <button
-        type="button"
-        onClick={() => setCurrentStep(2)}
-        className="group flex min-h-[3.5rem] w-full items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-[#2D3E10] active:scale-[0.98]"
-      >
-        Kembali
       </button>
     </div>
   </div>
