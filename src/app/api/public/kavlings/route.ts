@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { parseDateRangeWIB } from "@/lib/time";
-import { getKavlingSets } from "@/lib/kavling-config";
+import { getKavlingSets, parseKavlingBlockConfig } from "@/lib/kavling-config";
 
 const QuerySchema = z.object({
   checkIn: z.string().min(1),
@@ -154,5 +154,6 @@ export async function GET(req: Request) {
     privateRange: sets.privateList.length ? { start: sets.privateList[0], end: sets.privateList[sets.privateList.length - 1] } : { start: 58, end: 65 },
     privateKavlings: sets.privateList,
     regularKavlings: sets.regularList,
+    kavlingBlocks: parseKavlingBlockConfig(cfg.kavlingBlocksJson),
   });
 }

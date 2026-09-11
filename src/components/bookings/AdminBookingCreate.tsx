@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatIDR, formatTimeWIB } from "@/lib/format";
 import { addDaysWIB, formatDateWIB, parseDateWIB } from "@/lib/time";
 import { Modal } from "@/components/ui/Modal";
+import { buildKavlingBlockMap, resolveKavlingBlockName, KavlingBlockConfig } from "@/lib/kavling-config";
 import { InteractiveMapViewer } from "@/components/ui/InteractiveMapViewer";
 
 type AvailabilityUnit = {
@@ -99,28 +100,8 @@ function QuantityStepper({
   );
 }
 
-function extractBlockName(item: string | number): string {
-  const str = String(item).trim();
-  if (!str) return "Lainnya";
-
-  const blokMatch = str.match(/^blok\s*([A-Za-z0-9]+)/i);
-  if (blokMatch) {
-    return `Blok ${blokMatch[1].toUpperCase()}`;
-  }
-
-  const matchPrefix = str.match(/^([A-Za-z]+)\s*-?\s*\d+/);
-  if (matchPrefix) {
-    const prefix = matchPrefix[1].toUpperCase();
-    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
-  }
-
-  const matchOnlyLetters = str.match(/^([A-Za-z]+)$/);
-  if (matchOnlyLetters) {
-    const prefix = matchOnlyLetters[1].toUpperCase();
-    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
-  }
-
-  return "Lainnya";
+function extractBlockName(item: string | number, blockMap?: Map<string, string>): string {
+  return resolveKavlingBlockName(item, blockMap);
 }
 
 export function AdminBookingCreate() {
@@ -172,6 +153,8 @@ export function AdminBookingCreate() {
   const [kavlingOOO, setKavlingOOO] = useState<any[]>([]);
   const [kavlingSelected, setKavlingSelected] = useState<any[]>([]);
   const [selectedBlockFilter, setSelectedBlockFilter] = useState<string>("ALL");
+  const [kavlingBlocksConfig, setKavlingBlocksConfig] = useState<KavlingBlockConfig[]>([]);
+  const kavlingBlockMap = useMemo(() => buildKavlingBlockMap(kavlingBlocksConfig), [kavlingBlocksConfig]);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
   const [kavlingPrivateRange, setKavlingPrivateRange] = useState<null | { start: string | number; end: string | number }>(null);
@@ -184,10 +167,16 @@ export function AdminBookingCreate() {
   const availableBlocks = useMemo(() => {
     const blocksMap = new Map<string, number>();
     for (const n of kavlingAll) {
-      const bName = extractBlockName(n);
+      const bName = extractBlockName(n, kavlingBlockMap);
       blocksMap.set(bName, (blocksMap.get(bName) || 0) + 1);
     }
+    const configOrder = kavlingBlocksConfig.map((b) => b.name);
     const sortedBlockNames = Array.from(blocksMap.keys()).sort((a, b) => {
+      const idxA = configOrder.indexOf(a);
+      const idxB = configOrder.indexOf(b);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
       if (a === "Lainnya") return 1;
       if (b === "Lainnya") return -1;
       return a.localeCompare(b, undefined, { numeric: true });
@@ -196,12 +185,12 @@ export function AdminBookingCreate() {
       name,
       count: blocksMap.get(name) || 0,
     }));
-  }, [kavlingAll]);
+  }, [kavlingAll, kavlingBlockMap, kavlingBlocksConfig]);
 
   const filteredKavlingAll = useMemo(() => {
     if (selectedBlockFilter === "ALL") return kavlingAll;
-    return kavlingAll.filter((n) => extractBlockName(n) === selectedBlockFilter);
-  }, [kavlingAll, selectedBlockFilter]);
+    return kavlingAll.filter((n) => extractBlockName(n, kavlingBlockMap) === selectedBlockFilter);
+  }, [kavlingAll, selectedBlockFilter, kavlingBlockMap]);
 
   // Real-time kavling updates
   useEffect(() => {
@@ -483,7 +472,7 @@ export function AdminBookingCreate() {
       }
       const res = await fetch(url.toString());
       const data = (await res.json().catch(() => null)) as
-        | { all?: (string | number)[]; taken?: (string | number)[]; paid?: (string | number)[]; held?: (string | number)[]; ooo?: (string | number)[]; sellCount?: number; privateRange?: { start?: string | number; end?: string | number }; message?: string }
+        | { all?: (string | number)[]; taken?: (string | number)[]; paid?: (string | number)[]; held?: (string | number)[]; ooo?: (string | number)[]; sellCount?: number; privateRange?: { start?: string | number; end?: string | number }; kavlingBlocks?: KavlingBlockConfig[]; message?: string }
         | null;
       if (cancelled) return;
       if (!res.ok) {
@@ -501,6 +490,7 @@ export function AdminBookingCreate() {
       setKavlingPaid((data?.paid ?? []).filter((n): n is string | number => typeof n === "number" || (typeof n === "string" && Boolean(n.trim()))));
       setKavlingHeld((data?.held ?? []).filter((n): n is string | number => typeof n === "number" || (typeof n === "string" && Boolean(n.trim()))));
       setKavlingOOO((data?.ooo ?? []).filter((n): n is string | number => typeof n === "number" || (typeof n === "string" && Boolean(n.trim()))));
+      if (Array.isArray(data?.kavlingBlocks)) setKavlingBlocksConfig(data.kavlingBlocks);
       if (typeof data?.sellCount === "number" && Number.isFinite(data.sellCount)) setKavlingSellCount(data.sellCount);
       const ps = data?.privateRange?.start;
       const pe = data?.privateRange?.end;

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/Modal";
 import { formatIDR } from "@/lib/format";
+import { buildKavlingBlockMap, resolveKavlingBlockName, KavlingBlockConfig } from "@/lib/kavling-config";
 
 export type BookingStatus = "pending" | "paid" | "checked_in" | "cancelled" | "completed";
 
@@ -35,28 +36,8 @@ function allowedNext(status: BookingStatus) {
   return [] as BookingStatus[];
 }
 
-function extractBlockName(item: string | number): string {
-  const str = String(item).trim();
-  if (!str) return "Lainnya";
-
-  const blokMatch = str.match(/^blok\s*([A-Za-z0-9]+)/i);
-  if (blokMatch) {
-    return `Blok ${blokMatch[1].toUpperCase()}`;
-  }
-
-  const matchPrefix = str.match(/^([A-Za-z]+)\s*-?\s*\d+/);
-  if (matchPrefix) {
-    const prefix = matchPrefix[1].toUpperCase();
-    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
-  }
-
-  const matchOnlyLetters = str.match(/^([A-Za-z]+)$/);
-  if (matchOnlyLetters) {
-    const prefix = matchOnlyLetters[1].toUpperCase();
-    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
-  }
-
-  return "Lainnya";
+function extractBlockName(item: string | number, blockMap?: Map<string, string>): string {
+  return resolveKavlingBlockName(item, blockMap);
 }
 
 export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; currentUserRole?: string }) {
@@ -89,6 +70,8 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
   const [kavlingTakenBy, setKavlingTakenBy] = useState<Record<string | number, string>>({});
   const [kavlingSelected, setKavlingSelected] = useState<(string | number)[]>([]);
   const [selectedBlockFilter, setSelectedBlockFilter] = useState<string>("ALL");
+  const [kavlingBlocksConfig, setKavlingBlocksConfig] = useState<KavlingBlockConfig[]>([]);
+  const kavlingBlockMap = useMemo(() => buildKavlingBlockMap(kavlingBlocksConfig), [kavlingBlocksConfig]);
   const [kavlingRequired, setKavlingRequired] = useState(0);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
@@ -96,10 +79,16 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
   const availableBlocks = useMemo(() => {
     const blocksMap = new Map<string, number>();
     for (const n of kavlingAll) {
-      const bName = extractBlockName(n);
+      const bName = extractBlockName(n, kavlingBlockMap);
       blocksMap.set(bName, (blocksMap.get(bName) || 0) + 1);
     }
+    const configOrder = kavlingBlocksConfig.map((b) => b.name);
     const sortedBlockNames = Array.from(blocksMap.keys()).sort((a, b) => {
+      const idxA = configOrder.indexOf(a);
+      const idxB = configOrder.indexOf(b);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
       if (a === "Lainnya") return 1;
       if (b === "Lainnya") return -1;
       return a.localeCompare(b, undefined, { numeric: true });
@@ -108,12 +97,12 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
       name,
       count: blocksMap.get(name) || 0,
     }));
-  }, [kavlingAll]);
+  }, [kavlingAll, kavlingBlockMap, kavlingBlocksConfig]);
 
   const filteredKavlingAll = useMemo(() => {
     if (selectedBlockFilter === "ALL") return kavlingAll;
-    return kavlingAll.filter((n) => extractBlockName(n) === selectedBlockFilter);
-  }, [kavlingAll, selectedBlockFilter]);
+    return kavlingAll.filter((n) => extractBlockName(n, kavlingBlockMap) === selectedBlockFilter);
+  }, [kavlingAll, selectedBlockFilter, kavlingBlockMap]);
 
   const kavlingTitle = useMemo(
     () => (kavlingTarget ? `Pilih Kavling: ${kavlingTarget.code} (${kavlingTarget.unitName})` : "Pilih Kavling"),
@@ -245,7 +234,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
     url.searchParams.set("unitId", k.unitId);
     const res = await fetch(url.toString());
     const data = (await res.json().catch(() => null)) as
-      | { required?: number; assigned?: (string | number)[]; taken?: (string | number)[]; takenBy?: Record<string, string>; all?: (string | number)[]; message?: string }
+      | { required?: number; assigned?: (string | number)[]; taken?: (string | number)[]; takenBy?: Record<string, string>; all?: (string | number)[]; kavlingBlocks?: KavlingBlockConfig[]; message?: string }
       | null;
     if (!res.ok) {
       setKavlingError(data?.message ?? "Gagal load kavling");
@@ -259,6 +248,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
     }, {});
     setKavlingAll(all);
     setKavlingTaken(taken);
+    if (Array.isArray(data?.kavlingBlocks)) setKavlingBlocksConfig(data.kavlingBlocks);
     const takenBy = Object.entries(data?.takenBy ?? {}).reduce<Record<string | number, string>>((acc, [k, v]) => {
       acc[k] = v;
       return acc;
@@ -288,7 +278,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
     url.searchParams.set("checkOut", checkOut);
     const res = await fetch(url.toString());
     const data = (await res.json().catch(() => null)) as
-      | { required?: number; assigned?: (string | number)[]; taken?: (string | number)[]; takenBy?: Record<string, string>; all?: (string | number)[]; message?: string }
+      | { required?: number; assigned?: (string | number)[]; taken?: (string | number)[]; takenBy?: Record<string, string>; all?: (string | number)[]; kavlingBlocks?: KavlingBlockConfig[]; message?: string }
       | null;
     if (!res.ok) {
       setKavlingError(data?.message ?? "Gagal load kavling");
@@ -302,6 +292,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
     }, {});
     setKavlingAll(all);
     setKavlingTaken(taken);
+    if (Array.isArray(data?.kavlingBlocks)) setKavlingBlocksConfig(data.kavlingBlocks);
     const takenBy = Object.entries(data?.takenBy ?? {}).reduce<Record<string | number, string>>((acc, [k, v]) => {
       acc[k] = v;
       return acc;

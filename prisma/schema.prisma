@@ -320,6 +320,7 @@ model AppConfig {
   privateKavlingEnd   Int   @default(65)
   regularKavlingsList String? @db.Text
   privateKavlingsList String? @db.Text
+  kavlingBlocksJson String?   @db.Text
   mandiriAutoAddOnId String?
   holdMinutes      Int      @default(5)
   xenditSecretKey  String?  @db.Text

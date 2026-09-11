@@ -21,6 +21,15 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
   const [privateKavlingEnd, setPrivateKavlingEnd] = useState(65);
   const [regularKavlingsList, setRegularKavlingsList] = useState("1-57, 66-110");
   const [privateKavlingsList, setPrivateKavlingsList] = useState("58-65");
+  const [kavlingBlocks, setKavlingBlocks] = useState<Array<{ name: string; kavlings: string }>>([
+    { name: "Blok B", kavlings: "B1-B32" },
+    { name: "Blok C", kavlings: "C1-C11" },
+    { name: "Blok J", kavlings: "J1-J13" },
+    { name: "Blok K", kavlings: "K1-K34" },
+    { name: "Sandiakala", kavlings: "S1-S4" },
+    { name: "Blok V", kavlings: "V1-V6" },
+    { name: "Blok W", kavlings: "W1-W8" },
+  ]);
   const [holdMinutes, setHoldMinutes] = useState(5);
   const [balanceReminderDays, setBalanceReminderDays] = useState(3);
   const [xenditSecretKeySet, setXenditSecretKeySet] = useState(false);
@@ -82,6 +91,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
               privateKavlingEnd?: number;
               regularKavlingsList?: string;
               privateKavlingsList?: string;
+              kavlingBlocks?: Array<{ name: string; kavlings: string }>;
               holdMinutes?: number;
               xenditSecretKeySet?: boolean;
               xenditCallbackTokenSet?: boolean;
@@ -115,6 +125,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
       if (typeof pe === "number" && Number.isFinite(pe)) setPrivateKavlingEnd(pe);
       if (typeof data?.config?.regularKavlingsList === "string") setRegularKavlingsList(data.config.regularKavlingsList);
       if (typeof data?.config?.privateKavlingsList === "string") setPrivateKavlingsList(data.config.privateKavlingsList);
+      if (Array.isArray(data?.config?.kavlingBlocks) && data.config.kavlingBlocks.length > 0) setKavlingBlocks(data.config.kavlingBlocks);
       const hm = data?.config?.holdMinutes;
       if (typeof hm === "number" && Number.isFinite(hm)) setHoldMinutes(hm);
       setXenditSecretKeySet(!!data?.config?.xenditSecretKeySet);
@@ -175,6 +186,7 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
           Object.entries({
             regularKavlingsList: regularKavlingsList.trim(),
             privateKavlingsList: privateKavlingsList.trim(),
+            kavlingBlocks: kavlingBlocks.filter((b) => b.name.trim()),
             holdMinutes,
             xenditSecretKey: xenditSecretKeyInput.trim() ? xenditSecretKeyInput.trim() : undefined,
             xenditCallbackToken: xenditCallbackTokenInput.trim() ? xenditCallbackTokenInput.trim() : undefined,
@@ -448,6 +460,74 @@ export function SettingsManager({ currentUserRole }: { currentUserRole: string }
               className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-primary disabled:opacity-60"
             />
             <p className="text-[11px] text-muted">Nomor kavling khusus untuk penginapan Paket Private.</p>
+          </div>
+
+          <div className="col-span-full space-y-3 pt-3 border-t border-border/50">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider">Pengaturan Kategori & Nama Blok</h3>
+                <p className="text-[11px] text-muted">Tentukan nama khusus blok (seperti Sandiakala, Blok B, dll.) dan daftarkan nomor kavlingnya agar tamu tidak bingung saat memilih.</p>
+              </div>
+              {!isOwner && (
+                <button
+                  type="button"
+                  onClick={() => setKavlingBlocks((prev) => [...prev, { name: "", kavlings: "" }])}
+                  className="inline-flex items-center gap-1 self-start sm:self-auto rounded-lg border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 transition-colors"
+                >
+                  + Tambah Blok Baru
+                </button>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              {kavlingBlocks.map((block, idx) => (
+                <div key={idx} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-background/50 p-2.5 rounded-xl border border-border/60">
+                  <div className="w-full sm:w-1/3">
+                    <label className="text-[10px] font-medium text-muted block mb-0.5 sm:hidden">Nama Blok</label>
+                    <input
+                      type="text"
+                      value={block.name}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setKavlingBlocks((prev) => prev.map((item, i) => (i === idx ? { ...item, name: val } : item)));
+                      }}
+                      disabled={loading || saving || isOwner}
+                      placeholder="Nama Blok (misal: Sandiakala)"
+                      className="h-9 w-full rounded-lg border border-border bg-surface px-3 text-xs outline-none focus:border-primary font-medium text-foreground"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="text-[10px] font-medium text-muted block mb-0.5 sm:hidden">Isi Kavling</label>
+                    <input
+                      type="text"
+                      value={block.kavlings}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setKavlingBlocks((prev) => prev.map((item, i) => (i === idx ? { ...item, kavlings: val } : item)));
+                      }}
+                      disabled={loading || saving || isOwner}
+                      placeholder="Daftar Kavling (misal: S1-S13 atau S1, S2, S3)"
+                      className="h-9 w-full rounded-lg border border-border bg-surface px-3 text-xs outline-none focus:border-primary text-foreground"
+                    />
+                  </div>
+                  {!isOwner && (
+                    <button
+                      type="button"
+                      onClick={() => setKavlingBlocks((prev) => prev.filter((_, i) => i !== idx))}
+                      className="flex h-9 w-9 items-center justify-center self-end sm:self-auto rounded-lg text-muted hover:bg-rose-50 hover:text-rose-600 transition-colors shrink-0"
+                      title="Hapus Blok"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+              {kavlingBlocks.length === 0 && (
+                <div className="text-xs text-muted italic text-center py-3 border border-dashed border-border rounded-xl">
+                  Belum ada nama blok khusus. Sistem akan otomatis mengelompokkan berdasarkan awalan huruf (seperti Blok B, Blok C).
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

@@ -97,3 +97,86 @@ export function getKavlingSets(config: {
     totalCount: allList.length,
   };
 }
+
+export type KavlingBlockConfig = {
+  name: string;
+  kavlings: string;
+};
+
+export const DEFAULT_KAVLING_BLOCKS: KavlingBlockConfig[] = [
+  { name: "Blok B", kavlings: "B1-B32" },
+  { name: "Blok C", kavlings: "C1-C11" },
+  { name: "Blok J", kavlings: "J1-J13" },
+  { name: "Blok K", kavlings: "K1-K34" },
+  { name: "Sandiakala", kavlings: "S1-S4" },
+  { name: "Blok V", kavlings: "V1-V6" },
+  { name: "Blok W", kavlings: "W1-W8" },
+];
+
+export function parseKavlingBlockConfig(input: string | null | undefined): KavlingBlockConfig[] {
+  if (!input || !input.trim()) {
+    return DEFAULT_KAVLING_BLOCKS;
+  }
+  try {
+    const parsed = JSON.parse(input);
+    if (Array.isArray(parsed)) {
+      const result: KavlingBlockConfig[] = [];
+      for (const item of parsed) {
+        if (item && typeof item.name === "string" && typeof item.kavlings === "string") {
+          const name = item.name.trim();
+          const kavlings = item.kavlings.trim();
+          if (name) {
+            result.push({ name, kavlings });
+          }
+        }
+      }
+      return result.length > 0 ? result : DEFAULT_KAVLING_BLOCKS;
+    }
+  } catch {}
+  return DEFAULT_KAVLING_BLOCKS;
+}
+
+export function buildKavlingBlockMap(blocks: KavlingBlockConfig[]): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const block of blocks) {
+    const parsedCodes = parseKavlingList(block.kavlings);
+    for (const code of parsedCodes) {
+      if (!map.has(code)) {
+        map.set(code, block.name);
+      }
+    }
+  }
+  return map;
+}
+
+export function resolveKavlingBlockName(item: string | number, blockMap?: Map<string, string>): string {
+  const str = String(item).trim();
+  if (!str) return "Lainnya";
+
+  if (blockMap) {
+    const upper = str.toUpperCase();
+    if (blockMap.has(upper)) {
+      return blockMap.get(upper)!;
+    }
+  }
+
+  const blokMatch = str.match(/^blok\s*([A-Za-z0-9]+)/i);
+  if (blokMatch) {
+    return `Blok ${blokMatch[1].toUpperCase()}`;
+  }
+
+  const matchPrefix = str.match(/^([A-Za-z]+)\s*-?\s*\d+/);
+  if (matchPrefix) {
+    const prefix = matchPrefix[1].toUpperCase();
+    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
+  }
+
+  const matchOnlyLetters = str.match(/^([A-Za-z]+)$/);
+  if (matchOnlyLetters) {
+    const prefix = matchOnlyLetters[1].toUpperCase();
+    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
+  }
+
+  return "Lainnya";
+}
+

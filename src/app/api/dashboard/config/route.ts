@@ -4,7 +4,7 @@ import { getAdminSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/services/activity.service";
 
-import { parseKavlingList, getKavlingSets } from "@/lib/kavling-config";
+import { parseKavlingList, getKavlingSets, parseKavlingBlockConfig } from "@/lib/kavling-config";
 
 const UpdateSchema = z
   .object({
@@ -13,6 +13,7 @@ const UpdateSchema = z
     privateKavlingEnd: z.coerce.number().int().min(1).max(500).optional(),
     regularKavlingsList: z.string().optional(),
     privateKavlingsList: z.string().optional(),
+    kavlingBlocks: z.array(z.object({ name: z.string().min(1), kavlings: z.string() })).optional(),
     holdMinutes: z.coerce.number().int().min(1).max(30).optional(),
     xenditSecretKey: z.string().min(1).optional(),
     xenditCallbackToken: z.string().min(1).optional(),
@@ -118,6 +119,7 @@ export async function GET() {
       privateKavlingEnd: config.privateKavlingEnd,
       regularKavlingsList: config.regularKavlingsList ?? "1-57, 66-110",
       privateKavlingsList: config.privateKavlingsList ?? "58-65",
+      kavlingBlocks: parseKavlingBlockConfig(config.kavlingBlocksJson),
       regularCount: kavlingSets.regularList.length,
       privateCount: kavlingSets.privateList.length,
       totalCount: kavlingSets.totalCount,
@@ -169,6 +171,7 @@ export async function PUT(req: Request) {
 
   const newRegularListStr = parsed.data.regularKavlingsList ?? undefined;
   const newPrivateListStr = parsed.data.privateKavlingsList ?? undefined;
+  const newBlocksJson = parsed.data.kavlingBlocks ? JSON.stringify(parsed.data.kavlingBlocks) : undefined;
 
   const kavlingSets = getKavlingSets({
     regularKavlingsList: newRegularListStr,
@@ -189,6 +192,7 @@ export async function PUT(req: Request) {
       privateKavlingEnd: parsed.data.privateKavlingEnd ?? 65,
       regularKavlingsList: newRegularListStr ?? "1-57, 66-110",
       privateKavlingsList: newPrivateListStr ?? "58-65",
+      kavlingBlocksJson: newBlocksJson ?? null,
       holdMinutes: parsed.data.holdMinutes ?? 5,
       xenditSecretKey: parsed.data.xenditSecretKey ?? null,
       xenditCallbackToken: parsed.data.xenditCallbackToken ?? null,
@@ -211,6 +215,7 @@ export async function PUT(req: Request) {
       ...(typeof parsed.data.privateKavlingEnd === "number" ? { privateKavlingEnd: parsed.data.privateKavlingEnd } : {}),
       ...(typeof newRegularListStr === "string" ? { regularKavlingsList: newRegularListStr } : {}),
       ...(typeof newPrivateListStr === "string" ? { privateKavlingsList: newPrivateListStr } : {}),
+      ...(typeof newBlocksJson === "string" ? { kavlingBlocksJson: newBlocksJson } : {}),
       ...(typeof parsed.data.holdMinutes === "number" ? { holdMinutes: parsed.data.holdMinutes } : {}),
       ...(parsed.data.xenditSecretKey ? { xenditSecretKey: parsed.data.xenditSecretKey } : {}),
       ...(parsed.data.xenditCallbackToken ? { xenditCallbackToken: parsed.data.xenditCallbackToken } : {}),
@@ -254,6 +259,7 @@ export async function PUT(req: Request) {
       privateKavlingEnd: config.privateKavlingEnd,
       regularKavlingsList: config.regularKavlingsList ?? "1-57, 66-110",
       privateKavlingsList: config.privateKavlingsList ?? "58-65",
+      kavlingBlocks: parseKavlingBlockConfig(config.kavlingBlocksJson),
       regularCount: updatedKavlingSets.regularList.length,
       privateCount: updatedKavlingSets.privateList.length,
       totalCount: updatedKavlingSets.totalCount,

@@ -4,7 +4,7 @@ import { getAdminSession } from "@/lib/auth";
 import { getKavlingContext, setKavlingAssignment } from "@/services/booking.service";
 import { prisma } from "@/lib/prisma";
 import { parseDateRangeWIB } from "@/lib/time";
-import { getKavlingSets } from "@/lib/kavling-config";
+import { getKavlingSets, parseKavlingBlockConfig } from "@/lib/kavling-config";
 
 const QuerySchema = z.object({
   unitId: z.string().min(1),
@@ -70,6 +70,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
       privateRange: sets.privateList.length ? { start: sets.privateList[0], end: sets.privateList[sets.privateList.length - 1] } : { start: 58, end: 65 },
       privateKavlings: sets.privateList,
       regularKavlings: sets.regularList,
+      kavlingBlocks: parseKavlingBlockConfig(cfg.kavlingBlocksJson),
     });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Gagal load kavling";
