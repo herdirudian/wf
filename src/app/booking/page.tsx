@@ -2304,10 +2304,7 @@ export default function PublicBookingPage() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => {
-                          setKavlingMapAssetVersion(Date.now());
-                          setKavlingMapOpen(true);
-                        }}
+                        onClick={() => setKavlingMapOpen(true)}
                         className="group relative flex min-h-[3.75rem] shrink-0 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 lg:w-auto overflow-hidden"
                       >
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -2330,10 +2327,7 @@ export default function PublicBookingPage() {
                         </div>
                         <button
                           type="button"
-                          onClick={() => {
-                            setKavlingMapAssetVersion(Date.now());
-                            setKavlingMapOpen(true);
-                          }}
+                          onClick={() => setKavlingMapOpen(true)}
                           className="group relative block aspect-[16/10] w-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 lg:aspect-[4/3]"
                         >
                           <img

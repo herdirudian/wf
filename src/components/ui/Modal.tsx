@@ -32,7 +32,7 @@ export function Modal({
         className={`relative mx-auto w-full ${maxWidthClassName ?? "max-w-lg"} animate-in zoom-in-95 slide-in-from-bottom-10 duration-700 ease-out`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)] flex-col overflow-hidden rounded-3xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/20">
+        <div className="flex min-h-[300px] sm:min-h-[400px] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)] flex-col overflow-hidden rounded-3xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/20">
           {/* Header */}
           <div className="relative flex items-center justify-between border-b border-[#E8E8E1]/60 px-4 py-3.5 sm:px-8 sm:py-5 bg-[#F1F3EE]/30">
             <div className="relative z-10">

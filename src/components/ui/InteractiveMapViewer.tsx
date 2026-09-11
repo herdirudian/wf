@@ -182,7 +182,7 @@ export function InteractiveMapViewer({
   };
 
   return (
-    <div className={`relative flex flex-col overflow-hidden rounded-2xl sm:rounded-[2rem] border border-[#2D3E10]/20 bg-[#161B11] shadow-2xl select-none ${className}`}>
+    <div className={`relative flex flex-col w-full min-h-[380px] sm:min-h-[500px] overflow-hidden rounded-2xl sm:rounded-[2rem] border border-[#2D3E10]/20 bg-[#161B11] shadow-2xl select-none ${className}`}>
       {/* Top Floating Controls - Split into 2 compact side pods so top-center image is clear */}
       <div className="absolute top-2.5 left-2.5 right-2.5 sm:top-4 sm:left-4 sm:right-4 z-20 flex items-center justify-between gap-2 pointer-events-none">
         {/* Left Pod: Compact Zoom Controls */}
@@ -276,7 +276,7 @@ export function InteractiveMapViewer({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`relative flex-1 w-full h-[55dvh] sm:h-[68dvh] max-h-[75vh] overflow-hidden flex items-center justify-center ${
+        className={`relative flex-1 w-full min-h-[380px] sm:min-h-[500px] h-[55dvh] sm:h-[68dvh] max-h-[75vh] overflow-hidden flex items-center justify-center ${
           isDragging ? "cursor-grabbing" : scale > 1 ? "cursor-grab" : "cursor-zoom-in"
         }`}
         style={{ touchAction: "none" }}
@@ -300,6 +300,7 @@ export function InteractiveMapViewer({
           loading="eager"
           decoding="async"
           onLoad={() => setIsLoaded(true)}
+          onError={() => setIsLoaded(true)}
           draggable={false}
           className={`max-w-full max-h-full object-contain select-none ${
             isDragging ? "transition-none" : "transition-transform duration-200 ease-out"
