@@ -2304,8 +2304,11 @@ export default function PublicBookingPage() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => setKavlingMapOpen(true)}
-                        className="hidden sm:flex group relative min-h-[3.75rem] shrink-0 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 lg:w-auto overflow-hidden"
+                        onClick={() => {
+                          setKavlingMapAssetVersion(Date.now());
+                          setKavlingMapOpen(true);
+                        }}
+                        className="group relative flex min-h-[3.75rem] shrink-0 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 lg:w-auto overflow-hidden"
                       >
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                         <svg className="relative z-10 mr-3 h-5 w-5 text-primary transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2315,17 +2318,23 @@ export default function PublicBookingPage() {
                       </button>
                     </div>
 
-                    <div className="flex flex-col gap-6 lg:flex-row">
-                      {/* Map Preview (Visible on desktop; Mobile uses sticky button & full modal) */}
-                      <div className="hidden lg:block lg:w-1/3 shrink-0">
-                        <div className="mb-3 flex items-center gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]">Peta Lokasi</span>
+                    <div className="flex flex-col gap-10 lg:flex-row">
+                      {/* Map Preview */}
+                      <div className="sticky top-0 z-30 shrink-0 bg-white/95 pb-6 pt-4 backdrop-blur-md lg:static lg:w-1/3 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+                        <div className="mb-3 flex items-center justify-between lg:hidden">
+                          <div className="flex items-center gap-2">
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]">Peta Lokasi</span>
+                          </div>
+                          <span className="text-[10px] font-bold text-primary/60 italic">Scroll ke bawah untuk pilih nomor</span>
                         </div>
                         <button
                           type="button"
-                          onClick={() => setKavlingMapOpen(true)}
-                          className="group relative block aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5"
+                          onClick={() => {
+                            setKavlingMapAssetVersion(Date.now());
+                            setKavlingMapOpen(true);
+                          }}
+                          className="group relative block aspect-[16/10] w-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 lg:aspect-[4/3]"
                         >
                           <img
                             src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
@@ -2345,23 +2354,11 @@ export default function PublicBookingPage() {
                         </button>
                       </div>
 
-                      {/* Mobile Map Button */}
-                      <button
-                        type="button"
-                        onClick={() => setKavlingMapOpen(true)}
-                        className="lg:hidden flex items-center justify-center gap-2.5 w-full rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3 text-xs font-bold text-primary transition-all active:scale-98 shadow-sm"
-                      >
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                        </svg>
-                        <span>Lihat Denah Peta Lokasi</span>
-                      </button>
-
                       {/* Kavling Grid */}
-                      <div className="w-full min-w-0 flex-1 max-h-[65vh] overflow-y-auto overscroll-contain pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
+                      <div className="w-full min-w-0 flex-1 max-h-[60vh] overflow-y-auto overscroll-contain pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
                         {/* Block Filter Toolbar */}
                         {availableBlocks.length > 1 && (
-                          <div className="mb-4 space-y-2">
+                          <div className="mb-5 space-y-2.5">
                             <div className="flex items-center justify-between px-1">
                               <div className="flex items-center gap-2">
                                 <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
@@ -2375,17 +2372,17 @@ export default function PublicBookingPage() {
                                   onClick={() => setSelectedBlockFilter("ALL")}
                                   className="text-[10px] font-extrabold uppercase tracking-wider text-primary hover:underline"
                                 >
-                                  Semua ({kavlingAll.length})
+                                  Tampilkan Semua ({kavlingAll.length})
                                 </button>
                               )}
                             </div>
 
-                            {/* Block Pills: Single horizontal swipeable row on HP (max-sm), wrap on desktop (sm) */}
-                            <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none sm:flex-wrap sm:overflow-visible sm:pb-0">
+                            {/* Flexible Block Pills (Wrap to next line if space is tight) */}
+                            <div className="flex flex-wrap items-center gap-2 pb-1">
                               <button
                                 type="button"
                                 onClick={() => setSelectedBlockFilter("ALL")}
-                                className={`group relative flex shrink-0 items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all duration-300 ${
+                                className={`group relative flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all duration-300 ${
                                   selectedBlockFilter === "ALL"
                                     ? "bg-[#2D3E10] text-white shadow-md shadow-[#2D3E10]/20"
                                     : "bg-white border border-[#E8E8E1] text-[#2D3E10]/70 hover:border-primary/40 hover:text-primary"
@@ -2402,7 +2399,7 @@ export default function PublicBookingPage() {
                                   key={b.name}
                                   type="button"
                                   onClick={() => setSelectedBlockFilter(b.name)}
-                                  className={`group relative flex shrink-0 items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all duration-300 ${
+                                  className={`group relative flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all duration-300 ${
                                     selectedBlockFilter === b.name
                                       ? "bg-[#2D3E10] text-white shadow-md shadow-[#2D3E10]/20"
                                       : "bg-white border border-[#E8E8E1] text-[#2D3E10]/70 hover:border-primary/40 hover:text-primary"

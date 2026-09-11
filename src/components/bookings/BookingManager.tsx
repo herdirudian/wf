@@ -745,7 +745,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
           {kavlingLoading ? <div className="text-sm text-muted">Loading...</div> : null}
           {/* Block Filter Toolbar */}
           {availableBlocks.length > 1 && (
-            <div className="flex flex-wrap items-center gap-1.5 pb-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none no-scrollbar">
               <button
                 type="button"
                 onClick={() => setSelectedBlockFilter("ALL")}
@@ -781,7 +781,7 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
           )}
 
           <div className="max-h-[55dvh] overflow-auto rounded-2xl border border-border p-3">
-            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+            <div className="grid grid-cols-5 gap-2 sm:grid-cols-8">
               {filteredKavlingAll.map((n) => {
                 const selected = kavlingSelected.includes(n);
                 const taken = !!kavlingTaken[n];
