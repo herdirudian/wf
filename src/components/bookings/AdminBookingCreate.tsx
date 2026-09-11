@@ -99,6 +99,30 @@ function QuantityStepper({
   );
 }
 
+function extractBlockName(item: string | number): string {
+  const str = String(item).trim();
+  if (!str) return "Lainnya";
+
+  const blokMatch = str.match(/^blok\s*([A-Za-z0-9]+)/i);
+  if (blokMatch) {
+    return `Blok ${blokMatch[1].toUpperCase()}`;
+  }
+
+  const matchPrefix = str.match(/^([A-Za-z]+)\s*-?\s*\d+/);
+  if (matchPrefix) {
+    const prefix = matchPrefix[1].toUpperCase();
+    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
+  }
+
+  const matchOnlyLetters = str.match(/^([A-Za-z]+)$/);
+  if (matchOnlyLetters) {
+    const prefix = matchOnlyLetters[1].toUpperCase();
+    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
+  }
+
+  return "Lainnya";
+}
+
 export function AdminBookingCreate() {
   const today = useMemo(() => {
     const d = new Date();
