@@ -1055,7 +1055,7 @@ export function AdminBookingCreate() {
 
             {/* Block Filter Toolbar */}
             {availableBlocks.length > 1 && (
-              <div className="mt-3 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none no-scrollbar">
+              <div className="mt-3 flex flex-wrap items-center gap-1.5 pb-1">
                 <button
                   type="button"
                   onClick={() => setSelectedBlockFilter("ALL")}
@@ -1090,7 +1090,7 @@ export function AdminBookingCreate() {
               </div>
             )}
 
-            <div className="mt-3 grid grid-cols-8 gap-2 sm:grid-cols-12">
+            <div className="mt-3 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
               {(() => {
                 const pr = kavlingPrivateRange;
                 const privateNeed = combinedAll ? privateQty : 0;

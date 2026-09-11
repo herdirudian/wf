@@ -2355,7 +2355,7 @@ export default function PublicBookingPage() {
                       </div>
 
                       {/* Kavling Grid */}
-                      <div className="flex-1 max-h-[60vh] overflow-y-auto overscroll-contain pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
+                      <div className="w-full min-w-0 flex-1 max-h-[60vh] overflow-y-auto overscroll-contain pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
                         {/* Block Filter Toolbar */}
                         {availableBlocks.length > 1 && (
                           <div className="mb-5 space-y-2.5">
@@ -2377,8 +2377,8 @@ export default function PublicBookingPage() {
                               )}
                             </div>
 
-                            {/* Scrollable Block Pills */}
-                            <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#E8E8E1] scrollbar-track-transparent">
+                            {/* Flexible Block Pills (Wrap to next line if space is tight) */}
+                            <div className="flex flex-wrap items-center gap-2 pb-1">
                               <button
                                 type="button"
                                 onClick={() => setSelectedBlockFilter("ALL")}
@@ -2415,7 +2415,7 @@ export default function PublicBookingPage() {
                           </div>
                         )}
 
-                        <div className="grid grid-cols-5 gap-3 sm:grid-cols-8 md:grid-cols-10">
+                        <div className="grid grid-cols-4 min-[420px]:grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 gap-2.5 sm:gap-3">
                           {filteredKavlingAll.map((n, idx) => {
                             const isPaid = kavlingPaid.includes(n);
                             const isHeld = kavlingHeld.includes(n);
