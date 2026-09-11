@@ -3,6 +3,7 @@ import { getAdminSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import fs from "node:fs/promises";
 import path from "node:path";
+import sharp from "sharp";
 
 export const runtime = "nodejs";
 
@@ -30,12 +31,14 @@ export async function POST(req: Request) {
   if (file.type !== "image/png") return NextResponse.json({ message: "Hanya PNG yang diizinkan" }, { status: 400 });
 
   const maxBytes = 5 * 1024 * 1024;
-  if (file.size > maxBytes) return NextResponse.json({ message: "Ukuran gambar maksimal 5MB" }, { status: 400 });
-
   const dir = path.join(process.cwd(), "public", "kavling");
   await fs.mkdir(dir, { recursive: true });
   const buf = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(dir, "site-map.png"), buf);
+  const compressedBuf = await sharp(buf)
+    .png({ compressionLevel: 9, palette: true, quality: 90 })
+    .toBuffer()
+    .catch(() => buf);
+  await fs.writeFile(path.join(dir, "site-map.png"), compressedBuf);
 
   return NextResponse.json({ ok: true, url: "/kavling/site-map.png", version: Date.now() });
 }

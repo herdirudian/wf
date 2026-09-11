@@ -24,6 +24,12 @@ export function InteractiveMapViewer({
   const [isDragging, setIsDragging] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  React.useEffect(() => {
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+      setIsLoaded(true);
+    }
+  }, [src]);
+
   const dragStartRef = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
   const pinchStartDistRef = useRef<number | null>(null);
   const pinchStartScaleRef = useRef<number>(1);
@@ -291,6 +297,8 @@ export function InteractiveMapViewer({
           ref={imgRef}
           src={src}
           alt={alt}
+          loading="eager"
+          decoding="async"
           onLoad={() => setIsLoaded(true)}
           draggable={false}
           className={`max-w-full max-h-full object-contain select-none ${
