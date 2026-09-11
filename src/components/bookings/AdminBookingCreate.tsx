@@ -147,6 +147,7 @@ export function AdminBookingCreate() {
   const [kavlingHeld, setKavlingHeld] = useState<any[]>([]);
   const [kavlingOOO, setKavlingOOO] = useState<any[]>([]);
   const [kavlingSelected, setKavlingSelected] = useState<any[]>([]);
+  const [selectedBlockFilter, setSelectedBlockFilter] = useState<string>("ALL");
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
   const [kavlingPrivateRange, setKavlingPrivateRange] = useState<null | { start: string | number; end: string | number }>(null);
@@ -155,6 +156,28 @@ export function AdminBookingCreate() {
   const [holdError, setHoldError] = useState<string | null>(null);
   const [holdSubmitting, setHoldSubmitting] = useState(false);
   const [holdHeartbeat, setHoldHeartbeat] = useState(0);
+
+  const availableBlocks = useMemo(() => {
+    const blocksMap = new Map<string, number>();
+    for (const n of kavlingAll) {
+      const bName = extractBlockName(n);
+      blocksMap.set(bName, (blocksMap.get(bName) || 0) + 1);
+    }
+    const sortedBlockNames = Array.from(blocksMap.keys()).sort((a, b) => {
+      if (a === "Lainnya") return 1;
+      if (b === "Lainnya") return -1;
+      return a.localeCompare(b, undefined, { numeric: true });
+    });
+    return sortedBlockNames.map((name) => ({
+      name,
+      count: blocksMap.get(name) || 0,
+    }));
+  }, [kavlingAll]);
+
+  const filteredKavlingAll = useMemo(() => {
+    if (selectedBlockFilter === "ALL") return kavlingAll;
+    return kavlingAll.filter((n) => extractBlockName(n) === selectedBlockFilter);
+  }, [kavlingAll, selectedBlockFilter]);
 
   // Real-time kavling updates
   useEffect(() => {
@@ -1016,6 +1039,43 @@ export function AdminBookingCreate() {
               </div>
             </div>
 
+            {/* Block Filter Toolbar */}
+            {availableBlocks.length > 1 && (
+              <div className="mt-3 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none no-scrollbar">
+                <button
+                  type="button"
+                  onClick={() => setSelectedBlockFilter("ALL")}
+                  className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                    selectedBlockFilter === "ALL"
+                      ? "bg-primary text-white shadow-sm"
+                      : "bg-surface border border-border text-foreground hover:border-primary/40"
+                  }`}
+                >
+                  <span>Semua Blok</span>
+                  <span className={`rounded-md px-1.5 py-0.5 text-[10px] ${selectedBlockFilter === "ALL" ? "bg-white/20 text-white" : "bg-background text-muted"}`}>
+                    {kavlingAll.length}
+                  </span>
+                </button>
+                {availableBlocks.map((b) => (
+                  <button
+                    key={b.name}
+                    type="button"
+                    onClick={() => setSelectedBlockFilter(b.name)}
+                    className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                      selectedBlockFilter === b.name
+                        ? "bg-primary text-white shadow-sm"
+                        : "bg-surface border border-border text-foreground hover:border-primary/40"
+                    }`}
+                  >
+                    <span>{b.name}</span>
+                    <span className={`rounded-md px-1.5 py-0.5 text-[10px] ${selectedBlockFilter === b.name ? "bg-white/20 text-white" : "bg-background text-muted"}`}>
+                      {b.count}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div className="mt-3 grid grid-cols-8 gap-2 sm:grid-cols-12">
               {(() => {
                 const pr = kavlingPrivateRange;
@@ -1024,10 +1084,15 @@ export function AdminBookingCreate() {
                 const privatePicked = combinedAll && pr ? kavlingSelected.filter((x) => x >= pr.start && x <= pr.end).length : 0;
                 const nonPicked = combinedAll ? kavlingSelected.length - privatePicked : 0;
 
-                const allNums =
+                const rawNums =
                   effectiveKavlingScope === "private" && pr && typeof kavlingSellCount === "number"
                     ? Array.from({ length: kavlingSellCount }).map((_, i) => i + 1)
                     : kavlingAll;
+
+                const allNums =
+                  selectedBlockFilter === "ALL"
+                    ? rawNums
+                    : rawNums.filter((n) => extractBlockName(n) === selectedBlockFilter);
 
                 if (!allNums.length) {
                   return Array.from({ length: kavlingSellCount ?? 110 }).map((_, i) => (

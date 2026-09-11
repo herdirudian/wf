@@ -35,6 +35,30 @@ function allowedNext(status: BookingStatus) {
   return [] as BookingStatus[];
 }
 
+function extractBlockName(item: string | number): string {
+  const str = String(item).trim();
+  if (!str) return "Lainnya";
+
+  const blokMatch = str.match(/^blok\s*([A-Za-z0-9]+)/i);
+  if (blokMatch) {
+    return `Blok ${blokMatch[1].toUpperCase()}`;
+  }
+
+  const matchPrefix = str.match(/^([A-Za-z]+)\s*-?\s*\d+/);
+  if (matchPrefix) {
+    const prefix = matchPrefix[1].toUpperCase();
+    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
+  }
+
+  const matchOnlyLetters = str.match(/^([A-Za-z]+)$/);
+  if (matchOnlyLetters) {
+    const prefix = matchOnlyLetters[1].toUpperCase();
+    return prefix.length === 1 ? `Blok ${prefix}` : prefix;
+  }
+
+  return "Lainnya";
+}
+
 export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; currentUserRole?: string }) {
   const isOwner = currentUserRole === "owner";
   const isAdministrator = currentUserRole === "administrator";
@@ -64,9 +88,32 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
   const [kavlingTaken, setKavlingTaken] = useState<Record<string | number, boolean>>({});
   const [kavlingTakenBy, setKavlingTakenBy] = useState<Record<string | number, string>>({});
   const [kavlingSelected, setKavlingSelected] = useState<(string | number)[]>([]);
+  const [selectedBlockFilter, setSelectedBlockFilter] = useState<string>("ALL");
   const [kavlingRequired, setKavlingRequired] = useState(0);
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
+
+  const availableBlocks = useMemo(() => {
+    const blocksMap = new Map<string, number>();
+    for (const n of kavlingAll) {
+      const bName = extractBlockName(n);
+      blocksMap.set(bName, (blocksMap.get(bName) || 0) + 1);
+    }
+    const sortedBlockNames = Array.from(blocksMap.keys()).sort((a, b) => {
+      if (a === "Lainnya") return 1;
+      if (b === "Lainnya") return -1;
+      return a.localeCompare(b, undefined, { numeric: true });
+    });
+    return sortedBlockNames.map((name) => ({
+      name,
+      count: blocksMap.get(name) || 0,
+    }));
+  }, [kavlingAll]);
+
+  const filteredKavlingAll = useMemo(() => {
+    if (selectedBlockFilter === "ALL") return kavlingAll;
+    return kavlingAll.filter((n) => extractBlockName(n) === selectedBlockFilter);
+  }, [kavlingAll, selectedBlockFilter]);
 
   const kavlingTitle = useMemo(
     () => (kavlingTarget ? `Pilih Kavling: ${kavlingTarget.code} (${kavlingTarget.unitName})` : "Pilih Kavling"),
@@ -705,9 +752,46 @@ export function BookingManager({ rows, currentUserRole }: { rows: BookingRow[]; 
             <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{kavlingError}</div>
           ) : null}
           {kavlingLoading ? <div className="text-sm text-muted">Loading...</div> : null}
+          {/* Block Filter Toolbar */}
+          {availableBlocks.length > 1 && (
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none no-scrollbar">
+              <button
+                type="button"
+                onClick={() => setSelectedBlockFilter("ALL")}
+                className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                  selectedBlockFilter === "ALL"
+                    ? "bg-primary text-white shadow-sm"
+                    : "bg-surface border border-border text-foreground hover:border-primary/40"
+                }`}
+              >
+                <span>Semua Blok</span>
+                <span className={`rounded-md px-1.5 py-0.5 text-[10px] ${selectedBlockFilter === "ALL" ? "bg-white/20 text-white" : "bg-background text-muted"}`}>
+                  {kavlingAll.length}
+                </span>
+              </button>
+              {availableBlocks.map((b) => (
+                <button
+                  key={b.name}
+                  type="button"
+                  onClick={() => setSelectedBlockFilter(b.name)}
+                  className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                    selectedBlockFilter === b.name
+                      ? "bg-primary text-white shadow-sm"
+                      : "bg-surface border border-border text-foreground hover:border-primary/40"
+                  }`}
+                >
+                  <span>{b.name}</span>
+                  <span className={`rounded-md px-1.5 py-0.5 text-[10px] ${selectedBlockFilter === b.name ? "bg-white/20 text-white" : "bg-background text-muted"}`}>
+                    {b.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="max-h-[55dvh] overflow-auto rounded-2xl border border-border p-3">
             <div className="grid grid-cols-5 gap-2 sm:grid-cols-8">
-              {kavlingAll.map((n) => {
+              {filteredKavlingAll.map((n) => {
                 const selected = kavlingSelected.includes(n);
                 const taken = !!kavlingTaken[n];
                 const blocked = taken && !selected;
