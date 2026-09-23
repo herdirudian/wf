@@ -20,7 +20,7 @@ const Schema = z.object({
   adultPax: z.coerce.number().int().min(0).optional(),
   child5to10Pax: z.coerce.number().int().min(0).optional(),
   childUnder5Pax: z.coerce.number().int().min(0).optional(),
-  kavlings: z.array(z.coerce.number().int()).optional().default([]),
+  kavlings: z.array(z.union([z.string(), z.number()])).optional().default([]),
   paymentSeed: z
     .object({
       kind: z.enum(["unpaid", "dp_paid", "paid"]),
