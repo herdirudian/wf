@@ -195,8 +195,14 @@ function normalizePhoneId(phone: string) {
 
 export async function getXenditConfig() {
   const cfg = await prisma.appConfig.findUnique({ where: { id: 1 } });
-  const secretKey = cfg?.xenditSecretKey ?? process.env.XENDIT_SECRET_KEY ?? "";
-  const callbackToken = cfg?.xenditCallbackToken ?? process.env.XENDIT_CALLBACK_TOKEN ?? "";
+  const dbSecret = (cfg?.xenditSecretKey ?? "").trim();
+  const envSecret = (process.env.XENDIT_SECRET_KEY ?? "").trim();
+  const secretKey = dbSecret || envSecret;
+
+  const dbToken = (cfg?.xenditCallbackToken ?? "").trim();
+  const envToken = (process.env.XENDIT_CALLBACK_TOKEN ?? "").trim();
+  const callbackToken = dbToken || envToken;
+
   return { secretKey, callbackToken };
 }
 
@@ -219,7 +225,7 @@ export function feeConfigForPayment(methodsJson: string | null | undefined, meth
 
 async function getXenditSecretKey() {
   const { secretKey } = await getXenditConfig();
-  if (!secretKey) throw new Error("Xendit belum dikonfigurasi");
+  if (!secretKey) throw new Error("Xendit Secret API Key belum dikonfigurasi. Silakan isi Xendit Secret Key di Menu Pengaturan Admin (Dashboard Admin > Settings).");
   return secretKey;
 }
 
@@ -388,6 +394,10 @@ export async function createXenditInvoiceByBookingCode(params: {
   }
   if (!res.ok || !data || typeof (data as any).invoice_url !== "string") {
     const msg = (data as any)?.message ?? "Gagal membuat invoice Xendit";
+    const lower = msg.toLowerCase();
+    if (lower.includes("api key provided is invalid") || lower.includes("authentication") || lower.includes("unauthorized") || lower.includes("invalid key")) {
+      throw new Error("Xendit Secret API Key tidak valid atau belum di-set. Silakan perbarui Xendit Secret Key di Menu Pengaturan Admin (Dashboard Admin > Settings > Payment Gateway).");
+    }
     throw new Error(msg);
   }
 

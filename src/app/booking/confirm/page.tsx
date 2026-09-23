@@ -114,7 +114,7 @@ export default function BookingConfirmPage() {
   }, [draft?.hold?.expiresAt]);
 
   useEffect(() => {
-    if (!draft) return;
+    if (!draft || submitting) return;
     if (!draft.kavlings.length) return;
     if (!draft.kavlingScope) return;
     const draft0 = draft;
@@ -142,7 +142,7 @@ export default function BookingConfirmPage() {
       return data;
     };
     const tick = async () => {
-      if (cancelled) return;
+      if (cancelled || submitting) return;
       if (inFlight) return;
       inFlight = true;
       try {
@@ -162,6 +162,7 @@ export default function BookingConfirmPage() {
       } catch {
         failCount += 1;
         if (failCount >= 2) {
+          cancelled = true;
           setError("Hold kavling sudah habis atau kavling sudah diambil. Silakan kembali ke halaman booking untuk pilih ulang kavling.");
           setDraft((s) => (s ? { ...s, hold: undefined } : s));
         }
