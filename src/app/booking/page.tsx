@@ -1093,24 +1093,33 @@ export default function PublicBookingPage() {
 
   const sidebarContent = (
     <div className="sticky top-6 space-y-6">
-      <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white shadow-xl shadow-[#2D3E10]/5 transition-all duration-700">
-        {/* Header - Minimalist */}
-        <div className="relative overflow-hidden bg-[#2D3E10] px-8 py-10">
-          <div className="relative z-10 flex flex-col gap-2">
-            <h3 className="text-2xl font-black tracking-tight text-white">Ringkasan <span className="font-serif italic font-light opacity-90">Pesanan</span></h3>
-            <p className="text-[10px] font-bold text-white/60 uppercase tracking-[0.3em]">Woodforest Jayagiri</p>
+      <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/5 transition-all duration-700 hover:shadow-primary/10">
+        {/* Header - Premium Nature Gradient */}
+        <div className="relative overflow-hidden bg-[#2D3E10] px-8 py-12">
+          <div className="relative z-10">
+            <h3 className="text-2xl font-bold tracking-tight text-white">Ringkasan <span className="italic font-serif opacity-80">Pesanan</span></h3>
+            <div className="mt-3 flex items-center gap-3">
+              <span className="h-[1px] w-8 bg-primary/40"></span>
+              <p className="text-[10px] font-bold text-white/50 uppercase tracking-[0.4em]">Exclusive Stay</p>
+            </div>
           </div>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-white/10 to-transparent rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+          
+          {/* Organic Background Pattern - More Subtle */}
+          <div className="absolute -right-10 -top-10 h-48 w-48 opacity-[0.07] rotate-12 pointer-events-none">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#ffffff" d="M40,-67.2C51.7,-60.7,60.9,-49.5,68.1,-37.1C75.3,-24.7,80.5,-11.1,79.1,2C77.7,15.1,69.7,27.7,60.3,38.5C50.9,49.3,40.1,58.3,27.7,64.3C15.3,70.3,1.3,73.3,-13.2,71.7C-27.7,70.1,-42.7,63.9,-54.6,53.8C-66.5,43.7,-75.3,29.7,-78.7,14.6C-82.1,-0.5,-80.1,-16.7,-73.4,-30.5C-66.7,-44.3,-55.3,-55.7,-42.2,-61.5C-29.1,-67.3,-14.5,-67.5,0.4,-68.2C15.3,-68.9,30.6,-70,40,-67.2Z" transform="translate(100 100)" />
+            </svg>
+          </div>
         </div>
         
-        <div className="p-8 space-y-10">
+        <div className="p-8 space-y-12">
           {/* Jadwal & Tamu */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E8E8E1]/60">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Rencana Kunjungan</span>
+          <div className="space-y-8">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Rencana Kunjungan</span>
               <button 
                 onClick={() => setCurrentStep(1)} 
-                className="group flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.2em] transition-colors hover:text-[#2D3E10]"
+                className="group flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest transition-all hover:text-[#2D3E10]"
               >
                 <span>Ubah</span>
                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F1F3EE] transition-colors group-hover:bg-primary group-hover:text-white">
@@ -1123,44 +1132,44 @@ export default function PublicBookingPage() {
             
             <div className="space-y-6">
               {/* Date */}
-              <div className="flex items-center justify-between group">
-                <div className="flex flex-col gap-1.5">
+              <div className="flex items-start gap-5 group">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:rotate-3 group-hover:scale-110">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col gap-1.5 py-0.5">
                   <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Tanggal Menginap</span>
-                  <span className="text-sm font-bold text-[#2D3E10]">
+                  <span className="text-sm font-bold text-[#2D3E10] leading-none tracking-tight">
                     {checkIn ? formatDateWIB(new Date(checkIn)) : "Pilih Tanggal"}
                     {checkOut && <span className="mx-2 text-[#2D3E10]/20">—</span>}
                     {checkOut ? formatDateWIB(new Date(checkOut)) : ""}
                   </span>
                 </div>
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
               </div>
 
               {/* Guests */}
-              <div className="flex items-center justify-between group">
-                <div className="flex flex-col gap-1.5">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jumlah Tamu</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-sm font-bold text-[#2D3E10]">{totalGuest} Orang</span>
-                    <span className="text-[10px] font-medium text-[#2D3E10]/40">({adultPax} Dws, {child5to10Pax + childUnder5Pax} Ank)</span>
-                  </div>
-                </div>
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              <div className="flex items-start gap-5 group">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:-rotate-3 group-hover:scale-110">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
+                <div className="flex flex-col gap-1.5 py-0.5">
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jumlah Tamu</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-[#2D3E10] tracking-tight">{totalGuest} Orang</span>
+                      <span className="text-[10px] font-medium text-primary/60 italic">({adultPax}D, {child5to10Pax + childUnder5Pax}A)</span>
+                    </div>
+                  </div>
               </div>
             </div>
           </div>
 
           {/* Unit Terpilih */}
-          <div className="space-y-6">
-            <div className="border-b border-[#E8E8E1]/60 pb-4">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Akomodasi</span>
+          <div className="space-y-8">
+            <div className="border-b border-[#E8E8E1] pb-4">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Akomodasi</span>
             </div>
             {selectedVisibleUnits.length > 0 ? (
               <div className="space-y-6">
@@ -1169,29 +1178,29 @@ export default function PublicBookingPage() {
                   return (
                     <div key={u.id} className="group flex justify-between items-start gap-4">
                       <div className="flex flex-col gap-2">
-                        <span className="text-sm font-bold text-[#2D3E10] group-hover:text-primary transition-colors">{u.name}</span>
+                        <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{u.name}</span>
                         <div className="flex items-center gap-2">
-                          <span className="rounded-lg bg-[#F1F3EE] px-2 py-0.5 text-[10px] font-bold text-[#2D3E10]/60 uppercase tracking-widest">
+                          <span className="rounded-full bg-[#F1F3EE] px-2.5 py-0.5 text-[9px] font-bold text-[#2D3E10]/60 uppercase tracking-wider">
                             {qty} Unit
                           </span>
                           {u.capacity > 0 && (
-                            <span className="text-[9px] font-bold text-[#2D3E10]/30 uppercase tracking-[0.2em]">
-                              Kap: {u.capacity * qty} Org
+                            <span className="text-[9px] font-medium text-primary/40 uppercase tracking-widest">
+                              Kap: {u.capacity * qty} Orang
                             </span>
                           )}
                         </div>
                       </div>
-                      <span className="text-sm font-black text-[#2D3E10]">{formatIDR(sumDailyPrice(u) * qty)}</span>
+                      <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(sumDailyPrice(u) * qty)}</span>
                     </div>
                   );
                 })}
 
                 {/* Kavling Selection Info */}
                 {kavlingSelected.length > 0 && (
-                  <div className="rounded-xl bg-[#FDFDFB] p-4 border border-[#E8E8E1]">
+                  <div className="rounded-2xl bg-[#F1F3EE]/50 p-4 border border-[#E8E8E1]/60">
                     <div className="flex flex-col gap-1">
-                      <span className="text-[9px] font-black text-[#2D3E10]/40 uppercase tracking-[0.2em]">Kavling Terpilih</span>
-                      <span className="text-xs font-black text-primary">
+                      <span className="text-[9px] font-black text-[#2D3E10]/40 uppercase tracking-widest">Kavling Terpilih</span>
+                      <span className="text-xs font-black text-primary tracking-tight">
                         {kavlingSelected.sort((a, b) => Number(a) - Number(b)).join(", ")}
                       </span>
                     </div>
@@ -1199,31 +1208,36 @@ export default function PublicBookingPage() {
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-10 text-center rounded-2xl border border-dashed border-[#E8E8E1] bg-[#FDFDFB]">
+              <div className="flex flex-col items-center justify-center py-10 text-center rounded-[2rem] border-2 border-dashed border-[#E8E8E1] bg-[#F1F3EE]/20">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#2D3E10]/20 shadow-sm border border-[#E8E8E1] mb-4">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                </div>
                 <p className="text-[10px] font-bold text-[#2D3E10]/30 uppercase tracking-[0.2em]">Belum Ada Pilihan</p>
-              </div>
-            )}
+                </div>
+              )}
           </div>
 
-          {/* Layanan Tambahan */}
+          {/* Layanan Tambahan (Manual + Auto) */}
           {addons.some(a => effectiveAddonQty[a.id] > 0) && (
-            <div className="space-y-6">
-              <div className="border-b border-[#E8E8E1]/60 pb-4">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Layanan Tambahan</span>
+            <div className="space-y-8">
+              <div className="border-b border-[#E8E8E1] pb-4">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Layanan Tambahan</span>
               </div>
-              <div className="space-y-5">
+              <div className="space-y-6">
                 {addons.filter(a => effectiveAddonQty[a.id] > 0).map(a => (
                   <div key={a.id} className="group flex justify-between items-start gap-4">
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-[#2D3E10]">{a.name}</span>
+                        <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{a.name}</span>
                         {autoAddonQty[a.id] > 0 && (
-                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[8px] font-black text-primary uppercase">Auto</span>
+                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[7px] font-black text-primary uppercase tracking-tighter">Auto</span>
                         )}
                       </div>
-                      <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.2em]">Qty: {effectiveAddonQty[a.id]}</span>
+                      <span className="text-[9px] font-bold text-[#2D3E10]/40 uppercase tracking-widest">Qty: {effectiveAddonQty[a.id]}</span>
                     </div>
-                    <span className="text-sm font-black text-[#2D3E10]">{formatIDR(a.price * effectiveAddonQty[a.id])}</span>
+                    <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(a.price * effectiveAddonQty[a.id])}</span>
                   </div>
                 ))}
               </div>
@@ -1231,28 +1245,35 @@ export default function PublicBookingPage() {
           )}
 
           {/* Rincian Biaya */}
-          <div className="space-y-5 pt-4 border-t border-[#E8E8E1]/60">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Rincian Biaya</span>
+          <div className="space-y-6 pt-4 border-t border-[#E8E8E1]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Rincian Biaya</span>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-medium text-[#2D3E10]/60">Subtotal Akomodasi</span>
+                <span className="text-xs font-medium text-[#2D3E10]/50">Subtotal Akomodasi</span>
                 <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(selectedVisibleUnits.reduce((acc, u) => acc + (sumDailyPrice(u) * (unitQty[u.id] || 0)), 0))}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-xs font-medium text-[#2D3E10]/60">Layanan Tambahan</span>
+                <span className="text-xs font-medium text-[#2D3E10]/50">Layanan Tambahan</span>
                 <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(addons.reduce((acc, a) => acc + (a.price * (effectiveAddonQty[a.id] || 0)), 0))}</span>
               </div>
             </div>
           </div>
 
           {/* Summary Footer */}
-          <div className="pt-2">
-            <div className="rounded-2xl bg-[#F1F3EE] p-8 text-center border border-[#E8E8E1]">
-              <div className="space-y-2">
-                <span className="text-[10px] font-black text-[#2D3E10]/40 uppercase tracking-[0.2em]">Estimasi Total Biaya</span>
+          <div className="pt-4">
+            <div className="relative overflow-hidden rounded-[2.5rem] bg-[#F1F3EE] p-10 space-y-6 group">
+              {/* Organic Accent in Footer - Very Subtle */}
+              <div className="absolute -left-6 -bottom-6 h-32 w-32 opacity-[0.05] -rotate-12 transition-transform duration-1000 group-hover:rotate-0 group-hover:scale-110">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#2D3E10" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
+                </svg>
+              </div>
+
+              <div className="relative z-10 space-y-3 text-center">
+                <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.4em]">Estimasi Total Biaya</span>
                 <div className="flex flex-col gap-1">
-                  <span className="text-2xl font-black text-[#2D3E10]">{formatIDR(estimatedAmount)}</span>
-                  <p className="text-[10px] font-medium text-[#2D3E10]/40">
+                  <span className="text-3xl font-black text-[#2D3E10] tracking-tighter tabular-nums">{formatIDR(estimatedAmount)}</span>
+                  <p className="text-[10px] font-medium text-primary/40 italic">
                     *Termasuk pajak & biaya layanan
                   </p>
                 </div>
@@ -1680,43 +1701,64 @@ export default function PublicBookingPage() {
           </>
         ) : (
           <div className="mt-8 space-y-8 pb-20 sm:mt-12 sm:space-y-12">
-            {/* Step Indicators - Modern & Clean Pill Navigation */}
-            <div className="mx-auto w-full max-w-3xl flex items-center justify-center">
-              <div className="inline-flex items-center gap-1 sm:gap-2 rounded-full border border-[#E8E8E1] bg-white p-1.5 shadow-sm">
+            {/* Step Indicators - Modern & Professional */}
+            <div className="mx-auto w-full max-w-7xl">
+              <div className="relative flex items-center justify-between gap-2 sm:gap-4">
                 {[1, 2, 3].map((step) => {
                   const isActive = currentStep === step;
                   const isCompleted = currentStep > step;
-                  const labels = ["Pengalaman", "Unit & Kavling", "Isi Identitas"];
+                  const labels = ["Pilih Kategori", "Pilih Unit", "Isi Identitas"];
                   
                   return (
-                    <button 
-                      key={step}
-                      type="button"
-                      onClick={() => {
-                        if (isCompleted || (step < currentStep)) setCurrentStep(step);
-                      }}
-                      disabled={!isCompleted && step > currentStep}
-                      className={`relative flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-bold transition-all duration-500 sm:px-6 sm:py-2.5 sm:text-sm ${
-                        isActive 
-                          ? "bg-[#2D3E10] text-white shadow-md shadow-[#2D3E10]/10" 
-                          : isCompleted 
-                            ? "text-[#2D3E10] hover:bg-[#F1F3EE]" 
-                            : "text-[#2D3E10]/30"
-                      }`}
-                    >
-                      <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[9px] sm:h-6 sm:w-6 sm:text-xs ${
-                        isActive ? "bg-white/20 text-white" : isCompleted ? "bg-[#2D3E10]/10" : "bg-[#F1F3EE]"
-                      }`}>
-                        {isCompleted ? (
-                          <svg className="h-2.5 w-2.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        ) : (
-                          step
+                    <div key={step} className="relative flex min-w-0 flex-1 flex-col items-center group">
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          if (isCompleted || (step < currentStep)) setCurrentStep(step);
+                        }}
+                        disabled={!isCompleted && step > currentStep}
+                        className="flex flex-col items-center gap-1.5 outline-none w-full sm:gap-2"
+                      >
+                        {/* Line connector */}
+                        {step < 3 && (
+                          <div className="absolute left-[calc(50%+16px)] right-[-calc(50%-16px)] top-4 h-[1.5px] bg-[#E8E8E1] sm:left-[calc(50%+18px)] sm:right-[-calc(50%-18px)] sm:top-5 sm:h-[2px]">
+                            <div
+                              className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)"
+                              style={{ width: isCompleted ? "100%" : "0%" }}
+                            />
+                          </div>
                         )}
-                      </span>
-                      <span className="tracking-wide">{labels[step-1]}</span>
-                    </button>
+
+                        <div className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-[0.8rem] border-[1.5px] transition-all duration-700 sm:h-10 sm:w-10 sm:rounded-2xl sm:border-2 ${
+                          isActive 
+                            ? "border-primary bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
+                            : isCompleted 
+                              ? "border-primary bg-primary/10 text-primary" 
+                              : "border-[#E8E8E1] bg-white text-[#2D3E10]/20"
+                        }`}>
+                          {isCompleted ? (
+                            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          ) : (
+                            <span className="text-[11px] font-black tracking-tight sm:text-sm">{step}</span>
+                          )}
+                        </div>
+                        
+                        <div className="flex flex-col items-center text-center">
+                          <span className={`text-[8px] font-black uppercase tracking-[0.15em] transition-colors duration-300 sm:text-[9px] ${
+                            isActive ? "text-primary" : isCompleted ? "text-[#2D3E10]" : "text-[#2D3E10]/20"
+                          }`}>
+                            Langkah {step}
+                          </span>
+                          <span className={`text-[10px] font-bold transition-colors duration-300 sm:text-xs ${
+                            isActive ? "text-[#2D3E10]" : isCompleted ? "text-[#2D3E10]/70" : "text-[#2D3E10]/20"
+                          } hidden sm:block`}>
+                            {labels[step-1]}
+                          </span>
+                        </div>
+                      </button>
+                    </div>
                   );
                 })}
               </div>
@@ -1728,24 +1770,23 @@ export default function PublicBookingPage() {
                 <div className="space-y-8">
                   {currentStep === 1 && (
                     <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                      <div className="mb-10 sm:mb-16 flex flex-col text-center">
-                        <span className="mx-auto inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 mb-4 sm:mb-6">
+                      <div className="mb-8 flex flex-col items-center text-center sm:mb-12">
+                        <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] mb-4 border border-[#E8E8E1] sm:px-5 sm:py-2 sm:text-[10px] sm:tracking-[0.3em] sm:mb-6">
                           Langkah 01
-                        </span>
-                        <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
-                          Pilih <span className="font-serif italic font-light opacity-90 text-primary">Pengalaman</span>
+                        </div>
+                        <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
+                          Pilih <span className="text-primary italic">Pengalaman</span> Anda
                         </h2>
-                        <p className="mx-auto mt-4 max-w-lg text-[13px] font-medium text-[#2D3E10]/50 sm:mt-5 sm:text-[15px]">
-                          Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri.
+                        <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium text-primary/60 italic sm:mt-4 sm:text-sm">
+                          "Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri."
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-10">
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
                         {categoryOptions.map((cat, idx) => {
                           const isGlamping = cat.toLowerCase().includes('glamp');
                           const isPaket = cat.toLowerCase().includes('paket');
                           const isPrivate = cat.toLowerCase().includes('private');
-                          const isSelected = filterCategory === cat;
                           
                           return (
                             <div
@@ -1755,45 +1796,55 @@ export default function PublicBookingPage() {
                               <button
                                 type="button"
                                 onClick={() => {
-                                  if (!isSelected || currentStep > 1) {
+                                  if (filterCategory !== cat || currentStep > 1) {
                                     resetSelection();
                                   }
                                   setFilterCategory(cat);
                                   setCurrentStep(2);
                                 }}
-                                className={`flex flex-col h-full overflow-hidden rounded-[2rem] border transition-all duration-500 text-left sm:rounded-[3rem] ${
-                                  isSelected 
-                                    ? "border-primary bg-white shadow-2xl shadow-primary/10 ring-4 ring-primary/5" 
-                                    : "border-[#E8E8E1] bg-white hover:border-primary/30 hover:shadow-xl hover:shadow-[#2D3E10]/5"
+                                className={`flex flex-col h-full overflow-hidden rounded-[1.2rem] border border-[#E8E8E1] transition-all duration-700 hover:shadow-xl hover:-translate-y-1 sm:rounded-[2.5rem] sm:hover:shadow-[0_32px_64px_-16px_rgba(45,62,16,0.1)] sm:hover:-translate-y-2 ${
+                                  filterCategory === cat 
+                                    ? "border-primary bg-white shadow-lg shadow-primary/5" 
+                                    : "bg-white hover:border-primary/40"
                                 }`}
                               >
-                                <div className="relative h-48 w-full overflow-hidden sm:h-64">
+                                <div className="relative h-40 w-full overflow-hidden sm:h-56">
                                   {packageConfigs[cat]?.imageUrl ? (
                                     <img 
                                       src={`${packageConfigs[cat].imageUrl}?t=${kavlingMapAssetVersion}`} 
                                       alt={cat} 
-                                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
                                     />
                                   ) : (
-                                    <div className="absolute inset-0 bg-[#F1F3EE]" />
+                                    <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-1000 group-hover:scale-110 ${
+                                      isGlamping ? "from-[#F1F3EE] to-[#E8E8E1]" : 
+                                      isPrivate ? "from-[#FDFDFB] to-[#F1F3EE]" : 
+                                      "from-[#E8E8E1] to-[#F1F3EE]"
+                                    }`} />
                                   )}
 
-                                  <div className={`absolute top-6 left-6 flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-500 ${
-                                    isSelected ? "bg-primary text-white" : "bg-white/95 backdrop-blur-sm text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
+                                  <div className={`absolute top-4 left-4 flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-700 sm:top-6 sm:left-6 sm:h-12 sm:w-12 sm:rounded-2xl ${
+                                    filterCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-white/90 backdrop-blur-md text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
                                   }`}>
                                     {isGlamping ? (
-                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" /></svg>
+                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" />
+                                      </svg>
                                     ) : isPrivate ? (
-                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                      </svg>
                                     ) : (
-                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                      </svg>
                                     )}
                                   </div>
                                 </div>
 
-                                <div className="flex flex-col flex-1 p-6 sm:p-10">
-                                  <h3 className="text-2xl font-black text-[#2D3E10] mb-3 sm:text-3xl">{cat}</h3>
-                                  <p className="text-[13px] font-medium leading-relaxed text-[#2D3E10]/50 mb-8 flex-1 sm:text-[15px]">
+                                <div className="flex flex-col flex-1 p-5 text-center sm:p-8 sm:text-left">
+                                  <h3 className="text-lg font-bold text-[#2D3E10] mb-2 group-hover:text-primary transition-colors sm:text-2xl sm:mb-3">{cat}</h3>
+                                  <p className="text-[12px] font-medium leading-relaxed text-primary/60 mb-6 flex-1 italic sm:text-sm sm:mb-8">
                                     {packageConfigs[cat]?.description || (
                                       cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap." : 
                                       cat === "Paket" ? "Pilihan paket lengkap untuk momen berharga bersama keluarga." :
@@ -1801,12 +1852,10 @@ export default function PublicBookingPage() {
                                     )}
                                   </p>
 
-                                  <div className="flex items-center justify-between pt-6 border-t border-[#E8E8E1]/60">
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40 group-hover:text-primary transition-colors">Eksplorasi Detail</span>
-                                    <div className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-500 group-hover:translate-x-2 ${
-                                      isSelected ? "bg-primary text-white" : "bg-[#F1F3EE] text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
-                                    }`}>
-                                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <div className="flex items-center justify-between pt-4 border-t border-[#E8E8E1] sm:pt-6">
+                                    <span className="text-[9px] font-bold uppercase tracking-widest text-[#2D3E10] sm:text-[10px]">Eksplorasi Detail</span>
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1 sm:h-10 sm:w-10">
+                                      <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                       </svg>
                                     </div>
@@ -1821,131 +1870,121 @@ export default function PublicBookingPage() {
                 )}
 
             {currentStep === 2 && (
-              <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                <div className="mb-6 sm:mb-12 flex flex-col items-center text-center">
-                  <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-3.5 py-1 sm:px-5 sm:py-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#2D3E10] mb-3 sm:mb-6 border border-[#E8E8E1]">
+              <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
+                <div className="mb-10 sm:mb-16 flex flex-col text-center">
+                  <span className="mx-auto inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 mb-4 sm:mb-6">
                     Langkah 02
-                  </div>
-                  <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
-                    Pilihan <span className="text-primary italic">Unit & Kavling</span>
+                  </span>
+                  <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
+                    Pilihan <span className="font-serif italic font-light opacity-90 text-primary">Unit & Kavling</span>
                   </h2>
-                  <p className="mx-auto mt-2 sm:mt-4 max-w-xl text-xs sm:text-sm font-medium text-primary/60 italic">
-                    "Tentukan unit dan lokasi kavling favorit Anda untuk pengalaman menginap yang tak terlupakan."
+                  <p className="mx-auto mt-4 max-w-lg text-[13px] font-medium text-[#2D3E10]/50 sm:mt-5 sm:text-[15px]">
+                    Tentukan unit dan lokasi kavling favorit Anda untuk pengalaman menginap yang tak terlupakan.
                   </p>
                 </div>
 
-                  <div className="mx-auto w-full space-y-6 sm:space-y-12">
-                    {/* Date Selection */}
-                    <div className="space-y-3 sm:space-y-6 relative group">
-                        <div className="flex items-center justify-start gap-2.5 sm:gap-4 relative z-10">
-                          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
-                            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
-                        </div>
+                <div className="mx-auto w-full space-y-10 sm:space-y-16">
+                  {/* Date Selection */}
+                  <div className="space-y-5">
+                    <div className="flex items-center gap-3 px-1">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
+                    </div>
 
-                        <div className="overflow-hidden rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white p-3.5 sm:p-10 shadow-lg sm:shadow-xl shadow-[#2D3E10]/5 relative group/card">
-                          <div className="grid grid-cols-2 gap-2.5 sm:gap-8 relative z-10">
-                            <div className="group rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
-                              <div className="flex items-center gap-1.5 ml-0.5">
-                                <svg className="h-3 w-3 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-[0.2em] text-[#2D3E10]/40">Check-in</label>
-                              </div>
-                              <input
-                                type="date"
-                                value={checkIn}
-                                onChange={(e) => {
-                                  if (checkIn !== e.target.value) {
-                                    resetSelection();
-                                  }
-                                  setCheckIn(e.target.value);
-                                }}
-                                className="mt-1 sm:mt-2 w-full bg-transparent text-xs sm:text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20"
-                                required
-                              />
-                            </div>
-                            <div className="group rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 transition-all hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5">
-                              <div className="flex items-center gap-1.5 ml-0.5">
-                                <svg className="h-3 w-3 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <label className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-[0.2em] text-[#2D3E10]/40">Check-out</label>
-                              </div>
-                              <input
-                                type="date"
-                                value={checkOut}
-                                onChange={(e) => {
-                                  if (checkOut !== e.target.value) {
-                                    resetSelection();
-                                  }
-                                  setCheckOut(e.target.value);
-                                }}
-                                className="mt-1 sm:mt-2 w-full bg-transparent text-xs sm:text-base font-bold text-[#2D3E10] outline-none placeholder:text-[#2D3E10]/20"
-                                required
-                              />
-                            </div>
+                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:rounded-[2.5rem] sm:p-10 shadow-xl shadow-[#2D3E10]/5">
+                      <div className="grid grid-cols-2 gap-4 sm:gap-8">
+                        <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                          <div className="mb-2 flex items-center gap-2">
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Check-in</span>
                           </div>
+                          <input
+                            type="date"
+                            value={checkIn}
+                            onChange={(e) => {
+                              if (checkIn !== e.target.value) {
+                                resetSelection();
+                              }
+                              setCheckIn(e.target.value);
+                            }}
+                            className="w-full bg-transparent text-sm font-bold text-[#2D3E10] outline-none sm:text-lg"
+                            required
+                          />
+                        </div>
+                        <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                          <div className="mb-2 flex items-center gap-2">
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Check-out</span>
+                          </div>
+                          <input
+                            type="date"
+                            value={checkOut}
+                            onChange={(e) => {
+                              if (checkOut !== e.target.value) {
+                                resetSelection();
+                              }
+                              setCheckOut(e.target.value);
+                            }}
+                            className="w-full bg-transparent text-sm font-bold text-[#2D3E10] outline-none sm:text-lg"
+                            required
+                          />
+                        </div>
+                      </div>
                         </div>
                     </div>
 
                     {/* Konfigurasi Tamu Section */}
                     <div className="space-y-3 sm:space-y-6 relative group">
                         <div className="flex items-center justify-start gap-2.5 sm:gap-4 relative z-10">
-                          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#F1F3EE] text-[#2D3E10] shadow-sm">
-                            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                          </div>
-                          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
-                        </div>
-
-                        <div className="overflow-hidden rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white p-3.5 sm:p-10 shadow-lg sm:shadow-xl shadow-[#2D3E10]/5 relative group/card">
-                          <div className="grid grid-cols-1 gap-2.5 sm:gap-6 sm:grid-cols-3 relative z-10">
-                            <div className="flex items-center justify-between rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                              <div className="space-y-0.5 sm:space-y-1">
-                                <p className="text-sm sm:text-base font-bold text-[#2D3E10]">Dewasa</p>
-                                <p className="text-[9px] sm:text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 10+ tahun</p>
-                              </div>
-                              <QuantityStepper value={adultPax} min={1} size="sm" ariaLabel="Dewasa" onChange={setAdultPax} />
-                            </div>
-                            <div className="flex items-center justify-between rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                              <div className="space-y-0.5 sm:space-y-1">
-                                <p className="text-sm sm:text-base font-bold text-[#2D3E10]">Anak</p>
-                                <p className="text-[9px] sm:text-[10px] font-medium text-primary/60 italic tracking-wide">Usia 5-10 tahun</p>
-                              </div>
-                              <QuantityStepper value={child5to10Pax} min={0} size="sm" ariaLabel="Anak" onChange={setChild5to10Pax} />
-                            </div>
-                            <div className="flex items-center justify-between rounded-xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3 sm:p-6 shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
-                              <div className="space-y-0.5 sm:space-y-1">
-                                <p className="text-sm sm:text-base font-bold text-[#2D3E10]">Balita</p>
-                                <p className="text-[9px] sm:text-[10px] font-medium text-primary/60 italic tracking-wide">Usia &lt; 5 tahun</p>
-                              </div>
-                              <QuantityStepper value={childUnder5Pax} min={0} size="sm" ariaLabel="Balita" onChange={setChildUnder5Pax} />
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-
-                    <div className="mb-6 sm:mb-8 flex flex-col items-center justify-between gap-3 sm:gap-5 rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-[#F1F3EE]/30 p-3.5 sm:p-6 backdrop-blur-xl shadow-sm sm:flex-row relative group/filter overflow-hidden">
-                      {/* Subtle organic decoration for filter bar */}
-                      <div className="absolute -right-12 -bottom-12 h-40 w-40 opacity-[0.02] transition-transform duration-1000 group-hover/filter:scale-125 group-hover/filter:rotate-12 pointer-events-none">
-                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                          <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
+                  {/* Guest Configuration */}
+                  <div className="space-y-5 pt-4">
+                    <div className="flex items-center gap-3 px-1">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                       </div>
+                      <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
+                    </div>
 
+                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:rounded-[2.5rem] sm:p-10 shadow-xl shadow-[#2D3E10]/5">
+                      <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-3">
+                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                          <div className="space-y-1">
+                            <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Dewasa</p>
+                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/40 uppercase">Usia 10+ thn</p>
+                          </div>
+                          <QuantityStepper value={adultPax} min={1} size="sm" ariaLabel="Dewasa" onChange={setAdultPax} />
+                        </div>
+                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                          <div className="space-y-1">
+                            <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Anak</p>
+                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/40 uppercase">Usia 5-10 thn</p>
+                          </div>
+                          <QuantityStepper value={child5to10Pax} min={0} size="sm" ariaLabel="Anak" onChange={setChild5to10Pax} />
+                        </div>
+                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                          <div className="space-y-1">
+                            <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Balita</p>
+                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/40 uppercase">Usia &lt; 5 thn</p>
+                          </div>
+                          <QuantityStepper value={childUnder5Pax} min={0} size="sm" ariaLabel="Balita" onChange={setChildUnder5Pax} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                    <div className="mb-6 sm:mb-8 flex flex-col items-center justify-between gap-3 sm:gap-5 rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white p-3.5 sm:p-6 shadow-sm sm:flex-row relative group/filter overflow-hidden">
                       <div className="flex flex-col items-center gap-2 sm:gap-4 text-center sm:flex-row sm:text-left relative z-10">
-                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#F1F3EE] text-primary transition-transform group-hover/filter:rotate-6">
+                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-primary/10 text-primary transition-transform group-hover/filter:rotate-6">
                           <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-primary/40">Kategori</p>
+                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Kategori</p>
                           <p className="text-xs sm:text-sm font-bold text-[#2D3E10]">{filterCategory || "Semua Paket"}</p>
                         </div>
                       </div>
@@ -1953,13 +1992,13 @@ export default function PublicBookingPage() {
                       <div className="h-8 w-px bg-[#E8E8E1] hidden sm:block relative z-10" />
 
                       <div className="flex flex-col items-center gap-2 sm:gap-4 text-center sm:flex-row sm:text-left relative z-10">
-                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#F1F3EE] text-primary transition-transform group-hover/filter:-rotate-6">
+                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-primary/10 text-primary transition-transform group-hover/filter:-rotate-6">
                           <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-primary/40">Jadwal</p>
+                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jadwal</p>
                           <p className="text-xs sm:text-sm font-bold text-[#2D3E10]">{checkIn} - {checkOut}</p>
                         </div>
                       </div>
@@ -1970,7 +2009,7 @@ export default function PublicBookingPage() {
                         <select
                           value={filterType}
                           onChange={(e) => setFilterType(e.target.value)}
-                          className="h-11 sm:h-14 w-full appearance-none rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-white pl-4 sm:pl-5 pr-10 sm:pr-12 text-xs sm:text-sm font-bold text-[#2D3E10] outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-48"
+                          className="h-11 sm:h-14 w-full appearance-none rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] pl-4 sm:pl-5 pr-10 sm:pr-12 text-xs sm:text-sm font-bold text-[#2D3E10] outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-48"
                         >
                           <option value="">Semua Tipe</option>
                           {typeOptions.map((t) => (
@@ -1984,7 +2023,7 @@ export default function PublicBookingPage() {
                     </div>
                 
                 {/* Unit Grid */}
-                <div className="grid grid-cols-1 gap-6">
+                <div className="grid grid-cols-1 gap-8">
                   {pagedVisibleUnits.map((u, idx) => {
                     const inc = parseIncludesJson(u.includesJson);
                     const images = parseImagesJson(u.imagesJson);
@@ -1994,44 +2033,40 @@ export default function PublicBookingPage() {
                     return (
                       <div 
                         key={u.id} 
-                        className={`group flex flex-col overflow-hidden rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white transition-all duration-500 ${
+                        className={`group flex flex-col overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border bg-white transition-all duration-500 ${
                           isSelected 
-                            ? "ring-2 ring-primary border-transparent shadow-xl shadow-primary/5" 
-                            : "hover:border-primary/40 hover:shadow-xl"
+                            ? "border-primary shadow-2xl shadow-primary/10 ring-4 ring-primary/5" 
+                            : "border-[#E8E8E1] hover:border-primary/40 hover:shadow-xl hover:shadow-[#2D3E10]/5"
                         }`}
                       >
                         <div className="flex flex-col lg:flex-row lg:items-stretch">
                           {/* Image Section */}
-                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-80 overflow-hidden lg:shrink-0">
-                            <ImageCarousel images={images} className="h-full rounded-none border-none" />
-                            {u.available <= 0 && (
-                              <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
-                                <span className="rounded-full bg-destructive/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-destructive">Penuh</span>
-                              </div>
-                            )}
-                            <div className="absolute left-3 top-3 sm:left-6 sm:top-6">
-                              <div className="rounded-lg sm:rounded-xl bg-white/90 px-2.5 py-1 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#2D3E10] backdrop-blur-md shadow-sm">
-                                {u.type}
+                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-[400px] overflow-hidden lg:shrink-0 p-3 sm:p-4 pb-0 lg:pr-0">
+                            <div className="w-full h-full rounded-[1rem] sm:rounded-[2rem] overflow-hidden relative">
+                              <ImageCarousel images={images} className="h-full w-full rounded-none border-none" />
+                              {u.available <= 0 && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
+                                  <span className="rounded-full bg-destructive/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-destructive">Penuh</span>
+                                </div>
+                              )}
+                              <div className="absolute left-4 top-4 sm:left-6 sm:top-6">
+                                <div className="rounded-full bg-white/95 px-3 py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10] backdrop-blur-md shadow-sm">
+                                  {u.type}
+                                </div>
                               </div>
                             </div>
                           </div>
                           
                           {/* Content Section */}
-                          <div className="flex flex-1 flex-col p-3.5 sm:p-6 lg:p-10 relative">
-                            {/* Organic Decoration for Unit Card */}
-                            <div className="absolute -right-12 -bottom-12 h-48 w-48 opacity-[0.02] transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-12 pointer-events-none">
-                              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-                              </svg>
-                            </div>
+                          <div className="flex flex-1 flex-col p-5 sm:p-8 lg:p-10 relative">
                             
-                            <div className="flex flex-row items-center justify-between gap-3.5 w-full relative z-10">
-                              <div className="flex flex-col items-start text-left space-y-1">
-                                <h3 className="text-base sm:text-xl font-black leading-tight text-[#2D3E10] transition-all duration-300 group-hover/title:translate-x-1 flex items-center gap-2">
+                            <div className="flex flex-row items-center justify-between gap-3.5 w-full relative z-10 mb-4">
+                              <div className="flex flex-col items-start text-left space-y-2">
+                                <h3 className="text-xl sm:text-2xl font-black leading-tight text-[#2D3E10] transition-colors group-hover/title:text-primary">
                                   {u.name}
                                 </h3>
                                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-3">
-                                  <span className="flex items-center rounded-md bg-[#2D3E10]/5 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-[#2D3E10]/70">
+                                  <span className="flex items-center rounded-lg bg-[#F1F3EE] px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">
                                     <svg className="mr-1 h-3 w-3 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
@@ -2101,22 +2136,15 @@ export default function PublicBookingPage() {
                 </div>
 
               {visibleUnits.length > shownUnitBaseCount && (
-                <div className="flex justify-center pt-8">
+                <div className="flex justify-center pt-10">
                   <button
                     type="button"
                     onClick={() => setUnitPage((p) => p + 1)}
-                    className="group relative flex min-h-[3.75rem] items-center gap-4 rounded-[2rem] border border-[#E8E8E1] bg-white px-12 py-4 text-[13px] font-bold uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98] shadow-sm hover:shadow-xl hover:shadow-[#2D3E10]/5 overflow-hidden"
+                    className="group relative flex items-center gap-3 rounded-full border border-[#E8E8E1] bg-white px-8 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-[#2D3E10] transition-all duration-300 hover:border-[#2D3E10] hover:bg-[#2D3E10] hover:text-white hover:shadow-lg active:scale-95"
                   >
-                    {/* Subtle leaf icon for the button */}
-                    <div className="absolute -left-4 -top-4 h-12 w-12 opacity-0 transition-all duration-700 group-hover:opacity-10 group-hover:scale-110 group-hover:rotate-12">
-                      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-                      </svg>
-                    </div>
-
-                    <span className="relative z-10">Lihat Lebih Banyak Unit</span>
-                    <svg className="relative z-10 h-4 w-4 text-primary transition-transform duration-700 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                    <span>Muat Lebih Banyak</span>
+                    <svg className="h-4 w-4 transition-transform duration-500 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                 </div>
@@ -2171,7 +2199,7 @@ export default function PublicBookingPage() {
                   <div className="p-8">
                     <div className="mb-12 flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
                       <div className="flex-1 space-y-6">
-                        <div className="rounded-[2rem] bg-[#F1F3EE]/40 p-6 border border-[#E8E8E1]">
+                        <div className="rounded-[1.5rem] bg-[#F1F3EE]/40 p-6 border border-[#E8E8E1]">
                           {kavlingAmbiguous ? (
                             <div className="space-y-6">
                               {combinedAll ? (
@@ -2189,7 +2217,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("mandiri")}
-                                        className={`group relative flex min-h-[3.25rem] items-center justify-center overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "mandiri" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative flex items-center justify-center rounded-xl px-5 py-3 text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${kavlingScopePick === "mandiri" ? "bg-[#2D3E10] text-white shadow-lg shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-[#2D3E10] hover:text-[#2D3E10]"}`}
                                       >
                                         <span className="relative z-10">Camping Mandiri</span>
                                       </button>
@@ -2198,7 +2226,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("paket")}
-                                        className={`group relative flex min-h-[3.25rem] items-center justify-center overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "paket" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative flex items-center justify-center rounded-xl px-5 py-3 text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${kavlingScopePick === "paket" ? "bg-[#2D3E10] text-white shadow-lg shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-[#2D3E10] hover:text-[#2D3E10]"}`}
                                       >
                                         <span className="relative z-10">Paket</span>
                                       </button>
@@ -2207,7 +2235,7 @@ export default function PublicBookingPage() {
                                       <button
                                         type="button"
                                         onClick={() => setKavlingScopePick("private")}
-                                        className={`group relative flex min-h-[3.25rem] items-center justify-center overflow-hidden rounded-xl px-6 py-4.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-500 ${kavlingScopePick === "private" ? "bg-[#2D3E10] text-white shadow-xl shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-primary/40 hover:text-primary"}`}
+                                        className={`group relative flex items-center justify-center rounded-xl px-5 py-3 text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${kavlingScopePick === "private" ? "bg-[#2D3E10] text-white shadow-lg shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-[#2D3E10] hover:text-[#2D3E10]"}`}
                                       >
                                         <span className="relative z-10">Paket Private</span>
                                       </button>
@@ -2222,31 +2250,21 @@ export default function PublicBookingPage() {
                         </div>
                         {hold?.expiresAt && holdLeftLabel && (
                           <div className="animate-in fade-in slide-in-from-top-4 duration-700">
-                            <div className="relative overflow-hidden rounded-3xl border border-primary/10 bg-[#F1F3EE]/50 p-6 shadow-xl shadow-primary/5 backdrop-blur-sm group/timer">
-                              {/* Organic decorative background element */}
-                              <div className="absolute -right-8 -top-8 h-32 w-32 opacity-[0.03] transition-transform duration-1000 group-hover/timer:scale-125 group-hover/timer:rotate-12">
-                                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-                                </svg>
-                              </div>
-                              
-                              <div className="flex items-center gap-5 relative z-10">
-                                <div className="relative">
-                                  <div className="absolute inset-0 rounded-xl bg-primary/20 animate-ping" />
-                                  <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-primary/10">
-                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                  </div>
+                            <div className="rounded-[1.5rem] border border-primary/20 bg-primary/5 p-5 flex items-center gap-4">
+                              <div className="relative">
+                                <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
+                                <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-sm">
+                                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
                                 </div>
-                                <div className="space-y-0.5">
-                                  <div className="flex items-center gap-2">
-                                    <span className="h-1 w-1 rounded-full bg-primary" />
-                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">Waktu Hold Kavling</span>
-                                  </div>
-                                  <div className="text-sm font-bold tracking-tight text-[#2D3E10]">
-                                    Sesi pemilihan berakhir dalam <span className="text-primary italic underline decoration-primary/20 underline-offset-4 decoration-2">{holdLeftLabel}</span>
-                                  </div>
+                              </div>
+                              <div className="space-y-0.5">
+                                <div className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">
+                                  Sisa Waktu Hold Kavling
+                                </div>
+                                <div className="text-sm font-bold tracking-tight text-[#2D3E10]">
+                                  Sesi berakhir dalam <span className="text-primary font-black">{holdLeftLabel}</span>
                                 </div>
                               </div>
                             </div>
@@ -2256,19 +2274,18 @@ export default function PublicBookingPage() {
                       <button
                         type="button"
                         onClick={() => setKavlingMapOpen(true)}
-                        className="group relative flex min-h-[3.75rem] shrink-0 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-95 lg:w-auto overflow-hidden"
+                        className="group relative flex shrink-0 items-center justify-center rounded-full border border-[#E8E8E1] bg-white px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:border-[#2D3E10] hover:bg-[#2D3E10] hover:text-white active:scale-95 lg:w-auto overflow-hidden"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                        <svg className="relative z-10 mr-3 h-5 w-5 text-primary transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        <svg className="mr-3 h-4 w-4 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                         </svg>
-                        <span className="relative z-10">Buka Peta Interaktif</span>
+                        <span>Buka Peta Interaktif</span>
                       </button>
                     </div>
 
                     <div className="flex flex-col gap-10 lg:flex-row">
                       {/* Map Preview */}
-                      <div className="sticky top-0 z-30 shrink-0 bg-white/95 pb-6 pt-4 backdrop-blur-md lg:static lg:w-1/3 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+                      <div className="sticky top-4 z-30 shrink-0 bg-white/95 pb-4 pt-2 backdrop-blur-md lg:static lg:w-1/3 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
                         <div className="mb-3 flex items-center justify-between lg:hidden">
                           <div className="flex items-center gap-2">
                             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
@@ -2282,25 +2299,25 @@ export default function PublicBookingPage() {
                           className="group relative block aspect-[16/10] w-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 lg:aspect-[4/3]"
                         >
                           <img
-                            src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`}
+                            src={`/kavling/site-map.png?t=${kavlingMapAssetVersion}`}
                             alt="Site Map Kavling"
                             className="h-full w-full object-contain cursor-zoom-in transition-all duration-1000 group-hover:scale-110"
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-black/0 backdrop-blur-0 transition-all duration-700 group-hover:bg-[#2D3E10]/10 group-hover:backdrop-blur-[2px]">
                             <div className="flex translate-y-6 flex-col items-center gap-3 opacity-0 transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100">
-                              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-[#2D3E10] shadow-2xl">
-                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#2D3E10] shadow-2xl">
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                                 </svg>
                               </div>
-                              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white drop-shadow-lg">Zoom Peta</span>
+                              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-white drop-shadow-lg">Zoom Peta</span>
                             </div>
                           </div>
                         </button>
                       </div>
 
                       {/* Kavling Grid */}
-                      <div className="w-full min-w-0 flex-1 max-h-[60vh] overflow-y-auto overscroll-contain pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
+                      <div className="w-full min-w-0 flex-1 pb-28 lg:pb-0 pr-1 lg:pr-0">
                         {/* Block Filter Toolbar */}
                         {availableBlocks.length > 1 && (
                           <div className="mb-5 space-y-2.5">
@@ -2668,89 +2685,84 @@ export default function PublicBookingPage() {
                 }}
                 className="relative z-10"
               >
-                <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
-                  <div className="mb-10 flex flex-col items-center text-center sm:items-start sm:text-left">
-                    <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-primary mb-4 border border-primary/10">
-                      Konfirmasi Akhir
-                    </div>
-                    <h2 className="text-2xl font-black tracking-tight text-[#2D3E10] sm:text-4xl">
-                      Lengkapi <span className="italic text-primary">Identitas</span>
+                <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
+                  <div className="mb-10 sm:mb-16 flex flex-col text-center">
+                    <span className="mx-auto inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 mb-4 sm:mb-6">
+                      Langkah 03
+                    </span>
+                    <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
+                      Lengkapi <span className="font-serif italic font-light opacity-90 text-primary">Identitas</span>
                     </h2>
-                    <p className="mt-3 text-sm font-medium text-[#2D3E10]/50 max-w-md leading-relaxed">
+                    <p className="mx-auto mt-4 max-w-lg text-[13px] font-medium text-[#2D3E10]/50 sm:mt-5 sm:text-[15px]">
                       Lengkapi data diri Anda untuk penyelesaian pesanan dan pengiriman invoice.
                     </p>
                   </div>
 
-                  <div className="space-y-6 sm:space-y-8">
+                  <div className="space-y-6 sm:space-y-10">
                     {/* Informasi Kontak */}
                     <div className="grid grid-cols-1 gap-5">
-                      <div className="group rounded-[1.5rem] border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:rounded-[2rem] sm:p-8">
+                      <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:rounded-[2.5rem] sm:p-10 shadow-xl shadow-[#2D3E10]/5">
                         <div className="mb-6 flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                           </div>
-                          <h3 className="text-lg font-black tracking-tight text-[#2D3E10]">Data Personal</h3>
+                          <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Data Personal</h3>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-6">
-                          <div className="relative space-y-1.5">
-                            <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Nama Lengkap</label>
+                        <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                          <div className="relative space-y-2">
+                            <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Nama Lengkap</label>
                             <div className="relative group/input">
                               <input 
                                 value={name} 
                                 onChange={(e) => setName(e.target.value)} 
-                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20" 
+                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 sm:text-base sm:rounded-3xl" 
                                 placeholder="Sesuai Identitas (KTP/Passport)" 
                                 required 
                               />
-                              <div className="absolute right-5 top-1/2 -translate-y-1/2 text-primary/20 opacity-0 transition-opacity group-focus-within/input:opacity-100">
-                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                                </svg>
-                              </div>
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <div className="relative space-y-1.5">
-                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">WhatsApp</label>
+                          <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2">
+                            <div className="relative space-y-2">
+                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">WhatsApp</label>
                               <div className="relative flex items-center group/input">
-                                <div className="absolute left-5 text-sm font-black text-primary">
+                                <div className="absolute left-5 text-sm font-black text-primary sm:text-base">
                                   +62
                                 </div>
                                 <input 
                                   value={phone} 
                                   onChange={(e) => setPhone(e.target.value)} 
-                                  className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] py-4 pl-14 pr-5 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20" 
+                                  className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] py-4 pl-14 pr-5 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 sm:text-base sm:rounded-3xl" 
                                   placeholder="8123..." 
                                   required 
                                 />
                               </div>
                             </div>
-                            <div className="relative space-y-1.5">
-                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Email</label>
+                            <div className="relative space-y-2">
+                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Email</label>
                               <input 
                                 type="email" 
                                 value={email} 
                                 onChange={(e) => setEmail(e.target.value)} 
-                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20" 
+                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 sm:text-base sm:rounded-3xl" 
                                 placeholder="nama@email.com" 
                                 required 
                               />
                             </div>
                           </div>
 
-                          <div className="relative space-y-1.5">
+                          <div className="relative space-y-2">
                             <div className="flex items-center justify-between px-1">
-                              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Catatan Khusus</label>
-                              <span className="text-[9px] font-bold text-primary/40 uppercase">Opsional</span>
+                              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Catatan Khusus</label>
+                              <span className="text-[9px] font-bold text-primary/40 uppercase tracking-[0.1em]">Opsional</span>
                             </div>
                             <textarea 
                               value={specialRequest} 
                               onChange={(e) => setSpecialRequest(e.target.value)} 
-                              className="h-32 w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 text-sm font-medium text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 resize-none leading-relaxed" 
+                              className="h-32 w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 text-sm font-medium text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 resize-none leading-relaxed sm:text-base sm:rounded-3xl" 
                               placeholder="Contoh: Request lokasi dekat parkir, alergi makanan, dll." 
                             />
                           </div>
@@ -2758,7 +2770,7 @@ export default function PublicBookingPage() {
                       </div>
 
                       {/* Summary Minimalist for Mobile */}
-                      <div className="rounded-[1.5rem] border border-[#E8E8E1] bg-[#F1F3EE]/30 p-6 sm:hidden">
+                      <div className="rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:hidden shadow-xl shadow-[#2D3E10]/5">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                           <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Ringkasan Reservasi</h4>
@@ -2819,12 +2831,12 @@ export default function PublicBookingPage() {
 
 {/* Sticky Navigation Bar for Step 2 & 3 - Compact side-by-side layout on mobile */}
 {currentStep === 2 && (
-  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 pb-4 backdrop-blur-xl sm:hidden shadow-2xl">
-    <div className="mx-auto flex max-w-xl flex-row items-center gap-2.5">
+  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 pb-4 backdrop-blur-xl sm:hidden shadow-[0_-10px_40px_rgba(45,62,16,0.05)]">
+    <div className="mx-auto flex max-w-xl flex-row items-center gap-2">
       <button
         type="button"
         onClick={() => setCurrentStep(1)}
-        className="group flex flex-1 min-h-[3rem] items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[#2D3E10] active:scale-[0.98]"
+        className="group flex flex-1 min-h-[3rem] items-center justify-center rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#2D3E10] active:scale-[0.98] transition-all hover:bg-[#F1F3EE]"
       >
         Kembali
       </button>
@@ -2832,12 +2844,11 @@ export default function PublicBookingPage() {
         type="button"
         onClick={() => setCurrentStep(3)}
         disabled={selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings) || guestOverCapacity}
-        className="group relative flex flex-[2.5] min-h-[3rem] items-center justify-center overflow-hidden rounded-xl bg-[#2D3E10] px-4 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-md active:scale-[0.98] disabled:opacity-30 disabled:shadow-none"
+        className="group relative flex flex-[2.5] min-h-[3rem] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-white shadow-md active:scale-[0.98] disabled:opacity-30 disabled:shadow-none transition-all"
       >
-        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
         <div className="relative z-10 flex items-center gap-2">
           <span>Lanjut Isi Identitas</span>
-          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
         </div>
@@ -2847,12 +2858,12 @@ export default function PublicBookingPage() {
 )}
 
 {currentStep === 3 && (
-  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 pb-4 backdrop-blur-xl sm:hidden shadow-2xl">
-    <div className="mx-auto flex max-w-xl flex-row items-center gap-2.5">
+  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 pb-4 backdrop-blur-xl sm:hidden shadow-[0_-10px_40px_rgba(45,62,16,0.05)]">
+    <div className="mx-auto flex max-w-xl flex-row items-center gap-2">
       <button
         type="button"
         onClick={() => setCurrentStep(2)}
-        className="group flex flex-1 min-h-[3rem] items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[#2D3E10] active:scale-[0.98]"
+        className="group flex flex-1 min-h-[3rem] items-center justify-center rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#2D3E10] active:scale-[0.98] transition-all hover:bg-[#F1F3EE]"
       >
         Kembali
       </button>
@@ -2860,11 +2871,10 @@ export default function PublicBookingPage() {
         type="submit"
         form="booking-form"
         disabled={submitting || loading || !name || !phone || !email}
-        className="group relative flex flex-[2.5] min-h-[3rem] items-center justify-center overflow-hidden rounded-xl bg-[#2D3E10] px-4 py-2 text-[11px] font-black uppercase tracking-wider text-white shadow-md active:scale-[0.98] disabled:opacity-30 disabled:shadow-none"
+        className="group relative flex flex-[2.5] min-h-[3rem] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-white shadow-md active:scale-[0.98] disabled:opacity-30 disabled:shadow-none transition-all"
       >
-        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
         <span className="relative z-10">{submitting || loading ? "Memproses..." : "Konfirmasi Booking"}</span>
-        <svg className="relative z-10 ml-2 h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="relative z-10 ml-2 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
         </svg>
       </button>
@@ -2878,14 +2888,13 @@ export default function PublicBookingPage() {
     <div className="grid grid-cols-1 lg:grid-cols-3">
       <div className="lg:col-span-2">
         {currentStep === 2 && (
-          <div className="mt-12 flex flex-col sm:flex-row gap-4">
+          <div className="mt-16 flex flex-col sm:flex-row gap-5">
             <button
               type="button"
               onClick={() => setCurrentStep(3)}
               disabled={selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings) || guestOverCapacity}
-              className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-10 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 sm:order-2"
+              className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-[2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 disabled:hover:translate-y-0 sm:order-2"
             >
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
               <div className="relative z-10 flex items-center gap-3">
                 <span>Lanjut Isi Identitas</span>
                 <svg className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2896,22 +2905,21 @@ export default function PublicBookingPage() {
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1"
+              className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-[2rem] border border-[#E8E8E1] bg-[#FDFDFB] px-8 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1"
             >
               Kembali
             </button>
           </div>
         )}
         {currentStep === 3 && (
-          <div className="mt-12 flex flex-col sm:flex-row gap-4">
-            <button type="submit" form="booking-form" disabled={submitting || loading || !name || !phone || !email} className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-10 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 sm:order-2">
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+          <div className="mt-16 flex flex-col sm:flex-row gap-5">
+            <button type="submit" form="booking-form" disabled={submitting || loading || !name || !phone || !email} className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-[2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 disabled:hover:translate-y-0 sm:order-2">
               <span className="relative z-10">{submitting || loading ? "Memproses..." : "Konfirmasi Booking"}</span>
               <svg className="relative z-10 ml-3 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </button>
-            <button type="button" onClick={() => setCurrentStep(2)} className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1">
+            <button type="button" onClick={() => setCurrentStep(2)} className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-[2rem] border border-[#E8E8E1] bg-[#FDFDFB] px-8 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1">
               Kembali
             </button>
           </div>
