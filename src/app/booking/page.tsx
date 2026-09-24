@@ -2349,7 +2349,7 @@ export default function PublicBookingPage() {
                       </div>
 
                       {/* Kavling Grid */}
-                      <div className="w-full min-w-0 flex-1 max-h-[60vh] overflow-y-auto overscroll-contain pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
+                      <div className="w-full min-w-0 flex-1 pb-28 sm:pb-0 lg:max-h-none lg:overflow-visible lg:pr-0">
                         {/* Block Filter Toolbar */}
                         {availableBlocks.length > 1 && (
                           <div className="mb-5 space-y-2.5">
@@ -2529,7 +2529,7 @@ export default function PublicBookingPage() {
                     onClose={() => setKavlingMapOpen(false)}
                     maxWidthClassName="max-w-6xl"
                   >
-                    <InteractiveMapViewer src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`} />
+                    <InteractiveMapViewer src="/kavling/site-map.png" />
                   </Modal>
                 ) : null}
                 </div>

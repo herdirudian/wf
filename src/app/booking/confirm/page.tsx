@@ -114,6 +114,7 @@ export default function BookingConfirmPage() {
   }, [draft?.hold?.expiresAt]);
 
   useEffect(() => {
+    if (!draft) return;
     if (!draft || submitting) return;
     if (!draft.kavlings.length) return;
     if (!draft.kavlingScope) return;
@@ -142,6 +143,7 @@ export default function BookingConfirmPage() {
       return data;
     };
     const tick = async () => {
+      if (cancelled) return;
       if (cancelled || submitting) return;
       if (inFlight) return;
       inFlight = true;

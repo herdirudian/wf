@@ -195,6 +195,8 @@ function normalizePhoneId(phone: string) {
 
 export async function getXenditConfig() {
   const cfg = await prisma.appConfig.findUnique({ where: { id: 1 } });
+  const secretKey = cfg?.xenditSecretKey ?? process.env.XENDIT_SECRET_KEY ?? "";
+  const callbackToken = cfg?.xenditCallbackToken ?? process.env.XENDIT_CALLBACK_TOKEN ?? "";
   const dbSecret = (cfg?.xenditSecretKey ?? "").trim();
   const envSecret = (process.env.XENDIT_SECRET_KEY ?? "").trim();
   const secretKey = dbSecret || envSecret;
@@ -225,6 +227,7 @@ export function feeConfigForPayment(methodsJson: string | null | undefined, meth
 
 async function getXenditSecretKey() {
   const { secretKey } = await getXenditConfig();
+  if (!secretKey) throw new Error("Xendit belum dikonfigurasi");
   if (!secretKey) throw new Error("Xendit Secret API Key belum dikonfigurasi. Silakan isi Xendit Secret Key di Menu Pengaturan Admin (Dashboard Admin > Settings).");
   return secretKey;
 }
