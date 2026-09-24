@@ -195,8 +195,6 @@ function normalizePhoneId(phone: string) {
 
 export async function getXenditConfig() {
   const cfg = await prisma.appConfig.findUnique({ where: { id: 1 } });
-  const secretKey = cfg?.xenditSecretKey ?? process.env.XENDIT_SECRET_KEY ?? "";
-  const callbackToken = cfg?.xenditCallbackToken ?? process.env.XENDIT_CALLBACK_TOKEN ?? "";
   const dbSecret = (cfg?.xenditSecretKey ?? "").trim();
   const envSecret = (process.env.XENDIT_SECRET_KEY ?? "").trim();
   const secretKey = dbSecret || envSecret;
