@@ -1093,33 +1093,24 @@ export default function PublicBookingPage() {
 
   const sidebarContent = (
     <div className="sticky top-6 space-y-6">
-      <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/5 transition-all duration-700 hover:shadow-primary/10">
-        {/* Header - Premium Nature Gradient */}
-        <div className="relative overflow-hidden bg-[#2D3E10] px-8 py-12">
-          <div className="relative z-10">
-            <h3 className="text-2xl font-bold tracking-tight text-white">Ringkasan <span className="italic font-serif opacity-80">Pesanan</span></h3>
-            <div className="mt-3 flex items-center gap-3">
-              <span className="h-[1px] w-8 bg-primary/40"></span>
-              <p className="text-[10px] font-bold text-white/50 uppercase tracking-[0.4em]">Exclusive Stay</p>
-            </div>
+      <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white shadow-xl shadow-[#2D3E10]/5 transition-all duration-700">
+        {/* Header - Minimalist */}
+        <div className="relative overflow-hidden bg-[#2D3E10] px-8 py-10">
+          <div className="relative z-10 flex flex-col gap-2">
+            <h3 className="text-2xl font-black tracking-tight text-white">Ringkasan <span className="font-serif italic font-light opacity-90">Pesanan</span></h3>
+            <p className="text-[10px] font-bold text-white/60 uppercase tracking-[0.3em]">Woodforest Jayagiri</p>
           </div>
-          
-          {/* Organic Background Pattern - More Subtle */}
-          <div className="absolute -right-10 -top-10 h-48 w-48 opacity-[0.07] rotate-12 pointer-events-none">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <path fill="#ffffff" d="M40,-67.2C51.7,-60.7,60.9,-49.5,68.1,-37.1C75.3,-24.7,80.5,-11.1,79.1,2C77.7,15.1,69.7,27.7,60.3,38.5C50.9,49.3,40.1,58.3,27.7,64.3C15.3,70.3,1.3,73.3,-13.2,71.7C-27.7,70.1,-42.7,63.9,-54.6,53.8C-66.5,43.7,-75.3,29.7,-78.7,14.6C-82.1,-0.5,-80.1,-16.7,-73.4,-30.5C-66.7,-44.3,-55.3,-55.7,-42.2,-61.5C-29.1,-67.3,-14.5,-67.5,0.4,-68.2C15.3,-68.9,30.6,-70,40,-67.2Z" transform="translate(100 100)" />
-            </svg>
-          </div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-white/10 to-transparent rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
         </div>
         
-        <div className="p-8 space-y-12">
+        <div className="p-8 space-y-10">
           {/* Jadwal & Tamu */}
-          <div className="space-y-8">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Rencana Kunjungan</span>
+          <div className="space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E8E8E1]/60">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Rencana Kunjungan</span>
               <button 
                 onClick={() => setCurrentStep(1)} 
-                className="group flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest transition-all hover:text-[#2D3E10]"
+                className="group flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.2em] transition-colors hover:text-[#2D3E10]"
               >
                 <span>Ubah</span>
                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F1F3EE] transition-colors group-hover:bg-primary group-hover:text-white">
@@ -1132,44 +1123,44 @@ export default function PublicBookingPage() {
             
             <div className="space-y-6">
               {/* Date */}
-              <div className="flex items-start gap-5 group">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:rotate-3 group-hover:scale-110">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="flex flex-col gap-1.5 py-0.5">
+              <div className="flex items-center justify-between group">
+                <div className="flex flex-col gap-1.5">
                   <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Tanggal Menginap</span>
-                  <span className="text-sm font-bold text-[#2D3E10] leading-none tracking-tight">
+                  <span className="text-sm font-bold text-[#2D3E10]">
                     {checkIn ? formatDateWIB(new Date(checkIn)) : "Pilih Tanggal"}
                     {checkOut && <span className="mx-2 text-[#2D3E10]/20">—</span>}
                     {checkOut ? formatDateWIB(new Date(checkOut)) : ""}
                   </span>
                 </div>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
               </div>
 
               {/* Guests */}
-              <div className="flex items-start gap-5 group">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:-rotate-3 group-hover:scale-110">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              <div className="flex items-center justify-between group">
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jumlah Tamu</span>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm font-bold text-[#2D3E10]">{totalGuest} Orang</span>
+                    <span className="text-[10px] font-medium text-[#2D3E10]/40">({adultPax} Dws, {child5to10Pax + childUnder5Pax} Ank)</span>
+                  </div>
+                </div>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
-                <div className="flex flex-col gap-1.5 py-0.5">
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jumlah Tamu</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-[#2D3E10] tracking-tight">{totalGuest} Orang</span>
-                      <span className="text-[10px] font-medium text-primary/60 italic">({adultPax}D, {child5to10Pax + childUnder5Pax}A)</span>
-                    </div>
-                  </div>
               </div>
             </div>
           </div>
 
           {/* Unit Terpilih */}
-          <div className="space-y-8">
-            <div className="border-b border-[#E8E8E1] pb-4">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Akomodasi</span>
+          <div className="space-y-6">
+            <div className="border-b border-[#E8E8E1]/60 pb-4">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Akomodasi</span>
             </div>
             {selectedVisibleUnits.length > 0 ? (
               <div className="space-y-6">
@@ -1178,29 +1169,29 @@ export default function PublicBookingPage() {
                   return (
                     <div key={u.id} className="group flex justify-between items-start gap-4">
                       <div className="flex flex-col gap-2">
-                        <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{u.name}</span>
+                        <span className="text-sm font-bold text-[#2D3E10] group-hover:text-primary transition-colors">{u.name}</span>
                         <div className="flex items-center gap-2">
-                          <span className="rounded-full bg-[#F1F3EE] px-2.5 py-0.5 text-[9px] font-bold text-[#2D3E10]/60 uppercase tracking-wider">
+                          <span className="rounded-lg bg-[#F1F3EE] px-2 py-0.5 text-[10px] font-bold text-[#2D3E10]/60 uppercase tracking-widest">
                             {qty} Unit
                           </span>
                           {u.capacity > 0 && (
-                            <span className="text-[9px] font-medium text-primary/40 uppercase tracking-widest">
-                              Kap: {u.capacity * qty} Orang
+                            <span className="text-[9px] font-bold text-[#2D3E10]/30 uppercase tracking-[0.2em]">
+                              Kap: {u.capacity * qty} Org
                             </span>
                           )}
                         </div>
                       </div>
-                      <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(sumDailyPrice(u) * qty)}</span>
+                      <span className="text-sm font-black text-[#2D3E10]">{formatIDR(sumDailyPrice(u) * qty)}</span>
                     </div>
                   );
                 })}
 
                 {/* Kavling Selection Info */}
                 {kavlingSelected.length > 0 && (
-                  <div className="rounded-2xl bg-[#F1F3EE]/50 p-4 border border-[#E8E8E1]/60">
+                  <div className="rounded-xl bg-[#FDFDFB] p-4 border border-[#E8E8E1]">
                     <div className="flex flex-col gap-1">
-                      <span className="text-[9px] font-black text-[#2D3E10]/40 uppercase tracking-widest">Kavling Terpilih</span>
-                      <span className="text-xs font-black text-primary tracking-tight">
+                      <span className="text-[9px] font-black text-[#2D3E10]/40 uppercase tracking-[0.2em]">Kavling Terpilih</span>
+                      <span className="text-xs font-black text-primary">
                         {kavlingSelected.sort((a, b) => Number(a) - Number(b)).join(", ")}
                       </span>
                     </div>
@@ -1208,36 +1199,31 @@ export default function PublicBookingPage() {
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-10 text-center rounded-[2rem] border-2 border-dashed border-[#E8E8E1] bg-[#F1F3EE]/20">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#2D3E10]/20 shadow-sm border border-[#E8E8E1] mb-4">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                </div>
+              <div className="flex flex-col items-center justify-center py-10 text-center rounded-2xl border border-dashed border-[#E8E8E1] bg-[#FDFDFB]">
                 <p className="text-[10px] font-bold text-[#2D3E10]/30 uppercase tracking-[0.2em]">Belum Ada Pilihan</p>
-                </div>
-              )}
+              </div>
+            )}
           </div>
 
-          {/* Layanan Tambahan (Manual + Auto) */}
+          {/* Layanan Tambahan */}
           {addons.some(a => effectiveAddonQty[a.id] > 0) && (
-            <div className="space-y-8">
-              <div className="border-b border-[#E8E8E1] pb-4">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Layanan Tambahan</span>
+            <div className="space-y-6">
+              <div className="border-b border-[#E8E8E1]/60 pb-4">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Layanan Tambahan</span>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {addons.filter(a => effectiveAddonQty[a.id] > 0).map(a => (
                   <div key={a.id} className="group flex justify-between items-start gap-4">
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1.5">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{a.name}</span>
+                        <span className="text-sm font-bold text-[#2D3E10]">{a.name}</span>
                         {autoAddonQty[a.id] > 0 && (
-                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[7px] font-black text-primary uppercase tracking-tighter">Auto</span>
+                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[8px] font-black text-primary uppercase">Auto</span>
                         )}
                       </div>
-                      <span className="text-[9px] font-bold text-[#2D3E10]/40 uppercase tracking-widest">Qty: {effectiveAddonQty[a.id]}</span>
+                      <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.2em]">Qty: {effectiveAddonQty[a.id]}</span>
                     </div>
-                    <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(a.price * effectiveAddonQty[a.id])}</span>
+                    <span className="text-sm font-black text-[#2D3E10]">{formatIDR(a.price * effectiveAddonQty[a.id])}</span>
                   </div>
                 ))}
               </div>
@@ -1245,35 +1231,28 @@ export default function PublicBookingPage() {
           )}
 
           {/* Rincian Biaya */}
-          <div className="space-y-6 pt-4 border-t border-[#E8E8E1]">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Rincian Biaya</span>
+          <div className="space-y-5 pt-4 border-t border-[#E8E8E1]/60">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Rincian Biaya</span>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-medium text-[#2D3E10]/50">Subtotal Akomodasi</span>
+                <span className="text-xs font-medium text-[#2D3E10]/60">Subtotal Akomodasi</span>
                 <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(selectedVisibleUnits.reduce((acc, u) => acc + (sumDailyPrice(u) * (unitQty[u.id] || 0)), 0))}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-xs font-medium text-[#2D3E10]/50">Layanan Tambahan</span>
+                <span className="text-xs font-medium text-[#2D3E10]/60">Layanan Tambahan</span>
                 <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(addons.reduce((acc, a) => acc + (a.price * (effectiveAddonQty[a.id] || 0)), 0))}</span>
               </div>
             </div>
           </div>
 
           {/* Summary Footer */}
-          <div className="pt-4">
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-[#F1F3EE] p-10 space-y-6 group">
-              {/* Organic Accent in Footer - Very Subtle */}
-              <div className="absolute -left-6 -bottom-6 h-32 w-32 opacity-[0.05] -rotate-12 transition-transform duration-1000 group-hover:rotate-0 group-hover:scale-110">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="#2D3E10" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
-                </svg>
-              </div>
-
-              <div className="relative z-10 space-y-3 text-center">
-                <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.4em]">Estimasi Total Biaya</span>
+          <div className="pt-2">
+            <div className="rounded-2xl bg-[#F1F3EE] p-8 text-center border border-[#E8E8E1]">
+              <div className="space-y-2">
+                <span className="text-[10px] font-black text-[#2D3E10]/40 uppercase tracking-[0.2em]">Estimasi Total Biaya</span>
                 <div className="flex flex-col gap-1">
-                  <span className="text-3xl font-black text-[#2D3E10] tracking-tighter tabular-nums">{formatIDR(estimatedAmount)}</span>
-                  <p className="text-[10px] font-medium text-primary/40 italic">
+                  <span className="text-2xl font-black text-[#2D3E10]">{formatIDR(estimatedAmount)}</span>
+                  <p className="text-[10px] font-medium text-[#2D3E10]/40">
                     *Termasuk pajak & biaya layanan
                   </p>
                 </div>
@@ -1701,64 +1680,43 @@ export default function PublicBookingPage() {
           </>
         ) : (
           <div className="mt-8 space-y-8 pb-20 sm:mt-12 sm:space-y-12">
-            {/* Step Indicators - Modern & Professional */}
-            <div className="mx-auto w-full max-w-7xl">
-              <div className="relative flex items-center justify-between gap-2 sm:gap-4">
+            {/* Step Indicators - Modern & Clean Pill Navigation */}
+            <div className="mx-auto w-full max-w-3xl flex items-center justify-center">
+              <div className="inline-flex items-center gap-1 sm:gap-2 rounded-full border border-[#E8E8E1] bg-white p-1.5 shadow-sm">
                 {[1, 2, 3].map((step) => {
                   const isActive = currentStep === step;
                   const isCompleted = currentStep > step;
-                  const labels = ["Pilih Kategori", "Pilih Unit", "Isi Identitas"];
+                  const labels = ["Pengalaman", "Unit & Kavling", "Isi Identitas"];
                   
                   return (
-                    <div key={step} className="relative flex min-w-0 flex-1 flex-col items-center group">
-                      <button 
-                        type="button"
-                        onClick={() => {
-                          if (isCompleted || (step < currentStep)) setCurrentStep(step);
-                        }}
-                        disabled={!isCompleted && step > currentStep}
-                        className="flex flex-col items-center gap-1.5 outline-none w-full sm:gap-2"
-                      >
-                        {/* Line connector */}
-                        {step < 3 && (
-                          <div className="absolute left-[calc(50%+16px)] right-[-calc(50%-16px)] top-4 h-[1.5px] bg-[#E8E8E1] sm:left-[calc(50%+18px)] sm:right-[-calc(50%-18px)] sm:top-5 sm:h-[2px]">
-                            <div
-                              className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)"
-                              style={{ width: isCompleted ? "100%" : "0%" }}
-                            />
-                          </div>
+                    <button 
+                      key={step}
+                      type="button"
+                      onClick={() => {
+                        if (isCompleted || (step < currentStep)) setCurrentStep(step);
+                      }}
+                      disabled={!isCompleted && step > currentStep}
+                      className={`relative flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-bold transition-all duration-500 sm:px-6 sm:py-2.5 sm:text-sm ${
+                        isActive 
+                          ? "bg-[#2D3E10] text-white shadow-md shadow-[#2D3E10]/10" 
+                          : isCompleted 
+                            ? "text-[#2D3E10] hover:bg-[#F1F3EE]" 
+                            : "text-[#2D3E10]/30"
+                      }`}
+                    >
+                      <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[9px] sm:h-6 sm:w-6 sm:text-xs ${
+                        isActive ? "bg-white/20 text-white" : isCompleted ? "bg-[#2D3E10]/10" : "bg-[#F1F3EE]"
+                      }`}>
+                        {isCompleted ? (
+                          <svg className="h-2.5 w-2.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          step
                         )}
-
-                        <div className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-[0.8rem] border-[1.5px] transition-all duration-700 sm:h-10 sm:w-10 sm:rounded-2xl sm:border-2 ${
-                          isActive 
-                            ? "border-primary bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
-                            : isCompleted 
-                              ? "border-primary bg-primary/10 text-primary" 
-                              : "border-[#E8E8E1] bg-white text-[#2D3E10]/20"
-                        }`}>
-                          {isCompleted ? (
-                            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          ) : (
-                            <span className="text-[11px] font-black tracking-tight sm:text-sm">{step}</span>
-                          )}
-                        </div>
-                        
-                        <div className="flex flex-col items-center text-center">
-                          <span className={`text-[8px] font-black uppercase tracking-[0.15em] transition-colors duration-300 sm:text-[9px] ${
-                            isActive ? "text-primary" : isCompleted ? "text-[#2D3E10]" : "text-[#2D3E10]/20"
-                          }`}>
-                            Langkah {step}
-                          </span>
-                          <span className={`text-[10px] font-bold transition-colors duration-300 sm:text-xs ${
-                            isActive ? "text-[#2D3E10]" : isCompleted ? "text-[#2D3E10]/70" : "text-[#2D3E10]/20"
-                          } hidden sm:block`}>
-                            {labels[step-1]}
-                          </span>
-                        </div>
-                      </button>
-                    </div>
+                      </span>
+                      <span className="tracking-wide">{labels[step-1]}</span>
+                    </button>
                   );
                 })}
               </div>
@@ -1770,23 +1728,24 @@ export default function PublicBookingPage() {
                 <div className="space-y-8">
                   {currentStep === 1 && (
                     <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                      <div className="mb-8 flex flex-col items-center text-center sm:mb-12">
-                        <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] mb-4 border border-[#E8E8E1] sm:px-5 sm:py-2 sm:text-[10px] sm:tracking-[0.3em] sm:mb-6">
+                      <div className="mb-10 sm:mb-16 flex flex-col text-center">
+                        <span className="mx-auto inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 mb-4 sm:mb-6">
                           Langkah 01
-                        </div>
-                        <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
-                          Pilih <span className="text-primary italic">Pengalaman</span> Anda
+                        </span>
+                        <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
+                          Pilih <span className="font-serif italic font-light opacity-90 text-primary">Pengalaman</span>
                         </h2>
-                        <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium text-primary/60 italic sm:mt-4 sm:text-sm">
-                          "Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri."
+                        <p className="mx-auto mt-4 max-w-lg text-[13px] font-medium text-[#2D3E10]/50 sm:mt-5 sm:text-[15px]">
+                          Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri.
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-10">
                         {categoryOptions.map((cat, idx) => {
                           const isGlamping = cat.toLowerCase().includes('glamp');
                           const isPaket = cat.toLowerCase().includes('paket');
                           const isPrivate = cat.toLowerCase().includes('private');
+                          const isSelected = filterCategory === cat;
                           
                           return (
                             <div
@@ -1796,55 +1755,45 @@ export default function PublicBookingPage() {
                               <button
                                 type="button"
                                 onClick={() => {
-                                  if (filterCategory !== cat || currentStep > 1) {
+                                  if (!isSelected || currentStep > 1) {
                                     resetSelection();
                                   }
                                   setFilterCategory(cat);
                                   setCurrentStep(2);
                                 }}
-                                className={`flex flex-col h-full overflow-hidden rounded-[1.2rem] border border-[#E8E8E1] transition-all duration-700 hover:shadow-xl hover:-translate-y-1 sm:rounded-[2.5rem] sm:hover:shadow-[0_32px_64px_-16px_rgba(45,62,16,0.1)] sm:hover:-translate-y-2 ${
-                                  filterCategory === cat 
-                                    ? "border-primary bg-white shadow-lg shadow-primary/5" 
-                                    : "bg-white hover:border-primary/40"
+                                className={`flex flex-col h-full overflow-hidden rounded-[2rem] border transition-all duration-500 text-left sm:rounded-[3rem] ${
+                                  isSelected 
+                                    ? "border-primary bg-white shadow-2xl shadow-primary/10 ring-4 ring-primary/5" 
+                                    : "border-[#E8E8E1] bg-white hover:border-primary/30 hover:shadow-xl hover:shadow-[#2D3E10]/5"
                                 }`}
                               >
-                                <div className="relative h-40 w-full overflow-hidden sm:h-56">
+                                <div className="relative h-48 w-full overflow-hidden sm:h-64">
                                   {packageConfigs[cat]?.imageUrl ? (
                                     <img 
                                       src={`${packageConfigs[cat].imageUrl}?t=${kavlingMapAssetVersion}`} 
                                       alt={cat} 
-                                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105" 
                                     />
                                   ) : (
-                                    <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-1000 group-hover:scale-110 ${
-                                      isGlamping ? "from-[#F1F3EE] to-[#E8E8E1]" : 
-                                      isPrivate ? "from-[#FDFDFB] to-[#F1F3EE]" : 
-                                      "from-[#E8E8E1] to-[#F1F3EE]"
-                                    }`} />
+                                    <div className="absolute inset-0 bg-[#F1F3EE]" />
                                   )}
 
-                                  <div className={`absolute top-4 left-4 flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-700 sm:top-6 sm:left-6 sm:h-12 sm:w-12 sm:rounded-2xl ${
-                                    filterCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-white/90 backdrop-blur-md text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
+                                  <div className={`absolute top-6 left-6 flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-500 ${
+                                    isSelected ? "bg-primary text-white" : "bg-white/95 backdrop-blur-sm text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
                                   }`}>
                                     {isGlamping ? (
-                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" />
-                                      </svg>
+                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" /></svg>
                                     ) : isPrivate ? (
-                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                      </svg>
+                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                                     ) : (
-                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                      </svg>
+                                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                     )}
                                   </div>
                                 </div>
 
-                                <div className="flex flex-col flex-1 p-5 text-center sm:p-8 sm:text-left">
-                                  <h3 className="text-lg font-bold text-[#2D3E10] mb-2 group-hover:text-primary transition-colors sm:text-2xl sm:mb-3">{cat}</h3>
-                                  <p className="text-[12px] font-medium leading-relaxed text-primary/60 mb-6 flex-1 italic sm:text-sm sm:mb-8">
+                                <div className="flex flex-col flex-1 p-6 sm:p-10">
+                                  <h3 className="text-2xl font-black text-[#2D3E10] mb-3 sm:text-3xl">{cat}</h3>
+                                  <p className="text-[13px] font-medium leading-relaxed text-[#2D3E10]/50 mb-8 flex-1 sm:text-[15px]">
                                     {packageConfigs[cat]?.description || (
                                       cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap." : 
                                       cat === "Paket" ? "Pilihan paket lengkap untuk momen berharga bersama keluarga." :
@@ -1852,10 +1801,12 @@ export default function PublicBookingPage() {
                                     )}
                                   </p>
 
-                                  <div className="flex items-center justify-between pt-4 border-t border-[#E8E8E1] sm:pt-6">
-                                    <span className="text-[9px] font-bold uppercase tracking-widest text-[#2D3E10] sm:text-[10px]">Eksplorasi Detail</span>
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1 sm:h-10 sm:w-10">
-                                      <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <div className="flex items-center justify-between pt-6 border-t border-[#E8E8E1]/60">
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40 group-hover:text-primary transition-colors">Eksplorasi Detail</span>
+                                    <div className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-500 group-hover:translate-x-2 ${
+                                      isSelected ? "bg-primary text-white" : "bg-[#F1F3EE] text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
+                                    }`}>
+                                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                       </svg>
                                     </div>
