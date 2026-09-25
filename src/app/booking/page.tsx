@@ -212,8 +212,7 @@ function QuantityStepper({
 
   return (
     <div className="inline-flex w-fit items-center gap-1.5 p-1.5 rounded-full border border-[#E8E8E1] bg-white shadow-sm group transition-all duration-500 hover:border-primary/30 hover:shadow-md relative overflow-hidden">
-      {/* Stepper background */
-
+      
       <button
         type="button"
         disabled={decDisabled}
@@ -1099,8 +1098,7 @@ export default function PublicBookingPage() {
             </div>
           </div>
           
-          {/* Clean header decoration */
-        </div>
+                  </div>
         
         <div className="p-5 sm:p-6 space-y-6 sm:space-y-7">
           {/* Jadwal & Tamu */}
@@ -1252,8 +1250,7 @@ export default function PublicBookingPage() {
           {/* Summary Footer */}
           <div className="pt-4">
             <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#F1F3EE] p-5 space-y-3 group">
-              {/* Footer accent */
-
+              
               <div className="relative z-10 space-y-3 text-center">
                 <span className="text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.4em]">Estimasi Total Biaya</span>
                 <div className="flex flex-col gap-1">
@@ -2133,8 +2130,7 @@ export default function PublicBookingPage() {
               {(effectiveKavlingScope || kavlingAmbiguous) && requiredKavlings > 0 && (
                 <div className="rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-xl shadow-black/10 border-2 border-primary/20 bg-white/95 backdrop-blur-md transition-all duration-700 hover:shadow-primary/10">
                   <div className="rounded-t-[2.5rem] border-b border-[#E8E8E1] bg-[#F1F3EE]/30 px-8 py-8 relative group overflow-hidden">
-                    {/* Kavling header decoration */
-                    
+                                        
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between relative z-10">
                       <div className="flex flex-col items-center gap-5 sm:flex-row">
                         <div className="relative group/icon">
