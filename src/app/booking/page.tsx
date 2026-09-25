@@ -1455,7 +1455,7 @@ export default function PublicBookingPage() {
                 </span>
                 Luxury Camping Ground
               </div>
-              <h1 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
+              <h1 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-4xl">
                 Woodforest <span className="text-primary italic">Booking</span>
               </h1>
               <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium leading-relaxed text-primary/90 italic sm:mx-0 sm:mt-3 sm:text-sm">
@@ -1764,8 +1764,8 @@ export default function PublicBookingPage() {
               </div>
             </div>
 
-            <div className="relative mt-6 mx-auto max-w-7xl sm:mt-8">
-              <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px]">
+            <div className="relative mt-6 mx-auto max-w-6xl xl:max-w-[1150px] sm:mt-10 px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 gap-10 lg:gap-14 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px]">
                 {/* Main Content Area */}
                 <div className="space-y-8">
                   {currentStep === 1 && (
@@ -1774,7 +1774,7 @@ export default function PublicBookingPage() {
                         <div className="inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] mb-4 border border-[#E8E8E1] sm:px-5 sm:py-2 sm:text-[10px] sm:tracking-[0.3em] sm:mb-6">
                           Langkah 01
                         </div>
-                        <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
+                        <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-4xl">
                           Pilih <span className="text-primary italic">Pengalaman</span> Anda
                         </h2>
                         <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium text-primary/90 italic sm:mt-4 sm:text-sm">
@@ -1782,7 +1782,7 @@ export default function PublicBookingPage() {
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
                         {categoryOptions.map((cat, idx) => {
                           const isGlamping = cat.toLowerCase().includes('glamp');
                           const isPaket = cat.toLowerCase().includes('paket');
@@ -1875,7 +1875,7 @@ export default function PublicBookingPage() {
                   <span className="mx-auto inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 mb-4 sm:mb-6">
                     Langkah 02
                   </span>
-                  <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
+                  <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-4xl">
                     Pilihan <span className="font-serif italic font-light opacity-90 text-primary">Unit & Kavling</span>
                   </h2>
                   <p className="mx-auto mt-4 max-w-lg text-[13px] font-medium text-[#2D3E10]/50 sm:mt-5 sm:text-[15px]">
@@ -1895,9 +1895,9 @@ export default function PublicBookingPage() {
                       <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
                     </div>
 
-                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-8 shadow-sm shadow-[#2D3E10]/5">
+                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-6 shadow-sm shadow-[#2D3E10]/5">
                       <div className="grid grid-cols-2 gap-4 sm:gap-8">
-                        <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                        <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-5">
                           <div className="mb-2 flex items-center gap-2">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Check-in</span>
                           </div>
@@ -1910,11 +1910,11 @@ export default function PublicBookingPage() {
                               }
                               setCheckIn(e.target.value);
                             }}
-                            className="w-full bg-transparent text-sm font-bold text-[#2D3E10] outline-none sm:text-lg"
+                            className="w-full bg-transparent text-sm font-bold text-[#2D3E10] outline-none sm:text-base"
                             required
                           />
                         </div>
-                        <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                        <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-5">
                           <div className="mb-2 flex items-center gap-2">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Check-out</span>
                           </div>
@@ -1927,7 +1927,7 @@ export default function PublicBookingPage() {
                               }
                               setCheckOut(e.target.value);
                             }}
-                            className="w-full bg-transparent text-sm font-bold text-[#2D3E10] outline-none sm:text-lg"
+                            className="w-full bg-transparent text-sm font-bold text-[#2D3E10] outline-none sm:text-base"
                             required
                           />
                         </div>
@@ -1947,7 +1947,7 @@ export default function PublicBookingPage() {
                       <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
                     </div>
 
-                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-8 shadow-sm shadow-[#2D3E10]/5">
+                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-6 shadow-sm shadow-[#2D3E10]/5">
                       <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-3">
                         <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#F4F5F1] p-4 transition-all hover:border-primary/40 hover:bg-white hover:shadow-md sm:rounded-3xl sm:p-5">
                           <div className="space-y-1">
@@ -2687,7 +2687,7 @@ export default function PublicBookingPage() {
                     <span className="mx-auto inline-flex items-center rounded-full bg-[#F1F3EE] px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 mb-4 sm:mb-6">
                       Langkah 03
                     </span>
-                    <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
+                    <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-4xl">
                       Lengkapi <span className="font-serif italic font-light opacity-90 text-primary">Identitas</span>
                     </h2>
                     <p className="mx-auto mt-4 max-w-lg text-[13px] font-medium text-[#2D3E10]/50 sm:mt-5 sm:text-[15px]">
