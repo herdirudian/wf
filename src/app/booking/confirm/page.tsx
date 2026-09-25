@@ -310,12 +310,7 @@ export default function BookingConfirmPage() {
 
   return (
     <div className="min-h-dvh bg-[#FDFDFB] relative overflow-hidden pb-48 sm:pb-24">
-      {/* Subtle organic background elements */}
-      <div className="absolute left-[-10%] top-[-5%] h-[50%] w-[50%] opacity-[0.02] pointer-events-none -rotate-12">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-        </svg>
-      </div>
+      /* Background */
 
       <div className="mx-auto max-w-2xl px-4 py-8 sm:py-16 relative z-10">
         <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
@@ -327,18 +322,18 @@ export default function BookingConfirmPage() {
             <h1 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
               Konfirmasi <span className="italic text-primary">Pesanan</span>
             </h1>
-            <p className="mt-4 text-sm font-medium text-[#2D3E10]/40 max-w-md leading-relaxed">
+            <p className="mt-4 text-sm font-medium text-[#2D3E10]/70 max-w-md leading-relaxed">
               Tinjau kembali rincian reservasi Anda sebelum melanjutkan ke proses pembayaran aman.
             </p>
           </div>
 
           {/* Hold Banner - More Refined */}
           {draft.hold?.expiresAt && holdLeftLabel ? (
-            <div className="mb-8 overflow-hidden rounded-[2rem] border border-primary/10 bg-[#F1F3EE]/50 p-6 backdrop-blur-sm sm:p-8">
+            <div className="mb-8 overflow-hidden rounded-2xl sm:rounded-3xl border border-primary/10 bg-[#F1F3EE]/50 p-6 backdrop-blur-sm sm:p-8">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-5">
                   <div className="relative">
-                    <div className="absolute inset-0 rounded-xl bg-primary/20 animate-ping" />
+                    
                     <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-primary/5">
                       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -364,7 +359,7 @@ export default function BookingConfirmPage() {
 
           <div className="space-y-6">
             {/* Customer Details Card */}
-            <div className="group rounded-[2rem] border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
+            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
               <div className="mb-8 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -376,27 +371,27 @@ export default function BookingConfirmPage() {
 
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Nama Lengkap</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nama Lengkap</label>
                   <p className="text-base font-bold text-[#2D3E10]">{draft.customer.name}</p>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Nomor WhatsApp</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nomor WhatsApp</label>
                   <p className="text-base font-bold text-[#2D3E10]">{draft.customer.phone}</p>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Email</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Email</label>
                   <p className="text-base font-bold text-[#2D3E10]">{draft.customer.email}</p>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Waktu Menginap</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.checkIn} — {draft.checkOut}</p>
-                  <p className="text-[10px] font-medium text-primary/40 italic">({draft.totalGuest} Tamu: {draft.adultPax}D, {draft.child5to10Pax}A, {draft.childUnder5Pax}B)</p>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Waktu Menginap</label>
+                  <p className="text-base font-bold text-[#2D3E10]">{draft.checkIn} s/d {draft.checkOut}</p>
+                  <p className="text-[10px] font-medium text-primary/80 italic">({draft.totalGuest} Tamu: {draft.adultPax}D, {draft.child5to10Pax}A, {draft.childUnder5Pax}B)</p>
                 </div>
               </div>
             </div>
 
             {/* Reservation Summary Card */}
-            <div className="group rounded-[2rem] border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
+            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
               <div className="mb-8 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -419,7 +414,7 @@ export default function BookingConfirmPage() {
                         </div>
                         <div>
                           <p className="text-sm font-bold text-[#2D3E10]">{it.name}</p>
-                          <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest">Unit Reservasi</p>
+                          <p className="text-[10px] font-black text-primary/80 uppercase tracking-widest">Unit Reservasi</p>
                         </div>
                       </div>
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F1F3EE] text-[11px] font-black text-[#2D3E10]">
@@ -432,19 +427,19 @@ export default function BookingConfirmPage() {
                 {/* Kavlings & Addons */}
                 <div className="grid grid-cols-1 gap-4">
                   <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Nomor Kavling</span>
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nomor Kavling</span>
                     <p className="mt-1 text-base font-black text-primary tracking-tight">{kavlingText}</p>
                   </div>
                   
                   {draft.display.addOns.length > 0 && (
                     <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5 space-y-4">
-                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Layanan Tambahan</span>
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Layanan Tambahan</span>
                       <div className="space-y-3">
                         {draft.display.addOns.map((a) => (
                           <div key={a.addOnId} className="flex justify-between items-center">
                             <div className="flex flex-col">
                               <span className="text-xs font-bold text-[#2D3E10]">{a.name}</span>
-                              <span className="text-[9px] font-medium text-[#2D3E10]/40">Qty: {a.quantity}</span>
+                              <span className="text-[9px] font-medium text-[#2D3E10]/70">Qty: {a.quantity}</span>
                             </div>
                             <span className="text-xs font-black text-[#2D3E10]">{formatIDR(a.price * a.quantity)}</span>
                           </div>
@@ -456,7 +451,7 @@ export default function BookingConfirmPage() {
 
                 {draft.specialRequest && (
                   <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/30">Permintaan Khusus</span>
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Permintaan Khusus</span>
                     <p className="mt-2 text-sm font-medium leading-relaxed text-[#2D3E10]/70 italic">"{draft.specialRequest}"</p>
                   </div>
                 )}
@@ -464,7 +459,7 @@ export default function BookingConfirmPage() {
             </div>
 
             {/* Payment Method Card */}
-            <div className="group rounded-[2rem] border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
+            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
               <div className="mb-8 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -499,11 +494,11 @@ export default function BookingConfirmPage() {
                 <div className="rounded-3xl bg-[#F1F3EE] p-8">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/40">Subtotal</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/70">Subtotal</span>
                       <span className="text-sm font-bold text-[#2D3E10]">{formatIDR(draft.amountEstimate)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/40">Biaya Layanan</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/70">Biaya Layanan</span>
                       <span className="text-sm font-bold text-[#2D3E10]">{formatIDR(serviceFeePreview)}</span>
                     </div>
                     <div className="h-px bg-[#2D3E10]/5 my-2" />
@@ -569,9 +564,7 @@ export default function BookingConfirmPage() {
           >
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
             <span className="relative z-10">{submitting ? "Memproses..." : "Konfirmasi & Bayar Sekarang"}</span>
-            <svg className="relative z-10 ml-3 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
+            
           </button>
           <button
             type="button"

@@ -212,12 +212,7 @@ function QuantityStepper({
 
   return (
     <div className="inline-flex w-fit items-center gap-1.5 p-1.5 rounded-full border border-[#E8E8E1] bg-white shadow-sm group transition-all duration-500 hover:border-primary/30 hover:shadow-md relative overflow-hidden">
-      {/* Subtle organic background for the stepper */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none transition-transform duration-1000 group-hover:scale-110">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-        </svg>
-      </div>
+      {/* Stepper background */
 
       <button
         type="button"
@@ -1104,12 +1099,7 @@ export default function PublicBookingPage() {
             </div>
           </div>
           
-          {/* Organic Background Pattern - More Subtle */}
-          <div className="absolute -right-10 -top-10 h-48 w-48 opacity-[0.07] rotate-12 pointer-events-none">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <path fill="#ffffff" d="M40,-67.2C51.7,-60.7,60.9,-49.5,68.1,-37.1C75.3,-24.7,80.5,-11.1,79.1,2C77.7,15.1,69.7,27.7,60.3,38.5C50.9,49.3,40.1,58.3,27.7,64.3C15.3,70.3,1.3,73.3,-13.2,71.7C-27.7,70.1,-42.7,63.9,-54.6,53.8C-66.5,43.7,-75.3,29.7,-78.7,14.6C-82.1,-0.5,-80.1,-16.7,-73.4,-30.5C-66.7,-44.3,-55.3,-55.7,-42.2,-61.5C-29.1,-67.3,-14.5,-67.5,0.4,-68.2C15.3,-68.9,30.6,-70,40,-67.2Z" transform="translate(100 100)" />
-            </svg>
-          </div>
+          {/* Clean header decoration */
         </div>
         
         <div className="p-5 sm:p-6 space-y-6 sm:space-y-7">
@@ -1142,7 +1132,7 @@ export default function PublicBookingPage() {
                   <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Tanggal Menginap</span>
                   <span className="text-sm font-bold text-[#2D3E10] leading-none tracking-tight">
                     {checkIn ? formatDateWIB(new Date(checkIn)) : "Pilih Tanggal"}
-                    {checkOut && <span className="mx-2 text-[#2D3E10]/20">—</span>}
+                    {checkOut && <span className="mx-2 text-[#2D3E10]/60">s/d</span>}
                     {checkOut ? formatDateWIB(new Date(checkOut)) : ""}
                   </span>
                 </div>
@@ -1184,7 +1174,7 @@ export default function PublicBookingPage() {
                             {qty} Unit
                           </span>
                           {u.capacity > 0 && (
-                            <span className="text-[9px] font-medium text-primary/40 uppercase tracking-widest">
+                            <span className="text-[9px] font-medium text-primary/80 uppercase tracking-widest">
                               Kap: {u.capacity * qty} Orang
                             </span>
                           )}
@@ -1262,18 +1252,13 @@ export default function PublicBookingPage() {
           {/* Summary Footer */}
           <div className="pt-4">
             <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#F1F3EE] p-5 space-y-3 group">
-              {/* Organic Accent in Footer - Very Subtle */}
-              <div className="absolute -left-6 -bottom-6 h-32 w-32 opacity-[0.05] -rotate-12 transition-transform duration-1000 group-hover:rotate-0 group-hover:scale-110">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="#2D3E10" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.5,90,-16.3,88.5,-0.9C87,14.5,81.4,29,72.6,41.4C63.8,53.8,51.8,64,38.3,71.2C24.8,78.4,9.8,82.6,-5.3,81.8C-20.4,81,-35.5,75.2,-48.6,66.3C-61.7,57.4,-72.8,45.4,-78.9,31.5C-85,17.6,-86.1,1.8,-83.4,-13.4C-80.7,-28.6,-74.2,-43.1,-63.4,-53.4C-52.6,-63.7,-37.5,-69.8,-23.4,-77C-9.3,-84.2,3.8,-92.5,44.7,-76.4Z" transform="translate(100 100)" />
-                </svg>
-              </div>
+              {/* Footer accent */
 
               <div className="relative z-10 space-y-3 text-center">
                 <span className="text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.4em]">Estimasi Total Biaya</span>
                 <div className="flex flex-col gap-1">
                   <span className="text-3xl font-black text-[#2D3E10] tracking-tighter tabular-nums">{formatIDR(estimatedAmount)}</span>
-                  <p className="text-[10px] font-medium text-primary/40 italic">
+                  <p className="text-[10px] font-medium text-[#2D3E10]/60 italic">
                     *Termasuk pajak & biaya layanan
                   </p>
                 </div>
@@ -1316,8 +1301,8 @@ export default function PublicBookingPage() {
           </svg>
         </div>
         <div className="space-y-0.5">
-          <span className="block text-[10px] font-black text-[#2D3E10] uppercase tracking-[0.3em]">Secure Stay</span>
-          <span className="block text-[9px] font-medium text-primary/40 uppercase tracking-widest">Premium Protected Reservation</span>
+          <span className="block text-[10px] font-black text-[#2D3E10] uppercase tracking-[0.2em]">Reservasi Resmi</span>
+          <span className="block text-[10px] font-semibold text-primary">Konfirmasi Instan ke WhatsApp & Email</span>
         </div>
       </div>
     </div>
@@ -1443,17 +1428,13 @@ export default function PublicBookingPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-[180px_1fr] sm:items-center">
             <div className="flex justify-center sm:justify-start">
               <div className="relative group">
-                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                
                 <img src="/brand/logowf.png" alt="Woodforest" className="relative h-20 w-24 shrink-0 rounded-xl object-contain sm:h-36 sm:w-36 transition-transform duration-700 group-hover:scale-105" />
               </div>
             </div>
             <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
               <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-primary mb-2 sm:mb-3">
-                <span className="relative flex h-1.5 w-1.5 mr-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
-                </span>
-                Luxury Camping Ground
+                Luxury Nature Camping
               </div>
               <h1 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-4xl">
                 Woodforest <span className="text-primary italic">Booking</span>
@@ -1463,7 +1444,7 @@ export default function PublicBookingPage() {
               </p>
               <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start sm:mt-6 sm:gap-2.5">
                 {["Quiet nature", "Family bonding", "Wellness", "Light adventure"].map((tag) => (
-                  <div key={tag} className="rounded-xl border border-[#E8E8E1] bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] text-primary/40 transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-0.5 sm:rounded-2xl sm:px-4 sm:py-1.5 sm:text-[10px]">
+                  <div key={tag} className="rounded-xl border border-[#E8E8E1] bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] text-[#2D3E10]/70 transition-all hover:border-primary/40 hover:text-primary hover:-translate-y-0.5 sm:rounded-2xl sm:px-4 sm:py-1.5 sm:text-[10px]">
                     {tag}
                   </div>
                 ))}
@@ -1717,7 +1698,7 @@ export default function PublicBookingPage() {
                           if (isCompleted || (step < currentStep)) setCurrentStep(step);
                         }}
                         disabled={!isCompleted && step > currentStep}
-                        className="flex flex-col items-center gap-1.5 outline-none w-full sm:gap-2"
+                        className="flex flex-col items-center gap-1.5 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-xl w-full sm:gap-2"
                       >
                         {/* Line connector */}
                         {step < 3 && (
@@ -1734,7 +1715,7 @@ export default function PublicBookingPage() {
                             ? "border-primary bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
                             : isCompleted 
                               ? "border-primary bg-primary/10 text-primary" 
-                              : "border-[#E8E8E1] bg-white text-[#2D3E10]/20"
+                              : "border-[#E8E8E1] bg-white text-[#2D3E10]/40"
                         }`}>
                           {isCompleted ? (
                             <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -1747,12 +1728,12 @@ export default function PublicBookingPage() {
                         
                         <div className="flex flex-col items-center text-center">
                           <span className={`text-[8px] font-black uppercase tracking-[0.15em] transition-colors duration-300 sm:text-[9px] ${
-                            isActive ? "text-primary" : isCompleted ? "text-[#2D3E10]" : "text-[#2D3E10]/20"
+                            isActive ? "text-primary font-bold" : isCompleted ? "text-[#2D3E10]" : "text-[#2D3E10]/40"
                           }`}>
                             Langkah {step}
                           </span>
                           <span className={`text-[10px] font-bold transition-colors duration-300 sm:text-xs ${
-                            isActive ? "text-[#2D3E10]" : isCompleted ? "text-[#2D3E10]/70" : "text-[#2D3E10]/20"
+                            isActive ? "text-[#2D3E10]" : isCompleted ? "text-[#2D3E10]/80" : "text-[#2D3E10]/40"
                           } hidden sm:block`}>
                             {labels[step-1]}
                           </span>
@@ -1853,7 +1834,7 @@ export default function PublicBookingPage() {
                                   </p>
 
                                   <div className="flex items-center justify-between pt-4 border-t border-[#E8E8E1] sm:pt-6">
-                                    <span className="text-[9px] font-bold uppercase tracking-widest text-[#2D3E10] sm:text-[10px]">Eksplorasi Detail</span>
+                                    <span className="text-[9px] font-bold uppercase tracking-wider text-[#2D3E10] sm:text-[10px]">Pilih Kategori Ini</span>
                                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1 sm:h-10 sm:w-10">
                                       <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -2152,12 +2133,7 @@ export default function PublicBookingPage() {
               {(effectiveKavlingScope || kavlingAmbiguous) && requiredKavlings > 0 && (
                 <div className="rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-xl shadow-black/10 border-2 border-primary/20 bg-white/95 backdrop-blur-md transition-all duration-700 hover:shadow-primary/10">
                   <div className="rounded-t-[2.5rem] border-b border-[#E8E8E1] bg-[#F1F3EE]/30 px-8 py-8 relative group overflow-hidden">
-                    {/* Organic Decoration for Kavling Selection Header */}
-                    <div className="absolute -left-16 -top-16 h-64 w-64 opacity-[0.03] transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-12 pointer-events-none">
-                      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#2D3E10" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87,-15.7,85.6,-0.8C84.2,14.1,78.1,28.2,69.2,40.1C60.3,52,48.6,61.7,35.4,69.4C22.2,77.1,7.5,82.8,-7.4,82.8C-22.3,82.8,-37.4,77.1,-50.6,69.4C-63.8,61.7,-75.1,52,-82.1,40.1C-89.1,28.2,-91.8,14.1,-90.4,-0.8C-89,-15.7,-83.5,-31.3,-74.3,-44.7C-65.1,-58.1,-52.2,-69.2,-38.8,-76.4C-25.4,-83.6,-12.7,-86.8,0.7,-88C14.1,-89.2,28.2,-88.4,44.7,-76.4Z" transform="translate(100 100)" />
-                      </svg>
-                    </div>
+                    {/* Kavling header decoration */
                     
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between relative z-10">
                       <div className="flex flex-col items-center gap-5 sm:flex-row">
@@ -2173,7 +2149,7 @@ export default function PublicBookingPage() {
                           <h3 className="text-2xl font-bold tracking-tight text-[#2D3E10]">Pilih Lokasi <span className="italic text-primary">Kavling</span></h3>
                           <div className="flex items-center justify-center gap-2 sm:justify-start">
                             <span className="h-1.5 w-1.5 rounded-full bg-primary/40 animate-pulse" />
-                            <p className="text-[10px] font-bold text-primary/40 uppercase tracking-[0.2em]">Tentukan titik camping favorit Anda</p>
+                            <p className="text-[10px] font-bold text-primary/80 uppercase tracking-[0.2em]">Tentukan titik camping favorit Anda</p>
                           </div>
                         </div>
                       </div>
@@ -2181,7 +2157,7 @@ export default function PublicBookingPage() {
                         <div className="flex flex-col items-center sm:items-end">
                           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Progres Pemilihan</span>
                           <span className="text-base font-black text-[#2D3E10] tracking-tighter tabular-nums">
-                            {kavlingSelected.length} <span className="text-primary/40">/</span> {requiredKavlings} <span className="text-[10px] font-bold text-primary/40 uppercase ml-1">Kavling</span>
+                            {kavlingSelected.length} <span className="text-primary/60">/</span> {requiredKavlings} <span className="text-[10px] font-bold text-primary uppercase ml-1">Kavling</span>
                           </span>
                         </div>
                         <div className="h-12 w-1.5 rounded-full bg-[#F1F3EE] relative overflow-hidden">
@@ -2755,7 +2731,7 @@ export default function PublicBookingPage() {
                           <div className="relative space-y-2">
                             <div className="flex items-center justify-between px-1">
                               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Catatan Khusus</label>
-                              <span className="text-[9px] font-bold text-primary/40 uppercase tracking-[0.1em]">Opsional</span>
+                              <span className="text-[9px] font-bold text-primary/80 uppercase tracking-[0.1em]">Opsional</span>
                             </div>
                             <textarea 
                               value={specialRequest} 
@@ -2777,7 +2753,7 @@ export default function PublicBookingPage() {
                           <div className="space-y-2">
                             <div className="flex justify-between items-center">
                               <span className="text-xs font-medium text-[#2D3E10]/60">Durasi</span>
-                              <span className="text-xs font-bold text-[#2D3E10]">{checkIn} — {checkOut}</span>
+                              <span className="text-xs font-bold text-[#2D3E10]">{checkIn} s/d {checkOut}</span>
                             </div>
                             <div className="flex justify-between items-center">
                               <span className="text-xs font-medium text-[#2D3E10]/60">Total Tamu</span>
@@ -2947,12 +2923,12 @@ export default function PublicBookingPage() {
         </div>
 
         <div className="mt-20 pt-10 border-t border-[#E8E8E1]/40 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#2D3E10]/20">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/50">
             &copy; 2026 Woodforest Jayagiri 48.
           </p>
           <div className="flex gap-8">
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#2D3E10]/20 cursor-default">Privacy</span>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#2D3E10]/20 cursor-default">Terms</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/50 cursor-default">Privacy</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/50 cursor-default">Terms</span>
           </div>
         </div>
       </div>
