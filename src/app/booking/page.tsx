@@ -1089,16 +1089,18 @@ export default function PublicBookingPage() {
     <div className="sticky top-6 space-y-6">
       <div className="overflow-hidden rounded-[2.5rem] border-2 border-primary/30 bg-white/95 backdrop-blur-xl shadow-2xl shadow-black/10 transition-all duration-700 hover:shadow-primary/20 hover:border-primary/50">
         {/* Header - Premium Nature Gradient */}
-        <div className="relative overflow-hidden bg-[#2D3E10] px-6 py-6 sm:px-7 sm:py-7">
-          <div className="relative z-10">
-            <h3 className="text-2xl font-bold tracking-tight text-white">Ringkasan <span className="italic font-serif opacity-80">Pesanan</span></h3>
-            <div className="mt-3 flex items-center gap-3">
-              <span className="h-[1px] w-8 bg-primary/40"></span>
-              <p className="text-[10px] font-bold text-white/80 uppercase tracking-[0.4em]">Exclusive Stay</p>
+        <div className="relative overflow-hidden bg-[#2D3E10] px-6 py-6 sm:px-7 sm:py-7 text-center">
+          <div className="relative z-10 flex flex-col items-center justify-center">
+            <h3 className="text-2xl font-bold tracking-tight text-white">
+              Ringkasan <span className="italic font-serif opacity-90 text-[#F1F3EE]">Pesanan</span>
+            </h3>
+            <div className="mt-2.5 flex items-center justify-center gap-2.5">
+              <span className="h-px w-5 bg-white/20" />
+              <p className="text-[10px] font-bold text-white/80 uppercase tracking-[0.3em]">Exclusive Stay</p>
+              <span className="h-px w-5 bg-white/20" />
             </div>
           </div>
-          
-                  </div>
+        </div>
         
         <div className="p-5 sm:p-6 space-y-6 sm:space-y-7">
           {/* Jadwal & Tamu */}
