@@ -1095,7 +1095,7 @@ export default function PublicBookingPage() {
     <div className="sticky top-6 space-y-6">
       <div className="overflow-hidden rounded-[2.5rem] border-2 border-primary/30 bg-white/95 backdrop-blur-xl shadow-2xl shadow-black/10 transition-all duration-700 hover:shadow-primary/20 hover:border-primary/50">
         {/* Header - Premium Nature Gradient */}
-        <div className="relative overflow-hidden bg-[#2D3E10] px-8 py-12">
+        <div className="relative overflow-hidden bg-[#2D3E10] px-6 py-6 sm:px-7 sm:py-7">
           <div className="relative z-10">
             <h3 className="text-2xl font-bold tracking-tight text-white">Ringkasan <span className="italic font-serif opacity-80">Pesanan</span></h3>
             <div className="mt-3 flex items-center gap-3">
@@ -1112,9 +1112,9 @@ export default function PublicBookingPage() {
           </div>
         </div>
         
-        <div className="p-8 space-y-12">
+        <div className="p-5 sm:p-6 space-y-6 sm:space-y-7">
           {/* Jadwal & Tamu */}
-          <div className="space-y-8">
+          <div className="space-y-5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Rencana Kunjungan</span>
               <button 
@@ -1167,7 +1167,7 @@ export default function PublicBookingPage() {
           </div>
 
           {/* Unit Terpilih */}
-          <div className="space-y-8">
+          <div className="space-y-5">
             <div className="border-b border-[#E8E8E1] pb-4">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Akomodasi</span>
             </div>
@@ -1208,7 +1208,7 @@ export default function PublicBookingPage() {
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-10 text-center rounded-[2rem] border-2 border-dashed border-[#E8E8E1] bg-[#F1F3EE]/20">
+              <div className="flex flex-col items-center justify-center py-6 text-center rounded-2xl border-2 border-dashed border-[#E8E8E1] bg-[#F1F3EE]/20">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#2D3E10]/20 shadow-sm border border-[#E8E8E1] mb-4">
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -1261,7 +1261,7 @@ export default function PublicBookingPage() {
 
           {/* Summary Footer */}
           <div className="pt-4">
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-[#F1F3EE] p-10 space-y-6 group">
+            <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#F1F3EE] p-5 space-y-3 group">
               {/* Organic Accent in Footer - Very Subtle */}
               <div className="absolute -left-6 -bottom-6 h-32 w-32 opacity-[0.05] -rotate-12 transition-transform duration-1000 group-hover:rotate-0 group-hover:scale-110">
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -1283,7 +1283,7 @@ export default function PublicBookingPage() {
         </div>
 
         {/* Action Button Section */}
-        <div className="bg-white px-8 pb-10 pt-4 border-t border-[#E8E8E1]/60">
+        <div className="bg-white px-6 pb-6 pt-3 border-t border-[#E8E8E1]/60">
           <button
             onClick={() => {
               if (currentStep === 1) setCurrentStep(2);
@@ -1295,7 +1295,7 @@ export default function PublicBookingPage() {
               (currentStep === 2 && (!checkIn || !checkOut || selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings))) || 
               (currentStep === 3 && (!name || !phone || !email))
             }
-            className="group relative w-full overflow-hidden rounded-[1.2rem] bg-[#2D3E10] py-6 text-[13px] font-bold text-white shadow-xl shadow-[#2D3E10]/20 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-20 disabled:pointer-events-none"
+            className="group relative w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#2D3E10] py-4 text-xs font-bold text-white shadow-xl shadow-[#2D3E10]/20 transition-all hover:bg-[#3D5216] hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-20 disabled:pointer-events-none"
           >
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
             <div className="relative z-10 flex items-center justify-center gap-4 uppercase tracking-[0.3em]">
@@ -1309,7 +1309,7 @@ export default function PublicBookingPage() {
       </div>
 
       {/* Trust Badge - More Elegant */}
-      <div className="flex items-center gap-5 px-10 py-8 rounded-[2.5rem] bg-[#F1F3EE]/30 border border-[#E8E8E1] group transition-all duration-500 hover:bg-white hover:shadow-xl hover:shadow-[#2D3E10]/5">
+      <div className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-[#F1F3EE]/30 border border-[#E8E8E1] group transition-all duration-500 hover:bg-white hover:shadow-md">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm transition-transform duration-700 group-hover:rotate-[360deg]">
           <svg className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -1438,7 +1438,7 @@ export default function PublicBookingPage() {
         <div className="absolute -right-1/4 -bottom-1/4 h-[100%] w-[100%] rounded-full bg-primary/[0.02] blur-[120px] animate-pulse duration-[10000ms]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-3 py-6 sm:px-6 lg:px-8">
+      <div className="relative mx-auto w-full max-w-7xl xl:max-w-[1400px] 2xl:max-w-[1480px] px-3 py-6 sm:px-6 lg:px-8">
         <div className={`${success ? "no-print " : ""}mb-6 overflow-hidden rounded-[1.2rem] border border-[#E8E8E1] bg-white px-4 py-6 shadow-xl shadow-[#2D3E10]/5 backdrop-blur-xl transition-all hover:shadow-primary/10 sm:rounded-[2.5rem] sm:p-8`}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-[180px_1fr] sm:items-center">
             <div className="flex justify-center sm:justify-start">
@@ -1702,7 +1702,7 @@ export default function PublicBookingPage() {
         ) : (
           <div className="mt-8 space-y-8 pb-20 sm:mt-12 sm:space-y-12">
             {/* Step Indicators - Modern & Professional */}
-            <div className="mx-auto w-full max-w-7xl">
+            <div className="mx-auto w-full max-w-4xl">
               <div className="relative flex items-center justify-between gap-2 sm:gap-4">
                 {[1, 2, 3].map((step) => {
                   const isActive = currentStep === step;
@@ -1764,8 +1764,8 @@ export default function PublicBookingPage() {
               </div>
             </div>
 
-            <div className="relative mt-6 mx-auto max-w-6xl xl:max-w-[1150px] sm:mt-10 px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 gap-10 lg:gap-14 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px]">
+            <div className="relative mt-6 w-full sm:mt-8">
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] 2xl:grid-cols-[1fr_400px]">
                 {/* Main Content Area */}
                 <div className="space-y-8">
                   {currentStep === 1 && (
@@ -1883,7 +1883,7 @@ export default function PublicBookingPage() {
                   </p>
                 </div>
 
-                <div className="mx-auto w-full space-y-10 sm:space-y-16">
+                <div className="mx-auto w-full space-y-6 sm:space-y-8">
                   {/* Date Selection */}
                   <div className="space-y-5">
                     <div className="flex items-center gap-3 px-1">
@@ -1895,8 +1895,8 @@ export default function PublicBookingPage() {
                       <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
                     </div>
 
-                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-6 shadow-sm shadow-[#2D3E10]/5">
-                      <div className="grid grid-cols-2 gap-4 sm:gap-8">
+                    <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-4 sm:p-5 shadow-sm shadow-[#2D3E10]/5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-5">
                           <div className="mb-2 flex items-center gap-2">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Check-in</span>
@@ -1947,8 +1947,8 @@ export default function PublicBookingPage() {
                       <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
                     </div>
 
-                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-6 shadow-sm shadow-[#2D3E10]/5">
-                      <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-3">
+                    <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-4 sm:p-5 shadow-sm shadow-[#2D3E10]/5">
+                      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-3">
                         <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#F4F5F1] p-4 transition-all hover:border-primary/40 hover:bg-white hover:shadow-md sm:rounded-3xl sm:p-5">
                           <div className="space-y-1">
                             <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Dewasa</p>
@@ -1974,7 +1974,7 @@ export default function PublicBookingPage() {
                     </div>
                   </div>
 
-                    <div className="mb-6 sm:mb-8 flex flex-col items-center justify-between gap-3 sm:gap-5 rounded-2xl sm:rounded-[2.5rem] border border-[#E8E8E1] bg-white p-3.5 sm:p-6 shadow-sm sm:flex-row relative group/filter overflow-hidden">
+                    <div className="mb-4 sm:mb-6 flex flex-col items-center justify-between gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3.5 sm:p-4 shadow-sm sm:flex-row relative group/filter overflow-hidden">
                       <div className="flex flex-col items-center gap-2 sm:gap-4 text-center sm:flex-row sm:text-left relative z-10">
                         <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-primary/10 text-primary transition-transform group-hover/filter:rotate-6">
                           <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2039,16 +2039,16 @@ export default function PublicBookingPage() {
                       >
                         <div className="flex flex-col lg:flex-row lg:items-stretch">
                           {/* Image Section */}
-                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-[300px] xl:w-[320px] overflow-hidden lg:shrink-0 p-3 sm:p-4 pb-0 lg:pr-0">
-                            <div className="w-full h-full rounded-[1rem] sm:rounded-[2rem] overflow-hidden relative">
+                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-[260px] xl:w-[300px] 2xl:w-[340px] overflow-hidden lg:shrink-0 p-3 sm:p-4 pb-0 lg:pr-0">
+                            <div className="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative">
                               <ImageCarousel images={images} className="h-full w-full rounded-none border-none" />
                               {u.available <= 0 && (
                                 <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
                                   <span className="rounded-full bg-destructive/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-destructive">Penuh</span>
                                 </div>
                               )}
-                              <div className="absolute left-4 top-4 sm:left-6 sm:top-6">
-                                <div className="rounded-full bg-white/95 px-3 py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10] backdrop-blur-md shadow-sm">
+                              <div className="absolute left-3.5 top-3.5 sm:left-4 sm:top-4">
+                                <div className="rounded-full bg-white/95 px-3 py-1 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] text-[#2D3E10] backdrop-blur-md shadow-sm">
                                   {u.type}
                                 </div>
                               </div>
@@ -2056,58 +2056,59 @@ export default function PublicBookingPage() {
                           </div>
                           
                           {/* Content Section */}
-                          <div className="flex flex-1 min-w-0 flex-col p-5 sm:p-6 lg:p-7 relative">
-                            
-                            <div className="flex flex-col items-start text-left space-y-2 mb-2">
-                              <h3 className="text-xl sm:text-2xl font-black leading-tight text-[#2D3E10] transition-colors group-hover:text-primary">
-                                {u.name}
-                              </h3>
-                              <div className="flex flex-wrap items-center gap-1.5 sm:gap-3">
-                                <span className="flex items-center rounded-lg bg-[#F1F3EE] px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">
-                                  <svg className="mr-1 h-3 w-3 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                  </svg>
-                                  {u.capacity} Tamu
-                                </span>
-                                <span className={`flex items-center rounded-md px-2 py-0.5 text-[9px] sm:text-[10px] font-bold ${u.available > 2 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
-                                  <span className={`h-1.5 w-1.5 mr-1 rounded-full shrink-0 ${u.available > 2 ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                                  Sisa {u.available} Unit
-                                </span>
+                          <div className="flex flex-1 min-w-0 flex-col p-4 sm:p-5 lg:p-6 xl:p-7 relative justify-between">
+                            <div>
+                              <div className="flex flex-col items-start text-left space-y-1.5 mb-2">
+                                <h3 className="text-xl sm:text-2xl font-black leading-tight text-[#2D3E10] transition-colors group-hover:text-primary">
+                                  {u.name}
+                                </h3>
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span className="flex items-center rounded-lg bg-[#F1F3EE] px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/80">
+                                    <svg className="mr-1.5 h-3.5 w-3.5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    {u.capacity} Tamu
+                                  </span>
+                                  <span className={`flex items-center rounded-md px-2 py-0.5 text-[9px] sm:text-[10px] font-bold ${u.available > 2 ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                                    <span className={`h-1.5 w-1.5 mr-1.5 rounded-full shrink-0 ${u.available > 2 ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                                    Sisa {u.available} Unit
+                                  </span>
+                                </div>
                               </div>
+
+                              {u.description && (
+                                <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm font-medium leading-relaxed text-[#2D3E10]/70 line-clamp-2 text-left">{u.description}</p>
+                              )}
+
+                              {inc.length > 0 && (
+                                <div className="mt-3 sm:mt-4 rounded-xl bg-[#F8F9F5] p-3 sm:p-3.5 border border-[#E8E8E1]/80">
+                                  <p className="mb-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/60 text-left">Fasilitas Termasuk</p>
+                                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                                    {inc.slice(0, 4).map((t, idx) => (
+                                      <li key={idx} className="flex items-center text-[10px] sm:text-[11px] font-bold text-[#2D3E10] justify-start min-w-0">
+                                        <div className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] shrink-0">
+                                          <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                          </svg>
+                                        </div>
+                                        <span className="truncate">{t}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
                             </div>
 
-                            {u.description && (
-                              <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-medium leading-relaxed text-[#2D3E10]/60 line-clamp-2 text-left">{u.description}</p>
-                            )}
-
-                            {inc.length > 0 && (
-                              <div className="mt-4 sm:mt-5 rounded-xl bg-[#F4F5F1] p-3.5 sm:p-4 border border-[#E8E8E1]/60">
-                                <p className="mb-2.5 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/60 text-left">Fasilitas Termasuk</p>
-                                <ul className="grid grid-cols-2 gap-2 sm:gap-2.5">
-                                  {inc.slice(0, 4).map((t, idx) => (
-                                    <li key={idx} className="flex items-center text-[9px] sm:text-[10px] font-bold text-[#2D3E10] justify-start min-w-0">
-                                      <div className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] shrink-0">
-                                        <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                      </div>
-                                      <span className="truncate">{t}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            <div className="mt-auto pt-6 sm:pt-8">
-                              <div className="flex flex-row items-center justify-between border-t border-[#E8E8E1]/60 pt-4 sm:pt-5">
-                                <div className="space-y-0.5 text-left flex-1 min-w-0">
-                                  <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/50">Total Menginap</p>
-                                  <div className="flex flex-col xl:flex-row xl:items-baseline gap-0.5 xl:gap-2 flex-wrap">
-                                    <p className="text-lg sm:text-xl font-black text-[#2D3E10]">{formatIDR(sumDailyPrice(u))}</p>
-                                    <p className="text-[10px] font-bold text-[#2D3E10]/50">({priceRangeLabel(u)} /malam)</p>
+                            <div className="mt-4 pt-3.5 sm:mt-5 sm:pt-4 border-t border-[#E8E8E1]/70">
+                              <div className="flex flex-wrap items-center justify-between gap-3">
+                                <div className="space-y-0.5 text-left min-w-0">
+                                  <p className="text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/50">Total Menginap</p>
+                                  <div className="flex flex-wrap items-baseline gap-1.5">
+                                    <span className="text-xl sm:text-2xl font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(sumDailyPrice(u))}</span>
+                                    <span className="text-[11px] font-semibold text-[#2D3E10]/50">({priceRangeLabel(u)} /malam)</span>
                                   </div>
                                 </div>
-                                <div className="shrink-0 ml-4 bg-white rounded-full shadow-sm ring-1 ring-[#E8E8E1] transition-shadow hover:shadow-md">
+                                <div className="shrink-0">
                                   <QuantityStepper
                                     value={unitQty[u.id] ?? 0}
                                     min={0}
