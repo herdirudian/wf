@@ -2058,64 +2058,35 @@ export default function PublicBookingPage() {
                           {/* Content Section */}
                           <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-8 relative">
                             
-                            <div className="flex flex-row items-center justify-between gap-3.5 w-full relative z-10 mb-4">
-                              <div className="flex flex-col items-start text-left space-y-2">
-                                <h3 className="text-xl sm:text-2xl font-black leading-tight text-[#2D3E10] transition-colors group-hover/title:text-primary">
-                                  {u.name}
-                                </h3>
-                                <div className="flex flex-wrap items-center gap-1.5 sm:gap-3">
-                                  <span className="flex items-center rounded-lg bg-[#F1F3EE] px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">
-                                    <svg className="mr-1 h-3 w-3 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                    {u.capacity} Tamu
-                                  </span>
-                                  <span className={`flex items-center rounded-md px-2 py-0.5 text-[9px] sm:text-[10px] font-bold ${u.available > 2 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
-                                    <span className={`h-1.5 w-1.5 mr-1 rounded-full shrink-0 ${u.available > 2 ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                                    Sisa {u.available} Unit
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="shrink-0">
-                                <QuantityStepper
-                                  value={unitQty[u.id] ?? 0}
-                                  min={0}
-                                  max={u.available}
-                                  size="sm"
-                                  disabled={u.available <= 0}
-                                  ariaLabel={`qty ${u.name}`}
-                                  onChange={(next) =>
-                                    setUnitQty((s) => ({
-                                      ...s,
-                                      [u.id]: Math.max(0, Math.min(u.available, next)),
-                                    }))
-                                  }
-                                />
+                            <div className="flex flex-col items-start text-left space-y-2 mb-2">
+                              <h3 className="text-xl sm:text-2xl font-black leading-tight text-[#2D3E10] transition-colors group-hover:text-primary">
+                                {u.name}
+                              </h3>
+                              <div className="flex flex-wrap items-center gap-1.5 sm:gap-3">
+                                <span className="flex items-center rounded-lg bg-[#F1F3EE] px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">
+                                  <svg className="mr-1 h-3 w-3 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                  </svg>
+                                  {u.capacity} Tamu
+                                </span>
+                                <span className={`flex items-center rounded-md px-2 py-0.5 text-[9px] sm:text-[10px] font-bold ${u.available > 2 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+                                  <span className={`h-1.5 w-1.5 mr-1 rounded-full shrink-0 ${u.available > 2 ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                                  Sisa {u.available} Unit
+                                </span>
                               </div>
                             </div>
 
                             {u.description && (
-                              <p className="mt-2 sm:mt-4 text-xs sm:text-sm font-medium leading-relaxed text-[#2D3E10]/60 line-clamp-2 text-left">{u.description}</p>
+                              <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-medium leading-relaxed text-[#2D3E10]/60 line-clamp-2 text-left">{u.description}</p>
                             )}
 
-                            <div className="mt-3 sm:mt-8 grid grid-cols-2 gap-2 border-t border-[#E8E8E1]/60 pt-3 sm:pt-8">
-                              <div className="space-y-0.5 text-left">
-                                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/70">Per Malam</p>
-                                <p className="text-sm sm:text-xl font-black text-[#2D3E10]">{priceRangeLabel(u)}</p>
-                              </div>
-                              <div className="space-y-0.5 text-right">
-                                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/70">Total Menginap</p>
-                                <p className="text-base sm:text-2xl font-black text-primary italic drop-shadow-sm">{formatIDR(sumDailyPrice(u))}</p>
-                              </div>
-                            </div>
-
                             {inc.length > 0 && (
-                              <div className="mt-3 sm:mt-8 rounded-xl sm:rounded-[1.5rem] bg-[#F1F3EE]/50 p-3 sm:p-6 border border-[#E8E8E1]/40 relative overflow-hidden">
-                                <p className="mb-2 text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-primary/50 text-left">Fasilitas Termasuk</p>
-                                <ul className="grid grid-cols-2 gap-1.5 sm:gap-3 relative z-10">
+                              <div className="mt-4 sm:mt-5 rounded-xl bg-[#F4F5F1] p-3.5 sm:p-4 border border-[#E8E8E1]/60">
+                                <p className="mb-2.5 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/60 text-left">Fasilitas Termasuk</p>
+                                <ul className="grid grid-cols-2 gap-2 sm:gap-2.5">
                                   {inc.slice(0, 4).map((t, idx) => (
                                     <li key={idx} className="flex items-center text-[9px] sm:text-[10px] font-bold text-[#2D3E10] justify-start">
-                                      <div className="mr-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] shrink-0">
+                                      <div className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] shrink-0">
                                         <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                         </svg>
@@ -2126,6 +2097,34 @@ export default function PublicBookingPage() {
                                 </ul>
                               </div>
                             )}
+
+                            <div className="mt-auto pt-6 sm:pt-8">
+                              <div className="flex flex-row items-center justify-between border-t border-[#E8E8E1]/60 pt-4 sm:pt-5">
+                                <div className="space-y-0.5 text-left flex-1">
+                                  <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/50">Total Menginap</p>
+                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-2">
+                                    <p className="text-lg sm:text-xl font-black text-[#2D3E10]">{formatIDR(sumDailyPrice(u))}</p>
+                                    <p className="text-[10px] font-bold text-[#2D3E10]/50">({priceRangeLabel(u)} /malam)</p>
+                                  </div>
+                                </div>
+                                <div className="shrink-0 ml-4 bg-white rounded-full shadow-sm ring-1 ring-[#E8E8E1] transition-shadow hover:shadow-md">
+                                  <QuantityStepper
+                                    value={unitQty[u.id] ?? 0}
+                                    min={0}
+                                    max={u.available}
+                                    size="sm"
+                                    disabled={u.available <= 0}
+                                    ariaLabel={`qty ${u.name}`}
+                                    onChange={(next) =>
+                                      setUnitQty((s) => ({
+                                        ...s,
+                                        [u.id]: Math.max(0, Math.min(u.available, next)),
+                                      }))
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
