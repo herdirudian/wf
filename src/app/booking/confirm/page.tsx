@@ -315,9 +315,6 @@ export default function BookingConfirmPage() {
         <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
           {/* Header Section */}
           <div className="mb-10 flex flex-col items-center text-center sm:items-start sm:text-left">
-            <div className="inline-flex items-center rounded-full bg-primary/5 px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-primary mb-4 border border-primary/10">
-              Tahap Terakhir
-            </div>
             <h1 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
               Konfirmasi <span className="italic text-primary">Pesanan</span>
             </h1>
@@ -561,9 +558,7 @@ export default function BookingConfirmPage() {
             onClick={() => confirmAndPay()}
             className="group relative order-1 flex min-h-[3.75rem] w-full flex-[2] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] active:scale-[0.98] disabled:opacity-30 sm:order-2"
           >
-            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
             <span className="relative z-10">{submitting ? "Memproses..." : "Konfirmasi & Bayar Sekarang"}</span>
-            
           </button>
           <button
             type="button"
