@@ -1093,14 +1093,14 @@ export default function PublicBookingPage() {
 
   const sidebarContent = (
     <div className="sticky top-6 space-y-6">
-      <div className="overflow-hidden rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/5 transition-all duration-700 hover:shadow-primary/10">
+      <div className="overflow-hidden rounded-[2.5rem] border-2 border-primary/30 bg-white/95 backdrop-blur-xl shadow-2xl shadow-black/10 transition-all duration-700 hover:shadow-primary/20 hover:border-primary/50">
         {/* Header - Premium Nature Gradient */}
         <div className="relative overflow-hidden bg-[#2D3E10] px-8 py-12">
           <div className="relative z-10">
             <h3 className="text-2xl font-bold tracking-tight text-white">Ringkasan <span className="italic font-serif opacity-80">Pesanan</span></h3>
             <div className="mt-3 flex items-center gap-3">
               <span className="h-[1px] w-8 bg-primary/40"></span>
-              <p className="text-[10px] font-bold text-white/50 uppercase tracking-[0.4em]">Exclusive Stay</p>
+              <p className="text-[10px] font-bold text-white/80 uppercase tracking-[0.4em]">Exclusive Stay</p>
             </div>
           </div>
           
@@ -1116,7 +1116,7 @@ export default function PublicBookingPage() {
           {/* Jadwal & Tamu */}
           <div className="space-y-8">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Rencana Kunjungan</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Rencana Kunjungan</span>
               <button 
                 onClick={() => setCurrentStep(1)} 
                 className="group flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest transition-all hover:text-[#2D3E10]"
@@ -1139,7 +1139,7 @@ export default function PublicBookingPage() {
                   </svg>
                 </div>
                 <div className="flex flex-col gap-1.5 py-0.5">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Tanggal Menginap</span>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Tanggal Menginap</span>
                   <span className="text-sm font-bold text-[#2D3E10] leading-none tracking-tight">
                     {checkIn ? formatDateWIB(new Date(checkIn)) : "Pilih Tanggal"}
                     {checkOut && <span className="mx-2 text-[#2D3E10]/20">—</span>}
@@ -1156,10 +1156,10 @@ export default function PublicBookingPage() {
                   </svg>
                 </div>
                 <div className="flex flex-col gap-1.5 py-0.5">
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jumlah Tamu</span>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Jumlah Tamu</span>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-[#2D3E10] tracking-tight">{totalGuest} Orang</span>
-                      <span className="text-[10px] font-medium text-primary/60 italic">({adultPax}D, {child5to10Pax + childUnder5Pax}A)</span>
+                      <span className="text-[10px] font-medium text-primary/90 italic">({adultPax}D, {child5to10Pax + childUnder5Pax}A)</span>
                     </div>
                   </div>
               </div>
@@ -1169,7 +1169,7 @@ export default function PublicBookingPage() {
           {/* Unit Terpilih */}
           <div className="space-y-8">
             <div className="border-b border-[#E8E8E1] pb-4">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Akomodasi</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Akomodasi</span>
             </div>
             {selectedVisibleUnits.length > 0 ? (
               <div className="space-y-6">
@@ -1199,7 +1199,7 @@ export default function PublicBookingPage() {
                 {kavlingSelected.length > 0 && (
                   <div className="rounded-2xl bg-[#F1F3EE]/50 p-4 border border-[#E8E8E1]/60">
                     <div className="flex flex-col gap-1">
-                      <span className="text-[9px] font-black text-[#2D3E10]/40 uppercase tracking-widest">Kavling Terpilih</span>
+                      <span className="text-[9px] font-black text-[#2D3E10]/70 uppercase tracking-widest">Kavling Terpilih</span>
                       <span className="text-xs font-black text-primary tracking-tight">
                         {kavlingSelected.sort((a, b) => Number(a) - Number(b)).join(", ")}
                       </span>
@@ -1214,7 +1214,7 @@ export default function PublicBookingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                   </svg>
                 </div>
-                <p className="text-[10px] font-bold text-[#2D3E10]/30 uppercase tracking-[0.2em]">Belum Ada Pilihan</p>
+                <p className="text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.2em]">Belum Ada Pilihan</p>
                 </div>
               )}
           </div>
@@ -1223,7 +1223,7 @@ export default function PublicBookingPage() {
           {addons.some(a => effectiveAddonQty[a.id] > 0) && (
             <div className="space-y-8">
               <div className="border-b border-[#E8E8E1] pb-4">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Layanan Tambahan</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Layanan Tambahan</span>
               </div>
               <div className="space-y-6">
                 {addons.filter(a => effectiveAddonQty[a.id] > 0).map(a => (
@@ -1235,7 +1235,7 @@ export default function PublicBookingPage() {
                           <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[7px] font-black text-primary uppercase tracking-tighter">Auto</span>
                         )}
                       </div>
-                      <span className="text-[9px] font-bold text-[#2D3E10]/40 uppercase tracking-widest">Qty: {effectiveAddonQty[a.id]}</span>
+                      <span className="text-[9px] font-bold text-[#2D3E10]/70 uppercase tracking-widest">Qty: {effectiveAddonQty[a.id]}</span>
                     </div>
                     <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(a.price * effectiveAddonQty[a.id])}</span>
                   </div>
@@ -1246,7 +1246,7 @@ export default function PublicBookingPage() {
 
           {/* Rincian Biaya */}
           <div className="space-y-6 pt-4 border-t border-[#E8E8E1]">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Rincian Biaya</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Rincian Biaya</span>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-medium text-[#2D3E10]/50">Subtotal Akomodasi</span>
@@ -1270,7 +1270,7 @@ export default function PublicBookingPage() {
               </div>
 
               <div className="relative z-10 space-y-3 text-center">
-                <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.4em]">Estimasi Total Biaya</span>
+                <span className="text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.4em]">Estimasi Total Biaya</span>
                 <div className="flex flex-col gap-1">
                   <span className="text-3xl font-black text-[#2D3E10] tracking-tighter tabular-nums">{formatIDR(estimatedAmount)}</span>
                   <p className="text-[10px] font-medium text-primary/40 italic">
@@ -1458,7 +1458,7 @@ export default function PublicBookingPage() {
               <h1 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
                 Woodforest <span className="text-primary italic">Booking</span>
               </h1>
-              <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium leading-relaxed text-primary/60 italic sm:mx-0 sm:mt-3 sm:text-sm">
+              <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium leading-relaxed text-primary/90 italic sm:mx-0 sm:mt-3 sm:text-sm">
                 "Grounded, calm, warm. Pilih tanggal, pilih paket, dan nikmati pengalaman yang tenang di alam untuk bonding keluarga."
               </p>
               <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start sm:mt-6 sm:gap-2.5">
@@ -1531,9 +1531,9 @@ export default function PublicBookingPage() {
                   <div className="text-center">
                     <img src="/brand/logowf.png" alt="Woodforest" className="print-logo mx-auto h-32 w-32 object-contain" />
                     <div className="mt-4 text-xl font-bold tracking-tight text-[#2D3E10]">Woodforest <span className="italic font-serif opacity-60">Jayagiri 48</span></div>
-                    <div className="mt-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/30">Quiet nature • Family bonding • Wellness • Light adventure</div>
-                    <div className="mt-4 text-[11px] font-medium text-[#2D3E10]/40">admin@woodforestjayagiri48.com · +62 811-2090-808</div>
-                    <div className="mt-1 text-[10px] font-medium text-[#2D3E10]/40">Jam check-in 14:00 WIB • Check-out 12:00 WIB</div>
+                    <div className="mt-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Quiet nature • Family bonding • Wellness • Light adventure</div>
+                    <div className="mt-4 text-[11px] font-medium text-[#2D3E10]/70">admin@woodforestjayagiri48.com · +62 811-2090-808</div>
+                    <div className="mt-1 text-[10px] font-medium text-[#2D3E10]/70">Jam check-in 14:00 WIB • Check-out 12:00 WIB</div>
                   </div>
 
                   <div className="my-8 h-px bg-[#E8E8E1]" />
@@ -1548,11 +1548,11 @@ export default function PublicBookingPage() {
                         </div>
                         <div className="flex flex-col gap-4 md:text-right">
                           <div>
-                            <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">Booking ID</div>
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">Booking ID</div>
                             <div className="mt-1 font-mono text-sm font-bold text-[#2D3E10]">{invoice.code}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30">Status</div>
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">Status</div>
                             <div className="mt-1">
                               <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${
                                 invoice.payment.paidAmount >= invoice.payment.amount 
@@ -1583,12 +1583,12 @@ export default function PublicBookingPage() {
 
                           {invoice.addOns?.length ? (
                             <div className="mt-6 pt-6 border-t border-[#E8E8E1]">
-                              <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30 mb-4">Add-Ons</div>
+                              <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70 mb-4">Add-Ons</div>
                               <div className="space-y-3">
                                 {invoice.addOns.map((a, idx) => (
                                   <div key={`${a.name}-${idx}`} className="flex items-center justify-between gap-3 text-sm">
                                     <div className="text-[#2D3E10]">
-                                      {a.name} <span className="ml-1 text-[10px] font-bold text-[#2D3E10]/30">({formatIDR(a.price)})</span>
+                                      {a.name} <span className="ml-1 text-[10px] font-bold text-[#2D3E10]/70">({formatIDR(a.price)})</span>
                                     </div>
                                     <div className="font-mono text-[#2D3E10]/60">x{a.quantity}</div>
                                   </div>
@@ -1599,13 +1599,13 @@ export default function PublicBookingPage() {
 
                           <div className="mt-8 pt-6 border-t border-[#E8E8E1]">
                             <div className="grid grid-cols-2 gap-y-4 text-xs">
-                              <div className="text-[#2D3E10]/40">Check-in</div>
+                              <div className="text-[#2D3E10]/70">Check-in</div>
                               <div className="text-right font-bold text-[#2D3E10]">{formatDateWIB(new Date(invoice.checkIn))}</div>
-                              <div className="text-[#2D3E10]/40">Check-out</div>
+                              <div className="text-[#2D3E10]/70">Check-out</div>
                               <div className="text-right font-bold text-[#2D3E10]">{formatDateWIB(new Date(invoice.checkOut))}</div>
-                              <div className="text-[#2D3E10]/40">Guest</div>
+                              <div className="text-[#2D3E10]/70">Guest</div>
                               <div className="text-right font-bold text-[#2D3E10]">{invoice.totalGuest} Tamu</div>
-                              <div className="text-[#2D3E10]/40">Kavling</div>
+                              <div className="text-[#2D3E10]/70">Kavling</div>
                               <div className="text-right font-mono font-bold text-[#2D3E10]">
                                 {invoice.kavlings?.length ? invoice.kavlings.slice().sort((a, b) => a - b).join(", ") : "-"}
                               </div>
@@ -1614,7 +1614,7 @@ export default function PublicBookingPage() {
 
                           {invoice.specialRequest ? (
                             <div className="mt-6 pt-6 border-t border-[#E8E8E1]">
-                              <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/30 mb-2">Special Request</div>
+                              <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70 mb-2">Special Request</div>
                               <p className="text-xs italic text-[#2D3E10]/60 leading-relaxed">"{invoice.specialRequest}"</p>
                             </div>
                           ) : null}
@@ -1629,11 +1629,11 @@ export default function PublicBookingPage() {
                             return (
                               <div className="mt-6 flex-1 space-y-4 text-xs">
                                 <div className="flex items-center justify-between gap-3">
-                                  <div className="text-[#2D3E10]/40">Room / Paket</div>
+                                  <div className="text-[#2D3E10]/70">Room / Paket</div>
                                   <div className="font-bold text-[#2D3E10]">{formatIDR(baseAmount)}</div>
                                 </div>
                                 <div className="flex items-center justify-between gap-3">
-                                  <div className="text-[#2D3E10]/40">Add-Ons</div>
+                                  <div className="text-[#2D3E10]/70">Add-Ons</div>
                                   <div className="font-bold text-[#2D3E10]">{formatIDR(addOnAmount)}</div>
                                 </div>
                                 <div className="my-4 h-px bg-[#E8E8E1]" />
@@ -1643,11 +1643,11 @@ export default function PublicBookingPage() {
                                 </div>
                                 <div className="mt-8 space-y-3 rounded-xl bg-[#F1F3EE]/50 p-4">
                                   <div className="flex items-center justify-between text-[10px]">
-                                    <div className="font-bold uppercase tracking-widest text-[#2D3E10]/30">Method</div>
+                                    <div className="font-bold uppercase tracking-widest text-[#2D3E10]/70">Method</div>
                                     <div className="font-bold text-[#2D3E10]">{invoice.payment.method ?? "-"}</div>
                                   </div>
                                   <div className="flex items-center justify-between text-[10px]">
-                                    <div className="font-bold uppercase tracking-widest text-[#2D3E10]/30">Amount Paid</div>
+                                    <div className="font-bold uppercase tracking-widest text-[#2D3E10]/70">Amount Paid</div>
                                     <div className="font-bold text-[#2D3E10]">{formatIDR(invoice.payment.paidAmount)}</div>
                                   </div>
                                 </div>
@@ -1658,7 +1658,7 @@ export default function PublicBookingPage() {
                       </div>
 
                       <div className="print-hide mt-8 rounded-xl bg-[#F1F3EE] p-4 text-center">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/40">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">
                           Simpan halaman ini sebagai bukti booking. Tunjukkan Booking ID saat check-in.
                         </p>
                       </div>
@@ -1666,7 +1666,7 @@ export default function PublicBookingPage() {
                   ) : (
                     <div className="flex flex-col items-center justify-center py-20">
                       <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                      <p className="mt-4 text-xs font-bold uppercase tracking-widest text-[#2D3E10]/30">Menyiapkan invoice...</p>
+                      <p className="mt-4 text-xs font-bold uppercase tracking-widest text-[#2D3E10]/70">Menyiapkan invoice...</p>
                     </div>
                   )}
                 </div>
@@ -1777,7 +1777,7 @@ export default function PublicBookingPage() {
                         <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-5xl">
                           Pilih <span className="text-primary italic">Pengalaman</span> Anda
                         </h2>
-                        <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium text-primary/60 italic sm:mt-4 sm:text-sm">
+                        <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium text-primary/90 italic sm:mt-4 sm:text-sm">
                           "Temukan harmoni sempurna antara kemewahan modern dan keasrian alam Jayagiri."
                         </p>
                       </div>
@@ -1844,7 +1844,7 @@ export default function PublicBookingPage() {
 
                                 <div className="flex flex-col flex-1 p-5 text-center sm:p-8 sm:text-left">
                                   <h3 className="text-lg font-bold text-[#2D3E10] mb-2 group-hover:text-primary transition-colors sm:text-2xl sm:mb-3">{cat}</h3>
-                                  <p className="text-[12px] font-medium leading-relaxed text-primary/60 mb-6 flex-1 italic sm:text-sm sm:mb-8">
+                                  <p className="text-[12px] font-medium leading-relaxed text-primary/90 mb-6 flex-1 italic sm:text-sm sm:mb-8">
                                     {packageConfigs[cat]?.description || (
                                       cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap." : 
                                       cat === "Paket" ? "Pilihan paket lengkap untuk momen berharga bersama keluarga." :
@@ -1895,11 +1895,11 @@ export default function PublicBookingPage() {
                       <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
                     </div>
 
-                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:rounded-[2.5rem] sm:p-10 shadow-xl shadow-[#2D3E10]/5">
+                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-8 shadow-sm shadow-[#2D3E10]/5">
                       <div className="grid grid-cols-2 gap-4 sm:gap-8">
                         <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
                           <div className="mb-2 flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Check-in</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Check-in</span>
                           </div>
                           <input
                             type="date"
@@ -1916,7 +1916,7 @@ export default function PublicBookingPage() {
                         </div>
                         <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
                           <div className="mb-2 flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Check-out</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Check-out</span>
                           </div>
                           <input
                             type="date"
@@ -1947,26 +1947,26 @@ export default function PublicBookingPage() {
                       <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
                     </div>
 
-                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:rounded-[2.5rem] sm:p-10 shadow-xl shadow-[#2D3E10]/5">
+                    <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-8 shadow-sm shadow-[#2D3E10]/5">
                       <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-3">
-                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#F4F5F1] p-4 transition-all hover:border-primary/40 hover:bg-white hover:shadow-md sm:rounded-3xl sm:p-5">
                           <div className="space-y-1">
                             <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Dewasa</p>
-                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/40 uppercase">Usia 10+ thn</p>
+                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/70 uppercase">Usia 10+ thn</p>
                           </div>
                           <QuantityStepper value={adultPax} min={1} size="sm" ariaLabel="Dewasa" onChange={setAdultPax} />
                         </div>
-                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#F4F5F1] p-4 transition-all hover:border-primary/40 hover:bg-white hover:shadow-md sm:rounded-3xl sm:p-5">
                           <div className="space-y-1">
                             <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Anak</p>
-                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/40 uppercase">Usia 5-10 thn</p>
+                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/70 uppercase">Usia 5-10 thn</p>
                           </div>
                           <QuantityStepper value={child5to10Pax} min={0} size="sm" ariaLabel="Anak" onChange={setChild5to10Pax} />
                         </div>
-                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-6">
+                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#F4F5F1] p-4 transition-all hover:border-primary/40 hover:bg-white hover:shadow-md sm:rounded-3xl sm:p-5">
                           <div className="space-y-1">
                             <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Balita</p>
-                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/40 uppercase">Usia &lt; 5 thn</p>
+                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/70 uppercase">Usia &lt; 5 thn</p>
                           </div>
                           <QuantityStepper value={childUnder5Pax} min={0} size="sm" ariaLabel="Balita" onChange={setChildUnder5Pax} />
                         </div>
@@ -1982,7 +1982,7 @@ export default function PublicBookingPage() {
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Kategori</p>
+                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Kategori</p>
                           <p className="text-xs sm:text-sm font-bold text-[#2D3E10]">{filterCategory || "Semua Paket"}</p>
                         </div>
                       </div>
@@ -1996,7 +1996,7 @@ export default function PublicBookingPage() {
                           </svg>
                         </div>
                         <div>
-                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Jadwal</p>
+                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Jadwal</p>
                           <p className="text-xs sm:text-sm font-bold text-[#2D3E10]">{checkIn} - {checkOut}</p>
                         </div>
                       </div>
@@ -2056,7 +2056,7 @@ export default function PublicBookingPage() {
                           </div>
                           
                           {/* Content Section */}
-                          <div className="flex flex-1 flex-col p-5 sm:p-8 lg:p-10 relative">
+                          <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-8 relative">
                             
                             <div className="flex flex-row items-center justify-between gap-3.5 w-full relative z-10 mb-4">
                               <div className="flex flex-col items-start text-left space-y-2">
@@ -2100,11 +2100,11 @@ export default function PublicBookingPage() {
 
                             <div className="mt-3 sm:mt-8 grid grid-cols-2 gap-2 border-t border-[#E8E8E1]/60 pt-3 sm:pt-8">
                               <div className="space-y-0.5 text-left">
-                                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/40">Per Malam</p>
+                                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/70">Per Malam</p>
                                 <p className="text-sm sm:text-xl font-black text-[#2D3E10]">{priceRangeLabel(u)}</p>
                               </div>
                               <div className="space-y-0.5 text-right">
-                                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/40">Total Menginap</p>
+                                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/70">Total Menginap</p>
                                 <p className="text-base sm:text-2xl font-black text-primary italic drop-shadow-sm">{formatIDR(sumDailyPrice(u))}</p>
                               </div>
                             </div>
@@ -2150,7 +2150,7 @@ export default function PublicBookingPage() {
 
               {/* Kavling Selection Section */}
               {(effectiveKavlingScope || kavlingAmbiguous) && requiredKavlings > 0 && (
-                <div className="rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-2xl shadow-[#2D3E10]/5 transition-all duration-700 hover:shadow-primary/10">
+                <div className="rounded-[2.5rem] border border-[#E8E8E1] bg-white shadow-xl shadow-black/10 border-2 border-primary/20 bg-white/95 backdrop-blur-md transition-all duration-700 hover:shadow-primary/10">
                   <div className="rounded-t-[2.5rem] border-b border-[#E8E8E1] bg-[#F1F3EE]/30 px-8 py-8 relative group overflow-hidden">
                     {/* Organic Decoration for Kavling Selection Header */}
                     <div className="absolute -left-16 -top-16 h-64 w-64 opacity-[0.03] transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-12 pointer-events-none">
@@ -2179,7 +2179,7 @@ export default function PublicBookingPage() {
                       </div>
                       <div className="flex items-center justify-center gap-4 bg-white/50 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-sm transition-all hover:shadow-md hover:border-primary/20 group/progress sm:justify-end">
                         <div className="flex flex-col items-center sm:items-end">
-                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Progres Pemilihan</span>
+                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Progres Pemilihan</span>
                           <span className="text-base font-black text-[#2D3E10] tracking-tighter tabular-nums">
                             {kavlingSelected.length} <span className="text-primary/40">/</span> {requiredKavlings} <span className="text-[10px] font-bold text-primary/40 uppercase ml-1">Kavling</span>
                           </span>
@@ -2209,7 +2209,7 @@ export default function PublicBookingPage() {
                                 <div className="flex flex-col gap-5">
                                   <div className="flex items-center gap-3">
                                     <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                                    <span className="text-[10px] font-bold text-[#2D3E10]/40 uppercase tracking-[0.3em]">Tentukan Kategori Kavling</span>
+                                    <span className="text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.3em]">Tentukan Kategori Kavling</span>
                                   </div>
                                   <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
                                     {kavlingQtyByGroup.mandiri > 0 && (
@@ -2259,7 +2259,7 @@ export default function PublicBookingPage() {
                                 </div>
                               </div>
                               <div className="space-y-0.5">
-                                <div className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">
+                                <div className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/90">
                                   Sisa Waktu Hold Kavling
                                 </div>
                                 <div className="text-sm font-bold tracking-tight text-[#2D3E10]">
@@ -2290,7 +2290,7 @@ export default function PublicBookingPage() {
                             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]">Peta Lokasi</span>
                           </div>
-                          <span className="text-[10px] font-bold text-primary/60 italic">Scroll ke bawah untuk pilih nomor</span>
+                          <span className="text-[10px] font-bold text-primary/90 italic">Scroll ke bawah untuk pilih nomor</span>
                         </div>
                         <button
                           type="button"
@@ -2513,7 +2513,7 @@ export default function PublicBookingPage() {
                       </svg>
                       Fasilitas Tambahan
                     </h3>
-                    <p className="text-sm font-medium text-primary/60">Lengkapi kenyamanan menginap Anda dengan add-ons pilihan.</p>
+                    <p className="text-sm font-medium text-primary/90">Lengkapi kenyamanan menginap Anda dengan add-ons pilihan.</p>
                   </div>
                   <div className="">
                     <span className="rounded-full bg-primary/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-primary">Opsional</span>
@@ -2556,11 +2556,11 @@ export default function PublicBookingPage() {
                             </div>
                             <div className="flex items-baseline justify-center gap-1 sm:gap-1.5 sm:justify-start">
                               <span className="text-sm sm:text-xl font-black text-primary tracking-tight">{formatIDR(a.price)}</span>
-                              <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider sm:tracking-[0.2em] text-[#2D3E10]/30">/ unit</span>
+                              <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider sm:tracking-[0.2em] text-[#2D3E10]/70">/ unit</span>
                             </div>
                             <div className="flex items-center justify-center gap-1.5 sm:justify-start">
                               <div className={`h-1.5 w-1.5 rounded-full ${a.stock - auto <= 5 ? "bg-amber-500 animate-pulse" : "bg-emerald-500"}`} />
-                              <span className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-wider ${a.stock - auto <= 5 ? "text-amber-600" : "text-[#2D3E10]/40"}`}>
+                              <span className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-wider ${a.stock - auto <= 5 ? "text-amber-600" : "text-[#2D3E10]/70"}`}>
                                 {a.stock - auto > 0 ? `Stok: ${a.stock - auto}` : "Habis"}
                               </span>
                             </div>
@@ -2578,7 +2578,7 @@ export default function PublicBookingPage() {
                           
                           <div className="flex w-full flex-col items-center justify-between pt-2.5 sm:pt-6 border-t border-[#E8E8E1] gap-1.5 sm:gap-4 sm:flex-row">
                             <div className="flex flex-col items-center sm:items-start hidden sm:flex">
-                              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/40">Atur Jumlah</span>
+                              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Atur Jumlah</span>
                             </div>
                             <div className="w-full flex justify-center sm:w-auto sm:scale-110 sm:origin-right">
                               <QuantityStepper
@@ -2628,7 +2628,7 @@ export default function PublicBookingPage() {
                       </svg>
                     </div>
                     <h4 className="mt-6 text-lg font-black text-[#2D3E10]">Tidak Ada Add-On</h4>
-                    <p className="mt-2 text-[10px] font-bold text-[#2D3E10]/30 uppercase tracking-[0.2em]">Belum ada fasilitas tambahan yang tersedia saat ini.</p>
+                    <p className="mt-2 text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.2em]">Belum ada fasilitas tambahan yang tersedia saat ini.</p>
                   </div>
                 )}
               </div>
@@ -2699,7 +2699,7 @@ export default function PublicBookingPage() {
                   <div className="space-y-6 sm:space-y-10">
                     {/* Informasi Kontak */}
                     <div className="grid grid-cols-1 gap-5">
-                      <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:rounded-[2.5rem] sm:p-10 shadow-xl shadow-[#2D3E10]/5">
+                      <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-8 shadow-sm shadow-[#2D3E10]/5">
                         <div className="mb-6 flex items-center gap-3">
                           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
                             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2711,12 +2711,12 @@ export default function PublicBookingPage() {
 
                         <div className="grid grid-cols-1 gap-4 sm:gap-6">
                           <div className="relative space-y-2">
-                            <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Nama Lengkap</label>
+                            <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nama Lengkap</label>
                             <div className="relative group/input">
                               <input 
                                 value={name} 
                                 onChange={(e) => setName(e.target.value)} 
-                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 sm:text-base sm:rounded-3xl" 
+                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/50 sm:text-base sm:rounded-3xl" 
                                 placeholder="Sesuai Identitas (KTP/Passport)" 
                                 required 
                               />
@@ -2725,7 +2725,7 @@ export default function PublicBookingPage() {
                           
                           <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2">
                             <div className="relative space-y-2">
-                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">WhatsApp</label>
+                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">WhatsApp</label>
                               <div className="relative flex items-center group/input">
                                 <div className="absolute left-5 text-sm font-black text-primary sm:text-base">
                                   +62
@@ -2733,19 +2733,19 @@ export default function PublicBookingPage() {
                                 <input 
                                   value={phone} 
                                   onChange={(e) => setPhone(e.target.value)} 
-                                  className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] py-4 pl-14 pr-5 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 sm:text-base sm:rounded-3xl" 
+                                  className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] py-4 pl-14 pr-5 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/50 sm:text-base sm:rounded-3xl" 
                                   placeholder="8123..." 
                                   required 
                                 />
                               </div>
                             </div>
                             <div className="relative space-y-2">
-                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Email</label>
+                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Email</label>
                               <input 
                                 type="email" 
                                 value={email} 
                                 onChange={(e) => setEmail(e.target.value)} 
-                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 sm:text-base sm:rounded-3xl" 
+                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/50 sm:text-base sm:rounded-3xl" 
                                 placeholder="nama@email.com" 
                                 required 
                               />
@@ -2754,13 +2754,13 @@ export default function PublicBookingPage() {
 
                           <div className="relative space-y-2">
                             <div className="flex items-center justify-between px-1">
-                              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Catatan Khusus</label>
+                              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Catatan Khusus</label>
                               <span className="text-[9px] font-bold text-primary/40 uppercase tracking-[0.1em]">Opsional</span>
                             </div>
                             <textarea 
                               value={specialRequest} 
                               onChange={(e) => setSpecialRequest(e.target.value)} 
-                              className="h-32 w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 text-sm font-medium text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/20 resize-none leading-relaxed sm:text-base sm:rounded-3xl" 
+                              className="h-32 w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 text-sm font-medium text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/50 resize-none leading-relaxed sm:text-base sm:rounded-3xl" 
                               placeholder="Contoh: Request lokasi dekat parkir, alergi makanan, dll." 
                             />
                           </div>
@@ -2771,7 +2771,7 @@ export default function PublicBookingPage() {
                       <div className="rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:hidden shadow-xl shadow-[#2D3E10]/5">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/40">Ringkasan Reservasi</h4>
+                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Ringkasan Reservasi</h4>
                         </div>
                         <div className="space-y-4">
                           <div className="space-y-2">
@@ -2794,12 +2794,12 @@ export default function PublicBookingPage() {
                           {/* Breakdown for Mobile */}
                           <div className="pt-3 border-t border-[#E8E8E1]/60 space-y-2">
                             <div className="flex justify-between items-center">
-                              <span className="text-[10px] font-medium text-[#2D3E10]/40 uppercase tracking-widest">Akomodasi</span>
+                              <span className="text-[10px] font-medium text-[#2D3E10]/70 uppercase tracking-widest">Akomodasi</span>
                               <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(selectedVisibleUnits.reduce((acc, u) => acc + (sumDailyPrice(u) * (unitQty[u.id] || 0)), 0))}</span>
                             </div>
                             {addons.some(a => effectiveAddonQty[a.id] > 0) && (
                               <div className="flex justify-between items-center">
-                                <span className="text-[10px] font-medium text-[#2D3E10]/40 uppercase tracking-widest">Add-ons ({addons.filter(a => effectiveAddonQty[a.id] > 0).length})</span>
+                                <span className="text-[10px] font-medium text-[#2D3E10]/70 uppercase tracking-widest">Add-ons ({addons.filter(a => effectiveAddonQty[a.id] > 0).length})</span>
                                 <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(addons.reduce((acc, a) => acc + (a.price * (effectiveAddonQty[a.id] || 0)), 0))}</span>
                               </div>
                             )}
