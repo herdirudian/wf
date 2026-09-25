@@ -2039,7 +2039,7 @@ export default function PublicBookingPage() {
                       >
                         <div className="flex flex-col lg:flex-row lg:items-stretch">
                           {/* Image Section */}
-                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-[400px] overflow-hidden lg:shrink-0 p-3 sm:p-4 pb-0 lg:pr-0">
+                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-[300px] xl:w-[320px] overflow-hidden lg:shrink-0 p-3 sm:p-4 pb-0 lg:pr-0">
                             <div className="w-full h-full rounded-[1rem] sm:rounded-[2rem] overflow-hidden relative">
                               <ImageCarousel images={images} className="h-full w-full rounded-none border-none" />
                               {u.available <= 0 && (
@@ -2056,7 +2056,7 @@ export default function PublicBookingPage() {
                           </div>
                           
                           {/* Content Section */}
-                          <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-8 relative">
+                          <div className="flex flex-1 min-w-0 flex-col p-5 sm:p-6 lg:p-7 relative">
                             
                             <div className="flex flex-col items-start text-left space-y-2 mb-2">
                               <h3 className="text-xl sm:text-2xl font-black leading-tight text-[#2D3E10] transition-colors group-hover:text-primary">
@@ -2085,7 +2085,7 @@ export default function PublicBookingPage() {
                                 <p className="mb-2.5 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/60 text-left">Fasilitas Termasuk</p>
                                 <ul className="grid grid-cols-2 gap-2 sm:gap-2.5">
                                   {inc.slice(0, 4).map((t, idx) => (
-                                    <li key={idx} className="flex items-center text-[9px] sm:text-[10px] font-bold text-[#2D3E10] justify-start">
+                                    <li key={idx} className="flex items-center text-[9px] sm:text-[10px] font-bold text-[#2D3E10] justify-start min-w-0">
                                       <div className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] shrink-0">
                                         <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -2100,9 +2100,9 @@ export default function PublicBookingPage() {
 
                             <div className="mt-auto pt-6 sm:pt-8">
                               <div className="flex flex-row items-center justify-between border-t border-[#E8E8E1]/60 pt-4 sm:pt-5">
-                                <div className="space-y-0.5 text-left flex-1">
+                                <div className="space-y-0.5 text-left flex-1 min-w-0">
                                   <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/50">Total Menginap</p>
-                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-2">
+                                  <div className="flex flex-col xl:flex-row xl:items-baseline gap-0.5 xl:gap-2 flex-wrap">
                                     <p className="text-lg sm:text-xl font-black text-[#2D3E10]">{formatIDR(sumDailyPrice(u))}</p>
                                     <p className="text-[10px] font-bold text-[#2D3E10]/50">({priceRangeLabel(u)} /malam)</p>
                                   </div>
