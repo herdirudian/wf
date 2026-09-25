@@ -310,8 +310,7 @@ export default function BookingConfirmPage() {
 
   return (
     <div className="min-h-dvh bg-[#FDFDFB] relative overflow-hidden pb-48 sm:pb-24">
-      /* Background */
-
+      
       <div className="mx-auto max-w-2xl px-4 py-8 sm:py-16 relative z-10">
         <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
           {/* Header Section */}
