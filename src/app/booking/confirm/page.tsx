@@ -21,11 +21,40 @@ type BookingDraft = {
   items: Array<{ unitId: string; quantity: number }>;
   addOns: Array<{ addOnId: string; quantity: number }>;
   display: {
-    items: Array<{ unitId: string; name: string; quantity: number }>;
+    items: Array<{
+      unitId: string;
+      name: string;
+      quantity: number;
+      includes?: string[];
+      facilities?: string[];
+    }>;
     addOns: Array<{ addOnId: string; name: string; price: number; quantity: number }>;
   };
   amountEstimate: number;
   createdAt: string;
+};
+
+function parseJsonArray(input: unknown): string[] {
+  if (Array.isArray(input)) return input.filter((x): x is string => typeof x === "string" && Boolean(x.trim()));
+  if (typeof input !== "string" || !input.trim()) return [];
+  try {
+    const v = JSON.parse(input) as unknown;
+    if (Array.isArray(v)) {
+      return v.filter((x): x is string => typeof x === "string" && Boolean(x.trim()));
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+const FACILITY_LABEL_MAP: Record<string, string> = {
+  wifi: "WiFi Kawasan",
+  air_panas: "Water Heater Privat",
+  kids_friendly: "Kids Friendly",
+  breakfast: "Sarapan Pagi (Breakfast)",
+  parkir: "Parkir Terjaga 24 Jam",
+  listrik: "Akses Lot Listrik & Penerangan",
 };
 
 type PublicPaymentMethod = { code: string; label: string; feeFlat: number; feeBps: number };
@@ -193,6 +222,7 @@ export default function BookingConfirmPage() {
   const [agreed, setAgreed] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showCancellationModal, setShowCancellationModal] = useState(false);
+  const [unitDetailsMap, setUnitDetailsMap] = useState<Record<string, { includes: string[]; facilities: string[] }>>({});
 
   useEffect(() => {
     const d = readDraft();
@@ -200,6 +230,39 @@ export default function BookingConfirmPage() {
     setLoading(false);
     if (!d) router.replace("/booking");
   }, [router]);
+
+  useEffect(() => {
+    if (!draft?.checkIn || !draft?.checkOut) return;
+    let cancelled = false;
+    async function loadUnitDetails() {
+      try {
+        const res = await fetch(
+          `/api/public/availability?checkIn=${encodeURIComponent(draft!.checkIn)}&checkOut=${encodeURIComponent(draft!.checkOut)}`
+        );
+        if (!res.ok) return;
+        const data = (await res.json().catch(() => null)) as {
+          units?: Array<{ id: string; includesJson?: string | null; facilitiesJson?: string | null }>;
+        } | null;
+        if (cancelled || !Array.isArray(data?.units)) return;
+        const map: Record<string, { includes: string[]; facilities: string[] }> = {};
+        for (const u of data.units) {
+          if (u?.id) {
+            map[u.id] = {
+              includes: parseJsonArray(u.includesJson),
+              facilities: parseJsonArray(u.facilitiesJson),
+            };
+          }
+        }
+        setUnitDetailsMap(map);
+      } catch {
+        // Fallback fetch error silently ignored
+      }
+    }
+    void loadUnitDetails();
+    return () => {
+      cancelled = true;
+    };
+  }, [draft?.checkIn, draft?.checkOut]);
 
   useEffect(() => {
     let cancelled = false;
@@ -392,6 +455,48 @@ export default function BookingConfirmPage() {
     if (!draft) return 0;
     return draft.display.addOns.reduce((acc, a) => acc + (a.price * a.quantity), 0);
   }, [draft]);
+
+  const unitInclusionsList = useMemo(() => {
+    if (!draft) return [];
+    return draft.display.items.map((item) => {
+      const fromDraftIncludes = item.includes && item.includes.length > 0 ? item.includes : [];
+      const fromDraftFacilities = item.facilities && item.facilities.length > 0 ? item.facilities : [];
+
+      const fromFetched = unitDetailsMap[item.unitId];
+      const includes = fromDraftIncludes.length > 0 ? fromDraftIncludes : (fromFetched?.includes ?? []);
+      const facilitiesKeys = fromDraftFacilities.length > 0 ? fromDraftFacilities : (fromFetched?.facilities ?? []);
+
+      const mappedFacilities = facilitiesKeys.map((k) => FACILITY_LABEL_MAP[k] || k);
+      const combined = Array.from(new Set([...includes, ...mappedFacilities]));
+
+      return {
+        unitId: item.unitId,
+        unitName: item.name,
+        quantity: item.quantity,
+        inclusions: combined,
+      };
+    });
+  }, [draft, unitDetailsMap]);
+
+  const aggregatedInclusions = useMemo(() => {
+    const all: string[] = [];
+    for (const item of unitInclusionsList) {
+      for (const inc of item.inclusions) {
+        if (!all.includes(inc)) {
+          all.push(inc);
+        }
+      }
+    }
+    if (all.length === 0) {
+      return [
+        "Tiket resmi gerbang masuk kawasan Perhutani",
+        "Parkir kendaraan terjaga 24 jam di area resort",
+        "Akses fasilitas pemanas air (water heater) privat",
+        "Akses lot listrik & penerangan malam hari",
+      ];
+    }
+    return all;
+  }, [unitInclusionsList]);
 
   async function confirmAndPay() {
     if (!draft) return;
@@ -658,24 +763,44 @@ export default function BookingConfirmPage() {
                 <div className="space-y-4">
                   {/* Units */}
                   <div className="space-y-2.5">
-                    {draft.display.items.map((it) => (
-                      <div key={it.unitId} className="flex items-center justify-between rounded-xl bg-[#FAFBF7]/60 p-3.5 border border-[#E8E8E1]">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className="h-9 w-9 rounded-lg bg-[#2D3E10]/5 flex items-center justify-center text-primary shrink-0">
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
+                    {draft.display.items.map((it) => {
+                      const uIncs = unitInclusionsList.find((u) => u.unitId === it.unitId)?.inclusions ?? [];
+                      return (
+                        <div key={it.unitId} className="flex flex-col rounded-xl bg-[#FAFBF7]/60 p-3.5 border border-[#E8E8E1]">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="h-9 w-9 rounded-lg bg-[#2D3E10]/5 flex items-center justify-center text-primary shrink-0">
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-xs sm:text-sm font-bold text-[#2D3E10] truncate">{it.name}</p>
+                                <p className="text-[10px] font-semibold text-[#2D3E10]/50 uppercase tracking-wider">Unit Utama</p>
+                              </div>
+                            </div>
+                            <span className="flex h-7 px-2.5 items-center justify-center rounded-md bg-white border border-[#E8E8E1] text-xs font-black text-[#2D3E10]">
+                              {it.quantity} Unit
+                            </span>
                           </div>
-                          <div className="min-w-0">
-                            <p className="text-xs sm:text-sm font-bold text-[#2D3E10] truncate">{it.name}</p>
-                            <p className="text-[10px] font-semibold text-[#2D3E10]/50 uppercase tracking-wider">Unit Utama</p>
-                          </div>
+
+                          {/* Inclusions badges if present */}
+                          {uIncs.length > 0 && (
+                            <div className="mt-2.5 flex flex-wrap gap-1.5 pt-2 border-t border-[#E8E8E1]/60">
+                              {uIncs.map((inc, i) => (
+                                <span
+                                  key={i}
+                                  className="inline-flex items-center gap-1 rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-[#2D3E10]/80 border border-[#E8E8E1]"
+                                >
+                                  <span className="text-emerald-600 font-bold text-[9px]">✓</span>
+                                  <span>{inc}</span>
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        <span className="flex h-7 px-2.5 items-center justify-center rounded-md bg-white border border-[#E8E8E1] text-xs font-black text-[#2D3E10]">
-                          {it.quantity} Unit
-                        </span>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {/* Add-ons */}
@@ -902,19 +1027,49 @@ export default function BookingConfirmPage() {
                 </div>
 
                 {/* Inclusive Inclusions Note */}
-                <div className="mt-6 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4 space-y-1.5 text-[11px] text-[#2D3E10]/80">
+                <div className="mt-6 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4 space-y-2.5 text-[11px] text-[#2D3E10]/80">
                   <div className="flex items-center gap-1.5 font-bold text-emerald-900">
                     <svg className="h-4 w-4 text-emerald-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                     <span>Fasilitas Termasuk dalam Reservasi:</span>
                   </div>
-                  <ul className="space-y-1 text-[#2D3E10]/70 pl-5 list-disc text-[11px]">
-                    <li>Tiket resmi gerbang masuk kawasan Perhutani</li>
-                    <li>Parkir kendaraan terjaga 24 jam di area resort</li>
-                    <li>Akses fasilitas pemanas air (water heater) privat</li>
-                    <li>Akses lot listrik & penerangan malam hari</li>
-                  </ul>
+
+                  {unitInclusionsList.length <= 1 ? (
+                    <ul className="space-y-1.5 text-[#2D3E10]/80 pl-1">
+                      {aggregatedInclusions.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="mt-0.5 flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-bold">
+                            ✓
+                          </span>
+                          <span className="leading-snug">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="space-y-2.5 pt-1 divide-y divide-emerald-100/80">
+                      {unitInclusionsList.map((u) => (
+                        <div key={u.unitId} className="space-y-1.5 pt-2 first:pt-0">
+                          <div className="flex items-center gap-1.5 font-bold text-emerald-950 text-[11px]">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                            <span>{u.unitName} ({u.quantity} unit):</span>
+                          </div>
+                          <ul className="space-y-1 pl-3 text-[#2D3E10]/80">
+                            {(u.inclusions.length > 0 ? u.inclusions : [
+                              "Tiket resmi gerbang masuk kawasan Perhutani",
+                              "Parkir kendaraan terjaga 24 jam di area resort",
+                              "Akses lot listrik & penerangan malam hari",
+                            ]).map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-1.5 text-[10px] leading-snug">
+                                <span className="text-emerald-700 font-bold">•</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Agreement Checkbox */}

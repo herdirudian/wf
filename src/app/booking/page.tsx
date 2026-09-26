@@ -52,7 +52,13 @@ type BookingDraft = {
   items: Array<{ unitId: string; quantity: number }>;
   addOns: Array<{ addOnId: string; quantity: number }>;
   display: {
-    items: Array<{ unitId: string; name: string; quantity: number }>;
+    items: Array<{
+      unitId: string;
+      name: string;
+      quantity: number;
+      includes?: string[];
+      facilities?: string[];
+    }>;
     addOns: Array<{ addOnId: string; name: string; price: number; quantity: number }>;
   };
   amountEstimate: number;
@@ -1459,7 +1465,16 @@ export default function PublicBookingPage() {
       items,
       addOns,
       display: {
-        items: items.map((it) => ({ unitId: it.unitId, name: units.find((u) => u.id === it.unitId)?.name ?? it.unitId, quantity: it.quantity })),
+        items: items.map((it) => {
+          const u = units.find((x) => x.id === it.unitId);
+          return {
+            unitId: it.unitId,
+            name: u?.name ?? it.unitId,
+            quantity: it.quantity,
+            includes: parseIncludesJson(u?.includesJson),
+            facilities: parseFacilitiesJson(u?.facilitiesJson),
+          };
+        }),
         addOns: addons
           .map((a) => ({ addOnId: a.id, name: a.name, price: a.price, quantity: Number(effectiveAddonQty[a.id] ?? 0) }))
           .filter((x) => x.quantity > 0),
