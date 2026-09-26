@@ -279,6 +279,7 @@ export default function PublicBookingPage() {
   const [filterType, setFilterType] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [unitPage, setUnitPage] = useState(1);
+  const [minDate, setMinDate] = useState("");
 
   const [currentStep, setCurrentStep] = useState(1);
   const [adultPax, setAdultPax] = useState(1);
@@ -293,6 +294,7 @@ export default function PublicBookingPage() {
 
   useEffect(() => {
     setIsMounted(true);
+    setMinDate(isoDate(new Date()));
   }, []);
 
   useEffect(() => {
@@ -399,6 +401,50 @@ export default function PublicBookingPage() {
       pendingKavlingRestoreRef.current = null;
     }
   }, [hold]);
+
+  const checkInInputRef = useRef<HTMLInputElement>(null);
+  const checkOutInputRef = useRef<HTMLInputElement>(null);
+
+  const openCheckInPicker = useCallback(() => {
+    if (checkInInputRef.current) {
+      try {
+        checkInInputRef.current.showPicker?.();
+      } catch {
+        checkInInputRef.current.focus();
+      }
+    }
+  }, []);
+
+  const openCheckOutPicker = useCallback(() => {
+    if (checkOutInputRef.current) {
+      try {
+        checkOutInputRef.current.showPicker?.();
+      } catch {
+        checkOutInputRef.current.focus();
+      }
+    }
+  }, []);
+
+  const handleCheckInChange = useCallback((newVal: string) => {
+    if (checkIn !== newVal) {
+      resetSelection();
+    }
+    setCheckIn(newVal);
+    if (newVal && checkOut && checkOut <= newVal) {
+      const parts = newVal.split("-").map(Number);
+      if (parts.length === 3 && !parts.some(isNaN)) {
+        const nextDay = new Date(parts[0], parts[1] - 1, parts[2] + 1);
+        setCheckOut(isoDate(nextDay));
+      }
+    }
+  }, [checkIn, checkOut, resetSelection]);
+
+  const handleCheckOutChange = useCallback((newVal: string) => {
+    if (checkOut !== newVal) {
+      resetSelection();
+    }
+    setCheckOut(newVal);
+  }, [checkOut, resetSelection]);
 
   useEffect(() => {
     // Only initialize dates and versions once mounted on the client
@@ -1911,27 +1957,40 @@ export default function PublicBookingPage() {
                     <div className="p-4 sm:p-6">
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                         {/* Check-in Tile */}
-                        <div className="group relative rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md">
+                        <div 
+                          role="button"
+                          tabIndex={0}
+                          onClick={openCheckInPicker}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              openCheckInPicker();
+                            }
+                          }}
+                          className="group relative cursor-pointer rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                        >
                           <input
+                            ref={checkInInputRef}
                             type="date"
                             value={checkIn}
-                            onChange={(e) => {
-                              if (checkIn !== e.target.value) {
-                                resetSelection();
-                              }
-                              setCheckIn(e.target.value);
+                            min={minDate || undefined}
+                            onChange={(e) => handleCheckInChange(e.target.value)}
+                            onClick={(e) => {
+                              try {
+                                e.currentTarget.showPicker?.();
+                              } catch {}
                             }}
-                            className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+                            className="native-date-full-clickable"
                             required
                             aria-label="Pilih tanggal check-in"
                           />
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">Check-in</span>
-                            <span className="flex items-center gap-1 text-[11px] font-semibold text-primary transition-transform group-hover:translate-x-0.5">
-                              Ubah
+                            <span className="flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary transition-all group-hover:bg-primary group-hover:text-white">
                               <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
+                              Pilih Tanggal
                             </span>
                           </div>
                           <div className="mt-2.5">
@@ -1947,28 +2006,40 @@ export default function PublicBookingPage() {
                         </div>
 
                         {/* Check-out Tile */}
-                        <div className="group relative rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md">
+                        <div 
+                          role="button"
+                          tabIndex={0}
+                          onClick={openCheckOutPicker}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              openCheckOutPicker();
+                            }
+                          }}
+                          className="group relative cursor-pointer rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                        >
                           <input
+                            ref={checkOutInputRef}
                             type="date"
                             value={checkOut}
-                            min={checkIn || undefined}
-                            onChange={(e) => {
-                              if (checkOut !== e.target.value) {
-                                resetSelection();
-                              }
-                              setCheckOut(e.target.value);
+                            min={checkIn || minDate || undefined}
+                            onChange={(e) => handleCheckOutChange(e.target.value)}
+                            onClick={(e) => {
+                              try {
+                                e.currentTarget.showPicker?.();
+                              } catch {}
                             }}
-                            className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+                            className="native-date-full-clickable"
                             required
                             aria-label="Pilih tanggal check-out"
                           />
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">Check-out</span>
-                            <span className="flex items-center gap-1 text-[11px] font-semibold text-primary transition-transform group-hover:translate-x-0.5">
-                              Ubah
+                            <span className="flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary transition-all group-hover:bg-primary group-hover:text-white">
                               <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
+                              Pilih Tanggal
                             </span>
                           </div>
                           <div className="mt-2.5">

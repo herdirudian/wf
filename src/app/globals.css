@@ -94,3 +94,24 @@ body {
     color: color-mix(in srgb, var(--muted) 70%, transparent);
   }
 }
+
+.native-date-full-clickable {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.native-date-full-clickable::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
