@@ -8,6 +8,7 @@ import { buildKavlingBlockMap, resolveKavlingBlockName, KavlingBlockConfig } fro
 import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { Modal } from "@/components/ui/Modal";
 import { InteractiveMapViewer } from "@/components/ui/InteractiveMapViewer";
+import { StayDatePicker } from "@/components/ui/StayDatePicker";
 
 type AvailabilityUnit = {
   id: string;
@@ -402,28 +403,18 @@ export default function PublicBookingPage() {
     }
   }, [hold]);
 
-  const checkInInputRef = useRef<HTMLInputElement>(null);
-  const checkOutInputRef = useRef<HTMLInputElement>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [datePickerTarget, setDatePickerTarget] = useState<"checkIn" | "checkOut">("checkIn");
 
   const openCheckInPicker = useCallback(() => {
-    if (checkInInputRef.current) {
-      try {
-        checkInInputRef.current.showPicker?.();
-      } catch {
-        checkInInputRef.current.focus();
-      }
-    }
-  }, []);
+    setDatePickerTarget("checkIn");
+    setIsDatePickerOpen((prev) => (datePickerTarget === "checkIn" && prev ? false : true));
+  }, [datePickerTarget]);
 
   const openCheckOutPicker = useCallback(() => {
-    if (checkOutInputRef.current) {
-      try {
-        checkOutInputRef.current.showPicker?.();
-      } catch {
-        checkOutInputRef.current.focus();
-      }
-    }
-  }, []);
+    setDatePickerTarget("checkOut");
+    setIsDatePickerOpen((prev) => (datePickerTarget === "checkOut" && prev ? false : true));
+  }, [datePickerTarget]);
 
   const handleCheckInChange = useCallback((newVal: string) => {
     if (checkIn !== newVal) {
@@ -1967,30 +1958,24 @@ export default function PublicBookingPage() {
                               openCheckInPicker();
                             }
                           }}
-                          className="group relative cursor-pointer rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                          className={`group relative cursor-pointer rounded-2xl border p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md ${
+                            isDatePickerOpen && datePickerTarget === "checkIn"
+                              ? "border-primary bg-white ring-2 ring-primary/20 shadow-md"
+                              : "border-[#E8E8E1] bg-[#FAFBF7]/60"
+                          }`}
                         >
-                          <input
-                            ref={checkInInputRef}
-                            type="date"
-                            value={checkIn}
-                            min={minDate || undefined}
-                            onChange={(e) => handleCheckInChange(e.target.value)}
-                            onClick={(e) => {
-                              try {
-                                e.currentTarget.showPicker?.();
-                              } catch {}
-                            }}
-                            className="native-date-full-clickable"
-                            required
-                            aria-label="Pilih tanggal check-in"
-                          />
+                          <input type="hidden" name="checkIn" value={checkIn} />
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">Check-in</span>
-                            <span className="flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary transition-all group-hover:bg-primary group-hover:text-white">
+                            <span className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition-all ${
+                              isDatePickerOpen && datePickerTarget === "checkIn"
+                                ? "bg-primary text-white"
+                                : "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white"
+                            }`}>
                               <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
-                              Pilih Tanggal
+                              {isDatePickerOpen && datePickerTarget === "checkIn" ? "Sedang Memilih" : "Pilih Tanggal"}
                             </span>
                           </div>
                           <div className="mt-2.5">
@@ -2016,30 +2001,24 @@ export default function PublicBookingPage() {
                               openCheckOutPicker();
                             }
                           }}
-                          className="group relative cursor-pointer rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                          className={`group relative cursor-pointer rounded-2xl border p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md ${
+                            isDatePickerOpen && datePickerTarget === "checkOut"
+                              ? "border-primary bg-white ring-2 ring-primary/20 shadow-md"
+                              : "border-[#E8E8E1] bg-[#FAFBF7]/60"
+                          }`}
                         >
-                          <input
-                            ref={checkOutInputRef}
-                            type="date"
-                            value={checkOut}
-                            min={checkIn || minDate || undefined}
-                            onChange={(e) => handleCheckOutChange(e.target.value)}
-                            onClick={(e) => {
-                              try {
-                                e.currentTarget.showPicker?.();
-                              } catch {}
-                            }}
-                            className="native-date-full-clickable"
-                            required
-                            aria-label="Pilih tanggal check-out"
-                          />
+                          <input type="hidden" name="checkOut" value={checkOut} />
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">Check-out</span>
-                            <span className="flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary transition-all group-hover:bg-primary group-hover:text-white">
+                            <span className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition-all ${
+                              isDatePickerOpen && datePickerTarget === "checkOut"
+                                ? "bg-primary text-white"
+                                : "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white"
+                            }`}>
                               <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
-                              Pilih Tanggal
+                              {isDatePickerOpen && datePickerTarget === "checkOut" ? "Sedang Memilih" : "Pilih Tanggal"}
                             </span>
                           </div>
                           <div className="mt-2.5">
@@ -2054,6 +2033,26 @@ export default function PublicBookingPage() {
                           </div>
                         </div>
                       </div>
+
+                      {/* Custom Stay Date Picker Panel */}
+                      {isDatePickerOpen && (
+                        <div className="mt-4 pt-4 border-t border-[#E8E8E1] animate-in fade-in slide-in-from-top-3 duration-300">
+                          <StayDatePicker
+                            checkIn={checkIn}
+                            checkOut={checkOut}
+                            minDate={minDate}
+                            activeTarget={datePickerTarget}
+                            onChangeActiveTarget={setDatePickerTarget}
+                            onSelectCheckIn={(date) => {
+                              handleCheckInChange(date);
+                            }}
+                            onSelectCheckOut={(date) => {
+                              handleCheckOutChange(date);
+                            }}
+                            onClose={() => setIsDatePickerOpen(false)}
+                          />
+                        </div>
+                      )}
                     </div>
 
                     {/* Guests Section */}
