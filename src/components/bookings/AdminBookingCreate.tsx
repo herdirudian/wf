@@ -158,6 +158,8 @@ export function AdminBookingCreate() {
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
   const [kavlingPrivateRange, setKavlingPrivateRange] = useState<null | { start: string | number; end: string | number }>(null);
+  const [kavlingPrivateList, setKavlingPrivateList] = useState<string[]>([]);
+  const [kavlingRegularList, setKavlingRegularList] = useState<string[]>([]);
   const [kavlingSellCount, setKavlingSellCount] = useState<number | null>(null);
   const [hold, setHold] = useState<null | { id: string; token: string; expiresAt: string }>(null);
   const [holdError, setHoldError] = useState<string | null>(null);
@@ -495,6 +497,12 @@ export function AdminBookingCreate() {
       const ps = data?.privateRange?.start;
       const pe = data?.privateRange?.end;
       if (ps !== undefined && pe !== undefined) setKavlingPrivateRange({ start: ps, end: pe });
+      if (Array.isArray((data as any)?.privateKavlings)) {
+        setKavlingPrivateList((data as any).privateKavlings.map((x: any) => String(x).toUpperCase()));
+      }
+      if (Array.isArray((data as any)?.regularKavlings)) {
+        setKavlingRegularList((data as any).regularKavlings.map((x: any) => String(x).toUpperCase()));
+      }
       setKavlingLoading(false);
     }
     load();
@@ -960,7 +968,6 @@ export function AdminBookingCreate() {
                   disabled={!requiredKavlings || kavlingLoading || !effectiveKavlingScope}
                   onClick={() => {
                     const taken = new Set(kavlingTaken);
-                    const pr = kavlingPrivateRange;
                     const privateNeed = combinedAll ? privateQty : 0;
                     const nonNeed = combinedAll ? mandiriQty + paketQty : 0;
                     const picked = [...kavlingSelected];
@@ -968,9 +975,9 @@ export function AdminBookingCreate() {
                       if (picked.length >= requiredKavlings) break;
                       if (taken.has(n)) continue;
                       if (picked.includes(n)) continue;
-                      if (combinedAll && pr) {
-                        const inPrivate = n >= pr.start && n <= pr.end;
-                        const privatePicked = picked.filter((x) => x >= pr.start && x <= pr.end).length;
+                      if (combinedAll) {
+                        const inPrivate = kavlingPrivateList.includes(String(n).toUpperCase());
+                        const privatePicked = picked.filter((x) => kavlingPrivateList.includes(String(x).toUpperCase())).length;
                         const nonPicked = picked.length - privatePicked;
                         if (inPrivate && privatePicked >= privateNeed) continue;
                         if (!inPrivate && nonPicked >= nonNeed) continue;
@@ -1092,16 +1099,12 @@ export function AdminBookingCreate() {
 
             <div className="mt-3 grid grid-cols-8 gap-2 sm:grid-cols-12">
               {(() => {
-                const pr = kavlingPrivateRange;
                 const privateNeed = combinedAll ? privateQty : 0;
                 const nonNeed = combinedAll ? mandiriQty + paketQty : 0;
-                const privatePicked = combinedAll && pr ? kavlingSelected.filter((x) => x >= pr.start && x <= pr.end).length : 0;
+                const privatePicked = combinedAll ? kavlingSelected.filter((x) => kavlingPrivateList.includes(String(x).toUpperCase())).length : 0;
                 const nonPicked = combinedAll ? kavlingSelected.length - privatePicked : 0;
 
-                const rawNums =
-                  effectiveKavlingScope === "private" && pr && typeof kavlingSellCount === "number"
-                    ? Array.from({ length: kavlingSellCount }).map((_, i) => i + 1)
-                    : kavlingAll;
+                const rawNums = kavlingAll;
 
                 const allNums =
                   selectedBlockFilter === "ALL"
@@ -1120,10 +1123,9 @@ export function AdminBookingCreate() {
                   const isOOO = kavlingOOO.includes(n);
                   const isTaken = kavlingTaken.includes(n);
                   const isSelected = kavlingSelected.includes(n);
-                  const inPrivate = combinedAll && pr ? n >= pr.start && n <= pr.end : false;
-                  const outOfScope = effectiveKavlingScope === "private" && pr ? n < pr.start || n > pr.end : false;
-                  const quotaFull = combinedAll && pr ? (inPrivate ? privatePicked >= privateNeed : nonPicked >= nonNeed) : false;
-                  const disabled = outOfScope || isTaken || (!isSelected && (kavlingSelected.length >= requiredKavlings || quotaFull));
+                  const inPrivate = combinedAll ? kavlingPrivateList.includes(String(n).toUpperCase()) : false;
+                  const quotaFull = combinedAll ? (inPrivate ? privatePicked >= privateNeed : nonPicked >= nonNeed) : false;
+                  const disabled = isTaken || (!isSelected && (kavlingSelected.length >= requiredKavlings || quotaFull));
                   
                   let cls = "bg-background text-foreground hover:bg-surface";
                   if (isSelected) cls = "bg-emerald-500 text-white border-emerald-600";
@@ -1131,7 +1133,7 @@ export function AdminBookingCreate() {
                   else if (isPaid) cls = "bg-red-500 text-white border-red-600 cursor-not-allowed";
                   else if (isHeld) cls = "bg-amber-400 text-white border-amber-500 cursor-not-allowed";
                   else if (isTaken) cls = "bg-muted/30 text-muted cursor-not-allowed";
-                  else if (outOfScope) cls = "bg-muted/20 text-muted cursor-not-allowed";
+                  else if (disabled) cls = "bg-muted/20 text-muted cursor-not-allowed";
 
                   return (
                     <button
@@ -1143,17 +1145,17 @@ export function AdminBookingCreate() {
                           const set = new Set(prev);
                           if (set.has(n)) set.delete(n);
                           else {
-                            if (set.size >= requiredKavlings) return Array.from(set).sort((a, b) => a - b);
-                            if (combinedAll && pr) {
-                              const inPrivate = n >= pr.start && n <= pr.end;
-                              const privatePicked = prev.filter((x) => x >= pr.start && x <= pr.end).length;
+                            if (set.size >= requiredKavlings) return Array.from(set).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
+                            if (combinedAll) {
+                              const inPrivate = kavlingPrivateList.includes(String(n).toUpperCase());
+                              const privatePicked = prev.filter((x) => kavlingPrivateList.includes(String(x).toUpperCase())).length;
                               const nonPicked = prev.length - privatePicked;
-                              if (inPrivate && privatePicked >= privateNeed) return Array.from(set).sort((a, b) => a - b);
-                              if (!inPrivate && nonPicked >= nonNeed) return Array.from(set).sort((a, b) => a - b);
+                              if (inPrivate && privatePicked >= privateNeed) return Array.from(set).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
+                              if (!inPrivate && nonPicked >= nonNeed) return Array.from(set).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
                             }
                             set.add(n);
                           }
-                          return Array.from(set).sort((a, b) => a - b);
+                          return Array.from(set).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
                         });
                       }}
                       className={`relative flex min-h-[2.5rem] items-center justify-center rounded-xl border border-border text-xs font-black ${cls} disabled:opacity-60 transition-all active:scale-95 overflow-hidden`}
