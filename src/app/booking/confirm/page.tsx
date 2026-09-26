@@ -29,6 +29,92 @@ type BookingDraft = {
 
 type PublicPaymentMethod = { code: string; label: string; feeFlat: number; feeBps: number };
 
+function getPaymentMethodMeta(code: string) {
+  switch (code) {
+    case "BANK_TRANSFER":
+      return {
+        badge: "Virtual Account",
+        description: "BCA, Mandiri, BNI, BRI, Permata & ATM Bersama",
+        icon: (
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        ),
+      };
+    case "CREDIT_CARD":
+      return {
+        badge: "Kartu Kredit / Debit",
+        description: "Visa, Mastercard, JCB (3D Secure)",
+        icon: (
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+        ),
+      };
+    case "EWALLET":
+      return {
+        badge: "E-Wallet",
+        description: "GoPay, OVO, ShopeePay, DANA, LinkAja",
+        icon: (
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+        ),
+      };
+    case "QRIS":
+    case "QR_CODE":
+      return {
+        badge: "QRIS Instan",
+        description: "Scan instan lewat aplikasi m-Banking & e-wallet apapun",
+        icon: (
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+          </svg>
+        ),
+      };
+    case "RETAIL_OUTLET":
+      return {
+        badge: "Gerai Retail",
+        description: "Bayar di kasir Indomaret atau Alfamart",
+        icon: (
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+        ),
+      };
+    case "DIRECT_DEBIT":
+      return {
+        badge: "Direct Debit",
+        description: "BCA OneKlik, BRI Direct Debit",
+        icon: (
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+          </svg>
+        ),
+      };
+    case "PAYLATER":
+      return {
+        badge: "Paylater",
+        description: "Kredivo, Akulaku, Atome",
+        icon: (
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        ),
+      };
+    default:
+      return {
+        badge: "Pembayaran Online",
+        description: "Verifikasi transaksi otomatis & instan",
+        icon: (
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        ),
+      };
+  }
+}
+
 function readDraft() {
   const raw = sessionStorage.getItem("wf_booking_draft");
   if (!raw) return null;
@@ -455,52 +541,150 @@ export default function BookingConfirmPage() {
             </div>
 
             {/* Payment Method Card */}
-            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
-              <div className="mb-8 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-black tracking-tight text-[#2D3E10]">Metode Pembayaran</h3>
-              </div>
-
-              <div className="space-y-8">
-                <div className="relative">
-                  <select
-                    value={paymentMethodCode}
-                    onChange={(e) => setPaymentMethodCode(e.target.value)}
-                    disabled={submitting || !paymentMethods.length}
-                    className="h-14 w-full appearance-none rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-6 text-sm font-black text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 disabled:opacity-50"
-                  >
-                    {paymentMethods.length ? null : <option value="">Memuat metode...</option>}
-                    {paymentMethods.map((m) => (
-                      <option key={m.code} value={m.code}>
-                        {m.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-primary/30">
+            <div className="rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all sm:p-8">
+              <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#E8E8E1]/80 pb-5">
+                <div className="flex items-center gap-3.5">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2D3E10]/5 text-[#2D3E10] border border-[#2D3E10]/10">
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                     </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-black tracking-tight text-[#2D3E10]">Metode Pembayaran</h3>
+                    <p className="text-xs text-[#2D3E10]/60">Pilih opsi transaksi aman yang Anda kehendaki</p>
                   </div>
                 </div>
 
-                <div className="rounded-3xl bg-[#F1F3EE] p-8">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/70">Subtotal</span>
-                      <span className="text-sm font-bold text-[#2D3E10]">{formatIDR(draft.amountEstimate)}</span>
+                <div className="flex items-center gap-1.5 self-start sm:self-auto text-[11px] font-semibold text-[#2D3E10]/60 bg-[#F1F3EE]/80 px-2.5 py-1 rounded-lg">
+                  <svg className="h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  <span>Enkripsi 256-Bit</span>
+                </div>
+              </div>
+
+              {/* Method Selection List */}
+              <div className="space-y-3" role="radiogroup" aria-label="Pilihan metode pembayaran">
+                {paymentMethods.length === 0 ? (
+                  <div className="space-y-2.5 animate-pulse py-2">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="h-20 rounded-2xl bg-[#F1F3EE]/60 border border-[#E8E8E1]/60" />
+                    ))}
+                  </div>
+                ) : (
+                  paymentMethods.map((m) => {
+                    const isSelected = paymentMethodCode === m.code;
+                    const meta = getPaymentMethodMeta(m.code);
+                    const baseAmount = Math.max(0, Math.round(Number(draft?.amountEstimate) || 0));
+                    const feePct = Math.round((baseAmount * Math.max(0, m.feeBps || 0)) / 10_000);
+                    const totalFee = feePct + Math.max(0, Math.round(Number(m.feeFlat) || 0));
+
+                    return (
+                      <div
+                        key={m.code}
+                        role="radio"
+                        aria-checked={isSelected}
+                        tabIndex={0}
+                        onClick={() => {
+                          if (!submitting) setPaymentMethodCode(m.code);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            if (!submitting) setPaymentMethodCode(m.code);
+                          }
+                        }}
+                        className={`group relative flex cursor-pointer items-center justify-between gap-4 rounded-2xl border p-4 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D3E10] ${
+                          isSelected
+                            ? "border-[#2D3E10] bg-[#FAFBF7] shadow-sm shadow-[#2D3E10]/5 ring-1 ring-[#2D3E10]/20"
+                            : "border-[#E8E8E1] bg-white hover:border-[#2D3E10]/40 hover:bg-[#FAFBF7]/40"
+                        } ${submitting ? "pointer-events-none opacity-50" : ""}`}
+                      >
+                        <div className="flex items-center gap-3.5 min-w-0">
+                          <div
+                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ${
+                              isSelected
+                                ? "bg-[#2D3E10] text-white shadow-sm"
+                                : "bg-[#F1F3EE] text-[#2D3E10]/70 group-hover:bg-[#2D3E10]/10 group-hover:text-[#2D3E10]"
+                            }`}
+                          >
+                            {meta.icon}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="text-sm font-bold text-[#2D3E10] leading-snug">
+                                {m.label}
+                              </span>
+                              {isSelected && (
+                                <span className="inline-flex items-center rounded-md bg-[#2D3E10]/10 px-2 py-0.5 text-[10px] font-black text-[#2D3E10] uppercase tracking-wider">
+                                  Dipilih
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-[#2D3E10]/60 line-clamp-1 mt-0.5">
+                              {meta.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 shrink-0">
+                          <div className="text-right hidden sm:block">
+                            {totalFee > 0 ? (
+                              <span className="text-[11px] font-bold text-[#2D3E10]/60 font-mono tabular-nums">
+                                + {formatIDR(totalFee)}
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                Bebas Biaya
+                              </span>
+                            )}
+                          </div>
+
+                          <div
+                            className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all duration-200 ${
+                              isSelected
+                                ? "border-[#2D3E10] bg-[#2D3E10]"
+                                : "border-[#D0D0C8] bg-white group-hover:border-[#2D3E10]/60"
+                            }`}
+                          >
+                            {isSelected && <span className="h-2 w-2 rounded-full bg-white" />}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              {/* Rincian Pembayaran Breakdown */}
+              <div className="mt-8 rounded-2xl sm:rounded-3xl border border-[#E8E8E1]/80 bg-[#FAFBF7] p-6 sm:p-7">
+                <div className="space-y-3.5">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-semibold text-[#2D3E10]/60 uppercase tracking-wider text-[11px]">Subtotal Pesanan</span>
+                    <span className="font-bold text-[#2D3E10] font-mono tabular-nums">{formatIDR(draft.amountEstimate)}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-[#2D3E10]/60 uppercase tracking-wider text-[11px]">Biaya Layanan</span>
+                      {selectedPaymentMethod && (
+                        <span className="text-[10px] text-[#2D3E10]/50 font-normal">({selectedPaymentMethod.label})</span>
+                      )}
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/70">Biaya Layanan</span>
-                      <span className="text-sm font-bold text-[#2D3E10]">{formatIDR(serviceFeePreview)}</span>
+                    <span className="font-bold text-[#2D3E10] font-mono tabular-nums">
+                      {serviceFeePreview > 0 ? formatIDR(serviceFeePreview) : "Rp 0"}
+                    </span>
+                  </div>
+
+                  <div className="h-px bg-[#E8E8E1] my-1" />
+
+                  <div className="flex justify-between items-center pt-1">
+                    <div>
+                      <span className="text-xs font-black uppercase tracking-widest text-[#2D3E10]">Total Bayar</span>
+                      <p className="text-[10px] text-[#2D3E10]/50 mt-0.5">Termasuk pajak & biaya transaksi</p>
                     </div>
-                    <div className="h-px bg-[#2D3E10]/5 my-2" />
-                    <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/60">Total Bayar</span>
-                      <span className="text-2xl font-black text-primary tracking-tight">
+                    <div className="text-right">
+                      <span className="text-2xl sm:text-3xl font-black text-[#2D3E10] font-mono tabular-nums tracking-tight">
                         {formatIDR(Math.max(0, Math.round(Number(draft.amountEstimate) || 0)) + serviceFeePreview)}
                       </span>
                     </div>
