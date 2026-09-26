@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatIDR } from "@/lib/format";
+import { parseDateWIB } from "@/lib/time";
 import { Modal } from "@/components/ui/Modal";
 
 type BookingDraft = {
@@ -38,6 +39,25 @@ type PaymentMethodMeta = {
   icon?: React.ReactNode;
   brandLogos: PaymentBrandLogo[];
 };
+
+const INDONESIA_DAYS = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const INDONESIA_MONTHS = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+];
+
+function formatStayDateDisplay(dateStr: string) {
+  try {
+    const d = parseDateWIB(dateStr);
+    const day = INDONESIA_DAYS[d.getDay()];
+    const date = d.getDate();
+    const month = INDONESIA_MONTHS[d.getMonth()];
+    const year = d.getFullYear();
+    return `${day}, ${date} ${month} ${year}`;
+  } catch {
+    return dateStr;
+  }
+}
 
 function getPaymentMethodMeta(code: string): PaymentMethodMeta {
   switch (code) {
@@ -149,15 +169,12 @@ function readDraft() {
   if (!raw) return null;
   try {
     const d = JSON.parse(raw) as BookingDraft;
-    
-    // Verify hold expiration if present
     if (d.hold?.expiresAt) {
       const expiresMs = new Date(d.hold.expiresAt).getTime();
       if (Number.isFinite(expiresMs) && expiresMs <= Date.now()) {
         delete d.hold;
       }
     }
-    
     return d;
   } catch {
     return null;
@@ -340,6 +357,42 @@ export default function BookingConfirmPage() {
     return pctFee + flatFee;
   }, [draft, selectedPaymentMethod]);
 
+  const nightsCount = useMemo(() => {
+    if (!draft?.checkIn || !draft?.checkOut) return 1;
+    try {
+      const inD = parseDateWIB(draft.checkIn);
+      const outD = parseDateWIB(draft.checkOut);
+      return Math.max(1, Math.round((outD.getTime() - inD.getTime()) / (24 * 60 * 60 * 1000)));
+    } catch {
+      return 1;
+    }
+  }, [draft?.checkIn, draft?.checkOut]);
+
+  const guestSummary = useMemo(() => {
+    if (!draft) return "";
+    const details: string[] = [];
+    if (draft.adultPax > 0) details.push(`${draft.adultPax} Dewasa`);
+    if (draft.child5to10Pax > 0) details.push(`${draft.child5to10Pax} Anak (5-10 th)`);
+    if (draft.childUnder5Pax > 0) details.push(`${draft.childUnder5Pax} Balita (<5 th)`);
+    return details.join(" · ");
+  }, [draft]);
+
+  const grandTotal = useMemo(() => {
+    if (!draft) return 0;
+    return Math.max(0, Math.round(Number(draft.amountEstimate) || 0)) + serviceFeePreview;
+  }, [draft, serviceFeePreview]);
+
+  const accommodationSubtotal = useMemo(() => {
+    if (!draft) return 0;
+    const addOnsTotal = draft.display.addOns.reduce((acc, a) => acc + (a.price * a.quantity), 0);
+    return Math.max(0, draft.amountEstimate - addOnsTotal);
+  }, [draft]);
+
+  const addOnsSubtotal = useMemo(() => {
+    if (!draft) return 0;
+    return draft.display.addOns.reduce((acc, a) => acc + (a.price * a.quantity), 0);
+  }, [draft]);
+
   async function confirmAndPay() {
     if (!draft) return;
     setSubmitting(true);
@@ -424,448 +477,602 @@ export default function BookingConfirmPage() {
   if (!draft) return null;
 
   return (
-    <div className="min-h-dvh bg-[#FDFDFB] relative overflow-hidden pb-48 sm:pb-24">
-      
-      <div className="mx-auto max-w-2xl px-4 py-8 sm:py-16 relative z-10">
-        <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
-          {/* Header Section */}
-          <div className="mb-10 flex flex-col items-center text-center sm:items-start sm:text-left">
-            <h1 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
-              Konfirmasi <span className="italic text-primary">Pesanan</span>
+    <div className="min-h-dvh bg-[#FDFDFB] text-[#2D3E10] antialiased pb-36 lg:pb-16 relative">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 ease-out">
+          
+          {/* Top Brand Marker & Trust Beacon */}
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-[#E8E8E1] pb-4">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">
+              <span className="flex h-2 w-2 rounded-full bg-primary" />
+              <span>Woodforest Jayagiri 48</span>
+              <span className="text-[#E8E8E1]">·</span>
+              <span>1.620 mdpl Lembang</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#2D3E10]/70">
+              <svg className="h-4 w-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              <span>Reservasi Resmi & Terproteksi</span>
+            </div>
+          </div>
+
+          {/* Heading */}
+          <div className="mb-8">
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-[#2D3E10]">
+              Konfirmasi Reservasi
             </h1>
-            <p className="mt-4 text-sm font-medium text-[#2D3E10]/70 max-w-md leading-relaxed">
-              Tinjau kembali rincian reservasi Anda sebelum melanjutkan ke proses pembayaran aman.
+            <p className="mt-2 text-xs sm:text-sm font-medium text-[#2D3E10]/70 max-w-xl leading-relaxed">
+              Tinjau rincian menginap, lokasi kavling, dan opsi pembayaran sebelum dialihkan ke gerbang pembayaran aman.
             </p>
           </div>
 
-          {/* Hold Banner - More Refined */}
+          {/* Hold Countdown Banner */}
           {draft.hold?.expiresAt && holdLeftLabel ? (
-            <div className="mb-8 overflow-hidden rounded-2xl sm:rounded-3xl border border-primary/10 bg-[#F1F3EE]/50 p-6 backdrop-blur-sm sm:p-8">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div className="flex items-center gap-5">
-                  <div className="relative">
-                    
-                    <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-primary/5">
-                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
+            <div className="mb-8 overflow-hidden rounded-2xl sm:rounded-3xl border border-amber-200/80 bg-amber-50/50 p-5 sm:p-6 backdrop-blur-sm shadow-xs">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-100/90 text-amber-900 border border-amber-200/80">
+                    <svg className="h-5 w-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                   </div>
-                  <div className="space-y-0.5">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Sisa Waktu Hold</span>
-                    <div className="text-xl font-black text-[#2D3E10]">
-                      Berakhir dalam <span className="text-primary italic tabular-nums">{holdLeftLabel}</span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-900/80">Kavling Diamankan</span>
+                      <span className="h-2 w-2 rounded-full bg-amber-500 animate-ping" />
                     </div>
+                    <p className="text-base sm:text-lg font-black text-[#2D3E10] tracking-tight">
+                      Sisa Waktu Hold: <span className="font-mono tabular-nums text-amber-900">{holdLeftLabel}</span>
+                    </p>
+                    <p className="text-xs text-[#2D3E10]/60 hidden sm:block">
+                      Kavling Anda dikunci sementara agar tidak dapat dipesan oleh tamu lain.
+                    </p>
                   </div>
                 </div>
                 <button
-                  onClick={() => router.push("/booking?step=3")}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl border border-[#E8E8E1] bg-white text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#2D3E10] hover:text-white active:scale-95"
+                  type="button"
+                  onClick={() => router.push("/booking")}
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-amber-300 bg-white text-[11px] font-black uppercase tracking-wider text-[#2D3E10] transition-all hover:bg-[#2D3E10] hover:text-white hover:border-[#2D3E10] active:scale-95 shadow-2xs"
                 >
-                  Pilih Ulang
+                  Ubah Pilihan
                 </button>
               </div>
             </div>
           ) : null}
 
-          <div className="space-y-6">
-            {/* Customer Details Card */}
-            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
-              <div className="mb-8 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+          {/* Main 2-Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Left Column: Details & Payment Methods (7 Columns) */}
+            <div className="lg:col-span-7 space-y-6">
+              
+              {/* Card 1: Data Kontak Pemesan */}
+              <div className="rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm sm:p-8">
+                <div className="mb-6 flex items-center gap-3 border-b border-[#E8E8E1]/80 pb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2D3E10]/5 text-[#2D3E10]">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-base sm:text-lg font-black tracking-tight text-[#2D3E10]">Data Kontak Pemesan</h2>
+                    <p className="text-xs text-[#2D3E10]/60">Informasi utama untuk konfirmasi e-tiket & invoice</p>
+                  </div>
                 </div>
-                <h3 className="text-lg font-black tracking-tight text-[#2D3E10]">Detail Pemesan</h3>
+
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <div className="rounded-xl border border-[#E8E8E1]/60 bg-[#FAFBF7]/50 p-3.5">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-[#2D3E10]/60">Nama Lengkap</span>
+                    <p className="mt-1 text-sm sm:text-base font-bold text-[#2D3E10]">{draft.customer.name}</p>
+                  </div>
+
+                  <div className="rounded-xl border border-[#E8E8E1]/60 bg-[#FAFBF7]/50 p-3.5">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-[#2D3E10]/60">Nomor WhatsApp</span>
+                    <p className="mt-1 text-sm sm:text-base font-bold text-[#2D3E10] font-mono tabular-nums">{draft.customer.phone}</p>
+                  </div>
+
+                  <div className="rounded-xl border border-[#E8E8E1]/60 bg-[#FAFBF7]/50 p-3.5 sm:col-span-2">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-[#2D3E10]/60">Alamat Email</span>
+                    <p className="mt-1 text-sm sm:text-base font-bold text-[#2D3E10] break-all">{draft.customer.email}</p>
+                  </div>
+
+                  {draft.specialRequest && (
+                    <div className="rounded-xl border border-[#E8E8E1]/60 bg-[#FAFBF7]/50 p-3.5 sm:col-span-2">
+                      <span className="block text-[10px] font-bold uppercase tracking-wider text-[#2D3E10]/60">Catatan / Permintaan Khusus</span>
+                      <p className="mt-1 text-xs sm:text-sm font-medium text-[#2D3E10]/80 italic">"{draft.specialRequest}"</p>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nama Lengkap</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.customer.name}</p>
+              {/* Card 2: Jadwal & Lokasi Kavling */}
+              <div className="rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm sm:p-8">
+                <div className="mb-6 flex items-center gap-3 border-b border-[#E8E8E1]/80 pb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2D3E10]/5 text-[#2D3E10]">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-base sm:text-lg font-black tracking-tight text-[#2D3E10]">Jadwal Menginap & Kavling</h2>
+                    <p className="text-xs text-[#2D3E10]/60">Durasi kedatangan dan spot kavling terpilih</p>
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nomor WhatsApp</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.customer.phone}</p>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Email</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.customer.email}</p>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Waktu Menginap</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.checkIn} s/d {draft.checkOut}</p>
-                  <p className="text-[10px] font-medium text-primary/80 italic">({draft.totalGuest} Tamu: {draft.adultPax}D, {draft.child5to10Pax}A, {draft.childUnder5Pax}B)</p>
-                </div>
-              </div>
-            </div>
 
-            {/* Reservation Summary Card */}
-            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
-              <div className="mb-8 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-black tracking-tight text-[#2D3E10]">Rincian Reservasi</h3>
-              </div>
-
-              <div className="space-y-6">
-                {/* Units */}
                 <div className="space-y-4">
-                  {draft.display.items.map((it) => (
-                    <div key={it.unitId} className="flex items-center justify-between rounded-2xl bg-[#FDFDFB] p-4 border border-[#E8E8E1]/50">
-                      <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 rounded-xl bg-[#F1F3EE] flex items-center justify-center text-primary">
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-[#2D3E10]">{it.name}</p>
-                          <p className="text-[10px] font-black text-primary/80 uppercase tracking-widest">Unit Reservasi</p>
-                        </div>
-                      </div>
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F1F3EE] text-[11px] font-black text-[#2D3E10]">
-                        {it.quantity}
+                  {/* Dates Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="rounded-xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4">
+                      <span className="block text-[10px] font-bold uppercase tracking-wider text-[#2D3E10]/60">Check-in</span>
+                      <p className="mt-1 text-sm sm:text-base font-black text-[#2D3E10] tracking-tight">{formatStayDateDisplay(draft.checkIn)}</p>
+                      <p className="text-[11px] text-[#2D3E10]/50 mt-0.5">Mulai pukul 14:00 WIB</p>
+                    </div>
+
+                    <div className="rounded-xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4">
+                      <span className="block text-[10px] font-bold uppercase tracking-wider text-[#2D3E10]/60">Check-out</span>
+                      <p className="mt-1 text-sm sm:text-base font-black text-[#2D3E10] tracking-tight">{formatStayDateDisplay(draft.checkOut)}</p>
+                      <p className="text-[11px] text-[#2D3E10]/50 mt-0.5">Maksimal pukul 12:00 WIB</p>
+                    </div>
+                  </div>
+
+                  {/* Summary Bar: Duration, Guests, Kavling */}
+                  <div className="rounded-xl border border-[#E8E8E1]/80 bg-white p-4 space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                      <span className="font-semibold text-[#2D3E10]/70 uppercase tracking-wider text-[11px]">Durasi Menginap</span>
+                      <span className="font-bold text-[#2D3E10] bg-[#2D3E10]/5 px-2.5 py-1 rounded-md">{nightsCount} Malam</span>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs border-t border-[#E8E8E1]/60 pt-3">
+                      <span className="font-semibold text-[#2D3E10]/70 uppercase tracking-wider text-[11px]">Jumlah Tamu</span>
+                      <div className="text-right">
+                        <span className="font-bold text-[#2D3E10]">{draft.totalGuest} Tamu</span>
+                        {guestSummary && (
+                          <span className="block text-[11px] text-[#2D3E10]/60">{guestSummary}</span>
+                        )}
                       </div>
                     </div>
-                  ))}
+
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs border-t border-[#E8E8E1]/60 pt-3">
+                      <span className="font-semibold text-[#2D3E10]/70 uppercase tracking-wider text-[11px]">Nomor Kavling</span>
+                      <span className="font-black text-primary font-mono text-sm tracking-tight">{kavlingText}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3: Akomodasi & Layanan Tambahan */}
+              <div className="rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm sm:p-8">
+                <div className="mb-6 flex items-center gap-3 border-b border-[#E8E8E1]/80 pb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2D3E10]/5 text-[#2D3E10]">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-base sm:text-lg font-black tracking-tight text-[#2D3E10]">Akomodasi & Fasilitas Ekstra</h2>
+                    <p className="text-xs text-[#2D3E10]/60">Unit tenda atau cabin kayu serta layanan opsional</p>
+                  </div>
                 </div>
 
-                {/* Kavlings & Addons */}
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nomor Kavling</span>
-                    <p className="mt-1 text-base font-black text-primary tracking-tight">{kavlingText}</p>
+                <div className="space-y-4">
+                  {/* Units */}
+                  <div className="space-y-2.5">
+                    {draft.display.items.map((it) => (
+                      <div key={it.unitId} className="flex items-center justify-between rounded-xl bg-[#FAFBF7]/60 p-3.5 border border-[#E8E8E1]">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="h-9 w-9 rounded-lg bg-[#2D3E10]/5 flex items-center justify-center text-primary shrink-0">
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs sm:text-sm font-bold text-[#2D3E10] truncate">{it.name}</p>
+                            <p className="text-[10px] font-semibold text-[#2D3E10]/50 uppercase tracking-wider">Unit Utama</p>
+                          </div>
+                        </div>
+                        <span className="flex h-7 px-2.5 items-center justify-center rounded-md bg-white border border-[#E8E8E1] text-xs font-black text-[#2D3E10]">
+                          {it.quantity} Unit
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  
+
+                  {/* Add-ons */}
                   {draft.display.addOns.length > 0 && (
-                    <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5 space-y-4">
-                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Layanan Tambahan</span>
-                      <div className="space-y-3">
+                    <div className="rounded-xl border border-[#E8E8E1] bg-white p-4 space-y-3">
+                      <span className="block text-[10px] font-bold uppercase tracking-wider text-[#2D3E10]/60">Layanan Ekstra</span>
+                      <div className="divide-y divide-[#E8E8E1]/60">
                         {draft.display.addOns.map((a) => (
-                          <div key={a.addOnId} className="flex justify-between items-center">
-                            <div className="flex flex-col">
-                              <span className="text-xs font-bold text-[#2D3E10]">{a.name}</span>
-                              <span className="text-[9px] font-medium text-[#2D3E10]/70">Qty: {a.quantity}</span>
+                          <div key={a.addOnId} className="flex justify-between items-center py-2 text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-[#2D3E10]">{a.name}</span>
+                              <span className="text-[10px] text-[#2D3E10]/60">× {a.quantity}</span>
                             </div>
-                            <span className="text-xs font-black text-[#2D3E10]">{formatIDR(a.price * a.quantity)}</span>
+                            <span className="font-bold text-[#2D3E10] font-mono tabular-nums">{formatIDR(a.price * a.quantity)}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                   )}
                 </div>
-
-                {draft.specialRequest && (
-                  <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Permintaan Khusus</span>
-                    <p className="mt-2 text-sm font-medium leading-relaxed text-[#2D3E10]/70 italic">"{draft.specialRequest}"</p>
-                  </div>
-                )}
               </div>
-            </div>
 
-            {/* Payment Method Card */}
-            <div className="rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm transition-all sm:p-8">
-              <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#E8E8E1]/80 pb-5">
-                <div className="flex items-center gap-3.5">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2D3E10]/5 text-[#2D3E10] border border-[#2D3E10]/10">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              {/* Card 4: Metode Pembayaran (With Authentic Logos) */}
+              <div className="rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm sm:p-8">
+                <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#E8E8E1]/80 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2D3E10]/5 text-[#2D3E10]">
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h2 className="text-base sm:text-lg font-black tracking-tight text-[#2D3E10]">Pilih Metode Pembayaran</h2>
+                      <p className="text-xs text-[#2D3E10]/60">Transaksi terverifikasi instan tanpa konfirmasi manual</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 self-start sm:self-auto text-[11px] font-semibold text-[#2D3E10]/60 bg-[#FAFBF7] px-2.5 py-1 rounded-lg border border-[#E8E8E1]">
+                    <svg className="h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-base sm:text-lg font-black tracking-tight text-[#2D3E10]">Metode Pembayaran</h3>
-                    <p className="text-xs text-[#2D3E10]/60">Pilih opsi transaksi aman yang Anda kehendaki</p>
+                    <span>Enkripsi 256-Bit</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 self-start sm:self-auto text-[11px] font-semibold text-[#2D3E10]/60 bg-[#F1F3EE]/80 px-2.5 py-1 rounded-lg">
-                  <svg className="h-3.5 w-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <span>Enkripsi 256-Bit</span>
-                </div>
-              </div>
+                {/* Method Radio List */}
+                <div className="space-y-3" role="radiogroup" aria-label="Pilihan metode pembayaran">
+                  {paymentMethods.length === 0 ? (
+                    <div className="space-y-2.5 animate-pulse py-2">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="h-20 rounded-2xl bg-[#F1F3EE]/60 border border-[#E8E8E1]/60" />
+                      ))}
+                    </div>
+                  ) : (
+                    paymentMethods.map((m) => {
+                      const isSelected = paymentMethodCode === m.code;
+                      const meta = getPaymentMethodMeta(m.code);
+                      const baseAmount = Math.max(0, Math.round(Number(draft?.amountEstimate) || 0));
+                      const feePct = Math.round((baseAmount * Math.max(0, m.feeBps || 0)) / 10_000);
+                      const totalFee = feePct + Math.max(0, Math.round(Number(m.feeFlat) || 0));
 
-              {/* Method Selection List */}
-              <div className="space-y-3" role="radiogroup" aria-label="Pilihan metode pembayaran">
-                {paymentMethods.length === 0 ? (
-                  <div className="space-y-2.5 animate-pulse py-2">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="h-20 rounded-2xl bg-[#F1F3EE]/60 border border-[#E8E8E1]/60" />
-                    ))}
-                  </div>
-                ) : (
-                  paymentMethods.map((m) => {
-                    const isSelected = paymentMethodCode === m.code;
-                    const meta = getPaymentMethodMeta(m.code);
-                    const baseAmount = Math.max(0, Math.round(Number(draft?.amountEstimate) || 0));
-                    const feePct = Math.round((baseAmount * Math.max(0, m.feeBps || 0)) / 10_000);
-                    const totalFee = feePct + Math.max(0, Math.round(Number(m.feeFlat) || 0));
-
-                    return (
-                      <div
-                        key={m.code}
-                        role="radio"
-                        aria-checked={isSelected}
-                        tabIndex={0}
-                        onClick={() => {
-                          if (!submitting) setPaymentMethodCode(m.code);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
+                      return (
+                        <div
+                          key={m.code}
+                          role="radio"
+                          aria-checked={isSelected}
+                          tabIndex={0}
+                          onClick={() => {
                             if (!submitting) setPaymentMethodCode(m.code);
-                          }
-                        }}
-                        className={`group relative flex cursor-pointer items-center justify-between gap-4 rounded-2xl border p-4 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D3E10] ${
-                          isSelected
-                            ? "border-[#2D3E10] bg-[#FAFBF7] shadow-sm shadow-[#2D3E10]/5 ring-1 ring-[#2D3E10]/20"
-                            : "border-[#E8E8E1] bg-white hover:border-[#2D3E10]/40 hover:bg-[#FAFBF7]/40"
-                        } ${submitting ? "pointer-events-none opacity-50" : ""}`}
-                      >
-                        <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
-                          {meta.primaryLogo ? (
-                            <div
-                              className={`flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl bg-white border p-1.5 transition-all duration-300 ${
-                                isSelected
-                                  ? "border-[#2D3E10] shadow-sm ring-1 ring-[#2D3E10]/20"
-                                  : "border-[#E8E8E1] group-hover:border-[#2D3E10]/40"
-                              }`}
-                            >
-                              <img
-                                src={meta.primaryLogo}
-                                alt={m.label}
-                                className="h-7 w-auto max-w-full object-contain"
-                              />
-                            </div>
-                          ) : (
-                            <div
-                              className={`flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl transition-all duration-300 ${
-                                isSelected
-                                  ? "bg-[#2D3E10] text-white shadow-sm"
-                                  : "bg-[#F1F3EE] text-[#2D3E10]/70 group-hover:bg-[#2D3E10]/10 group-hover:text-[#2D3E10]"
-                              }`}
-                            >
-                              {meta.icon}
-                            </div>
-                          )}
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              if (!submitting) setPaymentMethodCode(m.code);
+                            }
+                          }}
+                          className={`group relative flex cursor-pointer items-center justify-between gap-4 rounded-2xl border p-4 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D3E10] ${
+                            isSelected
+                              ? "border-[#2D3E10] bg-[#FAFBF7] shadow-sm shadow-[#2D3E10]/5 ring-1 ring-[#2D3E10]/20"
+                              : "border-[#E8E8E1] bg-white hover:border-[#2D3E10]/40 hover:bg-[#FAFBF7]/40"
+                          } ${submitting ? "pointer-events-none opacity-50" : ""}`}
+                        >
+                          <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
+                            {meta.primaryLogo ? (
+                              <div
+                                className={`flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl bg-white border p-1.5 transition-all duration-300 ${
+                                  isSelected
+                                    ? "border-[#2D3E10] shadow-sm ring-1 ring-[#2D3E10]/20"
+                                    : "border-[#E8E8E1] group-hover:border-[#2D3E10]/40"
+                                }`}
+                              >
+                                <img
+                                  src={meta.primaryLogo}
+                                  alt={m.label}
+                                  className="h-7 w-auto max-w-full object-contain"
+                                />
+                              </div>
+                            ) : (
+                              <div
+                                className={`flex h-12 w-12 sm:h-13 sm:w-13 shrink-0 items-center justify-center rounded-2xl transition-all duration-300 ${
+                                  isSelected
+                                    ? "bg-[#2D3E10] text-white shadow-sm"
+                                    : "bg-[#F1F3EE] text-[#2D3E10]/70 group-hover:bg-[#2D3E10]/10 group-hover:text-[#2D3E10]"
+                                }`}
+                              >
+                                {meta.icon}
+                              </div>
+                            )}
 
-                          <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="text-sm font-bold text-[#2D3E10] leading-snug">
-                                {m.label}
-                              </span>
-                              {isSelected && (
-                                <span className="inline-flex items-center rounded-md bg-[#2D3E10]/10 px-2 py-0.5 text-[10px] font-black text-[#2D3E10] uppercase tracking-wider">
-                                  Dipilih
+                            <div className="min-w-0 flex-1">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="text-sm font-bold text-[#2D3E10] leading-snug">
+                                  {m.label}
+                                </span>
+                                {isSelected && (
+                                  <span className="inline-flex items-center rounded-md bg-[#2D3E10]/10 px-2 py-0.5 text-[10px] font-black text-[#2D3E10] uppercase tracking-wider">
+                                    Dipilih
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-[#2D3E10]/60 line-clamp-1 mt-0.5">
+                                {meta.description}
+                              </p>
+
+                              {/* Partner & Bank Logos */}
+                              {meta.brandLogos.length > 0 && (
+                                <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                                  {meta.brandLogos.map((b) => (
+                                    <span
+                                      key={b.name}
+                                      title={b.name}
+                                      className="inline-flex h-6 sm:h-7 items-center justify-center rounded-lg border border-[#E8E8E1] bg-white px-2 py-0.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all group-hover:border-[#2D3E10]/30"
+                                    >
+                                      <img
+                                        src={b.src}
+                                        alt={b.name}
+                                        className={`${b.heightClass || "h-3.5"} w-auto max-w-[65px] object-contain`}
+                                      />
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3 shrink-0">
+                            <div className="text-right hidden sm:block">
+                              {totalFee > 0 ? (
+                                <span className="text-[11px] font-bold text-[#2D3E10]/70 font-mono tabular-nums">
+                                  + {formatIDR(totalFee)}
+                                </span>
+                              ) : (
+                                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                  Bebas Biaya
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-[#2D3E10]/60 line-clamp-1 mt-0.5">
-                              {meta.description}
-                            </p>
 
-                            {/* Partner & Bank Logos */}
-                            {meta.brandLogos.length > 0 && (
-                              <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-                                {meta.brandLogos.map((b) => (
-                                  <span
-                                    key={b.name}
-                                    title={b.name}
-                                    className="inline-flex h-6 sm:h-7 items-center justify-center rounded-lg border border-[#E8E8E1] bg-white px-2 py-0.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all group-hover:border-[#2D3E10]/30"
-                                  >
-                                    <img
-                                      src={b.src}
-                                      alt={b.name}
-                                      className={`${b.heightClass || "h-3.5"} w-auto max-w-[65px] object-contain`}
-                                    />
-                                  </span>
-                                ))}
-                              </div>
-                            )}
+                            <div
+                              className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all duration-200 ${
+                                isSelected
+                                  ? "border-[#2D3E10] bg-[#2D3E10]"
+                                  : "border-[#D0D0C8] bg-white group-hover:border-[#2D3E10]/60"
+                              }`}
+                            >
+                              {isSelected && <span className="h-2 w-2 rounded-full bg-white" />}
+                            </div>
                           </div>
                         </div>
-
-                        <div className="flex items-center gap-3 shrink-0">
-                          <div className="text-right hidden sm:block">
-                            {totalFee > 0 ? (
-                              <span className="text-[11px] font-bold text-[#2D3E10]/60 font-mono tabular-nums">
-                                + {formatIDR(totalFee)}
-                              </span>
-                            ) : (
-                              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                                Bebas Biaya
-                              </span>
-                            )}
-                          </div>
-
-                          <div
-                            className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all duration-200 ${
-                              isSelected
-                                ? "border-[#2D3E10] bg-[#2D3E10]"
-                                : "border-[#D0D0C8] bg-white group-hover:border-[#2D3E10]/60"
-                            }`}
-                          >
-                            {isSelected && <span className="h-2 w-2 rounded-full bg-white" />}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
+                      );
+                    })
+                  )}
+                </div>
               </div>
+            </div>
 
-              {/* Rincian Pembayaran Breakdown */}
-              <div className="mt-8 rounded-2xl sm:rounded-3xl border border-[#E8E8E1]/80 bg-[#FAFBF7] p-6 sm:p-7">
-                <div className="space-y-3.5">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-[#2D3E10]/60 uppercase tracking-wider text-[11px]">Subtotal Pesanan</span>
-                    <span className="font-bold text-[#2D3E10] font-mono tabular-nums">{formatIDR(draft.amountEstimate)}</span>
+            {/* Right Column: Sticky Summary & Action (5 Columns) */}
+            <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
+              
+              {/* Sticky Summary Card */}
+              <div className="rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 shadow-sm sm:p-7">
+                <div className="mb-5 border-b border-[#E8E8E1]/80 pb-4">
+                  <h2 className="text-base sm:text-lg font-black tracking-tight text-[#2D3E10]">Ringkasan Pembayaran</h2>
+                  <p className="text-xs text-[#2D3E10]/60">Total biaya resmi tanpa pungutan tersembunyi</p>
+                </div>
+
+                {/* Breakdown Items */}
+                <div className="space-y-3.5 text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#2D3E10]/70">Subtotal Akomodasi ({nightsCount} malam)</span>
+                    <span className="font-bold text-[#2D3E10] font-mono tabular-nums">{formatIDR(accommodationSubtotal)}</span>
                   </div>
 
-                  <div className="flex justify-between items-center text-xs">
+                  {addOnsSubtotal > 0 && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-[#2D3E10]/70">Layanan Ekstra ({draft.display.addOns.length} item)</span>
+                      <span className="font-bold text-[#2D3E10] font-mono tabular-nums">{formatIDR(addOnsSubtotal)}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-[#2D3E10]/60 uppercase tracking-wider text-[11px]">Biaya Layanan</span>
-                      {selectedPaymentMethod && (
-                        <span className="text-[10px] text-[#2D3E10]/50 font-normal">({selectedPaymentMethod.label})</span>
-                      )}
+                      <span className="text-[#2D3E10]/70">Biaya Layanan Pembayaran</span>
                     </div>
                     <span className="font-bold text-[#2D3E10] font-mono tabular-nums">
-                      {serviceFeePreview > 0 ? formatIDR(serviceFeePreview) : "Rp 0"}
+                      {serviceFeePreview > 0 ? formatIDR(serviceFeePreview) : "Bebas Biaya"}
                     </span>
                   </div>
 
-                  <div className="h-px bg-[#E8E8E1] my-1" />
+                  <div className="h-px bg-[#E8E8E1] my-2" />
 
-                  <div className="flex justify-between items-center pt-1">
+                  {/* Grand Total */}
+                  <div className="flex justify-between items-baseline pt-1">
                     <div>
-                      <span className="text-xs font-black uppercase tracking-widest text-[#2D3E10]">Total Bayar</span>
-                      <p className="text-[10px] text-[#2D3E10]/50 mt-0.5">Termasuk pajak & biaya transaksi</p>
+                      <span className="text-xs font-black uppercase tracking-wider text-[#2D3E10]">Total Tagihan</span>
+                      <p className="text-[10px] text-[#2D3E10]/50 mt-0.5">Termasuk pajak & fasilitas standar</p>
                     </div>
                     <div className="text-right">
                       <span className="text-2xl sm:text-3xl font-black text-[#2D3E10] font-mono tabular-nums tracking-tight">
-                        {formatIDR(Math.max(0, Math.round(Number(draft.amountEstimate) || 0)) + serviceFeePreview)}
+                        {formatIDR(grandTotal)}
                       </span>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Agreements */}
-            <div className="px-2 pt-4">
-              <label className="flex cursor-pointer items-start gap-4 group">
-                <div className="relative flex h-6 w-6 shrink-0 items-center justify-center mt-0.5">
-                  <input
-                    type="checkbox"
-                    checked={agreed}
-                    onChange={(e) => setAgreed(e.target.checked)}
-                    className="peer h-full w-full cursor-pointer appearance-none rounded-[0.7rem] border-2 border-[#E8E8E1] bg-white transition-all duration-500 checked:border-primary checked:bg-primary hover:border-primary/40"
-                  />
-                  <svg
-                    className="pointer-events-none absolute h-3.5 w-3.5 text-white opacity-0 transition-all duration-500 scale-50 peer-checked:opacity-100 peer-checked:scale-110"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3.5}
+                {/* Inclusive Inclusions Note */}
+                <div className="mt-6 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4 space-y-1.5 text-[11px] text-[#2D3E10]/80">
+                  <div className="flex items-center gap-1.5 font-bold text-emerald-900">
+                    <svg className="h-4 w-4 text-emerald-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Fasilitas Termasuk dalam Reservasi:</span>
+                  </div>
+                  <ul className="space-y-1 text-[#2D3E10]/70 pl-5 list-disc text-[11px]">
+                    <li>Tiket resmi gerbang masuk kawasan Perhutani</li>
+                    <li>Parkir kendaraan terjaga 24 jam di area resort</li>
+                    <li>Akses fasilitas pemanas air (water heater) privat</li>
+                    <li>Akses lot listrik & penerangan malam hari</li>
+                  </ul>
+                </div>
+
+                {/* Agreement Checkbox */}
+                <div className="mt-6 pt-5 border-t border-[#E8E8E1]">
+                  <label className="flex cursor-pointer items-start gap-3 group">
+                    <div className="relative flex h-5 w-5 shrink-0 items-center justify-center mt-0.5">
+                      <input
+                        type="checkbox"
+                        checked={agreed}
+                        onChange={(e) => setAgreed(e.target.checked)}
+                        className="peer h-full w-full cursor-pointer appearance-none rounded-md border-2 border-[#E8E8E1] bg-white transition-all checked:border-primary checked:bg-primary hover:border-primary/40 focus:ring-2 focus:ring-primary/20"
+                      />
+                      <svg
+                        className="pointer-events-none absolute h-3.5 w-3.5 text-white opacity-0 transition-all scale-50 peer-checked:opacity-100 peer-checked:scale-100"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={3}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-[11px] font-medium leading-relaxed text-[#2D3E10]/70 select-none">
+                      Saya menyetujui{" "}
+                      <button type="button" onClick={() => setShowPrivacyModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/30 hover:text-primary">
+                        Syarat & Ketentuan
+                      </button>
+                      ,{" "}
+                      <button type="button" onClick={() => setShowPrivacyModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/30 hover:text-primary">
+                        Kebijakan Privasi
+                      </button>
+                      , dan{" "}
+                      <button type="button" onClick={() => setShowCancellationModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/30 hover:text-primary">
+                        Kebijakan Pembatalan
+                      </button>
+                      .
+                    </span>
+                  </label>
+                </div>
+
+                {/* Error Banner */}
+                {error && (
+                  <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-semibold text-red-700 animate-in fade-in">
+                    {error}
+                  </div>
+                )}
+
+                {/* Desktop Action Buttons */}
+                <div className="mt-6 hidden lg:flex flex-col gap-3">
+                  <button
+                    type="button"
+                    disabled={submitting || !agreed}
+                    onClick={() => confirmAndPay()}
+                    className="group relative flex min-h-[3.5rem] w-full items-center justify-center overflow-hidden rounded-xl bg-[#2D3E10] px-6 py-3.5 text-xs font-black uppercase tracking-[0.2em] text-white shadow-lg shadow-[#2D3E10]/15 transition-all hover:bg-[#1A2508] active:scale-[0.99] disabled:opacity-30 disabled:pointer-events-none"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span className="text-[11px] font-medium leading-relaxed text-[#2D3E10]/50 transition-colors group-hover:text-[#2D3E10]">
-                  Saya menyetujui <button onClick={() => setShowPrivacyModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/20 hover:text-primary">Syarat & Ketentuan</button>, <button onClick={() => setShowPrivacyModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/20 hover:text-primary">Kebijakan Privasi</button>, dan <button onClick={() => setShowCancellationModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/20 hover:text-primary">Kebijakan Pembatalan</button> yang berlaku.
-                </span>
-              </label>
-            </div>
+                    <span className="relative z-10">{submitting ? "Memproses Invoice..." : "Konfirmasi & Bayar Sekarang"}</span>
+                  </button>
 
-            {error && (
-              <div className="rounded-2xl border border-red-100 bg-red-50/50 p-6 animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center gap-4 text-red-600">
-                  <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <p className="text-sm font-bold">{error}</p>
+                  <button
+                    type="button"
+                    disabled={submitting}
+                    onClick={() => router.back()}
+                    className="flex min-h-[3rem] w-full items-center justify-center rounded-xl border border-[#E8E8E1] bg-white px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-[#2D3E10] transition-all hover:bg-[#FAFBF7] active:scale-[0.99]"
+                  >
+                    Kembali Ubah Data
+                  </button>
+                </div>
+
+                {/* Trust Footer */}
+                <div className="mt-6 pt-5 border-t border-[#E8E8E1]/60 flex items-center justify-center gap-3 text-[10px] text-[#2D3E10]/50 font-semibold text-center">
+                  <span>Diproses Aman oleh Xendit</span>
+                  <span>·</span>
+                  <span>Notifikasi WhatsApp & Email</span>
                 </div>
               </div>
-            )}
+            </div>
+
           </div>
         </div>
       </div>
 
-      {/* Sticky Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:p-6">
-        <div className="mx-auto flex max-w-2xl flex-col gap-3 sm:flex-row sm:gap-4">
-          <button
-            type="button"
-            disabled={submitting || !agreed}
-            onClick={() => confirmAndPay()}
-            className="group relative order-1 flex min-h-[3.75rem] w-full flex-[2] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] active:scale-[0.98] disabled:opacity-30 sm:order-2"
-          >
-            <span className="relative z-10">{submitting ? "Memproses..." : "Konfirmasi & Bayar Sekarang"}</span>
-          </button>
-          <button
-            type="button"
-            disabled={submitting}
-            onClick={() => router.back()}
-            className="order-2 flex min-h-[3.75rem] w-full flex-1 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1"
-          >
-            Kembali
-          </button>
+      {/* Sticky Bottom Navigation for Mobile (< lg) */}
+      <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 sm:p-4 backdrop-blur-xl lg:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.06)]">
+        <div className="mx-auto flex max-w-lg items-center justify-between gap-3">
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#2D3E10]/60">Total Bayar</span>
+            <span className="text-base sm:text-lg font-black text-[#2D3E10] font-mono tabular-nums tracking-tight">
+              {formatIDR(grandTotal)}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={submitting}
+              onClick={() => router.back()}
+              className="px-3 py-2.5 rounded-xl border border-[#E8E8E1] bg-white text-[10px] font-black uppercase text-[#2D3E10]"
+            >
+              Kembali
+            </button>
+            <button
+              type="button"
+              disabled={submitting || !agreed}
+              onClick={() => confirmAndPay()}
+              className="px-5 py-2.5 rounded-xl bg-[#2D3E10] text-[10px] font-black uppercase tracking-wider text-white shadow-md active:scale-95 disabled:opacity-30 transition-all"
+            >
+              {submitting ? "Memproses..." : "Bayar Sekarang"}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Modals */}
-      <Modal open={showPrivacyModal} title="Kebijakan Privasi" onClose={() => setShowPrivacyModal(false)} maxWidthClassName="max-w-xl">
+      <Modal open={showPrivacyModal} title="Kebijakan Privasi & Syarat Ketentuan" onClose={() => setShowPrivacyModal(false)} maxWidthClassName="max-w-xl">
         <div className="space-y-6 py-4">
-          <div className="rounded-2xl bg-[#F1F3EE]/50 p-6 text-sm font-medium leading-relaxed text-[#2D3E10]/70">
-            Kami menghargai privasi Anda. Data yang dikumpulkan hanya digunakan untuk keperluan reservasi dan peningkatan layanan di Woodforest Jayagiri 48.
+          <div className="rounded-2xl bg-[#FAFBF7] border border-[#E8E8E1] p-5 text-xs font-medium leading-relaxed text-[#2D3E10]/80">
+            Kami menjaga kerahasiaan data reservasi Anda. Informasi kontak hanya digunakan untuk penerbitan invoice resmi, konfirmasi e-tiket, serta koordinasi resepsionis dan tim ranger Jayagiri.
           </div>
           <div className="space-y-4">
             {[
-              { t: "Pengumpulan Data", d: "Kami mencatat nama, kontak, dan detail pesanan Anda." },
-              { t: "Penggunaan Data", d: "Informasi digunakan untuk konfirmasi, invoice, dan layanan tamu." },
-              { t: "Keamanan", d: "Data Anda disimpan secara aman dan tidak dibagikan ke pihak ketiga." }
+              { t: "Pengumpulan Data", d: "Kami mencatat nama pemesan, kontak WhatsApp, dan email untuk pengiriman tiket digital." },
+              { t: "Penggunaan Data", d: "Informasi digunakan eksklusif untuk administrasi reservasi di Woodforest Jayagiri 48." },
+              { t: "Keamanan Sistem", d: "Data Anda dienkripsi secara aman dan tidak diperjualbelikan kepada pihak manapun." }
             ].map((item, i) => (
               <div key={i} className="flex gap-4">
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-[10px] font-black text-primary">{i+1}</span>
                 <div className="space-y-1">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-[#2D3E10]">{item.t}</h4>
-                  <p className="text-sm font-medium text-[#2D3E10]/50">{item.d}</p>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-[#2D3E10]">{item.t}</h3>
+                  <p className="text-xs text-[#2D3E10]/70 leading-relaxed">{item.d}</p>
                 </div>
               </div>
             ))}
           </div>
-          <button onClick={() => setShowPrivacyModal(false)} className="w-full py-4 bg-[#2D3E10] text-white rounded-xl text-[10px] font-black uppercase tracking-widest mt-4 transition-all hover:bg-[#1A2508]">Tutup</button>
+          <button onClick={() => setShowPrivacyModal(false)} className="w-full py-3.5 bg-[#2D3E10] text-white rounded-xl text-xs font-black uppercase tracking-widest mt-4 transition-all hover:bg-[#1A2508]">Tutup</button>
         </div>
       </Modal>
 
-      <Modal open={showCancellationModal} title="Kebijakan Pembatalan" onClose={() => setShowCancellationModal(false)} maxWidthClassName="max-w-xl">
+      <Modal open={showCancellationModal} title="Kebijakan Pembatalan & Reschedule" onClose={() => setShowCancellationModal(false)} maxWidthClassName="max-w-xl">
         <div className="space-y-6 py-4">
-          <div className="rounded-2xl bg-amber-50 p-6 text-sm font-bold leading-relaxed text-amber-900/70 border border-amber-100">
-            Penting: Pembatalan karena cuaca ekstrem demi keselamatan tamu akan diprioritaskan untuk reschedule.
+          <div className="rounded-2xl bg-amber-50 p-5 text-xs font-bold leading-relaxed text-amber-900 border border-amber-200/80">
+            Pemberitahuan Cuaca & Alam: Keselamatan dan kenyamanan tamu di ketinggian 1.620 mdpl adalah prioritas utama kami.
           </div>
           <div className="space-y-4">
             {[
-              { t: "Refund Policy", d: "DP tidak dapat dikembalikan (non-refundable) namun dapat dialihkan." },
-              { t: "Reschedule", d: "Permintaan ubah jadwal maksimal 7 hari sebelum kedatangan." },
-              { t: "Force Majeure", d: "Manajemen berhak membatalkan sepihak jika kondisi alam tidak memungkinkan." }
+              { t: "Ketentuan Refund", d: "Pembayaran reservasi yang sudah terkonfirmasi tidak dapat di-refund (non-refundable)." },
+              { t: "Penjadwalan Ulang (Reschedule)", d: "Permintaan reschedule dapat diajukan selambat-lambatnya 7 hari sebelum tanggal check-in (tergantung ketersediaan kavling)." },
+              { t: "Kondisi Cuaca Ekstrem (Force Majeure)", d: "Jika terjadi cuaca ekstrem atau penutupan jalur oleh Perhutani, tamu berhak mendapatkan voucher reschedule gratis tanpa denda." }
             ].map((item, i) => (
               <div key={i} className="flex gap-4">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[10px] font-black text-amber-700">{i+1}</span>
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[10px] font-black text-amber-800">{i+1}</span>
                 <div className="space-y-1">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-[#2D3E10]">{item.t}</h4>
-                  <p className="text-sm font-medium text-[#2D3E10]/50">{item.d}</p>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-[#2D3E10]">{item.t}</h3>
+                  <p className="text-xs text-[#2D3E10]/70 leading-relaxed">{item.d}</p>
                 </div>
               </div>
             ))}
           </div>
-          <button onClick={() => setShowCancellationModal(false)} className="w-full py-4 bg-[#2D3E10] text-white rounded-xl text-[10px] font-black uppercase tracking-widest mt-4 transition-all hover:bg-[#1A2508]">Tutup</button>
+          <button onClick={() => setShowCancellationModal(false)} className="w-full py-3.5 bg-[#2D3E10] text-white rounded-xl text-xs font-black uppercase tracking-widest mt-4 transition-all hover:bg-[#1A2508]">Tutup</button>
         </div>
       </Modal>
     </div>
