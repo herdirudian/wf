@@ -1754,37 +1754,37 @@ export default function PublicBookingPage() {
               <div className="print-page print-invoice overflow-hidden rounded-[1.5rem] border border-[#E8E8E1] bg-white shadow-sm transition-all duration-700 hover:shadow-xl hover:shadow-[#2D3E10]/5">
                 <div className="p-8 print-tight print-compact-text">
                   <div className="text-center">
-                    <img src="/brand/logowf.png" alt="Woodforest" className="print-logo mx-auto h-32 w-32 object-contain" />
-                    <div className="mt-4 text-xl font-bold tracking-tight text-[#2D3E10]">Woodforest <span className="italic font-serif opacity-60">Jayagiri 48</span></div>
-                    <div className="mt-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Quiet nature • Family bonding • Wellness • Light adventure</div>
-                    <div className="mt-4 text-[11px] font-medium text-[#2D3E10]/70">admin@woodforestjayagiri48.com · +62 811-2090-808</div>
-                    <div className="mt-1 text-[10px] font-medium text-[#2D3E10]/70">Jam check-in 14:00 WIB • Check-out 12:00 WIB</div>
+                    <img src="/brand/logowf.png" alt="Woodforest" className="print-logo mx-auto h-28 w-28 object-contain" />
+                    <div className="mt-3 text-xl font-serif text-[#2D3E10] tracking-wide">WOODFOREST JAYAGIRI 48</div>
+                    <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.25em] text-[#2D3E10]/70">1.620 mdpl · Cikole Lembang Bandung Barat</div>
+                    <div className="mt-3 text-[11px] font-medium text-[#2D3E10]/70">admin@woodforestjayagiri48.com · +62 811-2090-808</div>
+                    <div className="mt-1 text-[10px] font-medium text-[#2D3E10]/70">Check-in 14:00 WIB · Check-out 12:00 WIB</div>
                   </div>
 
-                  <div className="my-8 h-px bg-[#E8E8E1]" />
+                  <div className="my-6 h-px bg-[#E8E8E1]" />
 
                   {invoice ? (
                     <>
                       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                        <div className="space-y-3">
-                          <div className="inline-flex rounded-full bg-[#F1F3EE] px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/60">Invoice / Confirmation</div>
-                          <div className="text-sm font-bold text-[#2D3E10]">Dear {invoice.customer.name},</div>
-                          <p className="max-w-xs text-xs leading-relaxed text-[#2D3E10]/50">Terima kasih telah memilih Woodforest Jayagiri 48. Berikut adalah detail konfirmasi booking Anda.</p>
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#2D3E10]/60">Voucher Resmi Reservasi</span>
+                          <div className="text-sm font-bold text-[#2D3E10]">Yth. {invoice.customer.name},</div>
+                          <p className="max-w-xs text-xs leading-relaxed text-[#2D3E10]/60">Terima kasih telah memilih Woodforest Jayagiri 48. Berikut adalah detail konfirmasi reservasi resmi Anda.</p>
                         </div>
-                        <div className="flex flex-col gap-4 md:text-right">
+                        <div className="flex flex-col gap-3 md:text-right">
                           <div>
-                            <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">Booking ID</div>
-                            <div className="mt-1 font-mono text-sm font-bold text-[#2D3E10]">{invoice.code}</div>
+                            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#2D3E10]/70">Booking ID</div>
+                            <div className="mt-0.5 font-mono text-base font-bold text-[#2D3E10]">{invoice.code}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/70">Status</div>
-                            <div className="mt-1">
-                              <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${
+                            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#2D3E10]/70">Status</div>
+                            <div className="mt-0.5">
+                              <span className={`text-xs font-mono uppercase font-bold ${
                                 invoice.payment.paidAmount >= invoice.payment.amount 
-                                  ? "bg-green-50 text-green-600" 
-                                  : "bg-amber-50 text-amber-600"
+                                  ? "text-emerald-700" 
+                                  : "text-amber-700"
                               }`}>
-                                {invoice.payment.paidAmount >= invoice.payment.amount ? "Confirmed" : "Pending"}
+                                {invoice.payment.paidAmount >= invoice.payment.amount ? "Terbayar / Confirmed" : "Menunggu Pembayaran"}
                               </span>
                             </div>
                           </div>
@@ -1897,18 +1897,18 @@ export default function PublicBookingPage() {
                 </div>
               </div>
 
-              <div className="no-print mt-8 flex flex-col gap-4 sm:flex-row">
+              <div className="no-print mt-8 flex flex-col gap-3 sm:flex-row">
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="group relative flex min-h-[3.75rem] flex-1 items-center justify-center overflow-hidden rounded-[1.2rem] bg-[#2D3E10] px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#3D5216] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50"
+                  className="flex min-h-[3.5rem] flex-1 items-center justify-center rounded-xl bg-[#86A86C] hover:bg-[#97ba7c] px-8 py-3.5 text-xs font-mono uppercase tracking-wider font-bold text-[#090E08] shadow-lg shadow-[#86A86C]/20 transition-all active:scale-[0.98] disabled:opacity-50"
                   disabled={!invoice}
                 >
-                  <div className="relative z-10 flex items-center gap-3">
+                  <div className="flex items-center gap-2.5">
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
-                    Unduh E-Voucher / Cetak
+                    <span>Cetak / Simpan E-Voucher</span>
                   </div>
                 </button>
                 <button
@@ -1917,9 +1917,9 @@ export default function PublicBookingPage() {
                     sessionStorage.removeItem("wf_booking_draft");
                     window.location.href = window.location.pathname;
                   }}
-                  className="group flex min-h-[3.75rem] flex-1 items-center justify-center rounded-[1.2rem] border border-[#E8E8E1] bg-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] hover:border-primary/30 active:scale-[0.98]"
+                  className="flex min-h-[3.5rem] flex-1 items-center justify-center rounded-xl border border-white/15 bg-[#121C11] px-8 py-3.5 text-xs font-mono uppercase tracking-wider text-white/80 transition-all hover:bg-[#162415] hover:text-white active:scale-[0.98]"
                 >
-                  Booking Lagi
+                  Buat Reservasi Baru
                 </button>
               </div>
             </div>
