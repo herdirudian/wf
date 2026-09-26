@@ -234,34 +234,33 @@ function QuantityStepper({
   const decDisabled = disabled || value <= min;
   const incDisabled = disabled || (typeof max === "number" ? value >= max : false);
 
-  const btnClass = size === "sm" ? "h-9 w-9" : "h-11 w-11";
-  const midClass = size === "sm" ? "min-w-[32px] text-sm" : "min-w-[40px] text-base";
+  const btnClass = size === "sm" ? "h-8 w-8" : "h-10 w-10";
+  const midClass = size === "sm" ? "min-w-[28px] text-xs" : "min-w-[36px] text-sm";
 
   return (
-    <div className="inline-flex w-fit items-center gap-1.5 p-1.5 rounded-full border border-[#E8E8E1] bg-white shadow-sm group transition-all duration-500 hover:border-primary/30 hover:shadow-md relative overflow-hidden">
-      
+    <div className="inline-flex w-fit items-center gap-1 p-1 rounded-xl border border-white/10 bg-[#162415] shadow-inner">
       <button
         type="button"
         disabled={decDisabled}
         onClick={() => onChange(Math.max(min, value - 1))}
-        className={`${btnClass} relative z-10 flex items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all hover:bg-primary hover:text-white active:scale-90 disabled:opacity-20 disabled:pointer-events-none hover:shadow-lg hover:shadow-primary/20`}
+        className={`${btnClass} flex items-center justify-center rounded-lg bg-[#121C11] text-[#F6F5F0] border border-white/10 transition-all hover:text-[#86A86C] hover:border-[#86A86C]/40 active:scale-95 disabled:opacity-20 disabled:pointer-events-none`}
         aria-label={`Kurangi ${ariaLabel}`}
       >
-        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
         </svg>
       </button>
-      <div className={`${midClass} relative z-10 flex items-center justify-center text-center font-bold text-[#2D3E10] tabular-nums`} aria-label={ariaLabel}>
+      <div className={`${midClass} flex items-center justify-center text-center font-mono tabular-nums font-bold text-[#F6F5F0]`} aria-label={ariaLabel}>
         {value}
       </div>
       <button
         type="button"
         disabled={incDisabled}
         onClick={() => onChange(typeof max === "number" ? Math.min(max, value + 1) : value + 1)}
-        className={`${btnClass} relative z-10 flex items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all hover:bg-primary hover:text-white active:scale-90 disabled:opacity-20 disabled:pointer-events-none hover:shadow-lg hover:shadow-primary/20`}
+        className={`${btnClass} flex items-center justify-center rounded-lg bg-[#121C11] text-[#F6F5F0] border border-white/10 transition-all hover:text-[#86A86C] hover:border-[#86A86C]/40 active:scale-95 disabled:opacity-20 disabled:pointer-events-none`}
         aria-label={`Tambah ${ariaLabel}`}
       >
-        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
         </svg>
       </button>
@@ -291,6 +290,9 @@ export default function PublicBookingPage() {
   const [email, setEmail] = useState("");
   const [totalGuest, setTotalGuest] = useState(1);
   const [specialRequest, setSpecialRequest] = useState("");
+
+  const [kavlingTab, setKavlingTab] = useState<"grid" | "map">("grid");
+  const [rulesModalOpen, setRulesModalOpen] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -1163,189 +1165,167 @@ export default function PublicBookingPage() {
   const stayNights = useMemo(() => calculateStayNights(checkIn, checkOut), [checkIn, checkOut]);
 
   const sidebarContent = (
-    <div className="sticky top-6 space-y-6">
-      <div className="overflow-hidden rounded-[2.5rem] border-2 border-primary/30 bg-white/95 backdrop-blur-xl shadow-2xl shadow-black/10 transition-all duration-700 hover:shadow-primary/20 hover:border-primary/50">
-        {/* Header - Premium Nature Gradient */}
-        <div className="relative overflow-hidden bg-[#2D3E10] px-6 py-6 sm:px-7 sm:py-7 text-center">
-          <div className="relative z-10 flex flex-col items-center justify-center">
-            <h3 className="text-2xl font-bold tracking-tight text-white">
-              Ringkasan <span className="italic font-serif opacity-90 text-[#F1F3EE]">Pesanan</span>
-            </h3>
-            <div className="mt-2.5 flex items-center justify-center gap-2.5">
-              <span className="h-px w-5 bg-white/20" />
-              <p className="text-[10px] font-bold text-white/80 uppercase tracking-[0.3em]">Exclusive Stay</p>
-              <span className="h-px w-5 bg-white/20" />
+    <div className="sticky top-6 space-y-4">
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121C11] text-[#F6F5F0] shadow-2xl shadow-black/50">
+        {/* Header - Luxury Pine Timber */}
+        <div className="border-b border-white/10 bg-[#162415] px-6 py-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-serif text-lg font-normal tracking-wide text-[#F6F5F0]">
+                Ringkasan Reservasi
+              </h3>
+              <p className="mt-0.5 text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                Woodforest Jayagiri 48
+              </p>
             </div>
+            <span className="font-mono text-xs text-[#F6F5F0]/50">1.620 mdpl</span>
           </div>
         </div>
         
-        <div className="p-5 sm:p-6 space-y-6 sm:space-y-7">
+        <div className="p-5 sm:p-6 space-y-6">
           {/* Jadwal & Tamu */}
-          <div className="space-y-5">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Rencana Kunjungan</span>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#F6F5F0]/50">Rencana Kunjungan</span>
               <button 
+                type="button"
                 onClick={() => setCurrentStep(1)} 
-                className="group flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest transition-all hover:text-[#2D3E10]"
+                className="text-xs font-mono text-[#86A86C] hover:underline"
               >
-                <span>Ubah</span>
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F1F3EE] transition-colors group-hover:bg-primary group-hover:text-white">
-                  <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
+                Ubah
               </button>
             </div>
             
-            <div className="space-y-6">
-              {/* Date */}
-              <div className="flex items-start gap-5 group">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:rotate-3 group-hover:scale-110">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="flex flex-col gap-1.5 py-0.5">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Tanggal Menginap</span>
-                  <span className="text-sm font-bold text-[#2D3E10] leading-none tracking-tight">
-                    {checkIn ? formatDateWIB(new Date(checkIn)) : "Pilih Tanggal"}
-                    {checkOut && <span className="mx-2 text-[#2D3E10]/60">s/d</span>}
-                    {checkOut ? formatDateWIB(new Date(checkOut)) : ""}
-                  </span>
-                </div>
+            <div className="space-y-3 text-xs">
+              <div className="flex justify-between items-start">
+                <span className="text-[#F6F5F0]/60">Tanggal Menginap</span>
+                <span className="font-mono tabular-nums text-right text-[#F6F5F0]">
+                  {checkIn ? formatDateWIB(new Date(checkIn)) : "Pilih Tanggal"}
+                  {checkOut && <span className="mx-1 text-[#F6F5F0]/40">—</span>}
+                  {checkOut ? formatDateWIB(new Date(checkOut)) : ""}
+                </span>
               </div>
 
-              {/* Guests */}
-              <div className="flex items-start gap-5 group">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F1F3EE] text-[#2D3E10] transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:-rotate-3 group-hover:scale-110">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </div>
-                <div className="flex flex-col gap-1.5 py-0.5">
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Jumlah Tamu</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-[#2D3E10] tracking-tight">{totalGuest} Orang</span>
-                      <span className="text-[10px] font-medium text-primary/90 italic">({adultPax}D, {child5to10Pax + childUnder5Pax}A)</span>
-                    </div>
-                  </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[#F6F5F0]/60">Komposisi Tamu</span>
+                <span className="font-mono tabular-nums text-[#86A86C]">
+                  {totalGuest} Tamu ({adultPax}D, {child5to10Pax + childUnder5Pax}A)
+                </span>
               </div>
             </div>
           </div>
 
           {/* Unit Terpilih */}
-          <div className="space-y-5">
-            <div className="border-b border-[#E8E8E1] pb-4">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Akomodasi</span>
+          <div className="space-y-4">
+            <div className="border-b border-white/10 pb-3">
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#F6F5F0]/50">Akomodasi Terpilih</span>
             </div>
             {selectedVisibleUnits.length > 0 ? (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {selectedVisibleUnits.map(u => {
                   const qty = unitQty[u.id] || 0;
                   return (
-                    <div key={u.id} className="group flex justify-between items-start gap-4">
-                      <div className="flex flex-col gap-2">
-                        <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{u.name}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="rounded-full bg-[#F1F3EE] px-2.5 py-0.5 text-[9px] font-bold text-[#2D3E10]/60 uppercase tracking-wider">
+                    <div key={u.id} className="flex justify-between items-start gap-3 text-xs">
+                      <div>
+                        <p className="font-medium text-[#F6F5F0]">{u.name}</p>
+                        <div className="mt-1 flex items-center gap-2">
+                          <span className="rounded bg-[#162415] border border-white/10 px-1.5 py-0.5 text-[10px] font-mono text-[#86A86C]">
                             {qty} Unit
                           </span>
                           {u.capacity > 0 && (
-                            <span className="text-[9px] font-medium text-primary/80 uppercase tracking-widest">
-                              Kap: {u.capacity * qty} Orang
+                            <span className="text-[10px] font-mono text-[#F6F5F0]/50">
+                              Maks {u.capacity * qty} Tamu
                             </span>
                           )}
                         </div>
                       </div>
-                      <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(sumDailyPrice(u) * qty)}</span>
+                      <span className="font-mono tabular-nums text-sm font-medium text-[#F6F5F0]">{formatIDR(sumDailyPrice(u) * qty)}</span>
                     </div>
                   );
                 })}
 
                 {/* Kavling Selection Info */}
                 {kavlingSelected.length > 0 && (
-                  <div className="rounded-2xl bg-[#F1F3EE]/50 p-4 border border-[#E8E8E1]/60">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[9px] font-black text-[#2D3E10]/70 uppercase tracking-widest">Kavling Terpilih</span>
-                      <span className="text-xs font-black text-primary tracking-tight">
-                        {kavlingSelected.sort((a, b) => Number(a) - Number(b)).join(", ")}
-                      </span>
-                    </div>
+                  <div className="rounded-xl bg-[#162415] border border-white/10 p-3.5 space-y-1">
+                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#F6F5F0]/50 block">Kavling Terpilih</span>
+                    <span className="font-mono tabular-nums text-sm font-bold text-[#86A86C]">
+                      {kavlingSelected.slice().sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true })).join(", ")}
+                    </span>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-6 text-center rounded-2xl border-2 border-dashed border-[#E8E8E1] bg-[#F1F3EE]/20 px-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#2D3E10]/40 shadow-sm border border-[#E8E8E1] mb-3">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" />
-                  </svg>
-                </div>
-                <p className="text-[11px] font-bold text-[#2D3E10]/70">Pilih unit akomodasi untuk melanjutkan</p>
+              <div className="rounded-xl bg-[#162415] border border-white/5 p-4 text-center">
+                <p className="text-xs text-[#F6F5F0]/60">Pilih unit akomodasi untuk melanjutkan</p>
               </div>
             )}
           </div>
 
           {/* Layanan Tambahan (Manual + Auto) */}
           {addons.some(a => effectiveAddonQty[a.id] > 0) && (
-            <div className="space-y-8">
-              <div className="border-b border-[#E8E8E1] pb-4">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Layanan Tambahan</span>
+            <div className="space-y-4">
+              <div className="border-b border-white/10 pb-3">
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#F6F5F0]/50">Layanan Tambahan</span>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {addons.filter(a => effectiveAddonQty[a.id] > 0).map(a => (
-                  <div key={a.id} className="group flex justify-between items-start gap-4">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">{a.name}</span>
-                        {autoAddonQty[a.id] > 0 && (
-                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[7px] font-black text-primary uppercase tracking-tighter">Auto</span>
-                        )}
-                      </div>
-                      <span className="text-[9px] font-bold text-[#2D3E10]/70 uppercase tracking-widest">Qty: {effectiveAddonQty[a.id]}</span>
+                  <div key={a.id} className="flex justify-between items-start gap-3 text-xs">
+                    <div>
+                      <span className="text-[#F6F5F0]">{a.name}</span>
+                      <span className="font-mono text-[#F6F5F0]/50 ml-2">×{effectiveAddonQty[a.id]}</span>
                     </div>
-                    <span className="text-sm font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(a.price * effectiveAddonQty[a.id])}</span>
+                    <span className="font-mono tabular-nums text-[#86A86C]">{formatIDR(a.price * effectiveAddonQty[a.id])}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Rincian Biaya */}
-          <div className="space-y-6 pt-4 border-t border-[#E8E8E1]">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#2D3E10]/70">Rincian Biaya</span>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-medium text-[#2D3E10]/50">Subtotal Akomodasi</span>
-                <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(selectedVisibleUnits.reduce((acc, u) => acc + (sumDailyPrice(u) * (unitQty[u.id] || 0)), 0))}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-medium text-[#2D3E10]/50">Layanan Tambahan</span>
-                <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(addons.reduce((acc, a) => acc + (a.price * (effectiveAddonQty[a.id] || 0)), 0))}</span>
-              </div>
-            </div>
+          {/* Transparent Inclusions Guarantee */}
+          <div className="rounded-xl bg-[#0B120A] border border-[#86A86C]/20 p-4 space-y-1">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#86A86C] block font-bold">
+              Transparansi Rimba
+            </span>
+            <p className="text-[11px] text-[#F6F5F0]/70 leading-relaxed">
+              Termasuk tiket gerbang masuk Perhutani, parkir aman, akses listrik stopkontak lot, serta pemanas air privat tanpa biaya tersembunyi.
+            </p>
           </div>
 
-          {/* Summary Footer */}
-          <div className="pt-4">
-            <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#F1F3EE] p-5 space-y-3 group">
-              
-              <div className="relative z-10 space-y-3 text-center">
-                <span className="text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.4em]">Estimasi Total Biaya</span>
-                <div className="flex flex-col gap-1">
-                  <span className="text-3xl font-black text-[#2D3E10] tracking-tighter tabular-nums">{formatIDR(estimatedAmount)}</span>
-                  <p className="text-[10px] font-medium text-[#2D3E10]/60 italic">
-                    *Termasuk pajak & biaya layanan
-                  </p>
-                </div>
+          {/* Total Breakdown */}
+          <div className="rounded-xl bg-[#0B120A] border border-white/10 p-5 space-y-3">
+            <div className="flex justify-between items-center text-xs">
+              <span className="font-mono uppercase tracking-wider text-[#F6F5F0]/60">Subtotal Akomodasi</span>
+              <span className="font-mono tabular-nums text-[#F6F5F0]">
+                {formatIDR(selectedVisibleUnits.reduce((acc, u) => acc + (sumDailyPrice(u) * (unitQty[u.id] || 0)), 0))}
+              </span>
+            </div>
+            {addons.some(a => effectiveAddonQty[a.id] > 0) && (
+              <div className="flex justify-between items-center text-xs">
+                <span className="font-mono uppercase tracking-wider text-[#F6F5F0]/60">Layanan Tambahan</span>
+                <span className="font-mono tabular-nums text-[#F6F5F0]">
+                  {formatIDR(addons.reduce((acc, a) => acc + (a.price * (effectiveAddonQty[a.id] || 0)), 0))}
+                </span>
               </div>
+            )}
+            <div className="h-px bg-white/10 my-1" />
+            <div className="flex justify-between items-baseline pt-1">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C] block">
+                  Estimasi Total
+                </span>
+                <span className="text-[10px] text-[#F6F5F0]/50 font-mono">*Termasuk fasilitas lengkap</span>
+              </div>
+              <span className="font-mono tabular-nums text-2xl font-bold text-[#86A86C]">
+                {formatIDR(estimatedAmount)}
+              </span>
             </div>
           </div>
         </div>
 
         {/* Action Button Section */}
-        <div className="bg-white px-6 pb-6 pt-3 border-t border-[#E8E8E1]/60">
+        <div className="bg-[#162415] p-5 border-t border-white/10">
           <button
+            type="button"
             onClick={() => {
               if (currentStep === 1) setCurrentStep(2);
               else if (currentStep === 2) setCurrentStep(3);
@@ -1356,29 +1336,23 @@ export default function PublicBookingPage() {
               (currentStep === 2 && (!checkIn || !checkOut || selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings))) || 
               (currentStep === 3 && (!name || !phone || !email))
             }
-            className="group relative w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#2D3E10] py-4 text-xs font-bold text-white shadow-xl shadow-[#2D3E10]/20 transition-all hover:bg-[#3D5216] hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-20 disabled:pointer-events-none"
+            className="w-full rounded-xl bg-[#86A86C] py-4 text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#090E08] shadow-lg shadow-[#86A86C]/10 transition-all hover:bg-[#97bd7c] active:scale-[0.99] disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
-            <div className="relative z-10 flex items-center justify-center gap-4 uppercase tracking-[0.3em]">
-              <span>{currentStep === 1 ? "Lanjut Pilih Unit" : currentStep === 2 ? "Lanjut Isi Data" : "Konfirmasi Booking"}</span>
-              <svg className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </div>
+            <span>{currentStep === 1 ? "Lanjut Pilih Unit →" : currentStep === 2 ? "Lanjut Isi Data →" : "Konfirmasi Booking →"}</span>
           </button>
         </div>
       </div>
 
-      {/* Trust Badge - More Elegant */}
-      <div className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-[#F1F3EE]/30 border border-[#E8E8E1] group transition-all duration-500 hover:bg-white hover:shadow-md">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white shadow-sm transition-transform duration-700 group-hover:rotate-[360deg]">
-          <svg className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      {/* Trust Badge */}
+      <div className="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-[#121C11] border border-white/10">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#162415] text-[#86A86C] border border-white/5">
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
         </div>
         <div className="space-y-0.5">
-          <span className="block text-[10px] font-black text-[#2D3E10] uppercase tracking-[0.2em]">Reservasi Resmi</span>
-          <span className="block text-[10px] font-semibold text-primary">Konfirmasi Instan ke WhatsApp & Email</span>
+          <span className="block text-[11px] font-medium text-[#F6F5F0]">Reservasi Resmi Woodforest</span>
+          <span className="block text-[10px] font-mono text-[#86A86C]">Konfirmasi Instan ke WhatsApp & Email</span>
         </div>
       </div>
     </div>
@@ -1492,26 +1466,236 @@ export default function PublicBookingPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background selection:bg-primary/10 selection:text-primary pb-48 sm:pb-0">
-      <div className="relative mx-auto w-full max-w-7xl xl:max-w-[1400px] 2xl:max-w-[1480px] px-3 py-6 sm:px-6 lg:px-8">
-        <div className={`${success ? "no-print " : ""}mb-6 overflow-hidden rounded-[1.2rem] border border-[#E8E8E1] bg-white px-4 py-6 shadow-xl shadow-[#2D3E10]/5 transition-all hover:shadow-primary/10 sm:rounded-[2.5rem] sm:p-8`}>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-[180px_1fr] sm:items-center">
-            <div className="flex justify-center sm:justify-start">
-              <div className="relative group">
-                
-                <img src="/brand/logowf.png" alt="Woodforest" className="relative h-20 w-24 shrink-0 rounded-xl object-contain sm:h-36 sm:w-36 transition-transform duration-700 group-hover:scale-105" />
-              </div>
+    <div className="relative min-h-screen overflow-x-hidden bg-[#090E08] text-[#F6F5F0] selection:bg-[#86A86C]/25 selection:text-[#F6F5F0] pb-48 sm:pb-24">
+      {/* Top Bar - 3-Zone Contract */}
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#090E08]/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4">
+          {/* Zone 1: Wordmark & Marker */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setCurrentStep(1)}
+              className="group flex flex-col text-left outline-none"
+            >
+              <span className="font-serif text-lg tracking-wider text-[#F6F5F0] transition-colors group-hover:text-[#86A86C] sm:text-xl">
+                WOODFOREST JAYAGIRI 48
+              </span>
+              <span className="text-[10px] tracking-widest text-[#F6F5F0]/50 uppercase font-sans">
+                1.620 mdpl · Lembang
+              </span>
+            </button>
+          </div>
+
+          {/* Zone 2: Clean Navigation */}
+          <nav className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-[0.2em] text-[#F6F5F0]/70">
+            <button
+              type="button"
+              onClick={() => setCurrentStep(1)}
+              className={`hover:text-[#86A86C] transition-colors ${currentStep === 1 ? "text-[#86A86C]" : ""}`}
+            >
+              Akomodasi
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (currentStep === 1 && categoryOptions.length) {
+                  setFilterCategory(categoryOptions[0]);
+                }
+                setCurrentStep(2);
+                setKavlingTab("map");
+              }}
+              className="hover:text-[#86A86C] transition-colors"
+            >
+              Peta Rimba
+            </button>
+            <button
+              type="button"
+              onClick={() => setRulesModalOpen(true)}
+              className="hover:text-[#86A86C] transition-colors"
+            >
+              Ketentuan Rimba
+            </button>
+          </nav>
+
+          {/* Zone 3: Quick Action */}
+          <div className="flex items-center gap-3">
+            <a
+              href="https://wa.me/628112090808"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#121C11] px-3.5 py-2 text-xs font-mono uppercase tracking-wider text-[#F6F5F0] hover:border-[#86A86C]/40 hover:text-[#86A86C] transition-all"
+            >
+              <span className="h-2 w-2 rounded-full bg-[#86A86C] animate-pulse" />
+              <span>Concierge WA</span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      {/* Atmospheric Hero Section */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#0B120A] py-10 sm:py-16">
+        <div className="absolute inset-0 z-0 opacity-25">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#090E08] via-transparent to-[#090E08]/80" />
+          <div className="h-full w-full bg-[radial-gradient(#86A86C_1px,transparent_1px)] [background-size:24px_24px] opacity-20" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center text-center">
+            {/* Climatology Trust Beacon */}
+            <div className="mb-4 inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.25em] text-[#86A86C]">
+              <span>1.620 mdpl</span>
+              <span className="text-white/30">·</span>
+              <span>Suhu Malam 12°–18°C</span>
+              <span className="text-white/30">·</span>
+              <span>Cikole Lembang</span>
             </div>
-            <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
-              <h1 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-4xl">
-                Woodforest <span className="text-primary italic">Booking</span>
-              </h1>
-              <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium leading-relaxed text-[#2D3E10]/70 sm:mx-0 sm:mt-3 sm:text-sm">
-                Pilih jadwal menginap, tentukan paket akomodasi, dan nikmati suasana asri alam Jayagiri bersama keluarga.
-              </p>
+
+            <h1 className="font-serif text-3xl font-normal tracking-tight text-[#F6F5F0] sm:text-5xl max-w-3xl leading-tight">
+              Glamping & Camping di Ketinggian Rimba Jayagiri
+            </h1>
+            <p className="mt-4 max-w-2xl text-sm sm:text-base font-normal text-[#F6F5F0]/70 leading-relaxed">
+              Nikmati sejuknya alam pinus Jayagiri 48 dengan pemanas air privat, parkir terjaga, dan akses listrik di setiap kavling tanpa biaya tersembunyi.
+            </p>
+
+            {/* Inclusions Ribbon */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-mono text-[#F6F5F0]/60">
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+                Tiket Gerbang Perhutani Termasuk
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+                Parkir Kendaraan Terjaga
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+                Akses Listrik Lot
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+                Water Heater Privat
+              </span>
+            </div>
+          </div>
+
+          {/* Grounded Booking Dock */}
+          <div className="mt-10 rounded-2xl border border-white/10 bg-[#121C11] p-4 sm:p-6 shadow-2xl shadow-black/80">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 items-center">
+              {/* Check-In Tile */}
+              <div 
+                role="button"
+                tabIndex={0}
+                onClick={openCheckInPicker}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openCheckInPicker();
+                  }
+                }}
+                className="group relative cursor-pointer rounded-xl border border-white/10 bg-[#162415] p-3.5 transition-all hover:border-[#86A86C]/40 hover:bg-[#1A2C19]"
+              >
+                <input
+                  ref={checkInInputRef}
+                  type="date"
+                  value={checkIn}
+                  min={minDate || undefined}
+                  onChange={(e) => handleCheckInChange(e.target.value)}
+                  onClick={(e) => {
+                    try {
+                      e.currentTarget.showPicker?.();
+                    } catch {}
+                  }}
+                  className="native-date-full-clickable"
+                  required
+                  aria-label="Pilih tanggal check-in"
+                />
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#F6F5F0]/50">Check-in</span>
+                  <span className="text-[10px] font-mono text-[#86A86C]">14:00 WIB</span>
+                </div>
+                <div className="mt-1">
+                  <div className="font-mono tabular-nums text-sm sm:text-base font-bold text-[#F6F5F0]">
+                    {checkInInfo.formattedDate}
+                  </div>
+                  <div className="text-[11px] text-[#F6F5F0]/60">{checkInInfo.dayName}</div>
+                </div>
+              </div>
+
+              {/* Check-Out Tile */}
+              <div 
+                role="button"
+                tabIndex={0}
+                onClick={openCheckOutPicker}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openCheckOutPicker();
+                  }
+                }}
+                className="group relative cursor-pointer rounded-xl border border-white/10 bg-[#162415] p-3.5 transition-all hover:border-[#86A86C]/40 hover:bg-[#1A2C19]"
+              >
+                <input
+                  ref={checkOutInputRef}
+                  type="date"
+                  value={checkOut}
+                  min={checkIn || minDate || undefined}
+                  onChange={(e) => handleCheckOutChange(e.target.value)}
+                  onClick={(e) => {
+                    try {
+                      e.currentTarget.showPicker?.();
+                    } catch {}
+                  }}
+                  className="native-date-full-clickable"
+                  required
+                  aria-label="Pilih tanggal check-out"
+                />
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#F6F5F0]/50">Check-out</span>
+                  <span className="text-[10px] font-mono text-[#86A86C]">12:00 WIB</span>
+                </div>
+                <div className="mt-1">
+                  <div className="font-mono tabular-nums text-sm sm:text-base font-bold text-[#F6F5F0]">
+                    {checkOutInfo.formattedDate}
+                  </div>
+                  <div className="text-[11px] text-[#F6F5F0]/60">
+                    {checkOutInfo.dayName} {stayNights > 0 ? `· ${stayNights} Malam` : ""}
+                  </div>
+                </div>
+              </div>
+
+              {/* Guests Tile */}
+              <div className="rounded-xl border border-white/10 bg-[#162415] p-3.5 md:col-span-1 lg:col-span-2">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#F6F5F0]/50">Komposisi Tamu</span>
+                  <span className="font-mono text-xs text-[#86A86C] font-bold">Total {totalGuest} Tamu</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="flex flex-col items-center p-1.5 rounded-lg bg-[#121C11] border border-white/5">
+                    <span className="text-[10px] text-[#F6F5F0]/60 font-mono">Dewasa (10+)</span>
+                    <div className="mt-1">
+                      <QuantityStepper value={adultPax} min={1} size="sm" ariaLabel="Dewasa" onChange={setAdultPax} />
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center p-1.5 rounded-lg bg-[#121C11] border border-white/5">
+                    <span className="text-[10px] text-[#F6F5F0]/60 font-mono">Anak (5-10)</span>
+                    <div className="mt-1">
+                      <QuantityStepper value={child5to10Pax} min={0} size="sm" ariaLabel="Anak" onChange={setChild5to10Pax} />
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center p-1.5 rounded-lg bg-[#121C11] border border-white/5">
+                    <span className="text-[10px] text-[#86A86C] font-mono">Balita (&lt;5)</span>
+                    <div className="mt-1">
+                      <QuantityStepper value={childUnder5Pax} min={0} size="sm" ariaLabel="Balita" onChange={setChildUnder5Pax} />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </section>
+
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 
         {success ? (
           <>
@@ -1741,164 +1925,114 @@ export default function PublicBookingPage() {
             </div>
           </>
         ) : (
-          <div className="mt-8 space-y-8 pb-20 sm:mt-12 sm:space-y-12">
-            {/* Step Indicators - Modern & Professional */}
-            <div className="mx-auto w-full max-w-4xl">
-              <div className="relative flex items-center justify-between gap-2 sm:gap-4">
-                {[1, 2, 3].map((step) => {
-                  const isActive = currentStep === step;
-                  const isCompleted = currentStep > step;
-                  const labels = ["Pilih Kategori", "Pilih Unit", "Isi Identitas"];
-                  
+          <div className="space-y-8">
+            {/* Architectural Stage Indicator */}
+            <div className="mx-auto max-w-3xl">
+              <div className="grid grid-cols-3 gap-2 border-b border-white/10 pb-4 text-center">
+                {[
+                  { step: 1, label: "01 AKOMODASI" },
+                  { step: 2, label: "02 KAVLING & UNIT" },
+                  { step: 3, label: "03 IDENTITAS TAMU" },
+                ].map((s) => {
+                  const isActive = currentStep === s.step;
+                  const isCompleted = currentStep > s.step;
                   return (
-                    <div key={step} className="relative flex min-w-0 flex-1 flex-col items-center group">
-                      <button 
-                        type="button"
-                        onClick={() => {
-                          if (isCompleted || (step < currentStep)) setCurrentStep(step);
-                        }}
-                        disabled={!isCompleted && step > currentStep}
-                        className="flex flex-col items-center gap-1.5 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-xl w-full sm:gap-2"
-                      >
-                        {/* Line connector */}
-                        {step < 3 && (
-                          <div className="absolute left-[calc(50%+16px)] right-[-calc(50%-16px)] top-4 h-[1.5px] bg-[#E8E8E1] sm:left-[calc(50%+18px)] sm:right-[-calc(50%-18px)] sm:top-5 sm:h-[2px]">
-                            <div
-                              className="h-full bg-primary transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)"
-                              style={{ width: isCompleted ? "100%" : "0%" }}
-                            />
-                          </div>
-                        )}
-
-                        <div className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-[0.8rem] border-[1.5px] transition-all duration-700 sm:h-10 sm:w-10 sm:rounded-2xl sm:border-2 ${
-                          isActive 
-                            ? "border-primary bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
-                            : isCompleted 
-                              ? "border-primary bg-primary/10 text-primary" 
-                              : "border-[#E8E8E1] bg-white text-[#2D3E10]/40"
-                        }`}>
-                          {isCompleted ? (
-                            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          ) : (
-                            <span className="text-[11px] font-black tracking-tight sm:text-sm">{step}</span>
-                          )}
-                        </div>
-                        
-                        <div className="flex flex-col items-center text-center">
-                          <span className={`text-[8px] font-black uppercase tracking-[0.15em] transition-colors duration-300 sm:text-[9px] ${
-                            isActive ? "text-primary font-bold" : isCompleted ? "text-[#2D3E10]" : "text-[#2D3E10]/40"
-                          }`}>
-                            Langkah {step}
-                          </span>
-                          <span className={`text-[10px] font-bold transition-colors duration-300 sm:text-xs ${
-                            isActive ? "text-[#2D3E10]" : isCompleted ? "text-[#2D3E10]/80" : "text-[#2D3E10]/40"
-                          } hidden sm:block`}>
-                            {labels[step-1]}
-                          </span>
-                        </div>
-                      </button>
-                    </div>
+                    <button
+                      key={s.step}
+                      type="button"
+                      disabled={!isCompleted && s.step > currentStep}
+                      onClick={() => setCurrentStep(s.step)}
+                      className={`text-xs font-mono tracking-wider transition-colors uppercase ${
+                        isActive
+                          ? "text-[#86A86C] font-bold border-b-2 border-[#86A86C] pb-2 -mb-4.5"
+                          : isCompleted
+                          ? "text-[#F6F5F0] hover:text-[#86A86C]"
+                          : "text-[#F6F5F0]/30 cursor-not-allowed"
+                      }`}
+                    >
+                      {s.label}
+                    </button>
                   );
                 })}
               </div>
             </div>
 
-            <div className="relative mt-6 w-full sm:mt-8">
-              <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] 2xl:grid-cols-[1fr_400px]">
-                {/* Main Content Area */}
-                <div className="space-y-8">
-                  {currentStep === 1 && (
-                    <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                      <div className="mb-8 flex flex-col items-center text-center sm:mb-12">
-                        <h2 className="text-2xl font-bold tracking-tight text-[#2D3E10] sm:text-4xl">
-                          Pilih <span className="text-primary italic">Kategori</span> Akomodasi
-                        </h2>
-                        <p className="mx-auto mt-2 max-w-xl text-[13px] font-medium text-[#2D3E10]/70 sm:mt-3 sm:text-sm">
-                          Temukan pilihan glamping dan tenda yang sesuai dengan rencana liburan Anda.
-                        </p>
-                      </div>
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px]">
+              {/* Main Step Content */}
+              <div className="space-y-8">
+                {currentStep === 1 && (
+                  <div className="space-y-6">
+                    <div>
+                      <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#86A86C] block mb-1">
+                        Pilihan Penginapan Rimba
+                      </span>
+                      <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#F6F5F0]">
+                        Pilih Kategori Akomodasi
+                      </h2>
+                      <p className="mt-1 text-xs sm:text-sm text-[#F6F5F0]/70 leading-relaxed">
+                        Pilih tipe pengalaman bermalam Anda di tengah ketenangan hutan pinus 1.620 mdpl Jayagiri Lembang.
+                      </p>
+                    </div>
 
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-                        {categoryOptions.map((cat, idx) => {
-                          const isGlamping = cat.toLowerCase().includes('glamp');
-                          const isPaket = cat.toLowerCase().includes('paket');
-                          const isPrivate = cat.toLowerCase().includes('private');
-                          
-                          return (
-                            <div
-                              key={cat}
-                              className="group relative flex flex-col h-full"
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                      {categoryOptions.map((cat) => {
+                        return (
+                          <div
+                            key={cat}
+                            className="group relative flex flex-col h-full rounded-2xl border border-white/10 bg-[#121C11] overflow-hidden transition-all hover:border-[#86A86C]/40 hover:-translate-y-1 shadow-lg"
+                          >
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (filterCategory !== cat || currentStep > 1) {
+                                  resetSelection();
+                                }
+                                setFilterCategory(cat);
+                                setCurrentStep(2);
+                              }}
+                              className="flex flex-col h-full text-left outline-none"
                             >
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (filterCategory !== cat || currentStep > 1) {
-                                    resetSelection();
-                                  }
-                                  setFilterCategory(cat);
-                                  setCurrentStep(2);
-                                }}
-                                className={`flex flex-col h-full overflow-hidden rounded-[1.2rem] border border-[#E8E8E1] transition-all duration-700 hover:shadow-xl hover:-translate-y-1 sm:rounded-[2.5rem] sm:hover:shadow-[0_32px_64px_-16px_rgba(45,62,16,0.1)] sm:hover:-translate-y-2 ${
-                                  filterCategory === cat 
-                                    ? "border-primary bg-white shadow-lg shadow-primary/5" 
-                                    : "bg-white hover:border-primary/40"
-                                }`}
-                              >
-                                <div className="relative h-40 w-full overflow-hidden sm:h-56">
-                                  {packageConfigs[cat]?.imageUrl ? (
-                                    <img 
-                                      src={`${packageConfigs[cat].imageUrl}?t=${kavlingMapAssetVersion}`} 
-                                      alt={cat} 
-                                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
-                                    />
-                                  ) : (
-                                    <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-1000 group-hover:scale-110 ${
-                                      isGlamping ? "from-[#F1F3EE] to-[#E8E8E1]" : 
-                                      isPrivate ? "from-[#FDFDFB] to-[#F1F3EE]" : 
-                                      "from-[#E8E8E1] to-[#F1F3EE]"
-                                    }`} />
-                                  )}
-
-                                  <div className={`absolute top-4 left-4 flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-700 sm:top-6 sm:left-6 sm:h-12 sm:w-12 sm:rounded-2xl ${
-                                    filterCategory === cat ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-white/90 backdrop-blur-md text-[#2D3E10] group-hover:bg-primary group-hover:text-white"
-                                  }`}>
-                                    {isGlamping ? (
-                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" />
-                                      </svg>
-                                    ) : isPrivate ? (
-                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                      </svg>
-                                    ) : (
-                                      <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                      </svg>
-                                    )}
-                                  </div>
+                              <div className="relative h-48 w-full overflow-hidden bg-[#090E08]">
+                                {packageConfigs[cat]?.imageUrl ? (
+                                  <img
+                                    src={`${packageConfigs[cat].imageUrl}?t=${kavlingMapAssetVersion}`}
+                                    alt={cat}
+                                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                  />
+                                ) : (
+                                  <div className="h-full w-full bg-gradient-to-t from-[#121C11] to-[#162415]" />
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#121C11] via-transparent to-transparent" />
+                                <div className="absolute top-3 right-3 text-[10px] font-mono uppercase tracking-widest text-[#86A86C] bg-[#090E08]/80 px-2.5 py-1 rounded-md border border-white/10">
+                                  1.620 mdpl
                                 </div>
+                              </div>
 
-                                <div className="flex flex-col flex-1 p-5 text-center sm:p-8 sm:text-left">
-                                  <h3 className="text-lg font-bold text-[#2D3E10] mb-2 group-hover:text-primary transition-colors sm:text-2xl sm:mb-3">{cat}</h3>
-                                  <p className="text-[12px] font-medium leading-relaxed text-primary/90 mb-6 flex-1 italic sm:text-sm sm:mb-8">
+                              <div className="flex flex-col flex-1 p-5 sm:p-6 justify-between">
+                                <div>
+                                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#F6F5F0] group-hover:text-[#86A86C] transition-colors">
+                                    {cat}
+                                  </h3>
+                                  <p className="mt-2 text-xs text-[#F6F5F0]/70 leading-relaxed">
                                     {packageConfigs[cat]?.description || (
-                                      cat === "Glamping" ? "Nikmati kemewahan berkemah dengan fasilitas lengkap." : 
-                                      cat === "Paket" ? "Pilihan paket lengkap untuk momen berharga bersama keluarga." :
-                                      "Pengalaman eksklusif dengan privasi tinggi di alam terbuka."
+                                      cat === "Glamping"
+                                        ? "Kabin kayu dan glamping mewah berpemanas air privat di antara pepohonan pinus."
+                                        : cat === "Paket"
+                                        ? "Paket lengkap tenda berkapasitas keluarga dengan perlengkapan lengkap siap huni."
+                                        : "Kavling camping mandiri dan campervan pitch bebas dengan pemandangan terbuka."
                                     )}
                                   </p>
-
-                                  <div className="flex items-center justify-between pt-4 border-t border-[#E8E8E1] sm:pt-6">
-                                    <span className="text-[9px] font-bold uppercase tracking-wider text-[#2D3E10] sm:text-[10px]">Pilih Kategori Ini</span>
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F1F3EE] text-[#2D3E10] transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:translate-x-1 sm:h-10 sm:w-10">
-                                      <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                      </svg>
-                                    </div>
+                                  <div className="mt-4 text-[10px] font-mono text-[#F6F5F0]/50 tracking-wider">
+                                    1.620 mdpl · Fasilitas Privat · Cikole Lembang
                                   </div>
                                 </div>
+
+                                <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+                                  <span className="text-xs font-mono uppercase tracking-wider text-[#86A86C] font-bold">
+                                    Pilih Kategori Ini →
+                                  </span>
+                                </div>
+                              </div>
                             </button>
                           </div>
                         );
@@ -1909,46 +2043,42 @@ export default function PublicBookingPage() {
 
             {currentStep === 2 && (
               <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1) fill-mode-both">
-                <div className="mb-10 sm:mb-16 flex flex-col text-center">
-                  <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-4xl">
-                    Pilihan <span className="font-serif italic font-light opacity-90 text-primary">Unit & Kavling</span>
+                <div className="mb-8 sm:mb-12 flex flex-col text-left sm:text-center">
+                  <div className="flex items-center justify-start sm:justify-center gap-2 mb-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+                    <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#86A86C]">
+                      Langkah 02 — Konfigurasi Menginap
+                    </span>
+                  </div>
+                  <h2 className="text-3xl font-serif tracking-tight text-[#F6F5F0] sm:text-4xl">
+                    Pilihan Akomodasi & Penempatan Kavling
                   </h2>
-                  <p className="mx-auto mt-4 max-w-lg text-[13px] font-medium text-[#2D3E10]/70 sm:mt-5 sm:text-[15px]">
-                    Tentukan unit dan lokasi kavling favorit Anda untuk pengalaman menginap yang nyaman.
+                  <p className="mx-auto mt-2 max-w-xl text-xs sm:text-sm text-white/60">
+                    Tentukan tipe unit kabin glamping atau kavling rimba favorit Anda di ketinggian 1.620 mdpl Cikole Lembang.
                   </p>
                 </div>
 
                 <div className="mx-auto w-full space-y-6 sm:space-y-8">
-                  {/* Unified Stay Configuration Panel */}
-                  <div className="overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-[#E8E8E1] bg-white shadow-sm shadow-[#2D3E10]/5 transition-all">
+                  {/* Unified Stay Configuration Panel - Deep Pine Sanctuary */}
+                  <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121C11] shadow-2xl transition-all">
                     {/* Header: Title & Badges */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8E8E1]/80 bg-[#FAFBF7] px-5 py-4 sm:px-6">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="flex h-2 w-2 rounded-full bg-primary" />
-                          <h3 className="text-xs sm:text-sm font-black uppercase tracking-[0.18em] text-[#2D3E10]">
-                            Jadwal & Komposisi Tamu
-                          </h3>
-                        </div>
-                        <p className="mt-1 text-xs text-[#2D3E10]/60">
-                          Pilih tanggal kunjungan dan jumlah tamu untuk mengecek ketersediaan unit
-                        </p>
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 bg-[#162415] px-5 py-3.5 sm:px-6">
+                      <div className="flex items-center gap-2.5">
+                        <span className="flex h-2 w-2 rounded-full bg-[#86A86C]" />
+                        <h3 className="text-xs font-mono uppercase tracking-[0.2em] text-[#F6F5F0]">
+                          Jadwal Kunjungan & Tamu
+                        </h3>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3 text-xs">
                         {stayNights > 0 && (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
-                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                            </svg>
+                          <span className="font-mono tabular-nums text-[#86A86C]">
                             {stayNights} Malam
                           </span>
                         )}
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2D3E10]/5 px-3 py-1 text-xs font-bold text-[#2D3E10]/80">
-                          <svg className="h-3.5 w-3.5 text-[#2D3E10]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                          </svg>
-                          {totalGuest} Tamu
+                        <span className="text-white/30">·</span>
+                        <span className="font-mono tabular-nums text-white/80">
+                          {totalGuest} Tamu Total
                         </span>
                       </div>
                     </div>
@@ -1967,7 +2097,7 @@ export default function PublicBookingPage() {
                               openCheckInPicker();
                             }
                           }}
-                          className="group relative cursor-pointer rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                          className="group relative cursor-pointer rounded-xl border border-white/10 bg-[#0B120A] p-4 transition-all hover:border-[#86A86C]/50 focus-within:border-[#86A86C]"
                         >
                           <input
                             ref={checkInInputRef}
@@ -1985,22 +2115,19 @@ export default function PublicBookingPage() {
                             aria-label="Pilih tanggal check-in"
                           />
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">Check-in</span>
-                            <span className="flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary transition-all group-hover:bg-primary group-hover:text-white">
-                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                              </svg>
-                              Pilih Tanggal
+                            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Check-in</span>
+                            <span className="text-[11px] font-mono text-white/60 transition-colors group-hover:text-[#86A86C]">
+                              Pilih Tanggal ↗
                             </span>
                           </div>
                           <div className="mt-2.5">
-                            <p className="text-base sm:text-lg font-black text-[#2D3E10] tracking-tight">
+                            <p className="text-base sm:text-lg font-mono tabular-nums font-bold text-[#F6F5F0] tracking-tight">
                               {checkInInfo.formattedDate}
                             </p>
-                            <p className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-[#2D3E10]/70">
+                            <p className="mt-1 flex items-center gap-1.5 text-xs text-white/50">
                               <span>{checkInInfo.dayName}</span>
-                              <span className="text-[#E8E8E1]">•</span>
-                              <span className="text-[#2D3E10]/50 font-normal">Check-in mulai 14:00 WIB</span>
+                              <span>·</span>
+                              <span className="text-white/40">Mulai 14:00 WIB</span>
                             </p>
                           </div>
                         </div>
@@ -2016,7 +2143,7 @@ export default function PublicBookingPage() {
                               openCheckOutPicker();
                             }
                           }}
-                          className="group relative cursor-pointer rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                          className="group relative cursor-pointer rounded-xl border border-white/10 bg-[#0B120A] p-4 transition-all hover:border-[#86A86C]/50 focus-within:border-[#86A86C]"
                         >
                           <input
                             ref={checkOutInputRef}
@@ -2034,22 +2161,19 @@ export default function PublicBookingPage() {
                             aria-label="Pilih tanggal check-out"
                           />
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">Check-out</span>
-                            <span className="flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary transition-all group-hover:bg-primary group-hover:text-white">
-                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                              </svg>
-                              Pilih Tanggal
+                            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Check-out</span>
+                            <span className="text-[11px] font-mono text-white/60 transition-colors group-hover:text-[#86A86C]">
+                              Pilih Tanggal ↗
                             </span>
                           </div>
                           <div className="mt-2.5">
-                            <p className="text-base sm:text-lg font-black text-[#2D3E10] tracking-tight">
+                            <p className="text-base sm:text-lg font-mono tabular-nums font-bold text-[#F6F5F0] tracking-tight">
                               {checkOutInfo.formattedDate}
                             </p>
-                            <p className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-[#2D3E10]/70">
+                            <p className="mt-1 flex items-center gap-1.5 text-xs text-white/50">
                               <span>{checkOutInfo.dayName}</span>
-                              <span className="text-[#E8E8E1]">•</span>
-                              <span className="text-[#2D3E10]/50 font-normal">Check-out maks 12:00 WIB</span>
+                              <span>·</span>
+                              <span className="text-white/40">Maks 12:00 WIB</span>
                             </p>
                           </div>
                         </div>
@@ -2057,45 +2181,45 @@ export default function PublicBookingPage() {
                     </div>
 
                     {/* Guests Section */}
-                    <div className="border-t border-[#E8E8E1] bg-[#FAFBF7]/30 p-4 sm:p-6">
+                    <div className="border-t border-white/10 bg-[#162415]/40 p-4 sm:p-6">
                       <div className="mb-3 flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">
+                        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
                           Rincian Tamu
                         </span>
-                        <span className="text-xs text-[#2D3E10]/60">
-                          Total Tamu: <strong className="text-[#2D3E10] font-black">{totalGuest}</strong>
+                        <span className="text-xs text-white/60 font-mono">
+                          Total: <strong className="text-[#F6F5F0] font-bold tabular-nums">{totalGuest}</strong>
                         </span>
                       </div>
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                         {/* Dewasa */}
-                        <div className="flex items-center justify-between rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-white p-3.5 sm:p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+                        <div className="flex items-center justify-between rounded-xl border border-white/10 bg-[#0B120A] p-3.5 sm:p-4">
                           <div className="space-y-0.5 pr-2">
                             <div className="flex items-center gap-1.5">
-                              <p className="text-sm font-bold text-[#2D3E10]">Dewasa</p>
-                              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary">Kapasitas</span>
+                              <p className="text-sm font-semibold text-[#F6F5F0]">Dewasa</p>
+                              <span className="text-[9px] font-mono uppercase tracking-wider text-[#86A86C]">· Kapasitas</span>
                             </div>
-                            <p className="text-[11px] text-[#2D3E10]/60">Usia 10+ tahun</p>
+                            <p className="text-[11px] text-white/45">Usia 10+ tahun</p>
                           </div>
                           <QuantityStepper value={adultPax} min={1} size="sm" ariaLabel="Dewasa" onChange={setAdultPax} />
                         </div>
 
                         {/* Anak */}
-                        <div className="flex items-center justify-between rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-white p-3.5 sm:p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+                        <div className="flex items-center justify-between rounded-xl border border-white/10 bg-[#0B120A] p-3.5 sm:p-4">
                           <div className="space-y-0.5 pr-2">
-                            <p className="text-sm font-bold text-[#2D3E10]">Anak</p>
-                            <p className="text-[11px] text-[#2D3E10]/60">Usia 5 - 10 tahun</p>
+                            <p className="text-sm font-semibold text-[#F6F5F0]">Anak</p>
+                            <p className="text-[11px] text-white/45">Usia 5 - 10 tahun</p>
                           </div>
                           <QuantityStepper value={child5to10Pax} min={0} size="sm" ariaLabel="Anak" onChange={setChild5to10Pax} />
                         </div>
 
                         {/* Balita */}
-                        <div className="flex items-center justify-between rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-white p-3.5 sm:p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+                        <div className="flex items-center justify-between rounded-xl border border-white/10 bg-[#0B120A] p-3.5 sm:p-4">
                           <div className="space-y-0.5 pr-2">
                             <div className="flex items-center gap-1.5">
-                              <p className="text-sm font-bold text-[#2D3E10]">Balita</p>
-                              <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700">Gratis</span>
+                              <p className="text-sm font-semibold text-[#F6F5F0]">Balita</p>
+                              <span className="text-[9px] font-mono uppercase tracking-wider text-[#86A86C]">· Gratis</span>
                             </div>
-                            <p className="text-[11px] text-[#2D3E10]/60">Usia &lt; 5 tahun</p>
+                            <p className="text-[11px] text-white/45">Usia &lt; 5 tahun</p>
                           </div>
                           <QuantityStepper value={childUnder5Pax} min={0} size="sm" ariaLabel="Balita" onChange={setChildUnder5Pax} />
                         </div>
@@ -2107,17 +2231,17 @@ export default function PublicBookingPage() {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-2 pb-1">
                     <div>
                       <div className="flex items-center gap-2.5">
-                        <h3 className="text-xl sm:text-2xl font-black tracking-tight text-[#2D3E10]">
+                        <h3 className="text-xl sm:text-2xl font-serif text-[#F6F5F0]">
                           Pilihan Akomodasi
                         </h3>
                         {filterCategory && (
-                          <span className="rounded-full bg-primary/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.15em] text-primary">
-                            {filterCategory}
+                          <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                            · {filterCategory}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs sm:text-sm text-[#2D3E10]/70 mt-1">
-                        Pilih unit yang sesuai dengan preferensi Anda. Harga per malam sudah termasuk fasilitas standar.
+                      <p className="text-xs sm:text-sm text-white/60 mt-1">
+                        Harga per malam sudah termasuk tiket masuk Perhutani, parkir aman, dan akses air panas.
                       </p>
                     </div>
 
@@ -2127,23 +2251,23 @@ export default function PublicBookingPage() {
                         <select
                           value={filterType}
                           onChange={(e) => setFilterType(e.target.value)}
-                          className="h-11 sm:h-12 w-full appearance-none rounded-xl border border-[#E8E8E1] bg-white pl-4 pr-10 text-xs sm:text-sm font-bold text-[#2D3E10] shadow-sm outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-48 cursor-pointer"
+                          className="h-11 sm:h-12 w-full appearance-none rounded-xl border border-white/15 bg-[#121C11] pl-4 pr-10 text-xs sm:text-sm font-mono text-[#F6F5F0] shadow-sm outline-none transition-all group-hover:border-[#86A86C]/50 focus:border-[#86A86C] sm:w-52 cursor-pointer"
                           aria-label="Filter berdasarkan tipe unit"
                         >
-                          <option value="">Semua Tipe Unit</option>
+                          <option value="" className="bg-[#121C11] text-[#F6F5F0]">Semua Tipe Unit</option>
                           {typeOptions.map((t) => (
-                            <option key={t} value={t}>{t}</option>
+                            <option key={t} value={t} className="bg-[#121C11] text-[#F6F5F0]">{t}</option>
                           ))}
                         </select>
-                        <svg className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-primary pointer-events-none transition-transform group-hover:translate-y-[-40%]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                        <svg className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#86A86C] pointer-events-none transition-transform group-hover:translate-y-[-40%]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </div>
                     </div>
                   </div>
                 
                 {/* Unit Grid */}
-                <div className="grid grid-cols-1 gap-8">
+                <div className="grid grid-cols-1 gap-6 sm:gap-8">
                   {pagedVisibleUnits.map((u, idx) => {
                     const inc = parseIncludesJson(u.includesJson);
                     const images = parseImagesJson(u.imagesJson);
@@ -2153,24 +2277,26 @@ export default function PublicBookingPage() {
                     return (
                       <div 
                         key={u.id} 
-                        className={`group flex flex-col overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border bg-white transition-all duration-500 ${
+                        className={`group flex flex-col overflow-hidden rounded-2xl border transition-all duration-500 ${
                           isSelected 
-                            ? "border-primary shadow-2xl shadow-primary/10 ring-4 ring-primary/5" 
-                            : "border-[#E8E8E1] hover:border-primary/40 hover:shadow-xl hover:shadow-[#2D3E10]/5"
+                            ? "border-[#86A86C] bg-[#162415] shadow-2xl ring-1 ring-[#86A86C]/40" 
+                            : "border-white/10 bg-[#121C11] hover:border-white/20"
                         }`}
                       >
                         <div className="flex flex-col lg:flex-row lg:items-stretch">
                           {/* Image Section */}
-                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-[260px] xl:w-[300px] 2xl:w-[340px] overflow-hidden lg:shrink-0 p-3 sm:p-4 pb-0 lg:pr-0">
-                            <div className="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden relative">
+                          <div className="relative aspect-[16/9] sm:aspect-[16/10] lg:aspect-auto lg:w-[280px] xl:w-[320px] 2xl:w-[360px] overflow-hidden lg:shrink-0 p-3 sm:p-4 pb-0 lg:pr-0">
+                            <div className="w-full h-full rounded-xl overflow-hidden relative">
                               <ImageCarousel images={images} className="h-full w-full rounded-none border-none" />
                               {u.available <= 0 && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
-                                  <span className="rounded-full bg-destructive/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-destructive">Penuh</span>
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/75 backdrop-blur-sm">
+                                  <span className="font-mono text-xs uppercase tracking-widest text-red-400 font-bold">
+                                    Penuh Terisi
+                                  </span>
                                 </div>
                               )}
-                              <div className="absolute left-3.5 top-3.5 sm:left-4 sm:top-4">
-                                <div className="rounded-full bg-white/95 px-3 py-1 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] text-[#2D3E10] backdrop-blur-md shadow-sm">
+                              <div className="absolute left-3 top-3">
+                                <div className="rounded-md bg-[#090E08]/85 px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-[#F6F5F0] backdrop-blur-md border border-white/10 shadow-sm">
                                   {u.type}
                                 </div>
                               </div>
@@ -2178,41 +2304,38 @@ export default function PublicBookingPage() {
                           </div>
                           
                           {/* Content Section */}
-                          <div className="flex flex-1 min-w-0 flex-col p-4 sm:p-5 lg:p-6 xl:p-7 relative justify-between">
+                          <div className="flex flex-1 min-w-0 flex-col p-4 sm:p-5 lg:p-6 relative justify-between">
                             <div>
                               <div className="flex flex-col items-start text-left space-y-1.5 mb-2">
-                                <h3 className="text-xl sm:text-2xl font-black leading-tight text-[#2D3E10] transition-colors group-hover:text-primary">
+                                <h3 className="text-xl sm:text-2xl font-serif text-[#F6F5F0]">
                                   {u.name}
                                 </h3>
-                                <div className="flex flex-wrap items-center gap-2">
-                                  <span className="flex items-center rounded-lg bg-[#F1F3EE] px-2.5 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#2D3E10]/80">
-                                    <svg className="mr-1.5 h-3.5 w-3.5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                    {u.capacity} Tamu
+                                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-white/60">
+                                  <span className="font-mono text-white/80">{u.capacity} Tamu Maks</span>
+                                  <span>·</span>
+                                  <span className={`font-mono ${u.available > 2 ? 'text-[#86A86C]' : u.available > 0 ? 'text-amber-400' : 'text-red-400'}`}>
+                                    {u.available > 0 ? `Sisa ${u.available} Unit` : 'Penuh'}
                                   </span>
-                                  <span className={`flex items-center rounded-md px-2 py-0.5 text-[9px] sm:text-[10px] font-bold ${u.available > 2 ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
-                                    <span className={`h-1.5 w-1.5 mr-1.5 rounded-full shrink-0 ${u.available > 2 ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                                    Sisa {u.available} Unit
-                                  </span>
+                                  <span>·</span>
+                                  <span className="text-white/45">1.620 mdpl Jayagiri</span>
                                 </div>
                               </div>
 
                               {u.description && (
-                                <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm font-medium leading-relaxed text-[#2D3E10]/70 line-clamp-2 text-left">{u.description}</p>
+                                <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm text-white/65 line-clamp-2 text-left leading-relaxed">
+                                  {u.description}
+                                </p>
                               )}
 
                               {inc.length > 0 && (
-                                <div className="mt-3 sm:mt-4 rounded-xl bg-[#F8F9F5] p-3 sm:p-3.5 border border-[#E8E8E1]/80">
-                                  <p className="mb-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/60 text-left">Fasilitas Termasuk</p>
+                                <div className="mt-3 sm:mt-4 rounded-xl bg-[#0B120A] p-3 sm:p-3.5 border border-white/10">
+                                  <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C] text-left">
+                                    Fasilitas Termasuk
+                                  </p>
                                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
                                     {inc.slice(0, 4).map((t, idx) => (
-                                      <li key={idx} className="flex items-center text-[10px] sm:text-[11px] font-bold text-[#2D3E10] justify-start min-w-0">
-                                        <div className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-white text-primary shadow-sm border border-[#E8E8E1] shrink-0">
-                                          <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                          </svg>
-                                        </div>
+                                      <li key={idx} className="flex items-center text-xs text-white/80 min-w-0">
+                                        <span className="mr-2 text-[#86A86C] font-bold">✓</span>
                                         <span className="truncate">{t}</span>
                                       </li>
                                     ))}
@@ -2221,13 +2344,19 @@ export default function PublicBookingPage() {
                               )}
                             </div>
 
-                            <div className="mt-4 pt-3.5 sm:mt-5 sm:pt-4 border-t border-[#E8E8E1]/70">
+                            <div className="mt-4 pt-3.5 sm:mt-5 sm:pt-4 border-t border-white/10">
                               <div className="flex flex-wrap items-center justify-between gap-3">
                                 <div className="space-y-0.5 text-left min-w-0">
-                                  <p className="text-[10px] font-black uppercase tracking-wider text-[#2D3E10]/50">Total Menginap</p>
-                                  <div className="flex flex-wrap items-baseline gap-1.5">
-                                    <span className="text-xl sm:text-2xl font-black text-[#2D3E10] tabular-nums tracking-tight">{formatIDR(sumDailyPrice(u))}</span>
-                                    <span className="text-[11px] font-semibold text-[#2D3E10]/50">({priceRangeLabel(u)} /malam)</span>
+                                  <p className="text-[10px] font-mono uppercase tracking-wider text-white/40">
+                                    Total Menginap ({stayNights} Malam)
+                                  </p>
+                                  <div className="flex flex-wrap items-baseline gap-2">
+                                    <span className="text-xl sm:text-2xl font-mono tabular-nums font-bold text-[#F6F5F0]">
+                                      {formatIDR(sumDailyPrice(u))}
+                                    </span>
+                                    <span className="text-xs font-mono tabular-nums text-white/40">
+                                      ({priceRangeLabel(u)} /malam)
+                                    </span>
                                   </div>
                                 </div>
                                 <div className="shrink-0">
@@ -2256,448 +2385,404 @@ export default function PublicBookingPage() {
                 </div>
 
               {visibleUnits.length > shownUnitBaseCount && (
-                <div className="flex justify-center pt-10">
+                <div className="flex justify-center pt-8">
                   <button
                     type="button"
                     onClick={() => setUnitPage((p) => p + 1)}
-                    className="group relative flex items-center gap-3 rounded-full border border-[#E8E8E1] bg-white px-8 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-[#2D3E10] transition-all duration-300 hover:border-[#2D3E10] hover:bg-[#2D3E10] hover:text-white hover:shadow-lg active:scale-95"
+                    className="group flex items-center gap-3 rounded-xl border border-white/15 bg-[#121C11] px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F6F5F0] transition-all hover:border-[#86A86C] hover:bg-[#162415] active:scale-95"
                   >
                     <span>Muat Lebih Banyak</span>
-                    <svg className="h-4 w-4 transition-transform duration-500 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                    <svg className="h-4 w-4 text-[#86A86C] transition-transform duration-300 group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                 </div>
               )}
 
-              {/* Kavling Selection Section */}
+              {/* Kavling Selection Section - Deep Pine Sanctuary */}
               {(effectiveKavlingScope || kavlingAmbiguous) && requiredKavlings > 0 && (
-                <div className="rounded-[2.5rem] border-2 border-primary/20 bg-white shadow-xl shadow-[#2D3E10]/5 transition-all duration-500">
-                  <div className="rounded-t-[2.5rem] border-b border-[#E8E8E1] bg-[#F1F3EE]/30 px-8 py-8 relative overflow-hidden">
-                                        
-                    <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between relative z-10">
-                      <div className="flex flex-col items-center gap-5 sm:flex-row">
-                        <div className="relative">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-[1.25rem] bg-[#2D3E10] text-white shadow-md shadow-[#2D3E10]/10">
-                            <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A2 2 0 013 15.483V5.517a2 2 0 011.553-1.943L9 2l6 3 5.447-2.724A2 2 0 0121 4.224v9.966a2 2 0 01-1.553 1.943L15 19l-6 1z" />
-                            </svg>
-                          </div>
+                <div className="rounded-2xl border border-white/10 bg-[#121C11] shadow-2xl transition-all duration-500 overflow-hidden">
+                  {/* Header: Title, Tabs & Progress */}
+                  <div className="border-b border-white/10 bg-[#162415] p-5 sm:p-6">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                      <div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="h-2 w-2 rounded-full bg-[#86A86C] animate-pulse" />
+                          <h3 className="text-xl sm:text-2xl font-serif text-[#F6F5F0]">
+                            Penentuan Titik Kavling Hutan
+                          </h3>
                         </div>
-                        <div className="space-y-1 text-center sm:text-left">
-                          <h3 className="text-2xl font-bold tracking-tight text-[#2D3E10]">Pilih Lokasi <span className="italic text-primary">Kavling</span></h3>
-                          <div className="flex items-center justify-center gap-2 sm:justify-start">
-                            <p className="text-[10px] font-bold text-primary/80 uppercase tracking-[0.2em]">Tentukan titik camping favorit Anda</p>
-                          </div>
-                        </div>
+                        <p className="mt-1 text-xs text-white/60">
+                          1.620 mdpl · Tentukan posisi tenda & spot camping favorit Anda di antara deretan pinus.
+                        </p>
                       </div>
-                      <div className="flex items-center justify-center gap-4 bg-white/50 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-sm transition-all hover:shadow-md hover:border-primary/20 group/progress sm:justify-end">
-                        <div className="flex flex-col items-center sm:items-end">
-                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Progres Pemilihan</span>
-                          <span className="text-base font-black text-[#2D3E10] tracking-tighter tabular-nums">
-                            {kavlingSelected.length} <span className="text-primary/60">/</span> {requiredKavlings} <span className="text-[10px] font-bold text-primary uppercase ml-1">Kavling</span>
+
+                      <div className="flex flex-wrap items-center gap-3">
+                        {/* Tab Switcher: Grid Spot vs Peta 2D Interaktif */}
+                        <div className="inline-flex rounded-xl bg-[#090E08] p-1 border border-white/10">
+                          <button
+                            type="button"
+                            onClick={() => setKavlingTab("grid")}
+                            className={`px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-lg transition-all ${
+                              kavlingTab === "grid"
+                                ? "bg-[#86A86C] text-[#090E08] font-bold shadow"
+                                : "text-white/60 hover:text-white"
+                            }`}
+                          >
+                            Pilihan Grid
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setKavlingTab("map")}
+                            className={`px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-lg transition-all ${
+                              kavlingTab === "map"
+                                ? "bg-[#86A86C] text-[#090E08] font-bold shadow"
+                                : "text-white/60 hover:text-white"
+                            }`}
+                          >
+                            Peta Kawasan 2D
+                          </button>
+                        </div>
+
+                        {/* Progress Indicator */}
+                        <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-[#090E08] px-3.5 py-1.5">
+                          <span className="text-xs text-white/50 font-mono uppercase tracking-wider">Terpilih:</span>
+                          <span className="font-mono tabular-nums text-sm font-bold text-[#86A86C]">
+                            {kavlingSelected.length} / {requiredKavlings}
                           </span>
-                        </div>
-                        <div className="h-12 w-1.5 rounded-full bg-[#F1F3EE] relative overflow-hidden">
-                          <div 
-                            className="absolute bottom-0 left-0 w-full rounded-full bg-primary transition-all duration-1000 ease-out" 
-                            style={{ height: `${requiredKavlings > 0 ? (kavlingSelected.length / requiredKavlings) * 100 : 0}%` }}
-                          />
+                          <span className="text-[10px] font-mono uppercase text-white/40">Kavling</span>
                         </div>
                       </div>
+                    </div>
                   </div>
-                  </div>
-                  <div className="p-8">
-                    <div className="mb-12 flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-                      <div className="flex-1 space-y-6">
-                        <div className="rounded-[1.5rem] bg-[#F1F3EE]/40 p-6 border border-[#E8E8E1]">
-                          {kavlingAmbiguous ? (
-                            <div className="space-y-6">
-                              {combinedAll ? (
-                                <p className="text-sm font-bold text-[#2D3E10] leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/20 underline-offset-4 decoration-2">{requiredKavlings} kavling</span> untuk paket yang Anda pilih.</p>
-                              ) : combinedNonPrivate ? (
-                                <p className="text-sm font-bold text-[#2D3E10] leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/20 underline-offset-4 decoration-2">{requiredKavlings} kavling</span> untuk Paket + Camping Mandiri.</p>
-                              ) : (
-                                <div className="flex flex-col gap-5">
-                                  <div className="flex items-center gap-3">
-                                    <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                                    <span className="text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.3em]">Tentukan Kategori Kavling</span>
-                                  </div>
-                                  <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
-                                    {kavlingQtyByGroup.mandiri > 0 && (
-                                      <button
-                                        type="button"
-                                        onClick={() => setKavlingScopePick("mandiri")}
-                                        className={`group relative flex items-center justify-center rounded-xl px-5 py-3 text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${kavlingScopePick === "mandiri" ? "bg-[#2D3E10] text-white shadow-lg shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-[#2D3E10] hover:text-[#2D3E10]"}`}
-                                      >
-                                        <span className="relative z-10">Camping Mandiri</span>
-                                      </button>
-                                    )}
-                                    {kavlingQtyByGroup.paket > 0 && (
-                                      <button
-                                        type="button"
-                                        onClick={() => setKavlingScopePick("paket")}
-                                        className={`group relative flex items-center justify-center rounded-xl px-5 py-3 text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${kavlingScopePick === "paket" ? "bg-[#2D3E10] text-white shadow-lg shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-[#2D3E10] hover:text-[#2D3E10]"}`}
-                                      >
-                                        <span className="relative z-10">Paket</span>
-                                      </button>
-                                    )}
-                                    {kavlingQtyByGroup.private > 0 && (
-                                      <button
-                                        type="button"
-                                        onClick={() => setKavlingScopePick("private")}
-                                        className={`group relative flex items-center justify-center rounded-xl px-5 py-3 text-[11px] font-black uppercase tracking-widest transition-all duration-300 ${kavlingScopePick === "private" ? "bg-[#2D3E10] text-white shadow-lg shadow-[#2D3E10]/20" : "bg-white border border-[#E8E8E1] text-[#2D3E10]/60 hover:border-[#2D3E10] hover:text-[#2D3E10]"}`}
-                                      >
-                                        <span className="relative z-10">Paket Private</span>
-                                      </button>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
+
+                  <div className="p-5 sm:p-6 lg:p-8 space-y-6">
+                    {/* Ambiguity or Scope Filter Alert */}
+                    <div className="rounded-xl bg-[#0B120A] p-4 sm:p-5 border border-white/10">
+                      {kavlingAmbiguous ? (
+                        <div className="space-y-4">
+                          {combinedAll ? (
+                            <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
+                              Silakan pilih <span className="font-mono font-bold text-[#86A86C]">{requiredKavlings} kavling</span> untuk paket yang Anda tentukan.
+                            </p>
+                          ) : combinedNonPrivate ? (
+                            <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
+                              Silakan pilih <span className="font-mono font-bold text-[#86A86C]">{requiredKavlings} kavling</span> untuk Paket + Camping Mandiri.
+                            </p>
                           ) : (
-                            <p className="text-sm font-bold text-[#2D3E10] leading-relaxed">Silakan pilih <span className="text-primary font-black underline decoration-primary/20 underline-offset-4 decoration-2">{requiredKavlings} kavling</span> untuk {effectiveKavlingScope}.</p>
+                            <div className="flex flex-col gap-3">
+                              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#86A86C]">
+                                Tentukan Kategori Kavling
+                              </span>
+                              <div className="flex flex-wrap gap-2">
+                                {kavlingQtyByGroup.mandiri > 0 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setKavlingScopePick("mandiri")}
+                                    className={`rounded-xl px-4 py-2 text-xs font-mono uppercase tracking-wider transition-all ${
+                                      kavlingScopePick === "mandiri"
+                                        ? "bg-[#86A86C] text-[#090E08] font-bold shadow"
+                                        : "bg-[#162415] border border-white/10 text-white/70 hover:border-white/20"
+                                    }`}
+                                  >
+                                    Camping Mandiri
+                                  </button>
+                                )}
+                                {kavlingQtyByGroup.paket > 0 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setKavlingScopePick("paket")}
+                                    className={`rounded-xl px-4 py-2 text-xs font-mono uppercase tracking-wider transition-all ${
+                                      kavlingScopePick === "paket"
+                                        ? "bg-[#86A86C] text-[#090E08] font-bold shadow"
+                                        : "bg-[#162415] border border-white/10 text-white/70 hover:border-white/20"
+                                    }`}
+                                  >
+                                    Paket
+                                  </button>
+                                )}
+                                {kavlingQtyByGroup.private > 0 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setKavlingScopePick("private")}
+                                    className={`rounded-xl px-4 py-2 text-xs font-mono uppercase tracking-wider transition-all ${
+                                      kavlingScopePick === "private"
+                                        ? "bg-[#86A86C] text-[#090E08] font-bold shadow"
+                                        : "bg-[#162415] border border-white/10 text-white/70 hover:border-white/20"
+                                    }`}
+                                  >
+                                    Paket Private
+                                  </button>
+                                )}
+                              </div>
+                            </div>
                           )}
                         </div>
-                        {hold?.expiresAt && holdLeftLabel && (
-                          <div className="animate-in fade-in slide-in-from-top-4 duration-700">
-                            <div className="rounded-[1.5rem] border border-primary/20 bg-primary/5 p-5 flex items-center gap-4">
-                              <div className="relative">
-                                <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-sm">
-                                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                  </svg>
-                                </div>
-                              </div>
-                              <div className="space-y-0.5">
-                                <div className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/90">
-                                  Sisa Waktu Hold Kavling
-                                </div>
-                                <div className="text-sm font-bold tracking-tight text-[#2D3E10]">
-                                  Sesi berakhir dalam <span className="text-primary font-black">{holdLeftLabel}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setKavlingMapOpen(true)}
-                        className="group relative flex shrink-0 items-center justify-center rounded-full border border-[#E8E8E1] bg-white px-8 py-3.5 text-[11px] font-black uppercase tracking-[0.2em] text-[#2D3E10] shadow-sm transition-all hover:border-[#2D3E10] hover:bg-[#2D3E10] hover:text-white active:scale-95 lg:w-auto overflow-hidden"
-                      >
-                        <svg className="mr-3 h-4 w-4 transition-transform duration-300 group-hover:scale-105" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                        </svg>
-                        <span>Buka Peta Interaktif</span>
-                      </button>
+                      ) : (
+                        <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
+                          Silakan pilih <span className="font-mono font-bold text-[#86A86C]">{requiredKavlings} kavling</span> untuk area <strong className="text-[#F6F5F0]">{effectiveKavlingScope}</strong>.
+                        </p>
+                      )}
                     </div>
 
-                    <div className="flex flex-col gap-10 lg:flex-row">
-                      {/* Map Preview */}
-                      <div className="sticky top-4 z-30 shrink-0 bg-white/95 pb-4 pt-2 backdrop-blur-md lg:static lg:w-1/3 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
-                        <div className="mb-3 flex items-center justify-between lg:hidden">
-                          <div className="flex items-center gap-2">
-                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]">Peta Lokasi</span>
-                          </div>
-                          <span className="text-[10px] font-bold text-primary/90 italic">Scroll ke bawah untuk pilih nomor</span>
+                    {/* Hold Timer Alert */}
+                    {hold?.expiresAt && holdLeftLabel && (
+                      <div className="rounded-xl border border-[#86A86C]/30 bg-[#162415] p-4 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <span className="h-2 w-2 rounded-full bg-[#86A86C] animate-pulse" />
+                          <span className="text-xs font-mono uppercase tracking-wider text-white/70">
+                            Sisa Waktu Hold Kavling:
+                          </span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => setKavlingMapOpen(true)}
-                          className="group relative block aspect-[16/10] w-full overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-[#F1F3EE] transition-all duration-700 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 lg:aspect-[4/3]"
-                        >
-                          <img
-                            src={`/kavling/site-map.png?t=${kavlingMapAssetVersion}`}
-                            alt="Site Map Kavling"
-                            className="h-full w-full object-contain cursor-zoom-in transition-all duration-1000 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/0 backdrop-blur-0 transition-all duration-700 group-hover:bg-[#2D3E10]/10 group-hover:backdrop-blur-[2px]">
-                            <div className="flex translate-y-6 flex-col items-center gap-3 opacity-0 transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100">
-                              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#2D3E10] shadow-2xl">
-                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                                </svg>
-                              </div>
-                              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-white drop-shadow-lg">Zoom Peta</span>
-                            </div>
-                          </div>
-                        </button>
+                        <span className="font-mono tabular-nums text-sm font-bold text-[#86A86C]">
+                          {holdLeftLabel}
+                        </span>
                       </div>
+                    )}
 
-                      {/* Kavling Grid */}
-                      <div className="w-full min-w-0 flex-1 pb-28 lg:pb-0 pr-1 lg:pr-0">
-                        {/* Block Filter Toolbar */}
-                        {availableBlocks.length > 1 && (
-                          <div className="mb-5 space-y-2.5">
-                            <div className="flex items-center justify-between px-1">
-                              <div className="flex items-center gap-2">
-                                <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/50">
-                                  Filter Berdasarkan Blok
-                                </span>
-                              </div>
-                              {selectedBlockFilter !== "ALL" && (
-                                <button
-                                  type="button"
-                                  onClick={() => setSelectedBlockFilter("ALL")}
-                                  className="text-[10px] font-extrabold uppercase tracking-wider text-primary hover:underline"
-                                >
-                                  Tampilkan Semua ({kavlingAll.length})
-                                </button>
-                              )}
-                            </div>
-
-                            {/* Flexible Block Pills (Wrap to next line if space is tight) */}
-                            <div className="flex flex-wrap items-center gap-2 pb-1">
-                              <button
-                                type="button"
-                                onClick={() => setSelectedBlockFilter("ALL")}
-                                className={`group relative flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all duration-300 ${
-                                  selectedBlockFilter === "ALL"
-                                    ? "bg-[#2D3E10] text-white shadow-md shadow-[#2D3E10]/20"
-                                    : "bg-white border border-[#E8E8E1] text-[#2D3E10]/70 hover:border-primary/40 hover:text-primary"
-                                }`}
-                              >
-                                <span>Semua Blok</span>
-                                <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-black ${selectedBlockFilter === "ALL" ? "bg-white/20 text-white" : "bg-[#F1F3EE] text-[#2D3E10]/60"}`}>
-                                  {kavlingAll.length}
-                                </span>
-                              </button>
-
-                              {availableBlocks.map((b) => (
-                                <button
-                                  key={b.name}
-                                  type="button"
-                                  onClick={() => setSelectedBlockFilter(b.name)}
-                                  className={`group relative flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all duration-300 ${
-                                    selectedBlockFilter === b.name
-                                      ? "bg-[#2D3E10] text-white shadow-md shadow-[#2D3E10]/20"
-                                      : "bg-white border border-[#E8E8E1] text-[#2D3E10]/70 hover:border-primary/40 hover:text-primary"
-                                  }`}
-                                >
-                                  <span>{b.name}</span>
-                                  <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-black ${selectedBlockFilter === b.name ? "bg-white/20 text-white" : "bg-[#F1F3EE] text-[#2D3E10]/60"}`}>
-                                    {b.count}
-                                  </span>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="grid grid-cols-4 min-[420px]:grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-9 gap-2.5 sm:gap-3">
-                          {filteredKavlingAll.map((n, idx) => {
-                            const isPaid = kavlingPaid.includes(n);
-                            const isHeld = kavlingHeld.includes(n);
-                            const isOOO = kavlingOOO.includes(n);
-                            const isTaken = kavlingTaken.includes(n);
-                            const isSelected = kavlingSelected.includes(n);
-                            const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
-                            const isMandiri = !isPrivateInRange;
-
-                            let disabled = isTaken;
-                            if (effectiveKavlingScope === "private" && isMandiri) disabled = true;
-                            if (effectiveKavlingScope === "mandiri" && isPrivateInRange) disabled = true;
-                            if (effectiveKavlingScope === "paket" && isPrivateInRange) disabled = true;
-                            if (!effectiveKavlingScope) disabled = true;
-
-                            return (
-                              <button
-                                key={n}
-                                type="button"
-                                disabled={disabled && !isSelected}
-                                onClick={() => {
-                                  if (isSelected) {
-                                    setKavlingSelected((s) => s.filter((x) => x !== n));
-                                  } else {
-                                    if (kavlingSelected.length < requiredKavlings) {
-                                      setKavlingSelected((s) => [...s, n]);
-                                    }
-                                  }
-                                }}
-                                className={`group/kavling relative flex min-h-[3.25rem] items-center justify-center rounded-[1rem] border-2 text-[13px] font-black transition-all duration-500 overflow-hidden ${
-                                  isSelected
-                                    ? "border-primary bg-[#2D3E10] text-white shadow-xl shadow-primary/20 scale-105 z-10"
-                                    : isOOO
-                                    ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed grayscale"
-                                    : isPaid
-                                    ? "border-red-100 bg-red-50 text-red-700 cursor-not-allowed"
-                                    : isHeld
-                                    ? "border-amber-100 bg-amber-50 text-amber-700 cursor-not-allowed"
-                                    : disabled
-                                    ? "border-[#F1F3EE] bg-[#F1F3EE]/20 text-[#2D3E10]/10 cursor-not-allowed opacity-40"
-                                    : "border-emerald-100 bg-emerald-50/30 text-emerald-700 hover:border-emerald-500 hover:bg-emerald-50 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/10"
-                                }`}
-                              >
-                                {isOOO && (
-                                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50">
-                                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                  </div>
-                                )}
-                                {!isOOO && isSelected && (
-                                   <div className="absolute inset-0 opacity-10 pointer-events-none">
-                                     <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                       <path fill="currentColor" d="M0,0 L100,0 L100,100 L0,100 Z" />
-                                     </svg>
-                                   </div>
-                                 )}
-                                 <span className="relative z-10">{n}</span>
-                                {!disabled && !isTaken && !isSelected && (
-                                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-emerald-500 opacity-0 transition-all duration-300 group-hover/kavling:opacity-100 group-hover/kavling:bottom-1" />
-                                )}
-                              </button>
-                            );
-                          })}
+                    {/* Content View: In-Place Interactive Map vs Grid */}
+                    {kavlingTab === "map" ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-mono uppercase tracking-wider text-white/60">
+                            Peta Lokasi Kawasan (Bisa Digeser & Dizoom)
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setKavlingMapOpen(true)}
+                            className="text-xs font-mono uppercase tracking-wider text-[#86A86C] hover:underline"
+                          >
+                            Layar Penuh ↗
+                          </button>
                         </div>
-                        <div className="mt-12 flex flex-wrap justify-center gap-8 border-t border-[#E8E8E1]/60 pt-8 sm:justify-start">
-                          <div className="flex items-center gap-3 group/legend">
-                            <div className="relative h-4 w-4">
-                              <div className="absolute inset-0 bg-[#2D3E10] rounded-full shadow-lg shadow-primary/20 transition-transform group-hover/legend:scale-125" />
-                              <div className="absolute inset-0 bg-white/20 rounded-full scale-0 transition-transform duration-500 group-hover/legend:scale-75" />
-                            </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60 transition-colors group-hover/legend:text-primary">Terpilih</span>
-                          </div>
-                          <div className="flex items-center gap-3 group/legend">
-                            <div className="h-4 w-4 rounded-full border-2 border-emerald-200 bg-emerald-50 transition-all duration-300 group-hover/legend:border-emerald-500 group-hover/legend:scale-110" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700/60 transition-colors group-hover/legend:text-emerald-700">Tersedia</span>
-                          </div>
-                          <div className="flex items-center gap-3 group/legend">
-                            <div className="h-4 w-4 rounded-full bg-red-100 border border-red-200 transition-all duration-300 group-hover/legend:scale-110" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-700/60">Sudah Dibooking</span>
-                          </div>
-                          <div className="flex items-center gap-3 group/legend">
-                            <div className="h-4 w-4 rounded-full bg-amber-100 border border-amber-200 transition-all duration-300 group-hover/legend:scale-110" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-700/60">Dalam Proses / Hold</span>
-                          </div>
-                          <div className="flex items-center gap-3 group/legend">
-                            <div className="h-4 w-4 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center transition-all duration-300 group-hover/legend:scale-110">
-                              <svg className="h-2 w-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                              </svg>
-                            </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500/60">Perbaikan (OOO)</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {holdError ? (
-                      <div className="mt-10 animate-in slide-in-from-top-4 duration-700">
-                        <div className="flex items-center gap-5 rounded-[1.5rem] border border-red-200 bg-red-50/50 p-6 text-sm font-bold text-red-700 backdrop-blur-sm">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-red-100 text-red-600 shadow-sm">
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                          </div>
-                          <div className="space-y-1">
-                            <p className="uppercase tracking-[0.15em] text-[10px] font-black">Kesalahan Pemilihan</p>
-                            <p className="text-xs font-medium opacity-80">{holdError}</p>
-                          </div>
+                        <div className="rounded-xl border border-white/10 bg-[#0B120A] overflow-hidden p-2">
+                          <InteractiveMapViewer src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`} />
                         </div>
                       </div>
                     ) : null}
 
-                {kavlingMapOpen ? (
-                  <Modal
-                    open={kavlingMapOpen}
-                    title="Site Map Kavling"
-                    onClose={() => setKavlingMapOpen(false)}
-                    maxWidthClassName="max-w-6xl"
-                  >
-                    <InteractiveMapViewer src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`} />
-                  </Modal>
-                ) : null}
-                </div>
-              </div>
-          )}
+                    {/* Block Filter Toolbar & Spot Grid (Always visible or in Grid mode) */}
+                    <div className="space-y-4">
+                      {availableBlocks.length > 1 && (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                              Filter Berdasarkan Blok
+                            </span>
+                            {selectedBlockFilter !== "ALL" && (
+                              <button
+                                type="button"
+                                onClick={() => setSelectedBlockFilter("ALL")}
+                                className="text-[10px] font-mono uppercase tracking-wider text-[#86A86C] hover:underline"
+                              >
+                                Tampilkan Semua ({kavlingAll.length})
+                              </button>
+                            )}
+                          </div>
 
-              {/* Add-Ons Section */}
-              <div className="space-y-8">
-                <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:items-center sm:text-left">
-                  <div className="space-y-1">
-                    <h3 className="flex items-center justify-center text-2xl font-black text-foreground sm:justify-start">
-                      <svg className="mr-3 h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                      Fasilitas Tambahan
-                    </h3>
-                    <p className="text-sm font-medium text-primary/90">Lengkapi kenyamanan menginap Anda dengan add-ons pilihan.</p>
-                  </div>
-                  <div className="">
-                    <span className="rounded-full bg-primary/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-primary">Opsional</span>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedBlockFilter("ALL")}
+                              className={`flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all ${
+                                selectedBlockFilter === "ALL"
+                                  ? "bg-[#86A86C] text-[#090E08] font-bold shadow"
+                                  : "bg-[#0B120A] border border-white/10 text-white/70 hover:border-white/20"
+                              }`}
+                            >
+                              <span>Semua Blok</span>
+                              <span className="text-[10px] opacity-75">({kavlingAll.length})</span>
+                            </button>
+                            {availableBlocks.map((b) => (
+                              <button
+                                key={b.name}
+                                type="button"
+                                onClick={() => setSelectedBlockFilter(b.name)}
+                                className={`flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all ${
+                                  selectedBlockFilter === b.name
+                                    ? "bg-[#86A86C] text-[#090E08] font-bold shadow"
+                                    : "bg-[#0B120A] border border-white/10 text-white/70 hover:border-white/20"
+                                }`}
+                              >
+                                <span>{b.name}</span>
+                                <span className="text-[10px] opacity-75">({b.count})</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Spot Numbers Grid */}
+                      <div className="grid grid-cols-4 min-[420px]:grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-2.5">
+                        {filteredKavlingAll.map((n) => {
+                          const isPaid = kavlingPaid.includes(n);
+                          const isHeld = kavlingHeld.includes(n);
+                          const isOOO = kavlingOOO.includes(n);
+                          const isTaken = kavlingTaken.includes(n);
+                          const isSelected = kavlingSelected.includes(n);
+                          const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
+                          const isMandiri = !isPrivateInRange;
+
+                          let disabled = isTaken;
+                          if (effectiveKavlingScope === "private" && isMandiri) disabled = true;
+                          if (effectiveKavlingScope === "mandiri" && isPrivateInRange) disabled = true;
+                          if (effectiveKavlingScope === "paket" && isPrivateInRange) disabled = true;
+                          if (!effectiveKavlingScope) disabled = true;
+
+                          return (
+                            <button
+                              key={n}
+                              type="button"
+                              disabled={disabled && !isSelected}
+                              onClick={() => {
+                                if (isSelected) {
+                                  setKavlingSelected((s) => s.filter((x) => x !== n));
+                                } else {
+                                  if (kavlingSelected.length < requiredKavlings) {
+                                    setKavlingSelected((s) => [...s, n]);
+                                  }
+                                }
+                              }}
+                              className={`group/kavling relative flex min-h-[3rem] items-center justify-center rounded-xl border text-xs font-mono tabular-nums font-bold transition-all duration-300 overflow-hidden ${
+                                isSelected
+                                  ? "border-[#86A86C] bg-[#86A86C] text-[#090E08] shadow-lg shadow-[#86A86C]/25 scale-105 z-10 font-black"
+                                  : isOOO
+                                  ? "border-white/5 bg-white/5 text-white/20 cursor-not-allowed"
+                                  : isPaid
+                                  ? "border-red-500/20 bg-red-950/20 text-red-400 cursor-not-allowed"
+                                  : isHeld
+                                  ? "border-amber-500/20 bg-amber-950/20 text-amber-400 cursor-not-allowed"
+                                  : disabled
+                                  ? "border-white/5 bg-white/5 text-white/20 cursor-not-allowed opacity-40"
+                                  : "border-white/10 bg-[#0B120A] text-[#86A86C] hover:border-[#86A86C] hover:bg-[#86A86C]/10"
+                              }`}
+                            >
+                              <span>{n}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Legend */}
+                      <div className="mt-6 flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6 border-t border-white/10 pt-4 text-xs font-mono text-white/60">
+                        <div className="flex items-center gap-2">
+                          <span className="h-3 w-3 rounded-md bg-[#86A86C] border border-[#86A86C]" />
+                          <span className="text-[#F6F5F0]">Terpilih</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="h-3 w-3 rounded-md bg-[#0B120A] border border-[#86A86C]/50" />
+                          <span>Tersedia</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="h-3 w-3 rounded-md bg-red-950/30 border border-red-500/30" />
+                          <span>Sudah Dibooking</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="h-3 w-3 rounded-md bg-amber-950/30 border border-amber-500/30" />
+                          <span>Sedang Diproses</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="h-3 w-3 rounded-md bg-white/5 border border-white/10" />
+                          <span>Perbaikan (OOO)</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {holdError ? (
+                      <div className="rounded-xl border border-red-500/30 bg-red-950/20 p-4 text-xs font-mono text-red-300">
+                        {holdError}
+                      </div>
+                    ) : null}
+
+                    {kavlingMapOpen ? (
+                      <Modal
+                        open={kavlingMapOpen}
+                        title="Site Map Kavling Jayagiri 1.620 mdpl"
+                        variant="sanctuary"
+                        onClose={() => setKavlingMapOpen(false)}
+                        maxWidthClassName="max-w-6xl"
+                      >
+                        <InteractiveMapViewer src={`/kavling/site-map.png?v=${kavlingMapAssetVersion}`} />
+                      </Modal>
+                    ) : null}
                   </div>
                 </div>
+              )}
 
-                <div className="grid grid-cols-2 gap-2.5 sm:gap-6 lg:grid-cols-3">
-                  {addons.slice(0, showAllAddons ? addons.length : 3).map((a, idx) => {
+              {/* Add-Ons Section - Deep Pine Sanctuary */}
+              <div className="space-y-6">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+                      <h3 className="text-xl sm:text-2xl font-serif text-[#F6F5F0]">
+                        Perlengkapan & Fasilitas Tambahan
+                      </h3>
+                    </div>
+                    <p className="mt-1 text-xs text-white/60">
+                      Kayu bakar, sleeping bag ekstra, atau kompor portabel untuk menghangatkan malam di hutan 1.620 mdpl.
+                    </p>
+                  </div>
+                  <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                    Opsional Tambahan
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                  {addons.slice(0, showAllAddons ? addons.length : 3).map((a) => {
                     const isSelected = (effectiveAddonQty[a.id] ?? 0) > (autoAddonQty[a.id] ?? 0);
                     const auto = autoAddonQty[a.id] ?? 0;
                     return (
                       <div 
                         key={a.id} 
-                        className={`group relative overflow-hidden rounded-2xl sm:rounded-[2.5rem] border p-3.5 sm:p-7 transition-all duration-700 ${
+                        className={`group relative overflow-hidden rounded-2xl border p-4 sm:p-5 transition-all duration-300 flex flex-col justify-between gap-4 ${
                           isSelected 
-                            ? "border-primary/20 bg-[#F1F3EE] shadow-xl shadow-primary/5 scale-[1.01] sm:scale-[1.02]" 
-                            : "border-[#E8E8E1] bg-white hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                            ? "border-[#86A86C] bg-[#162415] shadow-xl ring-1 ring-[#86A86C]/40" 
+                            : "border-white/10 bg-[#121C11] hover:border-white/20"
                         }`}
                       >
-
-                        <div className="flex flex-col h-full items-center text-center justify-between gap-3 sm:gap-8 sm:items-start sm:text-left">
-                          <div className="space-y-1.5 sm:space-y-4 w-full">
-                            <div className="flex flex-col items-center justify-between gap-1 sm:gap-3 sm:flex-row sm:items-start">
-                              <h4 className="text-xs sm:text-[17px] font-black tracking-tight text-[#2D3E10] leading-tight group-hover:text-primary transition-colors">
-                                {a.name}
-                              </h4>
-                              {auto > 0 && (
-                                <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 sm:px-3 sm:py-1 text-[7px] sm:text-[9px] font-bold uppercase tracking-widest text-primary">
-                                  Included
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-baseline justify-center gap-1 sm:gap-1.5 sm:justify-start">
-                              <span className="text-sm sm:text-xl font-black text-primary tracking-tight">{formatIDR(a.price)}</span>
-                              <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider sm:tracking-[0.2em] text-[#2D3E10]/70">/ unit</span>
-                            </div>
-                            <div className="flex items-center justify-center gap-1.5 sm:justify-start">
-                              <div className={`h-1.5 w-1.5 rounded-full ${a.stock - auto <= 5 ? "bg-amber-500 animate-pulse" : "bg-emerald-500"}`} />
-                              <span className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-wider ${a.stock - auto <= 5 ? "text-amber-600" : "text-[#2D3E10]/70"}`}>
-                                {a.stock - auto > 0 ? `Stok: ${a.stock - auto}` : "Habis"}
-                              </span>
-                            </div>
+                        <div className="space-y-2">
+                          <div className="flex items-start justify-between gap-2">
+                            <h4 className="text-sm sm:text-base font-semibold text-[#F6F5F0]">
+                              {a.name}
+                            </h4>
                             {auto > 0 && (
-                              <div className="flex items-center justify-center gap-1.5 rounded-lg bg-primary/5 p-1.5 sm:p-3 sm:justify-start">
-                                <svg className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                                </svg>
-                                <p className="text-[7px] sm:text-[10px] font-bold text-primary/70 leading-tight uppercase tracking-wider">
-                                  {auto} unit inc.
-                                </p>
-                              </div>
+                              <span className="shrink-0 rounded-md bg-[#090E08] border border-white/10 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-[#86A86C]">
+                                {auto} Inc.
+                              </span>
                             )}
                           </div>
-                          
-                          <div className="flex w-full flex-col items-center justify-between pt-2.5 sm:pt-6 border-t border-[#E8E8E1] gap-1.5 sm:gap-4 sm:flex-row">
-                            <div className="flex flex-col items-center sm:items-start hidden sm:flex">
-                              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Atur Jumlah</span>
-                            </div>
-                            <div className="w-full flex justify-center sm:w-auto sm:scale-110 sm:origin-right">
-                              <QuantityStepper
-                                value={effectiveAddonQty[a.id] ?? 0}
-                                min={autoAddonQty[a.id] ?? 0}
-                                max={a.stock}
-                                size="sm"
-                                ariaLabel={`qty ${a.name}`}
-                                onChange={(next) => {
-                                  const auto = autoAddonQty[a.id] ?? 0;
-                                  const manual = Math.max(0, next - auto);
-                                  setAddonQty((s) => ({ ...s, [a.id]: manual }));
-                                }}
-                              />
-                            </div>
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-base sm:text-lg font-mono tabular-nums font-bold text-[#F6F5F0]">
+                              {formatIDR(a.price)}
+                            </span>
+                            <span className="text-xs font-mono text-white/40">/ item</span>
                           </div>
+                          <div className="text-[11px] font-mono text-white/50">
+                            {a.stock - auto > 0 ? (
+                              <span className={a.stock - auto <= 5 ? "text-amber-400" : "text-white/60"}>
+                                Stok Tersedia: {a.stock - auto}
+                              </span>
+                            ) : (
+                              <span className="text-red-400">Habis</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-white/50">Jumlah</span>
+                          <QuantityStepper
+                            value={effectiveAddonQty[a.id] ?? 0}
+                            min={autoAddonQty[a.id] ?? 0}
+                            max={a.stock}
+                            size="sm"
+                            ariaLabel={`qty ${a.name}`}
+                            onChange={(next) => {
+                              const auto = autoAddonQty[a.id] ?? 0;
+                              const manual = Math.max(0, next - auto);
+                              setAddonQty((s) => ({ ...s, [a.id]: manual }));
+                            }}
+                          />
                         </div>
                       </div>
                     );
@@ -2705,72 +2790,41 @@ export default function PublicBookingPage() {
                 </div>
 
                 {addons.length > 3 && (
-                  <div className="flex justify-center pt-4">
+                  <div className="flex justify-center pt-2">
                     <button
                       type="button"
                       onClick={() => setShowAllAddons(!showAllAddons)}
-                      className="group flex items-center gap-3 rounded-full border border-[#E8E8E1] bg-white px-8 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-95 shadow-sm"
+                      className="group flex items-center gap-2 rounded-xl border border-white/15 bg-[#121C11] px-5 py-2.5 text-xs font-mono uppercase tracking-wider text-[#F6F5F0] transition-all hover:border-[#86A86C] hover:bg-[#162415] active:scale-95"
                     >
-                      <span>{showAllAddons ? "Sembunyikan" : "Tampilkan Semua Fasilitas"}</span>
+                      <span>{showAllAddons ? "Sembunyikan Fasilitas" : "Tampilkan Semua Fasilitas"}</span>
                       <svg 
-                        className={`h-4 w-4 text-primary transition-transform duration-500 ${showAllAddons ? 'rotate-180' : ''}`} 
+                        className={`h-3.5 w-3.5 text-[#86A86C] transition-transform duration-300 ${showAllAddons ? 'rotate-180' : ''}`} 
                         fill="none" 
                         viewBox="0 0 24 24" 
                         stroke="currentColor"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
                   </div>
                 )}
                 {addons.length === 0 && (
-                  <div className="rounded-[2.5rem] border-2 border-dashed border-[#E8E8E1] bg-[#F1F3EE]/20 p-10 text-center">
-                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-primary/40 shadow-sm border border-[#E8E8E1]">
-                      <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                      </svg>
-                    </div>
-                    <h4 className="mt-6 text-lg font-black text-[#2D3E10]">Tidak Ada Add-On</h4>
-                    <p className="mt-2 text-[10px] font-bold text-[#2D3E10]/70 uppercase tracking-[0.2em]">Belum ada fasilitas tambahan yang tersedia saat ini.</p>
+                  <div className="rounded-2xl border border-white/10 bg-[#121C11] p-8 text-center">
+                    <h4 className="text-sm font-mono text-white/70">Belum Ada Fasilitas Tambahan</h4>
+                    <p className="mt-1 text-xs text-white/40">Fasilitas standar sudah termasuk dalam paket penginapan.</p>
                   </div>
                 )}
               </div>
 
               {error && (
-                <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-                  <div className="relative overflow-hidden rounded-[2.5rem] border border-red-100 bg-red-50/30 p-7 shadow-xl shadow-red-900/5 backdrop-blur-sm">
-                    <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-red-100/20 blur-3xl" />
-                    <div className="flex items-center gap-6 relative z-10">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-red-500 shadow-sm border border-red-50">
-                        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500/50">Terjadi Kesalahan</span>
-                        <span className="text-sm font-bold text-red-600 leading-relaxed">{error}</span>
-                      </div>
-                    </div>
-                  </div>
+                <div className="rounded-xl border border-red-500/30 bg-red-950/20 p-4 text-xs font-mono text-red-300">
+                  {error}
                 </div>
               )}
 
               {guestOverCapacity && (
-                <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-                  <div className="relative overflow-hidden rounded-[2.5rem] border border-amber-100 bg-amber-50/30 p-7 shadow-xl shadow-amber-900/5 backdrop-blur-sm">
-                    <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-amber-100/20 blur-3xl" />
-                    <div className="flex items-center gap-6 relative z-10">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-amber-500 shadow-sm border border-amber-50">
-                        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-500/50">Kapasitas Terlampaui</span>
-                        <span className="text-sm font-bold text-amber-600 leading-relaxed">Jumlah tamu dewasa melebihi kapasitas paket yang dipilih. Mohon sesuaikan jumlah tamu dewasa atau pilih unit tambahan.</span>
-                      </div>
-                    </div>
-                  </div>
+                <div className="rounded-xl border border-amber-500/30 bg-amber-950/20 p-4 text-xs font-mono text-amber-300">
+                  Kapasitas terlampaui: Jumlah tamu dewasa melebihi kapasitas unit yang dipilih. Silakan sesuaikan jumlah tamu atau tambah unit.
                 </div>
               )}
             </div>
@@ -2787,128 +2841,119 @@ export default function PublicBookingPage() {
                 className="relative z-10"
               >
                 <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
-                  <div className="mb-10 sm:mb-16 flex flex-col text-center">
-                    <h2 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-4xl">
-                      Lengkapi <span className="font-serif italic font-light opacity-90 text-primary">Identitas</span>
+                  <div className="mb-8 sm:mb-12 flex flex-col text-left sm:text-center">
+                    <div className="flex items-center justify-start sm:justify-center gap-2 mb-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+                      <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#86A86C]">
+                        Langkah 03 — Finalisasi Registrasi
+                      </span>
+                    </div>
+                    <h2 className="text-3xl font-serif tracking-tight text-[#F6F5F0] sm:text-4xl">
+                      Identitas Tamu Pemesan
                     </h2>
-                    <p className="mx-auto mt-4 max-w-lg text-[13px] font-medium text-[#2D3E10]/70 sm:mt-5 sm:text-[15px]">
-                      Masukkan data diri Anda untuk konfirmasi pesanan dan pengiriman invoice.
+                    <p className="mx-auto mt-2 max-w-xl text-xs sm:text-sm text-white/60">
+                      Masukkan data diri resmi untuk konfirmasi voucher check-in dan asuransi kunjungan Perhutani Jayagiri.
                     </p>
                   </div>
 
-                  <div className="space-y-6 sm:space-y-10">
+                  <div className="space-y-6">
                     {/* Informasi Kontak */}
-                    <div className="grid grid-cols-1 gap-5">
-                      <div className="overflow-hidden rounded-[2rem] border border-[#E8E8E1] bg-white p-5 sm:rounded-[2.5rem] sm:p-8 shadow-sm shadow-[#2D3E10]/5">
-                        <div className="mb-6 flex items-center gap-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                          </div>
-                          <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Data Personal</h3>
+                    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121C11] p-5 sm:p-8 shadow-2xl">
+                      <div className="mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
+                        <span className="h-2 w-2 rounded-full bg-[#86A86C]" />
+                        <h3 className="text-lg font-serif text-[#F6F5F0]">Data Personal Pemesan</h3>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                            Nama Lengkap
+                          </label>
+                          <input 
+                            value={name} 
+                            onChange={(e) => setName(e.target.value)} 
+                            className="w-full rounded-xl border border-white/15 bg-[#0B120A] px-4 py-3.5 text-sm sm:text-base font-medium text-[#F6F5F0] outline-none transition-all placeholder:text-white/30 focus:border-[#86A86C]" 
+                            placeholder="Sesuai Identitas Resmi (KTP / Paspor)" 
+                            required 
+                          />
                         </div>
-
-                        <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                          <div className="relative space-y-2">
-                            <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nama Lengkap</label>
-                            <div className="relative group/input">
+                        
+                        <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2">
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                              WhatsApp Aktif
+                            </label>
+                            <div className="relative flex items-center">
+                              <span className="absolute left-4 font-mono font-bold text-sm text-[#86A86C]">
+                                +62
+                              </span>
                               <input 
-                                value={name} 
-                                onChange={(e) => setName(e.target.value)} 
-                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/50 sm:text-base sm:rounded-3xl" 
-                                placeholder="Sesuai Identitas (KTP/Passport)" 
+                                value={phone} 
+                                onChange={(e) => setPhone(e.target.value)} 
+                                className="w-full rounded-xl border border-white/15 bg-[#0B120A] py-3.5 pl-14 pr-4 text-sm sm:text-base font-mono font-bold text-[#F6F5F0] outline-none transition-all placeholder:text-white/30 focus:border-[#86A86C]" 
+                                placeholder="81234567890" 
                                 required 
                               />
                             </div>
                           </div>
-                          
-                          <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2">
-                            <div className="relative space-y-2">
-                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">WhatsApp</label>
-                              <div className="relative flex items-center group/input">
-                                <div className="absolute left-5 text-sm font-black text-primary sm:text-base">
-                                  +62
-                                </div>
-                                <input 
-                                  value={phone} 
-                                  onChange={(e) => setPhone(e.target.value)} 
-                                  className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] py-4 pl-14 pr-5 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/50 sm:text-base sm:rounded-3xl" 
-                                  placeholder="8123..." 
-                                  required 
-                                />
-                              </div>
-                            </div>
-                            <div className="relative space-y-2">
-                              <label className="ml-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Email</label>
-                              <input 
-                                type="email" 
-                                value={email} 
-                                onChange={(e) => setEmail(e.target.value)} 
-                                className="w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-5 py-4 text-sm font-bold text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/50 sm:text-base sm:rounded-3xl" 
-                                placeholder="nama@email.com" 
-                                required 
-                              />
-                            </div>
-                          </div>
-
-                          <div className="relative space-y-2">
-                            <div className="flex items-center justify-between px-1">
-                              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Catatan Khusus</label>
-                              <span className="text-[9px] font-bold text-primary/80 uppercase tracking-[0.1em]">Opsional</span>
-                            </div>
-                            <textarea 
-                              value={specialRequest} 
-                              onChange={(e) => setSpecialRequest(e.target.value)} 
-                              className="h-32 w-full rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-5 text-sm font-medium text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 placeholder:text-[#2D3E10]/50 resize-none leading-relaxed sm:text-base sm:rounded-3xl" 
-                              placeholder="Contoh: Request lokasi dekat parkir, alergi makanan, dll." 
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                              Alamat Email
+                            </label>
+                            <input 
+                              type="email" 
+                              value={email} 
+                              onChange={(e) => setEmail(e.target.value)} 
+                              className="w-full rounded-xl border border-white/15 bg-[#0B120A] px-4 py-3.5 text-sm sm:text-base font-medium text-[#F6F5F0] outline-none transition-all placeholder:text-white/30 focus:border-[#86A86C]" 
+                              placeholder="nama@email.com" 
+                              required 
                             />
                           </div>
                         </div>
-                      </div>
 
-                      {/* Summary Minimalist for Mobile */}
-                      <div className="rounded-[2rem] border border-[#E8E8E1] bg-white p-6 sm:hidden shadow-xl shadow-[#2D3E10]/5">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Ringkasan Reservasi</h4>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                              Catatan Khusus
+                            </label>
+                            <span className="text-[10px] font-mono uppercase text-white/40">Opsional</span>
+                          </div>
+                          <textarea 
+                            value={specialRequest} 
+                            onChange={(e) => setSpecialRequest(e.target.value)} 
+                            className="h-28 w-full rounded-xl border border-white/15 bg-[#0B120A] p-4 text-sm font-medium text-[#F6F5F0] outline-none transition-all placeholder:text-white/30 focus:border-[#86A86C] resize-none leading-relaxed" 
+                            placeholder="Contoh: Estimasi jam tiba malam, permohonan dekat area toilet, dll." 
+                          />
                         </div>
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs font-medium text-[#2D3E10]/60">Durasi</span>
-                              <span className="text-xs font-bold text-[#2D3E10]">{checkIn} s/d {checkOut}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs font-medium text-[#2D3E10]/60">Total Tamu</span>
-                              <span className="text-xs font-bold text-[#2D3E10]">{totalGuest} Orang</span>
-                            </div>
-                            {kavlingSelected.length > 0 && (
-                              <div className="flex justify-between items-center">
-                                <span className="text-xs font-medium text-[#2D3E10]/60">Kavling</span>
-                                <span className="text-xs font-bold text-primary">{kavlingSelected.join(", ")}</span>
-                              </div>
-                            )}
-                          </div>
+                      </div>
+                    </div>
 
-                          {/* Breakdown for Mobile */}
-                          <div className="pt-3 border-t border-[#E8E8E1]/60 space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-[10px] font-medium text-[#2D3E10]/70 uppercase tracking-widest">Akomodasi</span>
-                              <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(selectedVisibleUnits.reduce((acc, u) => acc + (sumDailyPrice(u) * (unitQty[u.id] || 0)), 0))}</span>
-                            </div>
-                            {addons.some(a => effectiveAddonQty[a.id] > 0) && (
-                              <div className="flex justify-between items-center">
-                                <span className="text-[10px] font-medium text-[#2D3E10]/70 uppercase tracking-widest">Add-ons ({addons.filter(a => effectiveAddonQty[a.id] > 0).length})</span>
-                                <span className="text-xs font-bold text-[#2D3E10]">{formatIDR(addons.reduce((acc, a) => acc + (a.price * (effectiveAddonQty[a.id] || 0)), 0))}</span>
-                              </div>
-                            )}
+                    {/* Summary Minimalist for Mobile */}
+                    <div className="rounded-2xl border border-white/10 bg-[#162415] p-5 sm:hidden shadow-xl text-white/80 space-y-3">
+                      <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+                        <h4 className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#F6F5F0]">
+                          Ringkasan Reservasi
+                        </h4>
+                      </div>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex justify-between items-center">
+                          <span className="text-white/50 font-mono">Durasi</span>
+                          <span className="font-mono tabular-nums text-white/90">{checkIn} s/d {checkOut}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-white/50 font-mono">Total Tamu</span>
+                          <span className="font-mono tabular-nums text-white/90">{totalGuest} Orang</span>
+                        </div>
+                        {kavlingSelected.length > 0 && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-white/50 font-mono">Kavling</span>
+                            <span className="font-mono tabular-nums text-[#86A86C] font-bold">{kavlingSelected.join(", ")}</span>
                           </div>
-
-                          <div className="pt-3 border-t border-[#E8E8E1] flex justify-between items-center">
-                            <span className="text-xs font-black text-[#2D3E10]">Estimasi Total</span>
-                            <span className="text-sm font-black text-primary">{formatIDR(estimatedAmount)}</span>
-                          </div>
+                        )}
+                        <div className="pt-2 border-t border-white/10 flex justify-between items-center">
+                          <span className="font-mono uppercase text-[10px] text-white/50">Estimasi Total</span>
+                          <span className="font-mono tabular-nums text-sm font-bold text-[#86A86C]">{formatIDR(estimatedAmount)}</span>
                         </div>
                       </div>
                     </div>
@@ -2923,18 +2968,17 @@ export default function PublicBookingPage() {
           </div>
         </div>
       </div>
-    </div>
-  )}
-</div>
+    )}
+  </div>
 
-{/* Sticky Navigation Bar for Step 2 & 3 - Compact side-by-side layout on mobile */}
+{/* Sticky Navigation Bar for Step 2 & 3 - Mobile - Deep Pine Sanctuary */}
 {currentStep === 2 && (
-  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 pb-4 backdrop-blur-xl sm:hidden shadow-[0_-10px_40px_rgba(45,62,16,0.05)]">
+  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-white/10 bg-[#090E08]/90 p-3 pb-5 backdrop-blur-xl sm:hidden shadow-2xl">
     <div className="mx-auto flex max-w-xl flex-row items-center gap-2">
       <button
         type="button"
         onClick={() => setCurrentStep(1)}
-        className="group flex flex-1 min-h-[3rem] items-center justify-center rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#2D3E10] active:scale-[0.98] transition-all hover:bg-[#F1F3EE]"
+        className="flex flex-1 min-h-[3rem] items-center justify-center rounded-xl border border-white/15 bg-[#121C11] px-3 py-2 text-xs font-mono uppercase tracking-wider text-white/80 active:scale-[0.98] transition-all"
       >
         Kembali
       </button>
@@ -2942,26 +2986,21 @@ export default function PublicBookingPage() {
         type="button"
         onClick={() => setCurrentStep(3)}
         disabled={selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings) || guestOverCapacity}
-        className="group relative flex flex-[2.5] min-h-[3rem] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-white shadow-md active:scale-[0.98] disabled:opacity-30 disabled:shadow-none transition-all"
+        className="flex flex-[2.5] min-h-[3rem] items-center justify-center rounded-xl bg-[#86A86C] px-4 py-2 text-xs font-mono uppercase tracking-wider font-bold text-[#090E08] shadow-lg shadow-[#86A86C]/20 active:scale-[0.98] disabled:opacity-30 transition-all"
       >
-        <div className="relative z-10 flex items-center gap-2">
-          <span>Lanjut Isi Identitas</span>
-          <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </div>
+        <span>Lanjut Isi Identitas ↗</span>
       </button>
     </div>
   </div>
 )}
 
 {currentStep === 3 && (
-  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/95 p-3 pb-4 backdrop-blur-xl sm:hidden shadow-[0_-10px_40px_rgba(45,62,16,0.05)]">
+  <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-white/10 bg-[#090E08]/90 p-3 pb-5 backdrop-blur-xl sm:hidden shadow-2xl">
     <div className="mx-auto flex max-w-xl flex-row items-center gap-2">
       <button
         type="button"
         onClick={() => setCurrentStep(2)}
-        className="group flex flex-1 min-h-[3rem] items-center justify-center rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#2D3E10] active:scale-[0.98] transition-all hover:bg-[#F1F3EE]"
+        className="flex flex-1 min-h-[3rem] items-center justify-center rounded-xl border border-white/15 bg-[#121C11] px-3 py-2 text-xs font-mono uppercase tracking-wider text-white/80 active:scale-[0.98] transition-all"
       >
         Kembali
       </button>
@@ -2969,9 +3008,9 @@ export default function PublicBookingPage() {
         type="submit"
         form="booking-form"
         disabled={submitting || loading || !name || !phone || !email}
-        className="group relative flex flex-[2.5] min-h-[3rem] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-white shadow-md active:scale-[0.98] disabled:opacity-30 disabled:shadow-none transition-all"
+        className="flex flex-[2.5] min-h-[3rem] items-center justify-center rounded-xl bg-[#86A86C] px-4 py-2 text-xs font-mono uppercase tracking-wider font-bold text-[#090E08] shadow-lg shadow-[#86A86C]/20 active:scale-[0.98] disabled:opacity-30 transition-all"
       >
-        <span className="relative z-10">{submitting || loading ? "Memproses..." : "Konfirmasi Booking"}</span>
+        <span>{submitting || loading ? "Memproses..." : "Konfirmasi Booking ↗"}</span>
       </button>
     </div>
   </div>
@@ -2983,32 +3022,39 @@ export default function PublicBookingPage() {
     <div className="grid grid-cols-1 lg:grid-cols-3">
       <div className="lg:col-span-2">
         {currentStep === 2 && (
-          <div className="mt-16 flex flex-col sm:flex-row gap-5">
+          <div className="mt-12 flex flex-col sm:flex-row gap-4">
             <button
               type="button"
               onClick={() => setCurrentStep(3)}
               disabled={selectedVisibleCount === 0 || (requiredKavlings > 0 && kavlingSelected.length !== requiredKavlings) || guestOverCapacity}
-              className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-[2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 disabled:hover:translate-y-0 sm:order-2"
+              className="order-1 flex min-h-[3.5rem] flex-[2] items-center justify-center rounded-xl bg-[#86A86C] px-8 py-3 text-xs font-mono uppercase tracking-widest font-bold text-[#090E08] shadow-lg shadow-[#86A86C]/20 transition-all hover:bg-[#97ba7c] active:scale-[0.98] disabled:opacity-30 sm:order-2"
             >
-              <div className="relative z-10 flex items-center gap-3">
-                <span>Lanjut Isi Identitas</span>
-              </div>
+              <span>Lanjut Isi Identitas ↗</span>
             </button>
             <button
               type="button"
-              onClick={() => setCurrentStep(2)}
-              className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-[2rem] border border-[#E8E8E1] bg-[#FDFDFB] px-8 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1"
+              onClick={() => setCurrentStep(1)}
+              className="order-2 flex min-h-[3.5rem] flex-1 items-center justify-center rounded-xl border border-white/15 bg-[#121C11] px-6 py-3 text-xs font-mono uppercase tracking-widest text-white/80 transition-all hover:bg-[#162415] hover:text-white active:scale-[0.98] sm:order-1"
             >
               Kembali
             </button>
           </div>
         )}
         {currentStep === 3 && (
-          <div className="mt-16 flex flex-col sm:flex-row gap-5">
-            <button type="submit" form="booking-form" disabled={submitting || loading || !name || !phone || !email} className="group relative order-1 flex min-h-[4rem] flex-[2] items-center justify-center overflow-hidden rounded-[2rem] bg-[#2D3E10] px-10 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-1 active:scale-[0.98] disabled:opacity-30 disabled:hover:translate-y-0 sm:order-2">
-              <span className="relative z-10">{submitting || loading ? "Memproses..." : "Konfirmasi Booking"}</span>
+          <div className="mt-12 flex flex-col sm:flex-row gap-4">
+            <button 
+              type="submit" 
+              form="booking-form" 
+              disabled={submitting || loading || !name || !phone || !email} 
+              className="order-1 flex min-h-[3.5rem] flex-[2] items-center justify-center rounded-xl bg-[#86A86C] px-8 py-3 text-xs font-mono uppercase tracking-widest font-bold text-[#090E08] shadow-lg shadow-[#86A86C]/20 transition-all hover:bg-[#97ba7c] active:scale-[0.98] disabled:opacity-30 sm:order-2"
+            >
+              <span>{submitting || loading ? "Memproses..." : "Konfirmasi Booking ↗"}</span>
             </button>
-            <button type="button" onClick={() => setCurrentStep(2)} className="group order-2 flex min-h-[4rem] flex-1 items-center justify-center rounded-[2rem] border border-[#E8E8E1] bg-[#FDFDFB] px-8 py-4 text-[13px] font-black uppercase tracking-[0.25em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1">
+            <button 
+              type="button" 
+              onClick={() => setCurrentStep(2)} 
+              className="order-2 flex min-h-[3.5rem] flex-1 items-center justify-center rounded-xl border border-white/15 bg-[#121C11] px-6 py-3 text-xs font-mono uppercase tracking-widest text-white/80 transition-all hover:bg-[#162415] hover:text-white active:scale-[0.98] sm:order-1"
+            >
               Kembali
             </button>
           </div>
@@ -3018,35 +3064,102 @@ export default function PublicBookingPage() {
   </div>
 </div>
 
-    {/* Nature-Inspired Footer */}
-    <footer className="mt-24 py-20 border-t border-[#E8E8E1]/40">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-center">
-          <div className="w-full max-w-xl rounded-[2.5rem] bg-[#F1F3EE]/50 p-10 space-y-8 text-center border border-[#E8E8E1]/60">
-            <div className="space-y-2">
-              <h4 className="text-lg font-black text-[#2D3E10]">Butuh bantuan reservasi?</h4>
-              <p className="text-sm font-medium text-[#2D3E10]/50 leading-relaxed">Tim reservasi kami siap membantu Anda merencanakan liburan impian.</p>
-            </div>
-            <a href="https://wa.me/628112090808" target="_blank" rel="noopener noreferrer" className="relative mx-auto flex min-h-[3.75rem] w-full max-w-xs items-center justify-center gap-3 rounded-2xl bg-[#2D3E10] px-8 py-4 text-[13px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] hover:-translate-y-0.5 active:scale-[0.98]">
-              <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-              </svg>
-              <span>Hubungi WhatsApp</span>
-            </a>
-          </div>
-        </div>
-
-        <div className="mt-20 pt-10 border-t border-[#E8E8E1]/40 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/50">
-            &copy; 2026 Woodforest Jayagiri 48.
-          </p>
-          <div className="flex gap-8">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/50 cursor-default">Privacy</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/50 cursor-default">Terms</span>
-          </div>
-        </div>
+{/* Ketentuan Rimba Modal - Sanctuary Theme */}
+{rulesModalOpen ? (
+  <Modal
+    open={rulesModalOpen}
+    title="Ketentuan Rimba Woodforest Jayagiri 48"
+    variant="sanctuary"
+    onClose={() => setRulesModalOpen(false)}
+    maxWidthClassName="max-w-2xl"
+  >
+    <div className="space-y-4 text-xs sm:text-sm text-white/80 leading-relaxed font-sans">
+      <div className="rounded-xl bg-[#0B120A] p-4 border border-white/10 space-y-2">
+        <h4 className="font-mono uppercase tracking-wider text-[#86A86C] text-xs">
+          Waktu Operasional & Check-In
+        </h4>
+        <p className="text-white/70">
+          Check-in dibuka mulai pukul 14:00 WIB dan batas akhir check-out pukul 12:00 WIB. Keterlambatan check-out tanpa konfirmasi dapat dikenakan biaya tambahan.
+        </p>
       </div>
-    </footer>
+
+      <div className="rounded-xl bg-[#0B120A] p-4 border border-white/10 space-y-2">
+        <h4 className="font-mono uppercase tracking-wider text-[#86A86C] text-xs">
+          Etika Hutan Pinus & Jam Tenang
+        </h4>
+        <p className="text-white/70">
+          Untuk menjaga ketenangan seluruh tamu di alam terbuka, jam tenang diberlakukan mulai pukul 22:00 WIB hingga 06:00 WIB. Dilarang menyalakan sound system berlebih atau membuat kegaduhan.
+        </p>
+      </div>
+
+      <div className="rounded-xl bg-[#0B120A] p-4 border border-white/10 space-y-2">
+        <h4 className="font-mono uppercase tracking-wider text-[#86A86C] text-xs">
+          Keamanan Api Unggun & Sampah (Zero Waste)
+        </h4>
+        <p className="text-white/70">
+          Api unggun hanya diizinkan pada wadah tungku api (fire pit) yang disediakan. Dilarang membuat perapian langsung di atas tanah tanpa alas. Mohon bawa kembali sampah Anda atau masukkan ke tempat sampah terpilah.
+        </p>
+      </div>
+
+      <div className="rounded-xl bg-[#0B120A] p-4 border border-white/10 space-y-2">
+        <h4 className="font-mono uppercase tracking-wider text-[#86A86C] text-xs">
+          Tiket & Retribusi Perhutani
+        </h4>
+        <p className="text-white/70">
+          Seluruh reservasi resmi melalui platform ini sudah termasuk tiket masuk kawasan hutan pinus Perhutani dan tiket penitipan kendaraan terkelola. Tidak ada pungutan liar tambahan di gerbang.
+        </p>
+      </div>
+    </div>
+  </Modal>
+) : null}
+
+{/* Deep Pine Sanctuary Footer */}
+<footer className="mt-20 border-t border-white/10 bg-[#090E08] py-16">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="flex justify-center">
+      <div className="w-full max-w-xl rounded-2xl bg-[#121C11] p-8 sm:p-10 space-y-6 text-center border border-white/10 shadow-2xl">
+        <div className="space-y-2">
+          <div className="flex items-center justify-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#86A86C]">
+              Layanan Concierge 24 Jam
+            </span>
+          </div>
+          <h4 className="text-xl font-serif text-[#F6F5F0]">
+            Butuh Bantuan Reservasi?
+          </h4>
+          <p className="text-xs sm:text-sm text-white/60 leading-relaxed max-w-md mx-auto">
+            Tim pramutamu kami siap membantu konsultasi kavling, rombongan gathering, atau rute berkendara menuju 1.620 mdpl.
+          </p>
+        </div>
+        <a 
+          href="https://wa.me/628112090808" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="inline-flex min-h-[3.25rem] items-center justify-center gap-3 rounded-xl bg-[#86A86C] hover:bg-[#97ba7c] px-8 py-3.5 text-xs font-mono uppercase tracking-wider font-bold text-[#090E08] shadow-lg shadow-[#86A86C]/20 transition-all active:scale-[0.98]"
+        >
+          <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
+          <span>Hubungi WhatsApp Concierge</span>
+        </a>
+      </div>
+    </div>
+
+    <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-white/40">
+      <p>
+        &copy; 2026 Woodforest Jayagiri 48. 1.620 mdpl Cikole Lembang.
+      </p>
+      <div className="flex gap-6">
+        <button type="button" onClick={() => setRulesModalOpen(true)} className="hover:text-white transition-colors">
+          Ketentuan Rimba
+        </button>
+        <span className="text-white/20">·</span>
+        <span className="text-white/40 cursor-default">Reservasi Resmi</span>
+      </div>
+    </div>
   </div>
+</footer>
+</div>
 );
 }

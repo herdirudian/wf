@@ -21,8 +21,16 @@ const palmore = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Woodforest Jayagiri 48 Admin",
-  description: "Admin dashboard booking penginapan camping",
+  title: "Woodforest Jayagiri 48 — Glamping & Camping Hutan Pinus Lembang (1.620 mdpl)",
+  description: "Reservasi resmi kavling tenda, glamping cabin kayu berpemanas air, dan campervan pitch di tengah sejuknya 1.620 mdpl hutan pinus Jayagiri Cikole, Lembang Bandung Barat.",
+  openGraph: {
+    title: "Woodforest Jayagiri 48 — Glamping & Camping Hutan Pinus Lembang (1.620 mdpl)",
+    description: "Reservasi resmi kavling tenda, glamping cabin kayu berpemanas air, dan campervan pitch di tengah sejuknya 1.620 mdpl hutan pinus Jayagiri Cikole, Lembang Bandung Barat.",
+    url: "https://booking.woodforestjayagiri48.com",
+    siteName: "Woodforest Jayagiri 48",
+    locale: "id_ID",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

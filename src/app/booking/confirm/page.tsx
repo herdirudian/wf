@@ -309,43 +309,68 @@ export default function BookingConfirmPage() {
   if (!draft) return null;
 
   return (
-    <div className="min-h-dvh bg-[#FDFDFB] relative overflow-hidden pb-48 sm:pb-24">
-      
-      <div className="mx-auto max-w-2xl px-4 py-8 sm:py-16 relative z-10">
+    <div className="min-h-dvh bg-[#090E08] text-[#F6F5F0] relative overflow-hidden pb-48 sm:pb-28">
+      {/* Background Ambience Scrim */}
+      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-full max-w-4xl rounded-full bg-[#86A86C]/5 blur-[120px]" />
+
+      {/* Top Bar - 3-Zone Contract */}
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#090E08]/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3.5 sm:px-6">
+          <button
+            type="button"
+            onClick={() => router.push("/booking?step=3")}
+            className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-white/70 hover:text-white transition-colors"
+          >
+            <span>←</span>
+            <span>Ubah Data</span>
+          </button>
+          <div className="flex flex-col items-center">
+            <span className="font-serif text-sm tracking-wider text-[#F6F5F0]">WOODFOREST JAYAGIRI 48</span>
+            <span className="text-[10px] font-mono text-[#86A86C]">1.620 mdpl · Lembang</span>
+          </div>
+          <div className="text-right">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/40">Tahap Akhir</span>
+          </div>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12 relative z-10">
         <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 cubic-bezier(0.16, 1, 0.3, 1)">
           {/* Header Section */}
-          <div className="mb-10 flex flex-col items-center text-center sm:items-start sm:text-left">
-            <h1 className="text-3xl font-black tracking-tight text-[#2D3E10] sm:text-5xl">
-              Konfirmasi <span className="italic text-primary">Pesanan</span>
+          <div className="mb-8 flex flex-col text-left sm:text-center">
+            <div className="flex items-center justify-start sm:justify-center gap-2 mb-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#86A86C]" />
+              <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#86A86C]">
+                Verifikasi & Pembayaran
+              </span>
+            </div>
+            <h1 className="text-3xl font-serif tracking-tight text-[#F6F5F0] sm:text-4xl">
+              Konfirmasi Rincian Reservasi
             </h1>
-            <p className="mt-4 text-sm font-medium text-[#2D3E10]/70 max-w-md leading-relaxed">
-              Tinjau kembali rincian reservasi Anda sebelum melanjutkan ke proses pembayaran aman.
+            <p className="mt-2 text-xs sm:text-sm text-white/60 max-w-lg sm:mx-auto leading-relaxed">
+              1.620 mdpl · Periksa kembali akomodasi, penempatan kavling, dan identitas sebelum pengalihan ke pembayaran resmi.
             </p>
           </div>
 
-          {/* Hold Banner - More Refined */}
+          {/* Hold Banner */}
           {draft.hold?.expiresAt && holdLeftLabel ? (
-            <div className="mb-8 overflow-hidden rounded-2xl sm:rounded-3xl border border-primary/10 bg-[#F1F3EE]/50 p-6 backdrop-blur-sm sm:p-8">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div className="flex items-center gap-5">
-                  <div className="relative">
-                    
-                    <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-primary/5">
-                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="space-y-0.5">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Sisa Waktu Hold</span>
-                    <div className="text-xl font-black text-[#2D3E10]">
-                      Berakhir dalam <span className="text-primary italic tabular-nums">{holdLeftLabel}</span>
+            <div className="mb-6 rounded-2xl border border-[#86A86C]/30 bg-[#162415] p-4 sm:p-5">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="h-2 w-2 rounded-full bg-[#86A86C] animate-pulse" />
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                      Sisa Waktu Hold Kavling
+                    </span>
+                    <div className="text-base sm:text-lg font-mono tabular-nums font-bold text-[#F6F5F0]">
+                      Berakhir dalam <span className="text-[#86A86C]">{holdLeftLabel}</span>
                     </div>
                   </div>
                 </div>
                 <button
-                  onClick={() => router.push("/booking?step=3")}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl border border-[#E8E8E1] bg-white text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#2D3E10] hover:text-white active:scale-95"
+                  type="button"
+                  onClick={() => router.push("/booking?step=2")}
+                  className="rounded-xl border border-white/15 bg-[#121C11] px-4 py-2 text-xs font-mono uppercase tracking-wider text-white/70 hover:text-white transition-all"
                 >
                   Pilih Ulang
                 </button>
@@ -355,194 +380,170 @@ export default function BookingConfirmPage() {
 
           <div className="space-y-6">
             {/* Customer Details Card */}
-            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
-              <div className="mb-8 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-black tracking-tight text-[#2D3E10]">Detail Pemesan</h3>
+            <div className="rounded-2xl border border-white/10 bg-[#121C11] p-5 sm:p-7 shadow-2xl space-y-5">
+              <div className="flex items-center gap-2.5 border-b border-white/10 pb-4">
+                <span className="h-2 w-2 rounded-full bg-[#86A86C]" />
+                <h3 className="text-base sm:text-lg font-serif text-[#F6F5F0]">Detail Tamu Pemesan</h3>
               </div>
 
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 text-xs">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nama Lengkap</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.customer.name}</p>
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Nama Lengkap</span>
+                  <p className="text-sm font-semibold text-[#F6F5F0]">{draft.customer.name}</p>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nomor WhatsApp</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.customer.phone}</p>
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Nomor WhatsApp</span>
+                  <p className="text-sm font-mono text-[#F6F5F0]">{draft.customer.phone}</p>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Email</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.customer.email}</p>
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Alamat Email</span>
+                  <p className="text-sm text-[#F6F5F0]">{draft.customer.email}</p>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Waktu Menginap</label>
-                  <p className="text-base font-bold text-[#2D3E10]">{draft.checkIn} s/d {draft.checkOut}</p>
-                  <p className="text-[10px] font-medium text-primary/80 italic">({draft.totalGuest} Tamu: {draft.adultPax}D, {draft.child5to10Pax}A, {draft.childUnder5Pax}B)</p>
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Jadwal Kunjungan</span>
+                  <p className="text-sm font-mono tabular-nums text-[#F6F5F0]">{draft.checkIn} s/d {draft.checkOut}</p>
+                  <p className="text-[11px] font-mono text-white/50">
+                    {draft.totalGuest} Tamu ({draft.adultPax} Dewasa, {draft.child5to10Pax} Anak, {draft.childUnder5Pax} Balita)
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Reservation Summary Card */}
-            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
-              <div className="mb-8 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-black tracking-tight text-[#2D3E10]">Rincian Reservasi</h3>
+            <div className="rounded-2xl border border-white/10 bg-[#121C11] p-5 sm:p-7 shadow-2xl space-y-5">
+              <div className="flex items-center gap-2.5 border-b border-white/10 pb-4">
+                <span className="h-2 w-2 rounded-full bg-[#86A86C]" />
+                <h3 className="text-base sm:text-lg font-serif text-[#F6F5F0]">Rincian Akomodasi & Penempatan</h3>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {/* Units */}
-                <div className="space-y-4">
+                <div className="space-y-2.5">
                   {draft.display.items.map((it) => (
-                    <div key={it.unitId} className="flex items-center justify-between rounded-2xl bg-[#FDFDFB] p-4 border border-[#E8E8E1]/50">
-                      <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 rounded-xl bg-[#F1F3EE] flex items-center justify-center text-primary">
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-[#2D3E10]">{it.name}</p>
-                          <p className="text-[10px] font-black text-primary/80 uppercase tracking-widest">Unit Reservasi</p>
-                        </div>
+                    <div key={it.unitId} className="flex items-center justify-between rounded-xl bg-[#0B120A] p-4 border border-white/10">
+                      <div>
+                        <p className="text-sm font-serif text-[#F6F5F0]">{it.name}</p>
+                        <p className="text-[10px] font-mono text-[#86A86C] uppercase tracking-wider">Unit Akomodasi Utama</p>
                       </div>
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F1F3EE] text-[11px] font-black text-[#2D3E10]">
-                        {it.quantity}
+                      <div className="font-mono tabular-nums text-sm font-bold text-[#F6F5F0]">
+                        {it.quantity} Unit
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Kavlings & Addons */}
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Nomor Kavling</span>
-                    <p className="mt-1 text-base font-black text-primary tracking-tight">{kavlingText}</p>
-                  </div>
-                  
-                  {draft.display.addOns.length > 0 && (
-                    <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5 space-y-4">
-                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Layanan Tambahan</span>
-                      <div className="space-y-3">
-                        {draft.display.addOns.map((a) => (
-                          <div key={a.addOnId} className="flex justify-between items-center">
-                            <div className="flex flex-col">
-                              <span className="text-xs font-bold text-[#2D3E10]">{a.name}</span>
-                              <span className="text-[9px] font-medium text-[#2D3E10]/70">Qty: {a.quantity}</span>
-                            </div>
-                            <span className="text-xs font-black text-[#2D3E10]">{formatIDR(a.price * a.quantity)}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                <div className="rounded-xl border border-white/10 bg-[#0B120A] p-4">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Titik Kavling Hutan</span>
+                  <p className="mt-1 text-base font-mono tabular-nums font-bold text-[#86A86C]">{kavlingText}</p>
                 </div>
+                
+                {draft.display.addOns.length > 0 && (
+                  <div className="rounded-xl border border-white/10 bg-[#0B120A] p-4 space-y-3">
+                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Perlengkapan Tambahan</span>
+                    <div className="space-y-2">
+                      {draft.display.addOns.map((a) => (
+                        <div key={a.addOnId} className="flex justify-between items-center text-xs">
+                          <div>
+                            <span className="text-[#F6F5F0] font-medium">{a.name}</span>
+                            <span className="ml-2 font-mono text-white/40">× {a.quantity}</span>
+                          </div>
+                          <span className="font-mono tabular-nums font-semibold text-[#F6F5F0]">{formatIDR(a.price * a.quantity)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {draft.specialRequest && (
-                  <div className="rounded-2xl border border-[#E8E8E1]/50 bg-[#FDFDFB] p-5">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Permintaan Khusus</span>
-                    <p className="mt-2 text-sm font-medium leading-relaxed text-[#2D3E10]/70 italic">"{draft.specialRequest}"</p>
+                  <div className="rounded-xl border border-white/10 bg-[#0B120A] p-4">
+                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">Permintaan Khusus</span>
+                    <p className="mt-1 text-xs text-white/70 leading-relaxed font-sans">{draft.specialRequest}</p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Payment Method Card */}
-            <div className="group rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-6 transition-all duration-500 hover:border-primary/20 hover:shadow-xl hover:shadow-[#2D3E10]/5 sm:p-10">
-              <div className="mb-8 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F1F3EE] text-[#2D3E10] transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-black tracking-tight text-[#2D3E10]">Metode Pembayaran</h3>
+            <div className="rounded-2xl border border-white/10 bg-[#121C11] p-5 sm:p-7 shadow-2xl space-y-5">
+              <div className="flex items-center gap-2.5 border-b border-white/10 pb-4">
+                <span className="h-2 w-2 rounded-full bg-[#86A86C]" />
+                <h3 className="text-base sm:text-lg font-serif text-[#F6F5F0]">Kanal & Total Pembayaran</h3>
               </div>
 
-              <div className="space-y-8">
-                <div className="relative">
-                  <select
-                    value={paymentMethodCode}
-                    onChange={(e) => setPaymentMethodCode(e.target.value)}
-                    disabled={submitting || !paymentMethods.length}
-                    className="h-14 w-full appearance-none rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] px-6 text-sm font-black text-[#2D3E10] outline-none transition-all focus:border-primary/40 focus:ring-4 focus:ring-primary/5 disabled:opacity-50"
-                  >
-                    {paymentMethods.length ? null : <option value="">Memuat metode...</option>}
-                    {paymentMethods.map((m) => (
-                      <option key={m.code} value={m.code}>
-                        {m.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-primary/30">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                    </svg>
+              <div className="space-y-5">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#86A86C]">
+                    Pilih Metode Pembayaran
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={paymentMethodCode}
+                      onChange={(e) => setPaymentMethodCode(e.target.value)}
+                      disabled={submitting || !paymentMethods.length}
+                      className="h-12 w-full appearance-none rounded-xl border border-white/15 bg-[#0B120A] px-4 text-xs sm:text-sm font-mono text-[#F6F5F0] outline-none transition-all focus:border-[#86A86C] disabled:opacity-50 cursor-pointer"
+                    >
+                      {paymentMethods.length ? null : <option value="">Memuat metode pembayaran...</option>}
+                      {paymentMethods.map((m) => (
+                        <option key={m.code} value={m.code} className="bg-[#0B120A] text-[#F6F5F0]">
+                          {m.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#86A86C]">
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
 
-                <div className="rounded-3xl bg-[#F1F3EE] p-8">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/70">Subtotal</span>
-                      <span className="text-sm font-bold text-[#2D3E10]">{formatIDR(draft.amountEstimate)}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/70">Biaya Layanan</span>
-                      <span className="text-sm font-bold text-[#2D3E10]">{formatIDR(serviceFeePreview)}</span>
-                    </div>
-                    <div className="h-px bg-[#2D3E10]/5 my-2" />
-                    <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#2D3E10]/60">Total Bayar</span>
-                      <span className="text-2xl font-black text-primary tracking-tight">
-                        {formatIDR(Math.max(0, Math.round(Number(draft.amountEstimate) || 0)) + serviceFeePreview)}
-                      </span>
-                    </div>
+                <div className="rounded-xl border border-white/10 bg-[#0B120A] p-5 space-y-3 font-mono">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-white/50 uppercase tracking-wider">Subtotal Sewa</span>
+                    <span className="tabular-nums text-white/90">{formatIDR(draft.amountEstimate)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-white/50 uppercase tracking-wider">Biaya Transaksi</span>
+                    <span className="tabular-nums text-white/90">{formatIDR(serviceFeePreview)}</span>
+                  </div>
+                  <div className="h-px bg-white/10 my-2" />
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs uppercase tracking-widest text-[#86A86C] font-bold">Total Pembayaran</span>
+                    <span className="text-xl sm:text-2xl font-bold tabular-nums text-[#86A86C]">
+                      {formatIDR(Math.max(0, Math.round(Number(draft.amountEstimate) || 0)) + serviceFeePreview)}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Agreements */}
-            <div className="px-2 pt-4">
-              <label className="flex cursor-pointer items-start gap-4 group">
-                <div className="relative flex h-6 w-6 shrink-0 items-center justify-center mt-0.5">
-                  <input
-                    type="checkbox"
-                    checked={agreed}
-                    onChange={(e) => setAgreed(e.target.checked)}
-                    className="peer h-full w-full cursor-pointer appearance-none rounded-[0.7rem] border-2 border-[#E8E8E1] bg-white transition-all duration-500 checked:border-primary checked:bg-primary hover:border-primary/40"
-                  />
-                  <svg
-                    className="pointer-events-none absolute h-3.5 w-3.5 text-white opacity-0 transition-all duration-500 scale-50 peer-checked:opacity-100 peer-checked:scale-110"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3.5}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span className="text-[11px] font-medium leading-relaxed text-[#2D3E10]/50 transition-colors group-hover:text-[#2D3E10]">
-                  Saya menyetujui <button onClick={() => setShowPrivacyModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/20 hover:text-primary">Syarat & Ketentuan</button>, <button onClick={() => setShowPrivacyModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/20 hover:text-primary">Kebijakan Privasi</button>, dan <button onClick={() => setShowCancellationModal(true)} className="font-bold text-[#2D3E10] underline decoration-primary/20 hover:text-primary">Kebijakan Pembatalan</button> yang berlaku.
+            <div className="px-1 pt-2">
+              <label className="flex cursor-pointer items-start gap-3 group">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-white/20 bg-[#0B120A] text-[#86A86C] focus:ring-0 cursor-pointer accent-[#86A86C]"
+                />
+                <span className="text-xs text-white/60 leading-relaxed font-sans">
+                  Saya menyetujui{" "}
+                  <button type="button" onClick={() => setShowPrivacyModal(true)} className="text-[#86A86C] underline underline-offset-2 hover:text-white">
+                    Ketentuan Rimba & Privasi
+                  </button>{" "}
+                  serta{" "}
+                  <button type="button" onClick={() => setShowCancellationModal(true)} className="text-[#86A86C] underline underline-offset-2 hover:text-white">
+                    Kebijakan Pembatalan / Reschedule
+                  </button>{" "}
+                  di Woodforest Jayagiri 48.
                 </span>
               </label>
             </div>
 
             {error && (
-              <div className="rounded-2xl border border-red-100 bg-red-50/50 p-6 animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center gap-4 text-red-600">
-                  <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <p className="text-sm font-bold">{error}</p>
-                </div>
+              <div className="rounded-xl border border-red-500/30 bg-red-950/20 p-4 text-xs font-mono text-red-300">
+                {error}
               </div>
             )}
           </div>
@@ -550,73 +551,83 @@ export default function BookingConfirmPage() {
       </div>
 
       {/* Sticky Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-[#E8E8E1] bg-white/80 p-4 backdrop-blur-xl sm:p-6">
-        <div className="mx-auto flex max-w-2xl flex-col gap-3 sm:flex-row sm:gap-4">
-          <button
-            type="button"
-            disabled={submitting || !agreed}
-            onClick={() => confirmAndPay()}
-            className="group relative order-1 flex min-h-[3.75rem] w-full flex-[2] items-center justify-center overflow-hidden rounded-2xl bg-[#2D3E10] px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-[#2D3E10]/10 transition-all hover:bg-[#1A2508] active:scale-[0.98] disabled:opacity-30 sm:order-2"
-          >
-            <span className="relative z-10">{submitting ? "Memproses..." : "Konfirmasi & Bayar Sekarang"}</span>
-          </button>
+      <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-white/10 bg-[#090E08]/90 p-3 sm:p-4 backdrop-blur-xl shadow-2xl">
+        <div className="mx-auto flex max-w-2xl flex-col gap-2 sm:flex-row sm:gap-3">
           <button
             type="button"
             disabled={submitting}
             onClick={() => router.back()}
-            className="order-2 flex min-h-[3.75rem] w-full flex-1 items-center justify-center rounded-2xl border border-[#E8E8E1] bg-white px-8 py-4 text-[12px] font-black uppercase tracking-[0.2em] text-[#2D3E10] transition-all hover:bg-[#F1F3EE] active:scale-[0.98] sm:order-1"
+            className="order-2 flex min-h-[3.25rem] w-full flex-1 items-center justify-center rounded-xl border border-white/15 bg-[#121C11] px-6 py-3 text-xs font-mono uppercase tracking-wider text-white/70 hover:text-white transition-all active:scale-[0.98] sm:order-1"
           >
             Kembali
+          </button>
+          <button
+            type="button"
+            disabled={submitting || !agreed}
+            onClick={() => confirmAndPay()}
+            className="order-1 flex min-h-[3.25rem] w-full flex-[2] items-center justify-center rounded-xl bg-[#86A86C] px-8 py-3 text-xs font-mono uppercase tracking-wider font-bold text-[#090E08] shadow-lg shadow-[#86A86C]/20 transition-all hover:bg-[#97ba7c] active:scale-[0.98] disabled:opacity-30 sm:order-2"
+          >
+            <span>{submitting ? "Menyiapkan Pembayaran..." : "Konfirmasi & Bayar Sekarang ↗"}</span>
           </button>
         </div>
       </div>
 
-      {/* Modals */}
-      <Modal open={showPrivacyModal} title="Kebijakan Privasi" onClose={() => setShowPrivacyModal(false)} maxWidthClassName="max-w-xl">
-        <div className="space-y-6 py-4">
-          <div className="rounded-2xl bg-[#F1F3EE]/50 p-6 text-sm font-medium leading-relaxed text-[#2D3E10]/70">
-            Kami menghargai privasi Anda. Data yang dikumpulkan hanya digunakan untuk keperluan reservasi dan peningkatan layanan di Woodforest Jayagiri 48.
+      {/* Modals - Sanctuary Variant */}
+      <Modal 
+        open={showPrivacyModal} 
+        title="Kebijakan Privasi & Ketentuan Rimba" 
+        variant="sanctuary"
+        onClose={() => setShowPrivacyModal(false)} 
+        maxWidthClassName="max-w-xl"
+      >
+        <div className="space-y-4 py-2 text-xs text-white/80 leading-relaxed font-sans">
+          <div className="rounded-xl bg-[#0B120A] p-4 border border-white/10 space-y-2">
+            <h4 className="font-mono uppercase tracking-wider text-[#86A86C] text-xs">Pemanfaatan Data</h4>
+            <p className="text-white/70">
+              Data identitas dan kontak hanya digunakan untuk registrasi gerbang masuk, konfirmasi invoice, asuransi Perhutani, dan layanan concierge selama kunjungan di Woodforest Jayagiri 48.
+            </p>
           </div>
-          <div className="space-y-4">
-            {[
-              { t: "Pengumpulan Data", d: "Kami mencatat nama, kontak, dan detail pesanan Anda." },
-              { t: "Penggunaan Data", d: "Informasi digunakan untuk konfirmasi, invoice, dan layanan tamu." },
-              { t: "Keamanan", d: "Data Anda disimpan secara aman dan tidak dibagikan ke pihak ketiga." }
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-[10px] font-black text-primary">{i+1}</span>
-                <div className="space-y-1">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-[#2D3E10]">{item.t}</h4>
-                  <p className="text-sm font-medium text-[#2D3E10]/50">{item.d}</p>
-                </div>
-              </div>
-            ))}
+          <div className="rounded-xl bg-[#0B120A] p-4 border border-white/10 space-y-2">
+            <h4 className="font-mono uppercase tracking-wider text-[#86A86C] text-xs">Keamanan Transaksi</h4>
+            <p className="text-white/70">
+              Seluruh transaksi pembayaran diproses melalui gateway resmi berlisensi Bank Indonesia (Xendit) dengan enkripsi TLS 1.3 standar perbankan.
+            </p>
           </div>
-          <button onClick={() => setShowPrivacyModal(false)} className="w-full py-4 bg-[#2D3E10] text-white rounded-xl text-[10px] font-black uppercase tracking-widest mt-4 transition-all hover:bg-[#1A2508]">Tutup</button>
+          <button 
+            onClick={() => setShowPrivacyModal(false)} 
+            className="w-full py-3 bg-[#86A86C] text-[#090E08] rounded-xl text-xs font-mono font-bold uppercase tracking-wider mt-4 transition-all hover:bg-[#97ba7c]"
+          >
+            Tutup
+          </button>
         </div>
       </Modal>
 
-      <Modal open={showCancellationModal} title="Kebijakan Pembatalan" onClose={() => setShowCancellationModal(false)} maxWidthClassName="max-w-xl">
-        <div className="space-y-6 py-4">
-          <div className="rounded-2xl bg-amber-50 p-6 text-sm font-bold leading-relaxed text-amber-900/70 border border-amber-100">
-            Penting: Pembatalan karena cuaca ekstrem demi keselamatan tamu akan diprioritaskan untuk reschedule.
+      <Modal 
+        open={showCancellationModal} 
+        title="Kebijakan Pembatalan & Perubahan Jadwal" 
+        variant="sanctuary"
+        onClose={() => setShowCancellationModal(false)} 
+        maxWidthClassName="max-w-xl"
+      >
+        <div className="space-y-4 py-2 text-xs text-white/80 leading-relaxed font-sans">
+          <div className="rounded-xl bg-[#0B120A] p-4 border border-white/10 space-y-2">
+            <h4 className="font-mono uppercase tracking-wider text-[#86A86C] text-xs">Ketentuan Reschedule</h4>
+            <p className="text-white/70">
+              Perubahan jadwal kunjungan dapat diajukan selambat-lambatnya 7 hari kalender sebelum tanggal check-in, bergantung pada ketersediaan unit dan kavling pada tanggal pengganti.
+            </p>
           </div>
-          <div className="space-y-4">
-            {[
-              { t: "Refund Policy", d: "DP tidak dapat dikembalikan (non-refundable) namun dapat dialihkan." },
-              { t: "Reschedule", d: "Permintaan ubah jadwal maksimal 7 hari sebelum kedatangan." },
-              { t: "Force Majeure", d: "Manajemen berhak membatalkan sepihak jika kondisi alam tidak memungkinkan." }
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[10px] font-black text-amber-700">{i+1}</span>
-                <div className="space-y-1">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-[#2D3E10]">{item.t}</h4>
-                  <p className="text-sm font-medium text-[#2D3E10]/50">{item.d}</p>
-                </div>
-              </div>
-            ))}
+          <div className="rounded-xl bg-[#0B120A] p-4 border border-white/10 space-y-2">
+            <h4 className="font-mono uppercase tracking-wider text-[#86A86C] text-xs">Kondisi Cuaca Ekstrem (Force Majeure)</h4>
+            <p className="text-white/70">
+              Demi keselamatan tamu di kawasan hutan lindung 1.620 mdpl, penutupan jalur atau kavling akibat anomali cuaca ekstrem dari Perhutani/BMKG akan dialihkan dengan jadwal ulang bebas biaya administrasi.
+            </p>
           </div>
-          <button onClick={() => setShowCancellationModal(false)} className="w-full py-4 bg-[#2D3E10] text-white rounded-xl text-[10px] font-black uppercase tracking-widest mt-4 transition-all hover:bg-[#1A2508]">Tutup</button>
+          <button 
+            onClick={() => setShowCancellationModal(false)} 
+            className="w-full py-3 bg-[#86A86C] text-[#090E08] rounded-xl text-xs font-mono font-bold uppercase tracking-wider mt-4 transition-all hover:bg-[#97ba7c]"
+          >
+            Tutup
+          </button>
         </div>
       </Modal>
     </div>
