@@ -103,6 +103,33 @@ function isoDate(d: Date) {
   return formatDateWIB(d);
 }
 
+function formatStayDate(str: string) {
+  if (!str) return { dayName: "Pilih tanggal", formattedDate: "Belum dipilih" };
+  const parts = str.split("-").map(Number);
+  if (parts.length !== 3 || parts.some(isNaN)) return { dayName: "-", formattedDate: str };
+  const d = new Date(parts[0], parts[1] - 1, parts[2]);
+  const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const monthNames = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+  return {
+    dayName: dayNames[d.getDay()],
+    formattedDate: `${parts[2]} ${monthNames[parts[1] - 1]} ${parts[0]}`,
+  };
+}
+
+function calculateStayNights(inStr: string, outStr: string) {
+  if (!inStr || !outStr) return 0;
+  const inParts = inStr.split("-").map(Number);
+  const outParts = outStr.split("-").map(Number);
+  if (inParts.length !== 3 || outParts.length !== 3) return 0;
+  const d1 = Date.UTC(inParts[0], inParts[1] - 1, inParts[2]);
+  const d2 = Date.UTC(outParts[0], outParts[1] - 1, outParts[2]);
+  const diff = Math.round((d2 - d1) / (24 * 60 * 60 * 1000));
+  return Math.max(0, diff);
+}
+
 function sumDailyPrice(u: AvailabilityUnit) {
   const daily = u.daily ?? [];
   if (!daily.length) return 0;
@@ -1085,6 +1112,10 @@ export default function PublicBookingPage() {
     return visibleUnits.filter(u => (unitQty[u.id] || 0) > 0);
   }, [visibleUnits, unitQty]);
 
+  const checkInInfo = useMemo(() => formatStayDate(checkIn), [checkIn]);
+  const checkOutInfo = useMemo(() => formatStayDate(checkOut), [checkOut]);
+  const stayNights = useMemo(() => calculateStayNights(checkIn, checkOut), [checkIn, checkOut]);
+
   const sidebarContent = (
     <div className="sticky top-6 space-y-6">
       <div className="overflow-hidden rounded-[2.5rem] border-2 border-primary/30 bg-white/95 backdrop-blur-xl shadow-2xl shadow-black/10 transition-all duration-700 hover:shadow-primary/20 hover:border-primary/50">
@@ -1842,23 +1873,45 @@ export default function PublicBookingPage() {
                 </div>
 
                 <div className="mx-auto w-full space-y-6 sm:space-y-8">
-                  {/* Date Selection */}
-                  <div className="space-y-5">
-                    <div className="flex items-center gap-3 px-1">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                  {/* Unified Stay Configuration Panel */}
+                  <div className="overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-[#E8E8E1] bg-white shadow-sm shadow-[#2D3E10]/5 transition-all">
+                    {/* Header: Title & Badges */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8E8E1]/80 bg-[#FAFBF7] px-5 py-4 sm:px-6">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="flex h-2 w-2 rounded-full bg-primary" />
+                          <h3 className="text-xs sm:text-sm font-black uppercase tracking-[0.18em] text-[#2D3E10]">
+                            Jadwal & Komposisi Tamu
+                          </h3>
+                        </div>
+                        <p className="mt-1 text-xs text-[#2D3E10]/60">
+                          Pilih tanggal kunjungan dan jumlah tamu untuk mengecek ketersediaan unit
+                        </p>
                       </div>
-                      <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Detail Menginap</h3>
+
+                      <div className="flex items-center gap-2">
+                        {stayNights > 0 && (
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                            {stayNights} Malam
+                          </span>
+                        )}
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2D3E10]/5 px-3 py-1 text-xs font-bold text-[#2D3E10]/80">
+                          <svg className="h-3.5 w-3.5 text-[#2D3E10]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                          </svg>
+                          {totalGuest} Tamu
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-4 sm:p-5 shadow-sm shadow-[#2D3E10]/5">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                        <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-5">
-                          <div className="mb-2 flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Check-in</span>
-                          </div>
+                    {/* Dates Grid: Check-in & Check-out */}
+                    <div className="p-4 sm:p-6">
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+                        {/* Check-in Tile */}
+                        <div className="group relative rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md">
                           <input
                             type="date"
                             value={checkIn}
@@ -1868,63 +1921,110 @@ export default function PublicBookingPage() {
                               }
                               setCheckIn(e.target.value);
                             }}
-                            className="w-full bg-transparent text-sm font-bold text-[#2D3E10] outline-none sm:text-base"
+                            className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
                             required
+                            aria-label="Pilih tanggal check-in"
                           />
-                        </div>
-                        <div className="group rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] p-4 transition-all hover:border-primary/30 sm:rounded-3xl sm:p-5">
-                          <div className="mb-2 flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/70">Check-out</span>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">Check-in</span>
+                            <span className="flex items-center gap-1 text-[11px] font-semibold text-primary transition-transform group-hover:translate-x-0.5">
+                              Ubah
+                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </span>
                           </div>
+                          <div className="mt-2.5">
+                            <p className="text-base sm:text-lg font-black text-[#2D3E10] tracking-tight">
+                              {checkInInfo.formattedDate}
+                            </p>
+                            <p className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-[#2D3E10]/70">
+                              <span>{checkInInfo.dayName}</span>
+                              <span className="text-[#E8E8E1]">•</span>
+                              <span className="text-[#2D3E10]/50 font-normal">Check-in mulai 14:00 WIB</span>
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Check-out Tile */}
+                        <div className="group relative rounded-2xl border border-[#E8E8E1] bg-[#FAFBF7]/60 p-4 transition-all hover:border-primary hover:bg-white hover:shadow-md">
                           <input
                             type="date"
                             value={checkOut}
+                            min={checkIn || undefined}
                             onChange={(e) => {
                               if (checkOut !== e.target.value) {
                                 resetSelection();
                               }
                               setCheckOut(e.target.value);
                             }}
-                            className="w-full bg-transparent text-sm font-bold text-[#2D3E10] outline-none sm:text-base"
+                            className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
                             required
+                            aria-label="Pilih tanggal check-out"
                           />
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">Check-out</span>
+                            <span className="flex items-center gap-1 text-[11px] font-semibold text-primary transition-transform group-hover:translate-x-0.5">
+                              Ubah
+                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </span>
+                          </div>
+                          <div className="mt-2.5">
+                            <p className="text-base sm:text-lg font-black text-[#2D3E10] tracking-tight">
+                              {checkOutInfo.formattedDate}
+                            </p>
+                            <p className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-[#2D3E10]/70">
+                              <span>{checkOutInfo.dayName}</span>
+                              <span className="text-[#E8E8E1]">•</span>
+                              <span className="text-[#2D3E10]/50 font-normal">Check-out maks 12:00 WIB</span>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                        </div>
                     </div>
 
-                    {/* Konfigurasi Tamu Section */}
-                  {/* Guest Configuration */}
-                  <div className="space-y-5 pt-4">
-                    <div className="flex items-center gap-3 px-1">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656-.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
+                    {/* Guests Section */}
+                    <div className="border-t border-[#E8E8E1] bg-[#FAFBF7]/30 p-4 sm:p-6">
+                      <div className="mb-3 flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2D3E10]/60">
+                          Rincian Tamu
+                        </span>
+                        <span className="text-xs text-[#2D3E10]/60">
+                          Total Tamu: <strong className="text-[#2D3E10] font-black">{totalGuest}</strong>
+                        </span>
                       </div>
-                      <h3 className="text-xl font-bold tracking-tight text-[#2D3E10]">Konfigurasi Tamu</h3>
-                    </div>
-
-                    <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-4 sm:p-5 shadow-sm shadow-[#2D3E10]/5">
-                      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-3">
-                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#F4F5F1] p-4 transition-all hover:border-primary/40 hover:bg-white hover:shadow-md sm:rounded-3xl sm:p-5">
-                          <div className="space-y-1">
-                            <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Dewasa</p>
-                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/70 uppercase">Usia 10+ thn</p>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                        {/* Dewasa */}
+                        <div className="flex items-center justify-between rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-white p-3.5 sm:p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+                          <div className="space-y-0.5 pr-2">
+                            <div className="flex items-center gap-1.5">
+                              <p className="text-sm font-bold text-[#2D3E10]">Dewasa</p>
+                              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary">Kapasitas</span>
+                            </div>
+                            <p className="text-[11px] text-[#2D3E10]/60">Usia 10+ tahun</p>
                           </div>
                           <QuantityStepper value={adultPax} min={1} size="sm" ariaLabel="Dewasa" onChange={setAdultPax} />
                         </div>
-                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#F4F5F1] p-4 transition-all hover:border-primary/40 hover:bg-white hover:shadow-md sm:rounded-3xl sm:p-5">
-                          <div className="space-y-1">
-                            <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Anak</p>
-                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/70 uppercase">Usia 5-10 thn</p>
+
+                        {/* Anak */}
+                        <div className="flex items-center justify-between rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-white p-3.5 sm:p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+                          <div className="space-y-0.5 pr-2">
+                            <p className="text-sm font-bold text-[#2D3E10]">Anak</p>
+                            <p className="text-[11px] text-[#2D3E10]/60">Usia 5 - 10 tahun</p>
                           </div>
                           <QuantityStepper value={child5to10Pax} min={0} size="sm" ariaLabel="Anak" onChange={setChild5to10Pax} />
                         </div>
-                        <div className="flex items-center justify-between rounded-2xl border border-[#E8E8E1] bg-[#F4F5F1] p-4 transition-all hover:border-primary/40 hover:bg-white hover:shadow-md sm:rounded-3xl sm:p-5">
-                          <div className="space-y-1">
-                            <p className="text-sm font-bold text-[#2D3E10] sm:text-base">Balita</p>
-                            <p className="text-[10px] font-bold tracking-[0.1em] text-[#2D3E10]/70 uppercase">Usia &lt; 5 thn</p>
+
+                        {/* Balita */}
+                        <div className="flex items-center justify-between rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-white p-3.5 sm:p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+                          <div className="space-y-0.5 pr-2">
+                            <div className="flex items-center gap-1.5">
+                              <p className="text-sm font-bold text-[#2D3E10]">Balita</p>
+                              <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700">Gratis</span>
+                            </div>
+                            <p className="text-[11px] text-[#2D3E10]/60">Usia &lt; 5 tahun</p>
                           </div>
                           <QuantityStepper value={childUnder5Pax} min={0} size="sm" ariaLabel="Balita" onChange={setChildUnder5Pax} />
                         </div>
@@ -1932,51 +2032,44 @@ export default function PublicBookingPage() {
                     </div>
                   </div>
 
-                    <div className="mb-4 sm:mb-6 flex flex-col items-center justify-between gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-[#E8E8E1] bg-white p-3.5 sm:p-4 shadow-sm sm:flex-row relative overflow-hidden">
-                      <div className="flex flex-col items-center gap-2 sm:gap-4 text-center sm:flex-row sm:text-left relative z-10">
-                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-primary/10 text-primary">
-                          <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 21 12 3l8.5 18M12 3v18M9 21l3-5 3 5" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Kategori</p>
-                          <p className="text-xs sm:text-sm font-bold text-[#2D3E10]">{filterCategory || "Semua Paket"}</p>
-                        </div>
+                  {/* Unit List Header & Filter Bar */}
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-2 pb-1">
+                    <div>
+                      <div className="flex items-center gap-2.5">
+                        <h3 className="text-xl sm:text-2xl font-black tracking-tight text-[#2D3E10]">
+                          Pilihan Akomodasi
+                        </h3>
+                        {filterCategory && (
+                          <span className="rounded-full bg-primary/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.15em] text-primary">
+                            {filterCategory}
+                          </span>
+                        )}
                       </div>
+                      <p className="text-xs sm:text-sm text-[#2D3E10]/70 mt-1">
+                        Pilih unit yang sesuai dengan preferensi Anda. Harga per malam sudah termasuk fasilitas standar.
+                      </p>
+                    </div>
 
-                      <div className="h-8 w-px bg-[#E8E8E1] hidden sm:block relative z-10" />
-
-                      <div className="flex flex-col items-center gap-2 sm:gap-4 text-center sm:flex-row sm:text-left relative z-10">
-                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-primary/10 text-primary">
-                          <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-[#2D3E10]/70">Jadwal</p>
-                          <p className="text-xs sm:text-sm font-bold text-[#2D3E10]">{checkIn} - {checkOut}</p>
-                        </div>
-                      </div>
-
-                      <div className="h-8 w-px bg-[#E8E8E1] hidden sm:block relative z-10" />
-
-                      <div className="relative group w-full sm:w-auto z-10">
+                    {/* Filter Type Dropdown */}
+                    <div className="flex items-center gap-3">
+                      <div className="relative group w-full sm:w-auto">
                         <select
                           value={filterType}
                           onChange={(e) => setFilterType(e.target.value)}
-                          className="h-11 sm:h-14 w-full appearance-none rounded-xl sm:rounded-2xl border border-[#E8E8E1] bg-[#FDFDFB] pl-4 sm:pl-5 pr-10 sm:pr-12 text-xs sm:text-sm font-bold text-[#2D3E10] outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-48"
+                          className="h-11 sm:h-12 w-full appearance-none rounded-xl border border-[#E8E8E1] bg-white pl-4 pr-10 text-xs sm:text-sm font-bold text-[#2D3E10] shadow-sm outline-none transition-all group-hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/5 sm:w-48 cursor-pointer"
+                          aria-label="Filter berdasarkan tipe unit"
                         >
-                          <option value="">Semua Tipe</option>
+                          <option value="">Semua Tipe Unit</option>
                           {typeOptions.map((t) => (
                             <option key={t} value={t}>{t}</option>
                           ))}
                         </select>
-                        <svg className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-primary pointer-events-none transition-transform group-hover:translate-y-[-40%]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-primary pointer-events-none transition-transform group-hover:translate-y-[-40%]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                         </svg>
                       </div>
                     </div>
+                  </div>
                 
                 {/* Unit Grid */}
                 <div className="grid grid-cols-1 gap-8">
