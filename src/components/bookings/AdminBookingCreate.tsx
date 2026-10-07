@@ -5,7 +5,7 @@ import Link from "next/link";
 import { formatIDR, formatTimeWIB } from "@/lib/format";
 import { addDaysWIB, formatDateWIB, parseDateWIB } from "@/lib/time";
 import { Modal } from "@/components/ui/Modal";
-import { buildKavlingBlockMap, resolveKavlingBlockName, KavlingBlockConfig } from "@/lib/kavling-config";
+import { buildKavlingBlockMap, resolveKavlingBlockName, isPrivateKavling, KavlingBlockConfig } from "@/lib/kavling-config";
 import { InteractiveMapViewer } from "@/components/ui/InteractiveMapViewer";
 
 type AvailabilityUnit = {
@@ -158,6 +158,10 @@ export function AdminBookingCreate() {
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
   const [kavlingPrivateRange, setKavlingPrivateRange] = useState<null | { start: string | number; end: string | number }>(null);
+  const [kavlingPrivateList, setKavlingPrivateList] = useState<string[]>([]);
+  const kavlingPrivateSet = useMemo(() => {
+    return new Set(kavlingPrivateList.map((x) => String(x).toUpperCase()));
+  }, [kavlingPrivateList]);
   const [kavlingSellCount, setKavlingSellCount] = useState<number | null>(null);
   const [hold, setHold] = useState<null | { id: string; token: string; expiresAt: string }>(null);
   const [holdError, setHoldError] = useState<string | null>(null);
@@ -495,6 +499,9 @@ export function AdminBookingCreate() {
       const ps = data?.privateRange?.start;
       const pe = data?.privateRange?.end;
       if (ps !== undefined && pe !== undefined) setKavlingPrivateRange({ start: ps, end: pe });
+      if (Array.isArray((data as any)?.privateKavlings)) {
+        setKavlingPrivateList((data as any).privateKavlings.map((x: any) => String(x).toUpperCase()));
+      }
       setKavlingLoading(false);
     }
     load();
@@ -960,7 +967,6 @@ export function AdminBookingCreate() {
                   disabled={!requiredKavlings || kavlingLoading || !effectiveKavlingScope}
                   onClick={() => {
                     const taken = new Set(kavlingTaken);
-                    const pr = kavlingPrivateRange;
                     const privateNeed = combinedAll ? privateQty : 0;
                     const nonNeed = combinedAll ? mandiriQty + paketQty : 0;
                     const picked = [...kavlingSelected];
@@ -968,12 +974,16 @@ export function AdminBookingCreate() {
                       if (picked.length >= requiredKavlings) break;
                       if (taken.has(n)) continue;
                       if (picked.includes(n)) continue;
-                      if (combinedAll && pr) {
-                        const inPrivate = n >= pr.start && n <= pr.end;
-                        const privatePicked = picked.filter((x) => x >= pr.start && x <= pr.end).length;
+                      const inPriv = isPrivateKavling(n, kavlingPrivateSet);
+                      if (combinedAll) {
+                        const privatePicked = picked.filter((x) => isPrivateKavling(x, kavlingPrivateSet)).length;
                         const nonPicked = picked.length - privatePicked;
-                        if (inPrivate && privatePicked >= privateNeed) continue;
-                        if (!inPrivate && nonPicked >= nonNeed) continue;
+                        if (inPriv && privatePicked >= privateNeed) continue;
+                        if (!inPriv && nonPicked >= nonNeed) continue;
+                      } else if (effectiveKavlingScope === "private") {
+                        if (!inPriv) continue;
+                      } else {
+                        if (inPriv) continue;
                       }
                       picked.push(n);
                     }
@@ -1092,21 +1102,17 @@ export function AdminBookingCreate() {
 
             <div className="mt-3 grid grid-cols-8 gap-2 sm:grid-cols-12">
               {(() => {
-                const pr = kavlingPrivateRange;
                 const privateNeed = combinedAll ? privateQty : 0;
                 const nonNeed = combinedAll ? mandiriQty + paketQty : 0;
-                const privatePicked = combinedAll && pr ? kavlingSelected.filter((x) => x >= pr.start && x <= pr.end).length : 0;
+                const privatePicked = combinedAll ? kavlingSelected.filter((x) => isPrivateKavling(x, kavlingPrivateSet)).length : 0;
                 const nonPicked = combinedAll ? kavlingSelected.length - privatePicked : 0;
 
-                const rawNums =
-                  effectiveKavlingScope === "private" && pr && typeof kavlingSellCount === "number"
-                    ? Array.from({ length: kavlingSellCount }).map((_, i) => i + 1)
-                    : kavlingAll;
+                const rawNums = kavlingAll;
 
                 const allNums =
                   selectedBlockFilter === "ALL"
                     ? rawNums
-                    : rawNums.filter((n) => extractBlockName(n) === selectedBlockFilter);
+                    : rawNums.filter((n) => extractBlockName(n, kavlingBlockMap) === selectedBlockFilter);
 
                 if (!allNums.length) {
                   return Array.from({ length: kavlingSellCount ?? 110 }).map((_, i) => (
@@ -1120,9 +1126,15 @@ export function AdminBookingCreate() {
                   const isOOO = kavlingOOO.includes(n);
                   const isTaken = kavlingTaken.includes(n);
                   const isSelected = kavlingSelected.includes(n);
-                  const inPrivate = combinedAll && pr ? n >= pr.start && n <= pr.end : false;
-                  const outOfScope = effectiveKavlingScope === "private" && pr ? n < pr.start || n > pr.end : false;
-                  const quotaFull = combinedAll && pr ? (inPrivate ? privatePicked >= privateNeed : nonPicked >= nonNeed) : false;
+                  const inPrivate = isPrivateKavling(n, kavlingPrivateSet);
+                  const inNonPrivate = !inPrivate;
+                  const outOfScope =
+                    effectiveKavlingScope === "private"
+                      ? inNonPrivate
+                      : (effectiveKavlingScope === "mandiri" || effectiveKavlingScope === "paket")
+                      ? inPrivate
+                      : false;
+                  const quotaFull = combinedAll ? (inPrivate ? privatePicked >= privateNeed : nonPicked >= nonNeed) : false;
                   const disabled = outOfScope || isTaken || (!isSelected && (kavlingSelected.length >= requiredKavlings || quotaFull));
                   
                   let cls = "bg-background text-foreground hover:bg-surface";
@@ -1143,17 +1155,17 @@ export function AdminBookingCreate() {
                           const set = new Set(prev);
                           if (set.has(n)) set.delete(n);
                           else {
-                            if (set.size >= requiredKavlings) return Array.from(set).sort((a, b) => a - b);
-                            if (combinedAll && pr) {
-                              const inPrivate = n >= pr.start && n <= pr.end;
-                              const privatePicked = prev.filter((x) => x >= pr.start && x <= pr.end).length;
-                              const nonPicked = prev.length - privatePicked;
-                              if (inPrivate && privatePicked >= privateNeed) return Array.from(set).sort((a, b) => a - b);
-                              if (!inPrivate && nonPicked >= nonNeed) return Array.from(set).sort((a, b) => a - b);
+                            if (set.size >= requiredKavlings) return Array.from(set).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
+                            if (combinedAll) {
+                              const inPriv = isPrivateKavling(n, kavlingPrivateSet);
+                              const privPicked = prev.filter((x) => isPrivateKavling(x, kavlingPrivateSet)).length;
+                              const nonPrivPicked = prev.length - privPicked;
+                              if (inPriv && privPicked >= privateNeed) return Array.from(set).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
+                              if (!inPriv && nonPrivPicked >= nonNeed) return Array.from(set).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
                             }
                             set.add(n);
                           }
-                          return Array.from(set).sort((a, b) => a - b);
+                          return Array.from(set).sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
                         });
                       }}
                       className={`relative flex min-h-[2.5rem] items-center justify-center rounded-xl border border-border text-xs font-black ${cls} disabled:opacity-60 transition-all active:scale-95 overflow-hidden`}

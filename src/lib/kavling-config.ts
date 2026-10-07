@@ -180,3 +180,10 @@ export function resolveKavlingBlockName(item: string | number, blockMap?: Map<st
   return "Lainnya";
 }
 
+export function isPrivateKavling(item: string | number, privateSet?: Set<string>): boolean {
+  const str = String(item).trim().toUpperCase();
+  if (privateSet && privateSet.has(str)) return true;
+  if (/^N\d+$/i.test(str)) return true;
+  return false;
+}
+
