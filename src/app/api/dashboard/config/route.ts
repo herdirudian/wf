@@ -61,6 +61,11 @@ export async function GET() {
   const session = await getAdminSession();
   if (!session.adminUser) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
+  const role = (session.adminUser as any)?.role || "administrator";
+  if (role === "front_office") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
+
   const defaultPaymentMethods = [
     { code: "BANK_TRANSFER", enabled: true, feeFlat: 4000, feeBps: 0 },
     { code: "CREDIT_CARD", enabled: true, feeFlat: 2000, feeBps: 290 },
@@ -145,6 +150,11 @@ export async function GET() {
 export async function PUT(req: Request) {
   const session = await getAdminSession();
   if (!session.adminUser) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+  const role = (session.adminUser as any)?.role || "administrator";
+  if (role === "front_office" || role === "owner") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
 
   const json = (await req.json().catch(() => null)) as unknown;
   const parsed = UpdateSchema.safeParse(json);

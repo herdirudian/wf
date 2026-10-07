@@ -1,7 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { UgcHighlightManager } from "@/components/ugc/UgcHighlightManager";
+import { requireAdmin } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export default async function UgcPage() {
+  const adminUser = await requireAdmin();
+  const role = adminUser.role || "administrator";
+  if (role === "front_office") {
+    redirect("/dashboard");
+  }
+
   const items = await prisma.ugcHighlight.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
   });

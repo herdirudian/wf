@@ -11,9 +11,6 @@ export default async function AddOnsPage({
 }) {
   const adminUser = await requireAdmin();
   const role = adminUser.role || "administrator";
-  if (role === "front_office") {
-    redirect("/dashboard");
-  }
 
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page ?? "1") || 1);

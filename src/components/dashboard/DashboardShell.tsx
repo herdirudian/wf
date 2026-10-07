@@ -73,14 +73,8 @@ export function DashboardShell({
             if (
               isFO &&
               (item.href === "/dashboard/settings" ||
-                item.href === "/dashboard/addons" ||
                 item.href === "/dashboard/users" ||
-                item.href === "/dashboard/ugc" ||
-                item.href === "/dashboard/units" ||
-                item.href === "/dashboard/packages" ||
-                item.href === "/dashboard/reports" ||
-                item.href === "/dashboard/activity-logs" ||
-                item.href === "/dashboard/kavlings/ooo")
+                item.href === "/dashboard/ugc")
             )
               return false;
             return true;

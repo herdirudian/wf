@@ -23,6 +23,11 @@ export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }
   const session = await getAdminSession();
   if (!session.adminUser) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
+  const role = (session.adminUser as any)?.role || "administrator";
+  if (role === "front_office" || role === "owner") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
+
   const { id } = await ctx.params;
   const json = (await req.json().catch(() => null)) as unknown;
   const parsed = UpdateSchema.safeParse(json);
@@ -44,6 +49,11 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   const session = await getAdminSession();
   if (!session.adminUser) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
+  const role = (session.adminUser as any)?.role || "administrator";
+  if (role === "front_office" || role === "owner") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
+
   const { id } = await ctx.params;
   const json = (await req.json().catch(() => null)) as unknown;
   const parsed = PatchSchema.safeParse(json);
@@ -62,6 +72,11 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   const session = await getAdminSession();
   if (!session.adminUser) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+  const role = (session.adminUser as any)?.role || "administrator";
+  if (role === "front_office" || role === "owner") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
 
   const { id } = await ctx.params;
   const item = await prisma.ugcHighlight.findUnique({ where: { id } });

@@ -14,6 +14,11 @@ export async function GET() {
   const session = await getAdminSession();
   if (!session.adminUser) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
+  const role = (session.adminUser as any)?.role || "administrator";
+  if (role === "front_office") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
+
   const items = await prisma.ugcHighlight.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
   });
@@ -23,6 +28,11 @@ export async function GET() {
 export async function POST(req: Request) {
   const session = await getAdminSession();
   if (!session.adminUser) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+  const role = (session.adminUser as any)?.role || "administrator";
+  if (role === "front_office" || role === "owner") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
 
   const json = (await req.json().catch(() => null)) as unknown;
   const parsed = CreateSchema.safeParse(json);
