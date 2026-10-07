@@ -52,13 +52,7 @@ type BookingDraft = {
   items: Array<{ unitId: string; quantity: number }>;
   addOns: Array<{ addOnId: string; quantity: number }>;
   display: {
-    items: Array<{
-      unitId: string;
-      name: string;
-      quantity: number;
-      includes?: string[];
-      facilities?: string[];
-    }>;
+    items: Array<{ unitId: string; name: string; quantity: number }>;
     addOns: Array<{ addOnId: string; name: string; price: number; quantity: number }>;
   };
   amountEstimate: number;
@@ -328,8 +322,6 @@ export default function PublicBookingPage() {
   const [kavlingLoading, setKavlingLoading] = useState(false);
   const [kavlingError, setKavlingError] = useState<string | null>(null);
   const [kavlingPrivateRange, setKavlingPrivateRange] = useState<null | { start: string | number; end: string | number }>(null);
-  const [kavlingPrivateList, setKavlingPrivateList] = useState<string[]>([]);
-  const [kavlingRegularList, setKavlingRegularList] = useState<string[]>([]);
   const [kavlingSellCount, setKavlingSellCount] = useState<number | null>(null);
   const [hold, setHold] = useState<null | { id: string; token: string; expiresAt: string }>(null);
   const [holdError, setHoldError] = useState<string | null>(null);
@@ -695,8 +687,6 @@ export default function PublicBookingPage() {
       setKavlingLoading(false);
       setKavlingError(null);
       setKavlingPrivateRange(null);
-      setKavlingPrivateList([]);
-      setKavlingRegularList([]);
       setKavlingSellCount(null);
       if (hold?.id && hold?.token) void releaseHold(hold);
       setHold(null);
@@ -767,12 +757,6 @@ export default function PublicBookingPage() {
       const ps = data?.privateRange?.start;
       const pe = data?.privateRange?.end;
       if (typeof ps === "number" && typeof pe === "number") setKavlingPrivateRange({ start: ps, end: pe });
-      if (Array.isArray((data as any)?.privateKavlings)) {
-        setKavlingPrivateList((data as any).privateKavlings.map((x: any) => String(x).toUpperCase()));
-      }
-      if (Array.isArray((data as any)?.regularKavlings)) {
-        setKavlingRegularList((data as any).regularKavlings.map((x: any) => String(x).toUpperCase()));
-      }
       setKavlingLoading(false);
     }
     load();
@@ -1475,16 +1459,7 @@ export default function PublicBookingPage() {
       items,
       addOns,
       display: {
-        items: items.map((it) => {
-          const u = units.find((x) => x.id === it.unitId);
-          return {
-            unitId: it.unitId,
-            name: u?.name ?? it.unitId,
-            quantity: it.quantity,
-            includes: parseIncludesJson(u?.includesJson),
-            facilities: parseFacilitiesJson(u?.facilitiesJson),
-          };
-        }),
+        items: items.map((it) => ({ unitId: it.unitId, name: units.find((u) => u.id === it.unitId)?.name ?? it.unitId, quantity: it.quantity })),
         addOns: addons
           .map((a) => ({ addOnId: a.id, name: a.name, price: a.price, quantity: Number(effectiveAddonQty[a.id] ?? 0) }))
           .filter((x) => x.quantity > 0),
@@ -2518,36 +2493,14 @@ export default function PublicBookingPage() {
                             const isOOO = kavlingOOO.includes(n);
                             const isTaken = kavlingTaken.includes(n);
                             const isSelected = kavlingSelected.includes(n);
+                            const isPrivateInRange = kavlingPrivateRange && n >= kavlingPrivateRange.start && n <= kavlingPrivateRange.end;
+                            const isMandiri = !isPrivateInRange;
+
                             let disabled = isTaken;
-                            if (!effectiveKavlingScope) {
-                              disabled = true;
-                            } else if (effectiveKavlingScope === "mixed") {
-                              const nStr = String(n).toUpperCase();
-                              const isPrivate = kavlingPrivateList.length > 0
-                                ? kavlingPrivateList.includes(nStr)
-                                : (kavlingPrivateRange && typeof kavlingPrivateRange.start === "number" && typeof kavlingPrivateRange.end === "number"
-                                  ? Number(n) >= kavlingPrivateRange.start && Number(n) <= kavlingPrivateRange.end
-                                  : false);
-
-                              const privateNeed = kavlingQtyByGroup.private;
-                              const nonPrivateNeed = kavlingQtyByGroup.mandiri + kavlingQtyByGroup.paket;
-
-                              const currentPrivateSelected = kavlingSelected.filter((x) => {
-                                const xStr = String(x).toUpperCase();
-                                return kavlingPrivateList.length > 0
-                                  ? kavlingPrivateList.includes(xStr)
-                                  : (kavlingPrivateRange && typeof kavlingPrivateRange.start === "number" && typeof kavlingPrivateRange.end === "number"
-                                    ? Number(x) >= kavlingPrivateRange.start && Number(x) <= kavlingPrivateRange.end
-                                    : false);
-                              }).length;
-                              const currentNonPrivateSelected = kavlingSelected.length - currentPrivateSelected;
-
-                              if (isPrivate && currentPrivateSelected >= privateNeed && !isSelected) {
-                                disabled = true;
-                              } else if (!isPrivate && currentNonPrivateSelected >= nonPrivateNeed && !isSelected) {
-                                disabled = true;
-                              }
-                            }
+                            if (effectiveKavlingScope === "private" && isMandiri) disabled = true;
+                            if (effectiveKavlingScope === "mandiri" && isPrivateInRange) disabled = true;
+                            if (effectiveKavlingScope === "paket" && isPrivateInRange) disabled = true;
+                            if (!effectiveKavlingScope) disabled = true;
 
                             return (
                               <button
@@ -2558,9 +2511,7 @@ export default function PublicBookingPage() {
                                   if (isSelected) {
                                     setKavlingSelected((s) => s.filter((x) => x !== n));
                                   } else {
-                                    if (requiredKavlings === 1) {
-                                      setKavlingSelected([n]);
-                                    } else if (kavlingSelected.length < requiredKavlings) {
+                                    if (kavlingSelected.length < requiredKavlings) {
                                       setKavlingSelected((s) => [...s, n]);
                                     }
                                   }

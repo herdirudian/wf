@@ -402,8 +402,8 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
         </table>
       </div>
 
-      <Modal open={open} title={title} onClose={() => setOpen(false)}>
-        <form className="space-y-3" onSubmit={onSubmit}>
+      <Modal open={open} title={title} onClose={() => setOpen(false)} maxWidthClassName="max-w-2xl sm:max-w-2xl lg:max-w-3xl">
+        <form className="space-y-4" onSubmit={onSubmit}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1 sm:col-span-2">
               <label className="text-sm font-medium text-foreground">Nama</label>
@@ -459,68 +459,90 @@ export function UnitManager({ items, addOns, currentUserRole }: { items: Unit[];
               </select>
               <div className="text-xs text-muted">Dipakai untuk membatasi pilihan nomor kavling.</div>
             </div>
-            <div className="space-y-4 sm:col-span-2 border-y border-border py-4 my-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-bold text-foreground uppercase tracking-widest">Multi Auto Add-Ons</label>
+            <div className="flex flex-col justify-end">
+              <label className="inline-flex cursor-pointer items-center gap-2.5 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground hover:bg-background transition-all">
+                <input
+                  type="checkbox"
+                  checked={form.isActive}
+                  onChange={(e) => setForm((s) => ({ ...s, isActive: e.target.checked }))}
+                  className="h-4 w-4 rounded accent-primary"
+                />
+                <span>Status Unit Aktif</span>
+              </label>
+              <div className="mt-1 text-xs text-muted">Unit aktif akan tampil di halaman booking tamu.</div>
+            </div>
+
+            <div className="space-y-3 sm:col-span-2 rounded-2xl border border-border bg-surface/50 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 pb-3">
+                <div>
+                  <label className="text-xs font-black uppercase tracking-wider text-[#2D3E10]">Multi Auto Add-Ons</label>
+                  <p className="text-[11px] text-muted">Aturan add-on otomatis yang dihitung ketika tamu memilih unit ini.</p>
+                </div>
                 <button
                   type="button"
                   onClick={addAutoAddOn}
-                  className="text-xs font-bold text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary hover:text-white transition-all active:scale-95 shrink-0 shadow-sm"
                 >
-                  + Tambah Aturan
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Tambah Aturan
                 </button>
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-2.5 pt-1">
                 {form.autoAddOns.map((item, idx) => (
-                  <div key={idx} className="flex flex-col gap-2 rounded-xl border border-border bg-background p-3 sm:flex-row sm:items-center">
-                    <select
-                      value={item.addOnId}
-                      onChange={(e) => updateAutoAddOn(idx, "addOnId", e.target.value)}
-                      className="flex-1 rounded-lg border border-border bg-surface px-2 py-1.5 text-sm outline-none focus:border-primary"
-                    >
-                      <option value="">Pilih Add-On...</option>
-                      {addOnOptions.map((a) => (
-                        <option key={a.id} value={a.id}>{a.name}</option>
-                      ))}
-                    </select>
-                    <select
-                      value={item.mode}
-                      onChange={(e) => updateAutoAddOn(idx, "mode", e.target.value)}
-                      className="rounded-lg border border-border bg-surface px-2 py-1.5 text-sm outline-none focus:border-primary sm:w-48"
-                    >
-                      <option value="per_pax">Per pax (total guest)</option>
-                      <option value="per_adult">Per Dewasa (10+ thn)</option>
-                      <option value="per_child_5_10">Per Anak (5-10 thn)</option>
-                      <option value="per_unit">Per unit (qty)</option>
-                      <option value="per_booking">Per booking (1x)</option>
-                    </select>
+                  <div key={idx} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 rounded-xl border border-border bg-background p-2.5 transition-all hover:border-primary/40 shadow-sm">
+                    <div className="min-w-0 flex-1">
+                      <select
+                        value={item.addOnId}
+                        onChange={(e) => updateAutoAddOn(idx, "addOnId", e.target.value)}
+                        className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-primary transition-all"
+                      >
+                        <option value="">Pilih Add-On...</option>
+                        {addOnOptions.map((a) => (
+                          <option key={a.id} value={a.id}>{a.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="w-full sm:w-56 shrink-0">
+                      <select
+                        value={item.mode}
+                        onChange={(e) => updateAutoAddOn(idx, "mode", e.target.value)}
+                        className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-primary transition-all"
+                      >
+                        <option value="per_pax">Per Pax (Semua Tamu)</option>
+                        <option value="per_adult">Per Dewasa (10+ thn)</option>
+                        <option value="per_child_5_10">Per Anak (5-10 thn)</option>
+                        <option value="per_unit">Per Unit (Qty Kamar)</option>
+                        <option value="per_booking">Per Booking (1x)</option>
+                      </select>
+                    </div>
                     <button
                       type="button"
                       onClick={() => removeAutoAddOn(idx)}
-                      className="text-red-500 hover:text-red-700 p-1"
+                      title="Hapus aturan ini"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center self-end sm:self-center rounded-xl border border-red-200 bg-red-50 text-red-600 transition-all hover:bg-red-500 hover:text-white hover:border-red-500 active:scale-90"
                     >
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
                   </div>
                 ))}
                 {form.autoAddOns.length === 0 && (
-                  <p className="text-center text-xs text-muted py-2 italic">Belum ada aturan add-on otomatis.</p>
+                  <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/80 bg-background/50 py-5 px-4 text-center">
+                    <p className="text-xs text-muted">Belum ada aturan add-on otomatis untuk unit ini.</p>
+                    <button
+                      type="button"
+                      onClick={addAutoAddOn}
+                      className="mt-1.5 text-xs font-bold text-primary hover:underline"
+                    >
+                      + Tambah aturan pertama
+                    </button>
+                  </div>
                 )}
               </div>
-            </div>
-
-            <div className="flex items-end">
-              <label className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <input
-                  type="checkbox"
-                  checked={form.isActive}
-                  onChange={(e) => setForm((s) => ({ ...s, isActive: e.target.checked }))}
-                />
-                Aktif
-              </label>
             </div>
             <div className="space-y-2 sm:col-span-2">
               <label className="text-sm font-medium text-foreground">Fasilitas</label>

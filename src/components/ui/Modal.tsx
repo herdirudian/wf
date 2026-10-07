@@ -50,7 +50,7 @@ export function Modal({
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-2 sm:p-6 scrollbar-thin scrollbar-thumb-[#E8E8E1] scrollbar-track-transparent">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-6 scrollbar-thin scrollbar-thumb-[#E8E8E1] scrollbar-track-transparent">
             {children}
           </div>
         </div>
